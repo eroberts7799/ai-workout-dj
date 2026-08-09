@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   beginLogin,
   getAccessToken,
@@ -8,7 +8,7 @@ import {
   logout,
   setClientId,
 } from './auth/spotify-auth'
-import { createSdkPlayer, runSdkTrial, sampleSdkStaleness, sleep } from './spike/sdk-path'
+import { createSdkPlayer, runSdkTrial, sampleSdkStaleness, sleep, type SdkHandle } from './spike/sdk-path'
 import {
   listDevices,
   playTrack,
@@ -19,18 +19,22 @@ import {
 } from './spike/webapi-path'
 import { summarize, verdict } from './spike/stats'
 import type { SpikeSummary, StalenessSample, Trial } from './spike/types'
+import TagEditor from './tags/TagEditor'
 
 // Default test track: The Killers — Mr. Brightside (any Premium-playable track works).
 const DEFAULT_TRACK = 'spotify:track:3n3Ppam7vgaVa1iaRUc9Lp'
 const TRIALS = 50
 const STALENESS_SAMPLES = 5
 
-type SdkHandle = Awaited<ReturnType<typeof createSdkPlayer>>
+type Tab = 'tagger' | 'spike'
 
 export default function App() {
   const [authed, setAuthed] = useState(isLoggedIn())
   const [clientId, setClientIdState] = useState(getClientId() ?? '')
   const [authError, setAuthError] = useState<string | null>(null)
+  const [sdk, setSdk] = useState<SdkHandle | null>(null)
+  const [sdkStatus, setSdkStatus] = useState('')
+  const [tab, setTab] = useState<Tab>('tagger')
 
   useEffect(() => {
     if (window.location.pathname === '/callback') {
@@ -40,31 +44,47 @@ export default function App() {
     }
   }, [])
 
+  async function connectSdk() {
+    setSdkStatus('Connecting Web Playback SDK player…')
+    try {
+      const handle = await createSdkPlayer(getAccessToken)
+      setSdk(handle)
+      setSdkStatus(`SDK device ready (${handle.deviceId.slice(0, 8)}…) — this browser is now a Spotify device`)
+    } catch (e) {
+      setSdkStatus(`SDK connect failed: ${String(e)}`)
+    }
+  }
+
   return (
     <div>
-      <h1>AI Workout DJ — hour-one latency spike</h1>
-      <p className="muted">
-        Decision gate from the design doc: p95 under 300ms → boundary cuts feel intentional, build on.
-        Over 2s → design buffer strategies first.
-      </p>
+      <h1>AI Workout DJ</h1>
 
       <div className="card">
-        <h2 style={{ marginTop: 0 }}>1 · Spotify app credentials</h2>
-        <p className="muted">
-          developer.spotify.com/dashboard → Create app → redirect URI <code>http://127.0.0.1:5173/callback</code>,
-          enable Web API + Web Playback SDK → paste the Client ID here.
-        </p>
-        <input
-          placeholder="Spotify Client ID"
-          value={clientId}
-          onChange={(e) => setClientIdState(e.target.value)}
-          onBlur={() => clientId.trim() && setClientId(clientId)}
-        />
+        <h2 style={{ marginTop: 0 }}>Spotify</h2>
+        {!authed && (
+          <>
+            <p className="muted">
+              developer.spotify.com/dashboard → Create app → redirect URI <code>http://127.0.0.1:5173/callback</code>,
+              enable Web API + Web Playback SDK → paste the Client ID here.
+            </p>
+            <input
+              placeholder="Spotify Client ID"
+              value={clientId}
+              onChange={(e) => setClientIdState(e.target.value)}
+              onBlur={() => clientId.trim() && setClientId(clientId)}
+            />
+          </>
+        )}
         <div style={{ marginTop: 10 }}>
           {authed ? (
             <>
               <span className="ok">Logged in ✓</span>{' '}
-              <button onClick={() => { logout(); setAuthed(false) }}>Log out</button>
+              {!sdk ? (
+                <button onClick={() => void connectSdk()}>Connect SDK player</button>
+              ) : (
+                <span className="ok">SDK player ready ✓</span>
+              )}{' '}
+              <button onClick={() => { logout(); setAuthed(false); setSdk(null) }}>Log out</button>
             </>
           ) : (
             <button
@@ -75,15 +95,25 @@ export default function App() {
             </button>
           )}
         </div>
-        {authError && <p className="bad">{authError}</p>}
+        {(authError || sdkStatus) && <p className={authError ? 'bad' : 'muted'}>{authError ?? sdkStatus}</p>}
       </div>
 
-      {authed && <SpikeRunner />}
+      {authed && (
+        <>
+          <div style={{ marginTop: 16 }}>
+            <button onClick={() => setTab('tagger')} disabled={tab === 'tagger'}>Song Tagger</button>
+            <button onClick={() => setTab('spike')} disabled={tab === 'spike'}>Latency Spike</button>
+          </div>
+          {tab === 'tagger' &&
+            (sdk ? <TagEditor sdk={sdk} /> : <p className="muted">Connect the SDK player above to start tagging.</p>)}
+          {tab === 'spike' && <SpikeRunner sdk={sdk} />}
+        </>
+      )}
     </div>
   )
 }
 
-function SpikeRunner() {
+function SpikeRunner({ sdk }: { sdk: SdkHandle | null }) {
   const [trackUri, setTrackUri] = useState(DEFAULT_TRACK)
   const [trials, setTrials] = useState<Trial[]>([])
   const [staleness, setStaleness] = useState<StalenessSample[]>([])
@@ -91,22 +121,8 @@ function SpikeRunner() {
   const [running, setRunning] = useState(false)
   const [devices, setDevices] = useState<ConnectDevice[]>([])
   const [deviceId, setDeviceId] = useState('')
-  const sdkRef = useRef<SdkHandle | null>(null)
-  const [sdkReady, setSdkReady] = useState(false)
-
-  async function connectSdk() {
-    setStatus('Connecting Web Playback SDK player…')
-    try {
-      sdkRef.current = await createSdkPlayer(getAccessToken)
-      setSdkReady(true)
-      setStatus(`SDK device ready (${sdkRef.current.deviceId.slice(0, 8)}…)`)
-    } catch (e) {
-      setStatus(`SDK connect failed: ${String(e)}`)
-    }
-  }
 
   async function runSdkSpike() {
-    const sdk = sdkRef.current
     if (!sdk) return
     setRunning(true)
     try {
@@ -184,23 +200,24 @@ function SpikeRunner() {
 
   return (
     <>
+      <p className="muted" style={{ marginTop: 16 }}>
+        Decision gate: p95 under 300ms → boundary cuts feel intentional. Over 2s → buffer strategies first.
+      </p>
       <div className="card">
-        <h2 style={{ marginTop: 0 }}>2 · Test track</h2>
+        <h2 style={{ marginTop: 0 }}>Test track</h2>
         <input value={trackUri} onChange={(e) => setTrackUri(e.target.value)} placeholder="spotify:track:…" />
       </div>
 
       <div className="card">
-        <h2 style={{ marginTop: 0 }}>3 · SDK path (this browser is the speaker)</h2>
-        {!sdkReady ? (
-          <button onClick={connectSdk} disabled={running}>Connect SDK player</button>
-        ) : (
-          <button onClick={runSdkSpike} disabled={running}>Run {TRIALS} SDK trials</button>
-        )}
+        <h2 style={{ marginTop: 0 }}>SDK path (this browser is the speaker)</h2>
+        <button onClick={() => void runSdkSpike()} disabled={running || !sdk}>
+          {sdk ? `Run ${TRIALS} SDK trials` : 'Connect the SDK player first'}
+        </button>
       </div>
 
       <div className="card">
-        <h2 style={{ marginTop: 0 }}>4 · Web API path (remote-control a device, e.g. your iPhone)</h2>
-        <button onClick={refreshDevices} disabled={running}>Refresh devices</button>
+        <h2 style={{ marginTop: 0 }}>Web API path (remote-control a device, e.g. your iPhone)</h2>
+        <button onClick={() => void refreshDevices()} disabled={running}>Refresh devices</button>
         {devices.length > 0 && (
           <select value={deviceId} onChange={(e) => setDeviceId(e.target.value)} style={{ marginTop: 8 }}>
             {devices.map((d) => (
@@ -212,7 +229,7 @@ function SpikeRunner() {
         )}
         {deviceId && (
           <div style={{ marginTop: 8 }}>
-            <button onClick={runWebApiSpike} disabled={running}>Run {TRIALS} Web API trials</button>
+            <button onClick={() => void runWebApiSpike()} disabled={running}>Run {TRIALS} Web API trials</button>
           </div>
         )}
       </div>

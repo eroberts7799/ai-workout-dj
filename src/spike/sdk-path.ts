@@ -2,12 +2,20 @@
 // low-staleness position readout. Desktop browsers only.
 import type { StalenessSample, Trial } from './types'
 
-/* Minimal ambient typing for the SDK — enough for the spike. */
-type SdkPlayer = {
+/* Minimal ambient typing for the SDK — enough for the spike + tagger. */
+export type SdkPlayer = {
   connect(): Promise<boolean>
   addListener(event: string, cb: (payload: never) => void): void
   getCurrentState(): Promise<{ position: number; duration: number; paused: boolean } | null>
   seek(positionMs: number): Promise<void>
+  togglePlay(): Promise<void>
+  pause(): Promise<void>
+  resume(): Promise<void>
+}
+
+export interface SdkHandle {
+  player: SdkPlayer
+  deviceId: string
 }
 
 let sdkLoading: Promise<void> | null = null
@@ -22,9 +30,7 @@ function loadSdkScript(): Promise<void> {
   return sdkLoading
 }
 
-export async function createSdkPlayer(
-  getToken: () => Promise<string>,
-): Promise<{ player: SdkPlayer; deviceId: string }> {
+export async function createSdkPlayer(getToken: () => Promise<string>): Promise<SdkHandle> {
   await loadSdkScript()
   const Spotify = (window as unknown as { Spotify: { Player: new (opts: object) => SdkPlayer } }).Spotify
   const player = new Spotify.Player({
