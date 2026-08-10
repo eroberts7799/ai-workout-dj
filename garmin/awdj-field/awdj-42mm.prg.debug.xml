@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<debugInfo>
+    <manifest filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/manifest.xml"/>
+    <pcToLineNum>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc" id="1" lineNum="15" parent="globals" pc="268435460" symbol="getApp"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc" id="1" lineNum="16" parent="globals" pc="268435470" symbol="getApp"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="2" lineNum="14" parent="globals/AwdjField" pc="268435481" symbol="&lt;init&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4574-00/source/Rez.mcgen" id="3" lineNum="7" parent="globals/Rez" pc="268435493" symbol="&lt;init&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc" id="4" lineNum="5" parent="globals/AwdjApp" pc="268435513" symbol="&lt;init&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="5" lineNum="39" parent="globals/AwdjField" pc="268435525" symbol="compute"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="5" lineNum="40" parent="globals/AwdjField" pc="268435528" symbol="compute"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="5" lineNum="42" parent="globals/AwdjField" pc="268435540" symbol="compute"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="5" lineNum="43" parent="globals/AwdjField" pc="268435564" symbol="compute"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="5" lineNum="44" parent="globals/AwdjField" pc="268435575" symbol="compute"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="5" lineNum="46" parent="globals/AwdjField" pc="268435587" symbol="compute"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="6" lineNum="79" parent="globals/AwdjField" pc="268435608" symbol="onResponse"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="7" lineNum="31" parent="globals/AwdjField" pc="268435611" symbol="onTimerResume"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="7" lineNum="32" parent="globals/AwdjField" pc="268435613" symbol="onTimerResume"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="8" lineNum="23" parent="globals/AwdjField" pc="268435626" symbol="onTimerStart"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="8" lineNum="24" parent="globals/AwdjField" pc="268435628" symbol="onTimerStart"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="9" lineNum="27" parent="globals/AwdjField" pc="268435641" symbol="onTimerPause"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="9" lineNum="28" parent="globals/AwdjField" pc="268435643" symbol="onTimerPause"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="10" lineNum="18" parent="globals/AwdjField" pc="268435656" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="10" lineNum="19" parent="globals/AwdjField" pc="268435658" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="10" lineNum="20" parent="globals/AwdjField" pc="268435670" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="11" lineNum="35" parent="globals/AwdjField" pc="268435683" symbol="onTimerStop"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="11" lineNum="36" parent="globals/AwdjField" pc="268435685" symbol="onTimerStop"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="12" lineNum="49" parent="globals/AwdjField" pc="268435698" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="12" lineNum="50" parent="globals/AwdjField" pc="268435701" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="12" lineNum="51" parent="globals/AwdjField" pc="268435720" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="12" lineNum="53" parent="globals/AwdjField" pc="268435744" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="12" lineNum="55" parent="globals/AwdjField" pc="268435754" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="12" lineNum="62" parent="globals/AwdjField" pc="268435820" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="12" lineNum="63" parent="globals/AwdjField" pc="268435830" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="12" lineNum="64" parent="globals/AwdjField" pc="268435844" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="12" lineNum="65" parent="globals/AwdjField" pc="268435856" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="12" lineNum="67" parent="globals/AwdjField" pc="268435872" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="12" lineNum="68" parent="globals/AwdjField" pc="268435880" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc" id="13" lineNum="10" parent="globals/AwdjApp" pc="268435935" symbol="getInitialView"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc" id="13" lineNum="11" parent="globals/AwdjApp" pc="268435937" symbol="getInitialView"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc" id="14" lineNum="6" parent="globals/AwdjApp" pc="268435963" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc" id="14" lineNum="7" parent="globals/AwdjApp" pc="268435965" symbol="initialize"/>
+    </pcToLineNum>
+    <symbolTable>
+        <entry id="8388639" module="true" symbol="Graphics"/>
+        <entry id="8388632" method="true" symbol="&lt;init&gt;"/>
+        <entry id="8389748" method="true" symbol="onTimerStop"/>
+        <entry field="true" id="8388611" module="true" symbol="Toybox"/>
+        <entry id="8389108" method="true" symbol="onResponse"/>
+        <entry id="8389747" method="true" symbol="onTimerStart"/>
+        <entry field="true" id="11" symbol="AppName"/>
+        <entry id="8389749" method="true" symbol="onTimerPause"/>
+        <entry id="4" module="true" symbol="globals/Rez/Strings"/>
+        <entry id="8389594" symbol="headers"/>
+        <entry id="8388631" module="true" symbol="Activity"/>
+        <entry id="8388648" module="true" symbol="WatchUi"/>
+        <entry id="8390425" module="true" symbol="Properties"/>
+        <entry id="2" module="true" symbol="globals/Rez"/>
+        <entry field="true" id="12" symbol="EndpointTitle"/>
+        <entry id="5" object="true" symbol="AwdjApp"/>
+        <entry id="8388771" module="true" object="true" symbol="Drawables"/>
+        <entry id="8389275" method="true" symbol="getApp"/>
+        <entry id="8389137" method="true" symbol="compute"/>
+        <entry id="8388637" module="true" symbol="Communications"/>
+        <entry id="3" module="true" symbol="globals/Rez/Drawables"/>
+        <entry id="8388786" method="true" symbol="method"/>
+        <entry id="8388644" module="true" symbol="System"/>
+        <entry id="8388645" module="true" symbol="Time"/>
+        <entry id="8388769" module="true" object="true" symbol="Rez"/>
+        <entry id="8388640" module="true" symbol="Lang"/>
+        <entry field="true" id="10" symbol="LauncherIcon"/>
+        <entry id="8388610" symbol="statics"/>
+        <entry id="8389350" module="true" symbol="globals"/>
+        <entry id="8388770" module="true" object="true" symbol="Strings"/>
+        <entry id="8388702" method="true" symbol="initialize"/>
+        <entry id="6" object="true" symbol="AwdjField"/>
+        <entry id="8389280" method="true" symbol="getInitialView"/>
+        <entry field="true" id="7" symbol="&lt;globals/AwdjField/&lt;&gt;_lastPostMs&gt;"/>
+        <entry id="8389750" method="true" symbol="onTimerResume"/>
+        <entry field="true" id="8" symbol="&lt;globals/AwdjField/&lt;&gt;_pendingEvent&gt;"/>
+        <entry id="9" method="true" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry id="8388635" module="true" symbol="Application"/>
+    </symbolTable>
+    <localVars>
+        <entry arg="true" endPc="268435607" name="info" stackId="1" startPc="268435525"/>
+        <entry endPc="268435607" name="now" stackId="2" startPc="268435528"/>
+        <entry arg="true" endPc="268435934" name="info" stackId="1" startPc="268435698"/>
+        <entry endPc="268435933" name="url" stackId="2" startPc="268435701"/>
+        <entry endPc="268435933" name="body" stackId="3" startPc="268435701"/>
+        <entry endPc="268435868" name="deg" stackId="4" startPc="268435830"/>
+    </localVars>
+    <deviceInfo deviceVersion="361e256b74f66f7ba19da23c7ec7c7f06ab33c5c" partNumber="006-B4574-00"/>
+    <annotations>
+        <annotationEntry annotation="initialized" class="Drawables" module="globals/Rez" symbol="LauncherIcon"/>
+        <annotationEntry annotation="initialized" class="Strings" module="globals/Rez" symbol="EndpointTitle"/>
+        <annotationEntry annotation="initialized" class="Strings" module="globals/Rez" symbol="AppName"/>
+    </annotations>
+    <dataEntryOffsetMappings>
+        <dataEntry label="globals" offset="49" parentId="" symbolId="globals" type="module"/>
+        <dataEntry label="globals/AwdjField" offset="116" parentId="globals" symbolId="AwdjField" type="class"/>
+        <dataEntry label="globals/Rez" offset="241" parentId="globals" symbolId="Rez" type="module"/>
+        <dataEntry label="globals/AwdjApp" offset="285" parentId="globals" symbolId="AwdjApp" type="class"/>
+        <dataEntry label="globals/Rez/Drawables" offset="338" parentId="Rez" symbolId="Drawables" type="module"/>
+        <dataEntry label="globals/Rez/Strings" offset="373" parentId="Rez" symbolId="Strings" type="module"/>
+    </dataEntryOffsetMappings>
+    <functions>
+        <functionEntry accessMode="public" endPc="268435480" name="getApp" startPc="268435460">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268435492" name="&lt;init&gt;" parent="AwdjField" startPc="268435481">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268435512" name="&lt;init&gt;" parent="Rez" startPc="268435493">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268435524" name="&lt;init&gt;" parent="AwdjApp" startPc="268435513">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268435607" name="compute" parent="AwdjField" startPc="268435525">
+            <param id="info"/>
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268435610" name="onResponse" parent="AwdjField" startPc="268435608">
+            <param id="code"/>
+            <param id="data"/>
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268435625" name="onTimerResume" parent="AwdjField" startPc="268435611">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268435640" name="onTimerStart" parent="AwdjField" startPc="268435626">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268435655" name="onTimerPause" parent="AwdjField" startPc="268435641">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268435682" name="initialize" parent="AwdjField" startPc="268435656">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268435697" name="onTimerStop" parent="AwdjField" startPc="268435683">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="private" endPc="268435934" name="&lt;globals/AwdjField/&lt;&gt;postSample&gt;" parent="AwdjField" startPc="268435698">
+            <param id="info"/>
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" name="&lt;init&gt;" parent="Drawables">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" name="&lt;init&gt;" parent="Strings">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268435962" name="getInitialView" parent="AwdjApp" startPc="268435935">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268435977" name="initialize" parent="AwdjApp" startPc="268435963">
+            <documentation/>
+        </functionEntry>
+    </functions>
+</debugInfo>

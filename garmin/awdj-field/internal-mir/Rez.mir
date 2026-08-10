@@ -1,0 +1,1664 @@
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 1; @symbol_importdef<0> = [Toybox,1,7,13]; @symbol_importdef<1> = [Lang,1,14,18]; ]
+import Toybox.Lang;
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 2; @symbol_usingdef<0> = [Toybox,2,6,12]; @symbol_usingdef<1> = [WatchUi,2,13,20]; ]
+using Toybox.WatchUi;
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 3; @symbol_usingdef<0> = [Toybox,3,6,12]; @symbol_usingdef<1> = [WatchUi,3,13,20]; @symbol_usingAlias = [Ui,3,24,26]; ]
+using Toybox.WatchUi as :Ui;
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 4; @symbol_usingdef<0> = [Toybox,4,6,12]; @symbol_usingdef<1> = [Graphics,4,13,21]; ]
+using Toybox.Graphics;
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 5; @symbol_usingdef<0> = [Toybox,5,6,12]; @symbol_usingdef<1> = [Graphics,5,13,21]; @symbol_usingAlias = [Gfx,5,25,28]; ]
+using Toybox.Graphics as :Gfx;
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 7; @symbol_moduledef = [Rez,7,7,10]; ]
+module Rez {
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 7; ]
+    <init> {
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 8; @symbol_moduledef = [Drawables,8,11,20]; ]
+    module Drawables {
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 8; ]
+        <init> {
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 9; @position = 27; initialized = true; @symbol_vardef = [LauncherIcon,9,27,39]; @symbol_type<0> = [ResourceId,9,43,53]; ]
+        var LauncherIcon as ResourceId;
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 12; @symbol_moduledef = [Strings,12,11,18]; ]
+    module Strings {
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 12; ]
+        <init> {
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 13; @position = 27; initialized = true; @symbol_vardef = [EndpointTitle,13,27,40]; @symbol_type<0> = [ResourceId,13,44,54]; ]
+        var EndpointTitle as ResourceId;
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 14; @position = 27; initialized = true; @symbol_vardef = [AppName,14,27,34]; @symbol_type<0> = [ResourceId,14,38,48]; ]
+        var AppName as ResourceId;
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 17; @symbol_moduledef = [Styles,17,11,17]; ]
+    module Styles {
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 17; ]
+        <init> {
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 18; @symbol_moduledef = [prompt_font_enhanced_readability__body_with_title,18,15,64]; ]
+        module prompt_font_enhanced_readability__body_with_title {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 18; ]
+            <init> {
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 19 18 ]
+                symbol [ Graphics %tmp.1 19 34 42 ];
+                %tmp.1 = getm $.Toybox.Graphics;
+                symbol [ TEXT_JUSTIFY_CENTER %tmp.2 19 43 62 ];
+                %tmp.2 = getv %tmp.1 :TEXT_JUSTIFY_CENTER;
+                symbol [ Graphics %tmp.3 19 63 71 ];
+                %tmp.3 = getm $.Toybox.Graphics;
+                symbol [ TEXT_JUSTIFY_VCENTER %tmp.4 19 72 92 ];
+                %tmp.4 = getv %tmp.3 :TEXT_JUSTIFY_VCENTER;
+                %tmp.5 = bitor %tmp.2 %tmp.4;
+                putv self :justification %tmp.5;
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 20 18 ]
+                symbol [ Graphics %tmp.6 20 25 33 ];
+                %tmp.6 = getm $.Toybox.Graphics;
+                symbol [ FONT_SMALL %tmp.7 20 34 44 ];
+                %tmp.7 = getv %tmp.6 :FONT_SMALL;
+                putv self :font %tmp.7;
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 19; @position = 18; @symbol_constdef = [justification,19,18,31]; ]
+            const justification;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 20; @position = 18; @symbol_constdef = [font,20,18,22]; ]
+            const font;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 23; @symbol_moduledef = [system_size__menu_header,23,15,39]; ]
+        module system_size__menu_header {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 23; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 24; @position = 18; @symbol_constdef = [width,24,18,23]; @symbol_type<0> = [Number,24,27,33]; ]
+            const width as Number = 454;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 25; @position = 18; @symbol_constdef = [height,25,18,24]; @symbol_type<0> = [Number,25,28,34]; ]
+            const height as Number = 172;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 28; @symbol_moduledef = [system_loc__hint_button_left_bottom,28,15,50]; ]
+        module system_loc__hint_button_left_bottom {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 28; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 29; @position = 18; @symbol_constdef = [x,29,18,19]; @symbol_type<0> = [Number,29,23,29]; ]
+            const x as Number = 16;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 30; @position = 18; @symbol_constdef = [y,30,18,19]; @symbol_type<0> = [Number,30,23,29]; ]
+            const y as Number = 284;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 33; @symbol_moduledef = [prompt_font_enhanced_readability__body_no_title,33,15,62]; ]
+        module prompt_font_enhanced_readability__body_no_title {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 33; ]
+            <init> {
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 34 18 ]
+                symbol [ Graphics %tmp.8 34 34 42 ];
+                %tmp.8 = getm $.Toybox.Graphics;
+                symbol [ TEXT_JUSTIFY_CENTER %tmp.9 34 43 62 ];
+                %tmp.9 = getv %tmp.8 :TEXT_JUSTIFY_CENTER;
+                symbol [ Graphics %tmp.10 34 63 71 ];
+                %tmp.10 = getm $.Toybox.Graphics;
+                symbol [ TEXT_JUSTIFY_VCENTER %tmp.11 34 72 92 ];
+                %tmp.11 = getv %tmp.10 :TEXT_JUSTIFY_VCENTER;
+                %tmp.12 = bitor %tmp.9 %tmp.11;
+                putv self :justification %tmp.12;
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 35 18 ]
+                symbol [ Graphics %tmp.13 35 25 33 ];
+                %tmp.13 = getm $.Toybox.Graphics;
+                symbol [ FONT_SMALL %tmp.14 35 34 44 ];
+                %tmp.14 = getv %tmp.13 :FONT_SMALL;
+                putv self :font %tmp.14;
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 34; @position = 18; @symbol_constdef = [justification,34,18,31]; ]
+            const justification;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 35; @position = 18; @symbol_constdef = [font,35,18,22]; ]
+            const font;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 38; @symbol_moduledef = [prompt_loc__body_no_title,38,15,40]; ]
+        module prompt_loc__body_no_title {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 38; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 39; @position = 18; @symbol_constdef = [x,39,18,19]; @symbol_type<0> = [Number,39,23,29]; ]
+            const x as Number = 76;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 40; @position = 18; @symbol_constdef = [y,40,18,19]; @symbol_type<0> = [Number,40,23,29]; ]
+            const y as Number = 70;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 43; @symbol_moduledef = [system_icon_dark__about,43,15,38]; ]
+        module system_icon_dark__about {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 43; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 44; @position = 18; @symbol_constdef = [filename,44,18,26]; @symbol_type<0> = [String,44,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__about.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 45; @position = 18; @symbol_constdef = [compress,45,18,26]; @symbol_type<0> = [String,45,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 46; @position = 18; @symbol_constdef = [dithering,46,18,27]; @symbol_type<0> = [String,46,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 47; @position = 18; @symbol_constdef = [automaticPalette,47,18,34]; @symbol_type<0> = [String,47,38,44]; ]
+            const automaticPalette as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 48; @position = 18; @symbol_constdef = [packingFormat,48,18,31]; @symbol_type<0> = [String,48,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 51; @symbol_moduledef = [system_icon_light__question,51,15,42]; ]
+        module system_icon_light__question {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 51; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 52; @position = 18; @symbol_constdef = [filename,52,18,26]; @symbol_type<0> = [String,52,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__question.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 53; @position = 18; @symbol_constdef = [compress,53,18,26]; @symbol_type<0> = [String,53,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 54; @position = 18; @symbol_constdef = [dithering,54,18,27]; @symbol_type<0> = [String,54,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 55; @position = 18; @symbol_constdef = [automaticPalette,55,18,34]; @symbol_type<0> = [String,55,38,44]; ]
+            const automaticPalette as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 56; @position = 18; @symbol_constdef = [packingFormat,56,18,31]; @symbol_type<0> = [String,56,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 59; @symbol_moduledef = [system_loc__hint_button_left_top,59,15,47]; ]
+        module system_loc__hint_button_left_top {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 59; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 60; @position = 18; @symbol_constdef = [exclude,60,18,25]; @symbol_type<0> = [Boolean,60,29,36]; ]
+            const exclude as Boolean = true;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 63; @symbol_moduledef = [prompt_font__title,63,15,33]; ]
+        module prompt_font__title {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 63; ]
+            <init> {
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 64 18 ]
+                symbol [ Graphics %tmp.15 64 34 42 ];
+                %tmp.15 = getm $.Toybox.Graphics;
+                symbol [ TEXT_JUSTIFY_CENTER %tmp.16 64 43 62 ];
+                %tmp.16 = getv %tmp.15 :TEXT_JUSTIFY_CENTER;
+                symbol [ Graphics %tmp.17 64 63 71 ];
+                %tmp.17 = getm $.Toybox.Graphics;
+                symbol [ TEXT_JUSTIFY_VCENTER %tmp.18 64 72 92 ];
+                %tmp.18 = getv %tmp.17 :TEXT_JUSTIFY_VCENTER;
+                %tmp.19 = bitor %tmp.16 %tmp.18;
+                putv self :justification %tmp.19;
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 65 18 ]
+                symbol [ Graphics %tmp.20 65 25 33 ];
+                %tmp.20 = getm $.Toybox.Graphics;
+                symbol [ FONT_TINY %tmp.21 65 34 43 ];
+                %tmp.21 = getv %tmp.20 :FONT_TINY;
+                putv self :font %tmp.21;
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 64; @position = 18; @symbol_constdef = [justification,64,18,31]; ]
+            const justification;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 65; @position = 18; @symbol_constdef = [font,65,18,22]; ]
+            const font;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 68; @symbol_moduledef = [system_icon_dark__discard,68,15,40]; ]
+        module system_icon_dark__discard {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 68; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 69; @position = 18; @symbol_constdef = [filename,69,18,26]; @symbol_type<0> = [String,69,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__discard.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 70; @position = 18; @symbol_constdef = [compress,70,18,26]; @symbol_type<0> = [String,70,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 71; @position = 18; @symbol_constdef = [dithering,71,18,27]; @symbol_type<0> = [String,71,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 72; @position = 18; @symbol_constdef = [automaticPalette,72,18,34]; @symbol_type<0> = [String,72,38,44]; ]
+            const automaticPalette as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 73; @position = 18; @symbol_constdef = [packingFormat,73,18,31]; @symbol_type<0> = [String,73,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 76; @symbol_moduledef = [system_size__menu_item,76,15,37]; ]
+        module system_size__menu_item {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 76; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 77; @position = 18; @symbol_constdef = [width,77,18,23]; @symbol_type<0> = [Number,77,27,33]; ]
+            const width as Number = 454;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 78; @position = 18; @symbol_constdef = [height,78,18,24]; @symbol_type<0> = [Number,78,28,34]; ]
+            const height as Number = 108;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 81; @symbol_moduledef = [system_color_dark__text,81,15,38]; ]
+        module system_color_dark__text {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 81; ]
+            <init> {
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 83 18 ]
+                symbol [ Graphics %tmp.22 83 31 39 ];
+                %tmp.22 = getm $.Toybox.Graphics;
+                symbol [ COLOR_TRANSPARENT %tmp.23 83 40 57 ];
+                %tmp.23 = getv %tmp.22 :COLOR_TRANSPARENT;
+                putv self :background %tmp.23;
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 82; @position = 18; @symbol_constdef = [color,82,18,23]; @symbol_type<0> = [Number,82,27,33]; ]
+            const color as Number = 0xFFFFFF;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 83; @position = 18; @symbol_constdef = [background,83,18,28]; ]
+            const background;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 86; @symbol_moduledef = [system_icon_destructive__discard,86,15,47]; ]
+        module system_icon_destructive__discard {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 86; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 87; @position = 18; @symbol_constdef = [filename,87,18,26]; @symbol_type<0> = [String,87,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_destructive__discard.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 88; @position = 18; @symbol_constdef = [dithering,88,18,27]; @symbol_type<0> = [String,88,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 89; @position = 18; @symbol_constdef = [packingFormat,89,18,31]; @symbol_type<0> = [String,89,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 92; @symbol_moduledef = [system_icon_dark__hint_action_menu,92,15,49]; ]
+        module system_icon_dark__hint_action_menu {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 92; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 93; @position = 18; @symbol_constdef = [filename,93,18,26]; @symbol_type<0> = [String,93,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__hint_button_right_top.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 94; @position = 18; @symbol_constdef = [dithering,94,18,27]; @symbol_type<0> = [String,94,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 95; @position = 18; @symbol_constdef = [packingFormat,95,18,31]; @symbol_type<0> = [String,95,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 98; @symbol_moduledef = [prompt_size__title,98,15,33]; ]
+        module prompt_size__title {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 98; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 99; @position = 18; @symbol_constdef = [width,99,18,23]; @symbol_type<0> = [Number,99,27,33]; ]
+            const width as Number = 287;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 100; @position = 18; @symbol_constdef = [height,100,18,24]; @symbol_type<0> = [Number,100,28,34]; ]
+            const height as Number = 97;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 103; @symbol_moduledef = [confirmation_font__body,103,15,38]; ]
+        module confirmation_font__body {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 103; ]
+            <init> {
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 104 18 ]
+                symbol [ Graphics %tmp.24 104 34 42 ];
+                %tmp.24 = getm $.Toybox.Graphics;
+                symbol [ TEXT_JUSTIFY_CENTER %tmp.25 104 43 62 ];
+                %tmp.25 = getv %tmp.24 :TEXT_JUSTIFY_CENTER;
+                symbol [ Graphics %tmp.26 104 63 71 ];
+                %tmp.26 = getm $.Toybox.Graphics;
+                symbol [ TEXT_JUSTIFY_VCENTER %tmp.27 104 72 92 ];
+                %tmp.27 = getv %tmp.26 :TEXT_JUSTIFY_VCENTER;
+                %tmp.28 = bitor %tmp.25 %tmp.27;
+                putv self :justification %tmp.28;
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 105 18 ]
+                symbol [ Graphics %tmp.29 105 25 33 ];
+                %tmp.29 = getm $.Toybox.Graphics;
+                symbol [ FONT_TINY %tmp.30 105 34 43 ];
+                %tmp.30 = getv %tmp.29 :FONT_TINY;
+                putv self :font %tmp.30;
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 104; @position = 18; @symbol_constdef = [justification,104,18,31]; ]
+            const justification;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 105; @position = 18; @symbol_constdef = [font,105,18,22]; ]
+            const font;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 108; @symbol_moduledef = [system_color_dark__background,108,15,44]; ]
+        module system_color_dark__background {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 108; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 109; @position = 18; @symbol_constdef = [color,109,18,23]; @symbol_type<0> = [Number,109,27,33]; ]
+            const color as Number = 0x000000;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 110; @position = 18; @symbol_constdef = [background,110,18,28]; @symbol_type<0> = [Number,110,32,38]; ]
+            const background as Number = 0x000000;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 113; @symbol_moduledef = [system_icon_destructive__hint_button_left_top,113,15,60]; ]
+        module system_icon_destructive__hint_button_left_top {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 113; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 114; @position = 18; @symbol_constdef = [filename,114,18,26]; @symbol_type<0> = [String,114,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_destructive__hint_button_left_top.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 115; @position = 18; @symbol_constdef = [dithering,115,18,27]; @symbol_type<0> = [String,115,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 116; @position = 18; @symbol_constdef = [packingFormat,116,18,31]; @symbol_type<0> = [String,116,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 119; @symbol_moduledef = [system_size__launch_icon,119,15,39]; ]
+        module system_size__launch_icon {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 119; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 120; @position = 18; @symbol_constdef = [scaleX,120,18,24]; @symbol_type<0> = [Number,120,28,34]; ]
+            const scaleX as Number = 65;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 121; @position = 18; @symbol_constdef = [scaleY,121,18,24]; @symbol_type<0> = [Number,121,28,34]; ]
+            const scaleY as Number = 65;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 122; @position = 18; @symbol_constdef = [scaleRelativeTo,122,18,33]; @symbol_type<0> = [String,122,37,43]; ]
+            const scaleRelativeTo as String = "screen";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 125; @symbol_moduledef = [confirmation_input__confirm,125,15,42]; ]
+        module confirmation_input__confirm {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 125; ]
+            <init> {
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 126 18 ]
+                symbol [ WatchUi %tmp.31 126 27 34 ];
+                %tmp.31 = getm $.Toybox.WatchUi;
+                symbol [ KEY_ENTER %tmp.32 126 35 44 ];
+                %tmp.32 = getv %tmp.31 :KEY_ENTER;
+                putv self :button %tmp.32;
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 126; @position = 18; @symbol_constdef = [button,126,18,24]; ]
+            const button;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 129; @symbol_moduledef = [prompt_font__body_with_title,129,15,43]; ]
+        module prompt_font__body_with_title {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 129; ]
+            <init> {
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 130 18 ]
+                symbol [ Graphics %tmp.33 130 34 42 ];
+                %tmp.33 = getm $.Toybox.Graphics;
+                symbol [ TEXT_JUSTIFY_CENTER %tmp.34 130 43 62 ];
+                %tmp.34 = getv %tmp.33 :TEXT_JUSTIFY_CENTER;
+                putv self :justification %tmp.34;
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 131 18 ]
+                symbol [ Graphics %tmp.35 131 25 33 ];
+                %tmp.35 = getm $.Toybox.Graphics;
+                symbol [ FONT_XTINY %tmp.36 131 34 44 ];
+                %tmp.36 = getv %tmp.35 :FONT_XTINY;
+                putv self :font %tmp.36;
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 130; @position = 18; @symbol_constdef = [justification,130,18,31]; ]
+            const justification;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 131; @position = 18; @symbol_constdef = [font,131,18,22]; ]
+            const font;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 134; @symbol_moduledef = [confirmation_loc__body,134,15,37]; ]
+        module confirmation_loc__body {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 134; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 135; @position = 18; @symbol_constdef = [x,135,18,19]; @symbol_type<0> = [Number,135,23,29]; ]
+            const x as Number = 70;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 136; @position = 18; @symbol_constdef = [y,136,18,19]; @symbol_type<0> = [Number,136,23,29]; ]
+            const y as Number = 104;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 139; @symbol_moduledef = [system_icon_destructive__hint_button_left_bottom,139,15,63]; ]
+        module system_icon_destructive__hint_button_left_bottom {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 139; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 140; @position = 18; @symbol_constdef = [filename,140,18,26]; @symbol_type<0> = [String,140,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_destructive__hint_button_left_bottom.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 141; @position = 18; @symbol_constdef = [dithering,141,18,27]; @symbol_type<0> = [String,141,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 142; @position = 18; @symbol_constdef = [packingFormat,142,18,31]; @symbol_type<0> = [String,142,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 145; @symbol_moduledef = [prompt_color_dark__background,145,15,44]; ]
+        module prompt_color_dark__background {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 145; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 146; @position = 18; @symbol_constdef = [color,146,18,23]; @symbol_type<0> = [Number,146,27,33]; ]
+            const color as Number = 0x000000;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 147; @position = 18; @symbol_constdef = [background,147,18,28]; @symbol_type<0> = [Number,147,32,38]; ]
+            const background as Number = 0x000000;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 150; @symbol_moduledef = [system_icon_destructive__hint_action_menu,150,15,56]; ]
+        module system_icon_destructive__hint_action_menu {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 150; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 151; @position = 18; @symbol_constdef = [filename,151,18,26]; @symbol_type<0> = [String,151,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_destructive__hint_button_right_top.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 152; @position = 18; @symbol_constdef = [dithering,152,18,27]; @symbol_type<0> = [String,152,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 153; @position = 18; @symbol_constdef = [packingFormat,153,18,31]; @symbol_type<0> = [String,153,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 156; @symbol_moduledef = [system_loc__hint_action_menu,156,15,43]; ]
+        module system_loc__hint_action_menu {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 156; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 157; @position = 18; @symbol_constdef = [x,157,18,19]; @symbol_type<0> = [Number,157,23,29]; ]
+            const x as Number = 379;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 158; @position = 18; @symbol_constdef = [y,158,18,19]; @symbol_type<0> = [Number,158,23,29]; ]
+            const y as Number = 89;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 161; @symbol_moduledef = [confirmation_icon__hint_confirm,161,15,46]; ]
+        module confirmation_icon__hint_confirm {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 161; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 162; @position = 18; @symbol_constdef = [filename,162,18,26]; @symbol_type<0> = [String,162,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/confirmation_icon__hint_completion.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 163; @position = 18; @symbol_constdef = [dithering,163,18,27]; @symbol_type<0> = [String,163,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 164; @position = 18; @symbol_constdef = [packingFormat,164,18,31]; @symbol_type<0> = [String,164,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 167; @symbol_moduledef = [system_loc__hint_button_left_middle,167,15,50]; ]
+        module system_loc__hint_button_left_middle {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 167; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 168; @position = 18; @symbol_constdef = [x,168,18,19]; @symbol_type<0> = [Number,168,23,29]; ]
+            const x as Number = 3;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 169; @position = 18; @symbol_constdef = [y,169,18,19]; @symbol_type<0> = [Number,169,23,29]; ]
+            const y as Number = 184;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 172; @symbol_moduledef = [prompt_size__body_no_title,172,15,41]; ]
+        module prompt_size__body_no_title {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 172; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 173; @position = 18; @symbol_constdef = [width,173,18,23]; @symbol_type<0> = [Number,173,27,33]; ]
+            const width as Number = 302;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 174; @position = 18; @symbol_constdef = [height,174,18,24]; @symbol_type<0> = [Number,174,28,34]; ]
+            const height as Number = 315;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 177; @symbol_moduledef = [system_icon_light__hint_button_left_top,177,15,54]; ]
+        module system_icon_light__hint_button_left_top {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 177; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 178; @position = 18; @symbol_constdef = [filename,178,18,26]; @symbol_type<0> = [String,178,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__hint_button_left_top.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 179; @position = 18; @symbol_constdef = [dithering,179,18,27]; @symbol_type<0> = [String,179,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 180; @position = 18; @symbol_constdef = [packingFormat,180,18,31]; @symbol_type<0> = [String,180,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 183; @symbol_moduledef = [prompt_color_light__background,183,15,45]; ]
+        module prompt_color_light__background {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 183; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 184; @position = 18; @symbol_constdef = [color,184,18,23]; @symbol_type<0> = [Number,184,27,33]; ]
+            const color as Number = 0x000000;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 185; @position = 18; @symbol_constdef = [background,185,18,28]; @symbol_type<0> = [Number,185,32,38]; ]
+            const background as Number = 0x000000;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 188; @symbol_moduledef = [confirmation_input__delete,188,15,41]; ]
+        module confirmation_input__delete {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 188; ]
+            <init> {
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 189 18 ]
+                symbol [ WatchUi %tmp.37 189 27 34 ];
+                %tmp.37 = getm $.Toybox.WatchUi;
+                symbol [ KEY_DOWN %tmp.38 189 35 43 ];
+                %tmp.38 = getv %tmp.37 :KEY_DOWN;
+                putv self :button %tmp.38;
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 189; @position = 18; @symbol_constdef = [button,189,18,24]; ]
+            const button;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 192; @symbol_moduledef = [system_icon_dark__hint_button_left_top,192,15,53]; ]
+        module system_icon_dark__hint_button_left_top {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 192; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 193; @position = 18; @symbol_constdef = [filename,193,18,26]; @symbol_type<0> = [String,193,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__hint_button_left_top.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 194; @position = 18; @symbol_constdef = [dithering,194,18,27]; @symbol_type<0> = [String,194,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 195; @position = 18; @symbol_constdef = [packingFormat,195,18,31]; @symbol_type<0> = [String,195,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 198; @symbol_moduledef = [system_input__action_menu,198,15,40]; ]
+        module system_input__action_menu {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 198; ]
+            <init> {
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 199 18 ]
+                symbol [ WatchUi %tmp.39 199 27 34 ];
+                %tmp.39 = getm $.Toybox.WatchUi;
+                symbol [ KEY_ENTER %tmp.40 199 35 44 ];
+                %tmp.40 = getv %tmp.39 :KEY_ENTER;
+                putv self :button %tmp.40;
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 199; @position = 18; @symbol_constdef = [button,199,18,24]; ]
+            const button;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 202; @symbol_moduledef = [system_icon_light__save,202,15,38]; ]
+        module system_icon_light__save {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 202; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 203; @position = 18; @symbol_constdef = [filename,203,18,26]; @symbol_type<0> = [String,203,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__save.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 204; @position = 18; @symbol_constdef = [compress,204,18,26]; @symbol_type<0> = [String,204,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 205; @position = 18; @symbol_constdef = [dithering,205,18,27]; @symbol_type<0> = [String,205,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 206; @position = 18; @symbol_constdef = [automaticPalette,206,18,34]; @symbol_type<0> = [String,206,38,44]; ]
+            const automaticPalette as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 207; @position = 18; @symbol_constdef = [packingFormat,207,18,31]; @symbol_type<0> = [String,207,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 210; @symbol_moduledef = [prompt_color_light__body,210,15,39]; ]
+        module prompt_color_light__body {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 210; ]
+            <init> {
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 212 18 ]
+                symbol [ Graphics %tmp.41 212 31 39 ];
+                %tmp.41 = getm $.Toybox.Graphics;
+                symbol [ COLOR_TRANSPARENT %tmp.42 212 40 57 ];
+                %tmp.42 = getv %tmp.41 :COLOR_TRANSPARENT;
+                putv self :background %tmp.42;
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 211; @position = 18; @symbol_constdef = [color,211,18,23]; @symbol_type<0> = [Number,211,27,33]; ]
+            const color as Number = 0xFFFFFF;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 212; @position = 18; @symbol_constdef = [background,212,18,28]; ]
+            const background;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 215; @symbol_moduledef = [system_loc__subwindow,215,15,36]; ]
+        module system_loc__subwindow {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 215; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 216; @position = 18; @symbol_constdef = [exclude,216,18,25]; @symbol_type<0> = [Boolean,216,29,36]; ]
+            const exclude as Boolean = true;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 219; @symbol_moduledef = [system_icon_light__warning,219,15,41]; ]
+        module system_icon_light__warning {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 219; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 220; @position = 18; @symbol_constdef = [filename,220,18,26]; @symbol_type<0> = [String,220,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__warning.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 221; @position = 18; @symbol_constdef = [compress,221,18,26]; @symbol_type<0> = [String,221,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 222; @position = 18; @symbol_constdef = [dithering,222,18,27]; @symbol_type<0> = [String,222,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 223; @position = 18; @symbol_constdef = [automaticPalette,223,18,34]; @symbol_type<0> = [String,223,38,44]; ]
+            const automaticPalette as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 224; @position = 18; @symbol_constdef = [packingFormat,224,18,31]; @symbol_type<0> = [String,224,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 227; @symbol_moduledef = [confirmation_color_light__body,227,15,45]; ]
+        module confirmation_color_light__body {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 227; ]
+            <init> {
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 229 18 ]
+                symbol [ Graphics %tmp.43 229 31 39 ];
+                %tmp.43 = getm $.Toybox.Graphics;
+                symbol [ COLOR_TRANSPARENT %tmp.44 229 40 57 ];
+                %tmp.44 = getv %tmp.43 :COLOR_TRANSPARENT;
+                putv self :background %tmp.44;
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 228; @position = 18; @symbol_constdef = [color,228,18,23]; @symbol_type<0> = [Number,228,27,33]; ]
+            const color as Number = 0xFFFFFF;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 229; @position = 18; @symbol_constdef = [background,229,18,28]; ]
+            const background;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 232; @symbol_moduledef = [confirmation_icon_light__hint_keep,232,15,49]; ]
+        module confirmation_icon_light__hint_keep {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 232; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 233; @position = 18; @symbol_constdef = [filename,233,18,26]; @symbol_type<0> = [String,233,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/confirmation_icon__hint_keep.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 234; @position = 18; @symbol_constdef = [dithering,234,18,27]; @symbol_type<0> = [String,234,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 235; @position = 18; @symbol_constdef = [packingFormat,235,18,31]; @symbol_type<0> = [String,235,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 238; @symbol_moduledef = [activity_color_light__background,238,15,47]; ]
+        module activity_color_light__background {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 238; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 239; @position = 18; @symbol_constdef = [color,239,18,23]; @symbol_type<0> = [Number,239,27,33]; ]
+            const color as Number = 0x000000;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 240; @position = 18; @symbol_constdef = [background,240,18,28]; @symbol_type<0> = [Number,240,32,38]; ]
+            const background as Number = 0x000000;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 243; @symbol_moduledef = [system_icon_positive__hint_button_right_top,243,15,58]; ]
+        module system_icon_positive__hint_button_right_top {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 243; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 244; @position = 18; @symbol_constdef = [filename,244,18,26]; @symbol_type<0> = [String,244,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_positive__hint_button_right_top.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 245; @position = 18; @symbol_constdef = [dithering,245,18,27]; @symbol_type<0> = [String,245,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 246; @position = 18; @symbol_constdef = [packingFormat,246,18,31]; @symbol_type<0> = [String,246,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 249; @symbol_moduledef = [system_size__screen,249,15,34]; ]
+        module system_size__screen {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 249; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 250; @position = 18; @symbol_constdef = [width,250,18,23]; @symbol_type<0> = [Number,250,27,33]; ]
+            const width as Number = 454;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 251; @position = 18; @symbol_constdef = [height,251,18,24]; @symbol_type<0> = [Number,251,28,34]; ]
+            const height as Number = 454;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 254; @symbol_moduledef = [system_icon_destructive__hint_button_right_bottom,254,15,64]; ]
+        module system_icon_destructive__hint_button_right_bottom {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 254; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 255; @position = 18; @symbol_constdef = [filename,255,18,26]; @symbol_type<0> = [String,255,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_destructive__hint_button_right_bottom.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 256; @position = 18; @symbol_constdef = [dithering,256,18,27]; @symbol_type<0> = [String,256,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 257; @position = 18; @symbol_constdef = [packingFormat,257,18,31]; @symbol_type<0> = [String,257,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 260; @symbol_moduledef = [system_color_light__background,260,15,45]; ]
+        module system_color_light__background {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 260; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 261; @position = 18; @symbol_constdef = [color,261,18,23]; @symbol_type<0> = [Number,261,27,33]; ]
+            const color as Number = 0x000000;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 262; @position = 18; @symbol_constdef = [background,262,18,28]; @symbol_type<0> = [Number,262,32,38]; ]
+            const background as Number = 0x000000;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 265; @symbol_moduledef = [system_icon_destructive__hint_button_right_top,265,15,61]; ]
+        module system_icon_destructive__hint_button_right_top {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 265; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 266; @position = 18; @symbol_constdef = [filename,266,18,26]; @symbol_type<0> = [String,266,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_destructive__hint_button_right_top.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 267; @position = 18; @symbol_constdef = [dithering,267,18,27]; @symbol_type<0> = [String,267,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 268; @position = 18; @symbol_constdef = [packingFormat,268,18,31]; @symbol_type<0> = [String,268,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 271; @symbol_moduledef = [confirmation_loc__hint_confirm,271,15,45]; ]
+        module confirmation_loc__hint_confirm {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 271; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 272; @position = 18; @symbol_constdef = [x,272,18,19]; @symbol_type<0> = [Number,272,23,29]; ]
+            const x as Number = 379;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 273; @position = 18; @symbol_constdef = [y,273,18,19]; @symbol_type<0> = [Number,273,23,29]; ]
+            const y as Number = 89;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 276; @symbol_moduledef = [activity_color_dark__text,276,15,40]; ]
+        module activity_color_dark__text {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 276; ]
+            <init> {
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 278 18 ]
+                symbol [ Graphics %tmp.45 278 31 39 ];
+                %tmp.45 = getm $.Toybox.Graphics;
+                symbol [ COLOR_TRANSPARENT %tmp.46 278 40 57 ];
+                %tmp.46 = getv %tmp.45 :COLOR_TRANSPARENT;
+                putv self :background %tmp.46;
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 277; @position = 18; @symbol_constdef = [color,277,18,23]; @symbol_type<0> = [Number,277,27,33]; ]
+            const color as Number = 0xFFFFFF;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 278; @position = 18; @symbol_constdef = [background,278,18,28]; ]
+            const background;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 281; @symbol_moduledef = [confirmation_input__keep,281,15,39]; ]
+        module confirmation_input__keep {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 281; ]
+            <init> {
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 282 18 ]
+                symbol [ WatchUi %tmp.47 282 27 34 ];
+                %tmp.47 = getm $.Toybox.WatchUi;
+                symbol [ KEY_ESC %tmp.48 282 35 42 ];
+                %tmp.48 = getv %tmp.47 :KEY_ESC;
+                putv self :button %tmp.48;
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 282; @position = 18; @symbol_constdef = [button,282,18,24]; ]
+            const button;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 285; @symbol_moduledef = [prompt_loc__body_with_title,285,15,42]; ]
+        module prompt_loc__body_with_title {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 285; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 286; @position = 18; @symbol_constdef = [x,286,18,19]; @symbol_type<0> = [Number,286,23,29]; ]
+            const x as Number = 76;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 287; @position = 18; @symbol_constdef = [y,287,18,19]; @symbol_type<0> = [Number,287,23,29]; ]
+            const y as Number = 131;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 290; @symbol_moduledef = [system_icon_dark__search,290,15,39]; ]
+        module system_icon_dark__search {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 290; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 291; @position = 18; @symbol_constdef = [filename,291,18,26]; @symbol_type<0> = [String,291,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__search.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 292; @position = 18; @symbol_constdef = [compress,292,18,26]; @symbol_type<0> = [String,292,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 293; @position = 18; @symbol_constdef = [dithering,293,18,27]; @symbol_type<0> = [String,293,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 294; @position = 18; @symbol_constdef = [automaticPalette,294,18,34]; @symbol_type<0> = [String,294,38,44]; ]
+            const automaticPalette as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 295; @position = 18; @symbol_constdef = [packingFormat,295,18,31]; @symbol_type<0> = [String,295,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 298; @symbol_moduledef = [activity_color_light__text,298,15,41]; ]
+        module activity_color_light__text {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 298; ]
+            <init> {
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 300 18 ]
+                symbol [ Graphics %tmp.49 300 31 39 ];
+                %tmp.49 = getm $.Toybox.Graphics;
+                symbol [ COLOR_TRANSPARENT %tmp.50 300 40 57 ];
+                %tmp.50 = getv %tmp.49 :COLOR_TRANSPARENT;
+                putv self :background %tmp.50;
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 299; @position = 18; @symbol_constdef = [color,299,18,23]; @symbol_type<0> = [Number,299,27,33]; ]
+            const color as Number = 0xFFFFFF;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 300; @position = 18; @symbol_constdef = [background,300,18,28]; ]
+            const background;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 303; @symbol_moduledef = [confirmation_icon__hint_keep,303,15,43]; ]
+        module confirmation_icon__hint_keep {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 303; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 304; @position = 18; @symbol_constdef = [filename,304,18,26]; @symbol_type<0> = [String,304,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/confirmation_icon__hint_keep.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 305; @position = 18; @symbol_constdef = [dithering,305,18,27]; @symbol_type<0> = [String,305,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 306; @position = 18; @symbol_constdef = [packingFormat,306,18,31]; @symbol_type<0> = [String,306,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 309; @symbol_moduledef = [system_icon_dark__save,309,15,37]; ]
+        module system_icon_dark__save {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 309; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 310; @position = 18; @symbol_constdef = [filename,310,18,26]; @symbol_type<0> = [String,310,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__save.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 311; @position = 18; @symbol_constdef = [compress,311,18,26]; @symbol_type<0> = [String,311,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 312; @position = 18; @symbol_constdef = [dithering,312,18,27]; @symbol_type<0> = [String,312,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 313; @position = 18; @symbol_constdef = [automaticPalette,313,18,34]; @symbol_type<0> = [String,313,38,44]; ]
+            const automaticPalette as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 314; @position = 18; @symbol_constdef = [packingFormat,314,18,31]; @symbol_type<0> = [String,314,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 317; @symbol_moduledef = [system_icon_destructive__hint_button_left_middle,317,15,63]; ]
+        module system_icon_destructive__hint_button_left_middle {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 317; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 318; @position = 18; @symbol_constdef = [filename,318,18,26]; @symbol_type<0> = [String,318,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_destructive__hint_button_left_middle.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 319; @position = 18; @symbol_constdef = [dithering,319,18,27]; @symbol_type<0> = [String,319,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 320; @position = 18; @symbol_constdef = [packingFormat,320,18,31]; @symbol_type<0> = [String,320,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 323; @symbol_moduledef = [system_icon_light__search,323,15,40]; ]
+        module system_icon_light__search {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 323; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 324; @position = 18; @symbol_constdef = [filename,324,18,26]; @symbol_type<0> = [String,324,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__search.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 325; @position = 18; @symbol_constdef = [compress,325,18,26]; @symbol_type<0> = [String,325,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 326; @position = 18; @symbol_constdef = [dithering,326,18,27]; @symbol_type<0> = [String,326,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 327; @position = 18; @symbol_constdef = [automaticPalette,327,18,34]; @symbol_type<0> = [String,327,38,44]; ]
+            const automaticPalette as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 328; @position = 18; @symbol_constdef = [packingFormat,328,18,31]; @symbol_type<0> = [String,328,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 331; @symbol_moduledef = [system_icon_dark__hint_button_left_bottom,331,15,56]; ]
+        module system_icon_dark__hint_button_left_bottom {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 331; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 332; @position = 18; @symbol_constdef = [filename,332,18,26]; @symbol_type<0> = [String,332,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__hint_button_left_bottom.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 333; @position = 18; @symbol_constdef = [dithering,333,18,27]; @symbol_type<0> = [String,333,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 334; @position = 18; @symbol_constdef = [packingFormat,334,18,31]; @symbol_type<0> = [String,334,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 337; @symbol_moduledef = [system_icon_positive__hint_button_left_top,337,15,57]; ]
+        module system_icon_positive__hint_button_left_top {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 337; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 338; @position = 18; @symbol_constdef = [filename,338,18,26]; @symbol_type<0> = [String,338,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_positive__hint_button_left_top.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 339; @position = 18; @symbol_constdef = [dithering,339,18,27]; @symbol_type<0> = [String,339,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 340; @position = 18; @symbol_constdef = [packingFormat,340,18,31]; @symbol_type<0> = [String,340,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 343; @symbol_moduledef = [system_loc__hint_button_right_bottom,343,15,51]; ]
+        module system_loc__hint_button_right_bottom {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 343; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 344; @position = 18; @symbol_constdef = [x,344,18,19]; @symbol_type<0> = [Number,344,23,29]; ]
+            const x as Number = 369;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 345; @position = 18; @symbol_constdef = [y,345,18,19]; @symbol_type<0> = [Number,345,23,29]; ]
+            const y as Number = 283;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 348; @symbol_moduledef = [confirmation_icon_dark__hint_reject,348,15,50]; ]
+        module confirmation_icon_dark__hint_reject {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 348; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 349; @position = 18; @symbol_constdef = [filename,349,18,26]; @symbol_type<0> = [String,349,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/confirmation_icon__hint_reject.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 350; @position = 18; @symbol_constdef = [dithering,350,18,27]; @symbol_type<0> = [String,350,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 351; @position = 18; @symbol_constdef = [packingFormat,351,18,31]; @symbol_type<0> = [String,351,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 354; @symbol_moduledef = [confirmation_color_dark__body,354,15,44]; ]
+        module confirmation_color_dark__body {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 354; ]
+            <init> {
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 356 18 ]
+                symbol [ Graphics %tmp.51 356 31 39 ];
+                %tmp.51 = getm $.Toybox.Graphics;
+                symbol [ COLOR_TRANSPARENT %tmp.52 356 40 57 ];
+                %tmp.52 = getv %tmp.51 :COLOR_TRANSPARENT;
+                putv self :background %tmp.52;
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 355; @position = 18; @symbol_constdef = [color,355,18,23]; @symbol_type<0> = [Number,355,27,33]; ]
+            const color as Number = 0xFFFFFF;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 356; @position = 18; @symbol_constdef = [background,356,18,28]; ]
+            const background;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 359; @symbol_moduledef = [confirmation_icon_light__hint_confirm,359,15,52]; ]
+        module confirmation_icon_light__hint_confirm {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 359; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 360; @position = 18; @symbol_constdef = [filename,360,18,26]; @symbol_type<0> = [String,360,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/confirmation_icon__hint_completion.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 361; @position = 18; @symbol_constdef = [dithering,361,18,27]; @symbol_type<0> = [String,361,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 362; @position = 18; @symbol_constdef = [packingFormat,362,18,31]; @symbol_type<0> = [String,362,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 365; @symbol_moduledef = [prompt_color_dark__title,365,15,39]; ]
+        module prompt_color_dark__title {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 365; ]
+            <init> {
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 367 18 ]
+                symbol [ Graphics %tmp.53 367 31 39 ];
+                %tmp.53 = getm $.Toybox.Graphics;
+                symbol [ COLOR_TRANSPARENT %tmp.54 367 40 57 ];
+                %tmp.54 = getv %tmp.53 :COLOR_TRANSPARENT;
+                putv self :background %tmp.54;
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 366; @position = 18; @symbol_constdef = [color,366,18,23]; @symbol_type<0> = [Number,366,27,33]; ]
+            const color as Number = 0xFFFFFF;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 367; @position = 18; @symbol_constdef = [background,367,18,28]; ]
+            const background;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 370; @symbol_moduledef = [system_icon_destructive__cancel,370,15,46]; ]
+        module system_icon_destructive__cancel {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 370; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 371; @position = 18; @symbol_constdef = [filename,371,18,26]; @symbol_type<0> = [String,371,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_destructive__cancel.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 372; @position = 18; @symbol_constdef = [dithering,372,18,27]; @symbol_type<0> = [String,372,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 373; @position = 18; @symbol_constdef = [packingFormat,373,18,31]; @symbol_type<0> = [String,373,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 376; @symbol_moduledef = [system_icon_light__hint_button_right_bottom,376,15,58]; ]
+        module system_icon_light__hint_button_right_bottom {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 376; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 377; @position = 18; @symbol_constdef = [filename,377,18,26]; @symbol_type<0> = [String,377,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__hint_button_right_bottom.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 378; @position = 18; @symbol_constdef = [dithering,378,18,27]; @symbol_type<0> = [String,378,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 379; @position = 18; @symbol_constdef = [packingFormat,379,18,31]; @symbol_type<0> = [String,379,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 382; @symbol_moduledef = [prompt_loc__title,382,15,32]; ]
+        module prompt_loc__title {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 382; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 383; @position = 18; @symbol_constdef = [x,383,18,19]; @symbol_type<0> = [Number,383,23,29]; ]
+            const x as Number = 83;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 384; @position = 18; @symbol_constdef = [y,384,18,19]; @symbol_type<0> = [Number,384,23,29]; ]
+            const y as Number = 34;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 387; @symbol_moduledef = [confirmation_font_enhanced_readability__body,387,15,59]; ]
+        module confirmation_font_enhanced_readability__body {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 387; ]
+            <init> {
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 388 18 ]
+                symbol [ Graphics %tmp.55 388 34 42 ];
+                %tmp.55 = getm $.Toybox.Graphics;
+                symbol [ TEXT_JUSTIFY_CENTER %tmp.56 388 43 62 ];
+                %tmp.56 = getv %tmp.55 :TEXT_JUSTIFY_CENTER;
+                symbol [ Graphics %tmp.57 388 63 71 ];
+                %tmp.57 = getm $.Toybox.Graphics;
+                symbol [ TEXT_JUSTIFY_VCENTER %tmp.58 388 72 92 ];
+                %tmp.58 = getv %tmp.57 :TEXT_JUSTIFY_VCENTER;
+                %tmp.59 = bitor %tmp.56 %tmp.58;
+                putv self :justification %tmp.59;
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 389 18 ]
+                symbol [ Graphics %tmp.60 389 25 33 ];
+                %tmp.60 = getm $.Toybox.Graphics;
+                symbol [ FONT_SMALL %tmp.61 389 34 44 ];
+                %tmp.61 = getv %tmp.60 :FONT_SMALL;
+                putv self :font %tmp.61;
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 388; @position = 18; @symbol_constdef = [justification,388,18,31]; ]
+            const justification;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 389; @position = 18; @symbol_constdef = [font,389,18,22]; ]
+            const font;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 392; @symbol_moduledef = [prompt_color_light__title,392,15,40]; ]
+        module prompt_color_light__title {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 392; ]
+            <init> {
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 394 18 ]
+                symbol [ Graphics %tmp.62 394 31 39 ];
+                %tmp.62 = getm $.Toybox.Graphics;
+                symbol [ COLOR_TRANSPARENT %tmp.63 394 40 57 ];
+                %tmp.63 = getv %tmp.62 :COLOR_TRANSPARENT;
+                putv self :background %tmp.63;
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 393; @position = 18; @symbol_constdef = [color,393,18,23]; @symbol_type<0> = [Number,393,27,33]; ]
+            const color as Number = 0xFFFFFF;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 394; @position = 18; @symbol_constdef = [background,394,18,28]; ]
+            const background;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 397; @symbol_moduledef = [system_icon_dark__hint_button_right_top,397,15,54]; ]
+        module system_icon_dark__hint_button_right_top {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 397; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 398; @position = 18; @symbol_constdef = [filename,398,18,26]; @symbol_type<0> = [String,398,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__hint_button_right_top.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 399; @position = 18; @symbol_constdef = [dithering,399,18,27]; @symbol_type<0> = [String,399,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 400; @position = 18; @symbol_constdef = [packingFormat,400,18,31]; @symbol_type<0> = [String,400,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 403; @symbol_moduledef = [system_icon_dark__hint_button_left_middle,403,15,56]; ]
+        module system_icon_dark__hint_button_left_middle {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 403; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 404; @position = 18; @symbol_constdef = [filename,404,18,26]; @symbol_type<0> = [String,404,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__hint_button_left_middle.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 405; @position = 18; @symbol_constdef = [dithering,405,18,27]; @symbol_type<0> = [String,405,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 406; @position = 18; @symbol_constdef = [packingFormat,406,18,31]; @symbol_type<0> = [String,406,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 409; @symbol_moduledef = [confirmation_icon_dark__hint_keep,409,15,48]; ]
+        module confirmation_icon_dark__hint_keep {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 409; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 410; @position = 18; @symbol_constdef = [filename,410,18,26]; @symbol_type<0> = [String,410,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/confirmation_icon__hint_keep.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 411; @position = 18; @symbol_constdef = [dithering,411,18,27]; @symbol_type<0> = [String,411,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 412; @position = 18; @symbol_constdef = [packingFormat,412,18,31]; @symbol_type<0> = [String,412,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 415; @symbol_moduledef = [system_icon_light__cancel,415,15,40]; ]
+        module system_icon_light__cancel {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 415; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 416; @position = 18; @symbol_constdef = [filename,416,18,26]; @symbol_type<0> = [String,416,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__cancel.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 417; @position = 18; @symbol_constdef = [compress,417,18,26]; @symbol_type<0> = [String,417,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 418; @position = 18; @symbol_constdef = [dithering,418,18,27]; @symbol_type<0> = [String,418,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 419; @position = 18; @symbol_constdef = [automaticPalette,419,18,34]; @symbol_type<0> = [String,419,38,44]; ]
+            const automaticPalette as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 420; @position = 18; @symbol_constdef = [packingFormat,420,18,31]; @symbol_type<0> = [String,420,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 423; @symbol_moduledef = [confirmation_icon_light__hint_reject,423,15,51]; ]
+        module confirmation_icon_light__hint_reject {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 423; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 424; @position = 18; @symbol_constdef = [filename,424,18,26]; @symbol_type<0> = [String,424,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/confirmation_icon__hint_reject.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 425; @position = 18; @symbol_constdef = [dithering,425,18,27]; @symbol_type<0> = [String,425,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 426; @position = 18; @symbol_constdef = [packingFormat,426,18,31]; @symbol_type<0> = [String,426,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 429; @symbol_moduledef = [system_icon_light__about,429,15,39]; ]
+        module system_icon_light__about {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 429; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 430; @position = 18; @symbol_constdef = [filename,430,18,26]; @symbol_type<0> = [String,430,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__about.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 431; @position = 18; @symbol_constdef = [compress,431,18,26]; @symbol_type<0> = [String,431,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 432; @position = 18; @symbol_constdef = [dithering,432,18,27]; @symbol_type<0> = [String,432,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 433; @position = 18; @symbol_constdef = [automaticPalette,433,18,34]; @symbol_type<0> = [String,433,38,44]; ]
+            const automaticPalette as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 434; @position = 18; @symbol_constdef = [packingFormat,434,18,31]; @symbol_type<0> = [String,434,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 437; @symbol_moduledef = [system_size__toast_icon,437,15,38]; ]
+        module system_size__toast_icon {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 437; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 438; @position = 18; @symbol_constdef = [scaleX,438,18,24]; @symbol_type<0> = [Number,438,28,34]; ]
+            const scaleX as Number = 45;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 439; @position = 18; @symbol_constdef = [scaleY,439,18,24]; @symbol_type<0> = [Number,439,28,34]; ]
+            const scaleY as Number = 45;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 440; @position = 18; @symbol_constdef = [scaleRelativeTo,440,18,33]; @symbol_type<0> = [String,440,37,43]; ]
+            const scaleRelativeTo as String = "screen";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 443; @symbol_moduledef = [system_icon_dark__hint_button_right_middle,443,15,57]; ]
+        module system_icon_dark__hint_button_right_middle {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 443; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 444; @position = 18; @symbol_constdef = [exclude,444,18,25]; @symbol_type<0> = [Boolean,444,29,36]; ]
+            const exclude as Boolean = true;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 447; @symbol_moduledef = [confirmation_icon__hint_reject,447,15,45]; ]
+        module confirmation_icon__hint_reject {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 447; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 448; @position = 18; @symbol_constdef = [filename,448,18,26]; @symbol_type<0> = [String,448,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/confirmation_icon__hint_reject.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 449; @position = 18; @symbol_constdef = [dithering,449,18,27]; @symbol_type<0> = [String,449,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 450; @position = 18; @symbol_constdef = [packingFormat,450,18,31]; @symbol_type<0> = [String,450,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 453; @symbol_moduledef = [system_icon_light__hint_action_menu,453,15,50]; ]
+        module system_icon_light__hint_action_menu {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 453; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 454; @position = 18; @symbol_constdef = [filename,454,18,26]; @symbol_type<0> = [String,454,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__hint_button_right_top.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 455; @position = 18; @symbol_constdef = [dithering,455,18,27]; @symbol_type<0> = [String,455,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 456; @position = 18; @symbol_constdef = [packingFormat,456,18,31]; @symbol_type<0> = [String,456,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 459; @symbol_moduledef = [system_icon_light__hint_button_right_middle,459,15,58]; ]
+        module system_icon_light__hint_button_right_middle {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 459; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 460; @position = 18; @symbol_constdef = [exclude,460,18,25]; @symbol_type<0> = [Boolean,460,29,36]; ]
+            const exclude as Boolean = true;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 463; @symbol_moduledef = [system_icon_destructive__hint_button_right_middle,463,15,64]; ]
+        module system_icon_destructive__hint_button_right_middle {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 463; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 464; @position = 18; @symbol_constdef = [exclude,464,18,25]; @symbol_type<0> = [Boolean,464,29,36]; ]
+            const exclude as Boolean = true;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 467; @symbol_moduledef = [confirmation_loc__hint_reject,467,15,44]; ]
+        module confirmation_loc__hint_reject {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 467; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 468; @position = 18; @symbol_constdef = [x,468,18,19]; @symbol_type<0> = [Number,468,23,29]; ]
+            const x as Number = 16;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 469; @position = 18; @symbol_constdef = [y,469,18,19]; @symbol_type<0> = [Number,469,23,29]; ]
+            const y as Number = 284;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 472; @symbol_moduledef = [confirmation_icon_dark__hint_delete,472,15,50]; ]
+        module confirmation_icon_dark__hint_delete {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 472; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 473; @position = 18; @symbol_constdef = [filename,473,18,26]; @symbol_type<0> = [String,473,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/confirmation_icon__hint_delete.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 474; @position = 18; @symbol_constdef = [dithering,474,18,27]; @symbol_type<0> = [String,474,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 475; @position = 18; @symbol_constdef = [packingFormat,475,18,31]; @symbol_type<0> = [String,475,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 478; @symbol_moduledef = [activity_color_dark__background,478,15,46]; ]
+        module activity_color_dark__background {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 478; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 479; @position = 18; @symbol_constdef = [color,479,18,23]; @symbol_type<0> = [Number,479,27,33]; ]
+            const color as Number = 0x000000;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 480; @position = 18; @symbol_constdef = [background,480,18,28]; @symbol_type<0> = [Number,480,32,38]; ]
+            const background as Number = 0x000000;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 483; @symbol_moduledef = [system_icon_light__hint_button_left_bottom,483,15,57]; ]
+        module system_icon_light__hint_button_left_bottom {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 483; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 484; @position = 18; @symbol_constdef = [filename,484,18,26]; @symbol_type<0> = [String,484,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__hint_button_left_bottom.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 485; @position = 18; @symbol_constdef = [dithering,485,18,27]; @symbol_type<0> = [String,485,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 486; @position = 18; @symbol_constdef = [packingFormat,486,18,31]; @symbol_type<0> = [String,486,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 489; @symbol_moduledef = [system_icon_positive__hint_button_left_middle,489,15,60]; ]
+        module system_icon_positive__hint_button_left_middle {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 489; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 490; @position = 18; @symbol_constdef = [filename,490,18,26]; @symbol_type<0> = [String,490,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_positive__hint_button_left_middle.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 491; @position = 18; @symbol_constdef = [dithering,491,18,27]; @symbol_type<0> = [String,491,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 492; @position = 18; @symbol_constdef = [packingFormat,492,18,31]; @symbol_type<0> = [String,492,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 495; @symbol_moduledef = [system_size__menu_icon,495,15,37]; ]
+        module system_size__menu_icon {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 495; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 496; @position = 18; @symbol_constdef = [scaleX,496,18,24]; @symbol_type<0> = [Number,496,28,34]; ]
+            const scaleX as Number = 55;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 497; @position = 18; @symbol_constdef = [scaleY,497,18,24]; @symbol_type<0> = [Number,497,28,34]; ]
+            const scaleY as Number = 55;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 498; @position = 18; @symbol_constdef = [scaleRelativeTo,498,18,33]; @symbol_type<0> = [String,498,37,43]; ]
+            const scaleRelativeTo as String = "screen";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 501; @symbol_moduledef = [system_icon_destructive__warning,501,15,47]; ]
+        module system_icon_destructive__warning {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 501; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 502; @position = 18; @symbol_constdef = [filename,502,18,26]; @symbol_type<0> = [String,502,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_destructive__warning.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 503; @position = 18; @symbol_constdef = [dithering,503,18,27]; @symbol_type<0> = [String,503,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 504; @position = 18; @symbol_constdef = [packingFormat,504,18,31]; @symbol_type<0> = [String,504,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 507; @symbol_moduledef = [system_loc__hint_button_right_middle,507,15,51]; ]
+        module system_loc__hint_button_right_middle {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 507; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 508; @position = 18; @symbol_constdef = [exclude,508,18,25]; @symbol_type<0> = [Boolean,508,29,36]; ]
+            const exclude as Boolean = true;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 511; @symbol_moduledef = [system_icon_dark__cancel,511,15,39]; ]
+        module system_icon_dark__cancel {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 511; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 512; @position = 18; @symbol_constdef = [filename,512,18,26]; @symbol_type<0> = [String,512,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__cancel.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 513; @position = 18; @symbol_constdef = [compress,513,18,26]; @symbol_type<0> = [String,513,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 514; @position = 18; @symbol_constdef = [dithering,514,18,27]; @symbol_type<0> = [String,514,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 515; @position = 18; @symbol_constdef = [automaticPalette,515,18,34]; @symbol_type<0> = [String,515,38,44]; ]
+            const automaticPalette as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 516; @position = 18; @symbol_constdef = [packingFormat,516,18,31]; @symbol_type<0> = [String,516,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 519; @symbol_moduledef = [prompt_size__body_with_title,519,15,43]; ]
+        module prompt_size__body_with_title {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 519; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 520; @position = 18; @symbol_constdef = [width,520,18,23]; @symbol_type<0> = [Number,520,27,33]; ]
+            const width as Number = 302;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 521; @position = 18; @symbol_constdef = [height,521,18,24]; @symbol_type<0> = [Number,521,28,34]; ]
+            const height as Number = 254;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 524; @symbol_moduledef = [system_loc__hint_button_right_top,524,15,48]; ]
+        module system_loc__hint_button_right_top {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 524; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 525; @position = 18; @symbol_constdef = [x,525,18,19]; @symbol_type<0> = [Number,525,23,29]; ]
+            const x as Number = 379;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 526; @position = 18; @symbol_constdef = [y,526,18,19]; @symbol_type<0> = [Number,526,23,29]; ]
+            const y as Number = 89;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 529; @symbol_moduledef = [system_color_light__text,529,15,39]; ]
+        module system_color_light__text {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 529; ]
+            <init> {
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 531 18 ]
+                symbol [ Graphics %tmp.64 531 31 39 ];
+                %tmp.64 = getm $.Toybox.Graphics;
+                symbol [ COLOR_TRANSPARENT %tmp.65 531 40 57 ];
+                %tmp.65 = getv %tmp.64 :COLOR_TRANSPARENT;
+                putv self :background %tmp.65;
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 530; @position = 18; @symbol_constdef = [color,530,18,23]; @symbol_type<0> = [Number,530,27,33]; ]
+            const color as Number = 0xFFFFFF;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 531; @position = 18; @symbol_constdef = [background,531,18,28]; ]
+            const background;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 534; @symbol_moduledef = [system_icon_light__check,534,15,39]; ]
+        module system_icon_light__check {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 534; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 535; @position = 18; @symbol_constdef = [filename,535,18,26]; @symbol_type<0> = [String,535,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__check.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 536; @position = 18; @symbol_constdef = [compress,536,18,26]; @symbol_type<0> = [String,536,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 537; @position = 18; @symbol_constdef = [dithering,537,18,27]; @symbol_type<0> = [String,537,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 538; @position = 18; @symbol_constdef = [automaticPalette,538,18,34]; @symbol_type<0> = [String,538,38,44]; ]
+            const automaticPalette as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 539; @position = 18; @symbol_constdef = [packingFormat,539,18,31]; @symbol_type<0> = [String,539,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 542; @symbol_moduledef = [confirmation_input__reject,542,15,41]; ]
+        module confirmation_input__reject {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 542; ]
+            <init> {
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 543 18 ]
+                symbol [ WatchUi %tmp.66 543 27 34 ];
+                %tmp.66 = getm $.Toybox.WatchUi;
+                symbol [ KEY_DOWN %tmp.67 543 35 43 ];
+                %tmp.67 = getv %tmp.66 :KEY_DOWN;
+                putv self :button %tmp.67;
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 543; @position = 18; @symbol_constdef = [button,543,18,24]; ]
+            const button;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 546; @symbol_moduledef = [system_icon_light__revert,546,15,40]; ]
+        module system_icon_light__revert {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 546; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 547; @position = 18; @symbol_constdef = [filename,547,18,26]; @symbol_type<0> = [String,547,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__revert.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 548; @position = 18; @symbol_constdef = [compress,548,18,26]; @symbol_type<0> = [String,548,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 549; @position = 18; @symbol_constdef = [dithering,549,18,27]; @symbol_type<0> = [String,549,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 550; @position = 18; @symbol_constdef = [automaticPalette,550,18,34]; @symbol_type<0> = [String,550,38,44]; ]
+            const automaticPalette as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 551; @position = 18; @symbol_constdef = [packingFormat,551,18,31]; @symbol_type<0> = [String,551,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 554; @symbol_moduledef = [system_size__subwindow,554,15,37]; ]
+        module system_size__subwindow {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 554; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 555; @position = 18; @symbol_constdef = [exclude,555,18,25]; @symbol_type<0> = [Boolean,555,29,36]; ]
+            const exclude as Boolean = true;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 558; @symbol_moduledef = [system_icon_positive__hint_button_left_bottom,558,15,60]; ]
+        module system_icon_positive__hint_button_left_bottom {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 558; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 559; @position = 18; @symbol_constdef = [filename,559,18,26]; @symbol_type<0> = [String,559,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_positive__hint_button_left_bottom.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 560; @position = 18; @symbol_constdef = [dithering,560,18,27]; @symbol_type<0> = [String,560,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 561; @position = 18; @symbol_constdef = [packingFormat,561,18,31]; @symbol_type<0> = [String,561,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 564; @symbol_moduledef = [system_icon_dark__check,564,15,38]; ]
+        module system_icon_dark__check {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 564; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 565; @position = 18; @symbol_constdef = [filename,565,18,26]; @symbol_type<0> = [String,565,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__check.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 566; @position = 18; @symbol_constdef = [compress,566,18,26]; @symbol_type<0> = [String,566,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 567; @position = 18; @symbol_constdef = [dithering,567,18,27]; @symbol_type<0> = [String,567,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 568; @position = 18; @symbol_constdef = [automaticPalette,568,18,34]; @symbol_type<0> = [String,568,38,44]; ]
+            const automaticPalette as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 569; @position = 18; @symbol_constdef = [packingFormat,569,18,31]; @symbol_type<0> = [String,569,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 572; @symbol_moduledef = [confirmation_loc__hint_keep,572,15,42]; ]
+        module confirmation_loc__hint_keep {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 572; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 573; @position = 18; @symbol_constdef = [x,573,18,19]; @symbol_type<0> = [Number,573,23,29]; ]
+            const x as Number = 372;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 574; @position = 18; @symbol_constdef = [y,574,18,19]; @symbol_type<0> = [Number,574,23,29]; ]
+            const y as Number = 286;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 577; @symbol_moduledef = [confirmation_loc__hint_delete,577,15,44]; ]
+        module confirmation_loc__hint_delete {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 577; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 578; @position = 18; @symbol_constdef = [x,578,18,19]; @symbol_type<0> = [Number,578,23,29]; ]
+            const x as Number = 16;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 579; @position = 18; @symbol_constdef = [y,579,18,19]; @symbol_type<0> = [Number,579,23,29]; ]
+            const y as Number = 284;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 582; @symbol_moduledef = [system_icon_positive__hint_action_menu,582,15,53]; ]
+        module system_icon_positive__hint_action_menu {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 582; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 583; @position = 18; @symbol_constdef = [filename,583,18,26]; @symbol_type<0> = [String,583,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_positive__hint_button_right_top.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 584; @position = 18; @symbol_constdef = [dithering,584,18,27]; @symbol_type<0> = [String,584,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 585; @position = 18; @symbol_constdef = [packingFormat,585,18,31]; @symbol_type<0> = [String,585,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 588; @symbol_moduledef = [system_icon_positive__hint_button_right_middle,588,15,61]; ]
+        module system_icon_positive__hint_button_right_middle {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 588; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 589; @position = 18; @symbol_constdef = [exclude,589,18,25]; @symbol_type<0> = [Boolean,589,29,36]; ]
+            const exclude as Boolean = true;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 592; @symbol_moduledef = [system_icon_light__hint_button_left_middle,592,15,57]; ]
+        module system_icon_light__hint_button_left_middle {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 592; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 593; @position = 18; @symbol_constdef = [filename,593,18,26]; @symbol_type<0> = [String,593,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__hint_button_left_middle.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 594; @position = 18; @symbol_constdef = [dithering,594,18,27]; @symbol_type<0> = [String,594,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 595; @position = 18; @symbol_constdef = [packingFormat,595,18,31]; @symbol_type<0> = [String,595,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 598; @symbol_moduledef = [system_icon_dark__hint_button_right_bottom,598,15,57]; ]
+        module system_icon_dark__hint_button_right_bottom {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 598; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 599; @position = 18; @symbol_constdef = [filename,599,18,26]; @symbol_type<0> = [String,599,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__hint_button_right_bottom.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 600; @position = 18; @symbol_constdef = [dithering,600,18,27]; @symbol_type<0> = [String,600,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 601; @position = 18; @symbol_constdef = [packingFormat,601,18,31]; @symbol_type<0> = [String,601,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 604; @symbol_moduledef = [system_icon_positive__hint_button_right_bottom,604,15,61]; ]
+        module system_icon_positive__hint_button_right_bottom {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 604; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 605; @position = 18; @symbol_constdef = [filename,605,18,26]; @symbol_type<0> = [String,605,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_positive__hint_button_right_bottom.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 606; @position = 18; @symbol_constdef = [dithering,606,18,27]; @symbol_type<0> = [String,606,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 607; @position = 18; @symbol_constdef = [packingFormat,607,18,31]; @symbol_type<0> = [String,607,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 610; @symbol_moduledef = [system_icon_dark__revert,610,15,39]; ]
+        module system_icon_dark__revert {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 610; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 611; @position = 18; @symbol_constdef = [filename,611,18,26]; @symbol_type<0> = [String,611,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__revert.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 612; @position = 18; @symbol_constdef = [compress,612,18,26]; @symbol_type<0> = [String,612,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 613; @position = 18; @symbol_constdef = [dithering,613,18,27]; @symbol_type<0> = [String,613,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 614; @position = 18; @symbol_constdef = [automaticPalette,614,18,34]; @symbol_type<0> = [String,614,38,44]; ]
+            const automaticPalette as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 615; @position = 18; @symbol_constdef = [packingFormat,615,18,31]; @symbol_type<0> = [String,615,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 618; @symbol_moduledef = [confirmation_icon_light__hint_delete,618,15,51]; ]
+        module confirmation_icon_light__hint_delete {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 618; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 619; @position = 18; @symbol_constdef = [filename,619,18,26]; @symbol_type<0> = [String,619,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/confirmation_icon__hint_delete.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 620; @position = 18; @symbol_constdef = [dithering,620,18,27]; @symbol_type<0> = [String,620,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 621; @position = 18; @symbol_constdef = [packingFormat,621,18,31]; @symbol_type<0> = [String,621,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 624; @symbol_moduledef = [system_icon_dark__question,624,15,41]; ]
+        module system_icon_dark__question {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 624; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 625; @position = 18; @symbol_constdef = [filename,625,18,26]; @symbol_type<0> = [String,625,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__question.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 626; @position = 18; @symbol_constdef = [compress,626,18,26]; @symbol_type<0> = [String,626,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 627; @position = 18; @symbol_constdef = [dithering,627,18,27]; @symbol_type<0> = [String,627,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 628; @position = 18; @symbol_constdef = [automaticPalette,628,18,34]; @symbol_type<0> = [String,628,38,44]; ]
+            const automaticPalette as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 629; @position = 18; @symbol_constdef = [packingFormat,629,18,31]; @symbol_type<0> = [String,629,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 632; @symbol_moduledef = [system_icon_light__discard,632,15,41]; ]
+        module system_icon_light__discard {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 632; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 633; @position = 18; @symbol_constdef = [filename,633,18,26]; @symbol_type<0> = [String,633,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__discard.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 634; @position = 18; @symbol_constdef = [compress,634,18,26]; @symbol_type<0> = [String,634,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 635; @position = 18; @symbol_constdef = [dithering,635,18,27]; @symbol_type<0> = [String,635,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 636; @position = 18; @symbol_constdef = [automaticPalette,636,18,34]; @symbol_type<0> = [String,636,38,44]; ]
+            const automaticPalette as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 637; @position = 18; @symbol_constdef = [packingFormat,637,18,31]; @symbol_type<0> = [String,637,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 640; @symbol_moduledef = [device_info,640,15,26]; ]
+        module device_info {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 640; ]
+            <init> {
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 642 18 ]
+                symbol [ Toybox %tmp.69 642 32 38 ];
+                %tmp.69 = getv ? :Toybox;
+                symbol [ System %tmp.70 642 39 45 ];
+                %tmp.70 = getv %tmp.69 :System;
+                symbol [ SCREEN_SHAPE_ROUND %tmp.71 642 46 64 ];
+                %tmp.71 = getv %tmp.70 :SCREEN_SHAPE_ROUND;
+                putv self :screenShape %tmp.71;
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 641; @position = 18; @symbol_constdef = [screenWidth,641,18,29]; @symbol_type<0> = [Number,641,33,39]; ]
+            const screenWidth as Number = 454;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 642; @position = 18; @symbol_constdef = [screenShape,642,18,29]; ]
+            const screenShape;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 643; @position = 18; @symbol_constdef = [hasNightMode,643,18,30]; @symbol_type<0> = [Boolean,643,34,41]; ]
+            const hasNightMode as Boolean = false;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 644; @position = 18; @symbol_constdef = [hasGpu,644,18,24]; @symbol_type<0> = [Boolean,644,28,35]; ]
+            const hasGpu as Boolean = true;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 645; @position = 18; @symbol_constdef = [screenHeight,645,18,30]; @symbol_type<0> = [Number,645,34,40]; ]
+            const screenHeight as Number = 454;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 646; @position = 18; @symbol_constdef = [hasTouchScreen,646,18,32]; @symbol_type<0> = [Boolean,646,36,43]; ]
+            const hasTouchScreen as Boolean = true;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 647; @position = 18; @symbol_constdef = [hasEnhancedReadabilityMode,647,18,44]; @symbol_type<0> = [Boolean,647,48,55]; ]
+            const hasEnhancedReadabilityMode as Boolean = true;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 650; @symbol_moduledef = [confirmation_icon_dark__hint_confirm,650,15,51]; ]
+        module confirmation_icon_dark__hint_confirm {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 650; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 651; @position = 18; @symbol_constdef = [filename,651,18,26]; @symbol_type<0> = [String,651,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/confirmation_icon__hint_completion.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 652; @position = 18; @symbol_constdef = [dithering,652,18,27]; @symbol_type<0> = [String,652,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 653; @position = 18; @symbol_constdef = [packingFormat,653,18,31]; @symbol_type<0> = [String,653,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 656; @symbol_moduledef = [prompt_font__body_no_title,656,15,41]; ]
+        module prompt_font__body_no_title {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 656; ]
+            <init> {
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 657 18 ]
+                symbol [ Graphics %tmp.72 657 34 42 ];
+                %tmp.72 = getm $.Toybox.Graphics;
+                symbol [ TEXT_JUSTIFY_CENTER %tmp.73 657 43 62 ];
+                %tmp.73 = getv %tmp.72 :TEXT_JUSTIFY_CENTER;
+                symbol [ Graphics %tmp.74 657 63 71 ];
+                %tmp.74 = getm $.Toybox.Graphics;
+                symbol [ TEXT_JUSTIFY_VCENTER %tmp.75 657 72 92 ];
+                %tmp.75 = getv %tmp.74 :TEXT_JUSTIFY_VCENTER;
+                %tmp.76 = bitor %tmp.73 %tmp.75;
+                putv self :justification %tmp.76;
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 658 18 ]
+                symbol [ Graphics %tmp.77 658 25 33 ];
+                %tmp.77 = getm $.Toybox.Graphics;
+                symbol [ FONT_XTINY %tmp.78 658 34 44 ];
+                %tmp.78 = getv %tmp.77 :FONT_XTINY;
+                putv self :font %tmp.78;
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 657; @position = 18; @symbol_constdef = [justification,657,18,31]; ]
+            const justification;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 658; @position = 18; @symbol_constdef = [font,658,18,22]; ]
+            const font;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 661; @symbol_moduledef = [prompt_size__title_icon,661,15,38]; ]
+        module prompt_size__title_icon {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 661; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 662; @position = 18; @symbol_constdef = [scaleX,662,18,24]; @symbol_type<0> = [Float,662,28,33]; ]
+            const scaleX as Float = 0.13;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 663; @position = 18; @symbol_constdef = [scaleRelativeTo,663,18,33]; @symbol_type<0> = [String,663,37,43]; ]
+            const scaleRelativeTo as String = "screen";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 666; @symbol_moduledef = [system_icon_dark__warning,666,15,40]; ]
+        module system_icon_dark__warning {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 666; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 667; @position = 18; @symbol_constdef = [filename,667,18,26]; @symbol_type<0> = [String,667,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__warning.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 668; @position = 18; @symbol_constdef = [compress,668,18,26]; @symbol_type<0> = [String,668,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 669; @position = 18; @symbol_constdef = [dithering,669,18,27]; @symbol_type<0> = [String,669,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 670; @position = 18; @symbol_constdef = [automaticPalette,670,18,34]; @symbol_type<0> = [String,670,38,44]; ]
+            const automaticPalette as String = "true";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 671; @position = 18; @symbol_constdef = [packingFormat,671,18,31]; @symbol_type<0> = [String,671,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 674; @symbol_moduledef = [prompt_loc__title_icon,674,15,37]; ]
+        module prompt_loc__title_icon {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 674; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 675; @position = 18; @symbol_constdef = [x,675,18,19]; @symbol_type<0> = [Number,675,23,29]; ]
+            const x as Number = 227;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 676; @position = 18; @symbol_constdef = [y,676,18,19]; @symbol_type<0> = [Number,676,23,29]; ]
+            const y as Number = 46;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 677; @position = 18; @symbol_constdef = [horizontalJustification,677,18,41]; @symbol_type<0> = [String,677,45,51]; ]
+            const horizontalJustification as String = "center";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 678; @position = 18; @symbol_constdef = [verticalJustification,678,18,39]; @symbol_type<0> = [String,678,43,49]; ]
+            const verticalJustification as String = "center";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 681; @symbol_moduledef = [prompt_font_enhanced_readability__title,681,15,54]; ]
+        module prompt_font_enhanced_readability__title {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 681; ]
+            <init> {
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 682 18 ]
+                symbol [ Graphics %tmp.79 682 34 42 ];
+                %tmp.79 = getm $.Toybox.Graphics;
+                symbol [ TEXT_JUSTIFY_CENTER %tmp.80 682 43 62 ];
+                %tmp.80 = getv %tmp.79 :TEXT_JUSTIFY_CENTER;
+                symbol [ Graphics %tmp.81 682 63 71 ];
+                %tmp.81 = getm $.Toybox.Graphics;
+                symbol [ TEXT_JUSTIFY_VCENTER %tmp.82 682 72 92 ];
+                %tmp.82 = getv %tmp.81 :TEXT_JUSTIFY_VCENTER;
+                %tmp.83 = bitor %tmp.80 %tmp.82;
+                putv self :justification %tmp.83;
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 683 18 ]
+                symbol [ Graphics %tmp.84 683 25 33 ];
+                %tmp.84 = getm $.Toybox.Graphics;
+                symbol [ FONT_MEDIUM %tmp.85 683 34 45 ];
+                %tmp.85 = getv %tmp.84 :FONT_MEDIUM;
+                putv self :font %tmp.85;
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 682; @position = 18; @symbol_constdef = [justification,682,18,31]; ]
+            const justification;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 683; @position = 18; @symbol_constdef = [font,683,18,22]; ]
+            const font;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 686; @symbol_moduledef = [prompt_color_dark__body,686,15,38]; ]
+        module prompt_color_dark__body {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 686; ]
+            <init> {
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen" 688 18 ]
+                symbol [ Graphics %tmp.86 688 31 39 ];
+                %tmp.86 = getm $.Toybox.Graphics;
+                symbol [ COLOR_TRANSPARENT %tmp.87 688 40 57 ];
+                %tmp.87 = getv %tmp.86 :COLOR_TRANSPARENT;
+                putv self :background %tmp.87;
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 687; @position = 18; @symbol_constdef = [color,687,18,23]; @symbol_type<0> = [Number,687,27,33]; ]
+            const color as Number = 0xFFFFFF;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 688; @position = 18; @symbol_constdef = [background,688,18,28]; ]
+            const background;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 691; @symbol_moduledef = [confirmation_icon__hint_delete,691,15,45]; ]
+        module confirmation_icon__hint_delete {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 691; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 692; @position = 18; @symbol_constdef = [filename,692,18,26]; @symbol_type<0> = [String,692,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/confirmation_icon__hint_delete.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 693; @position = 18; @symbol_constdef = [dithering,693,18,27]; @symbol_type<0> = [String,693,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 694; @position = 18; @symbol_constdef = [packingFormat,694,18,31]; @symbol_type<0> = [String,694,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 697; @symbol_moduledef = [system_icon_light__hint_button_right_top,697,15,55]; ]
+        module system_icon_light__hint_button_right_top {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 697; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 698; @position = 18; @symbol_constdef = [filename,698,18,26]; @symbol_type<0> = [String,698,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_dark__hint_button_right_top.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 699; @position = 18; @symbol_constdef = [dithering,699,18,27]; @symbol_type<0> = [String,699,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 700; @position = 18; @symbol_constdef = [packingFormat,700,18,31]; @symbol_type<0> = [String,700,35,41]; ]
+            const packingFormat as String = "png";
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 703; @symbol_moduledef = [confirmation_size__body,703,15,38]; ]
+        module confirmation_size__body {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 703; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 704; @position = 18; @symbol_constdef = [width,704,18,23]; @symbol_type<0> = [Number,704,27,33]; ]
+            const width as Number = 316;
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 705; @position = 18; @symbol_constdef = [height,705,18,24]; @symbol_type<0> = [Number,705,28,34]; ]
+            const height as Number = 246;
+        }
+        [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 708; @symbol_moduledef = [system_icon_positive__check,708,15,42]; ]
+        module system_icon_positive__check {
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 708; ]
+            <init> {
+            }
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 709; @position = 18; @symbol_constdef = [filename,709,18,26]; @symbol_type<0> = [String,709,30,36]; ]
+            const filename as String = "/Users/ethanroberts/Library/Application Support/Garmin/ConnectIQ/Devices/fr57047mm/system_icon_positive__check.svg";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 710; @position = 18; @symbol_constdef = [dithering,710,18,27]; @symbol_type<0> = [String,710,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 711; @position = 18; @symbol_constdef = [packingFormat,711,18,31]; @symbol_type<0> = [String,711,35,41]; ]
+            const packingFormat as String = "png";
+        }
+    }
+}
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4570-00/source/Rez.mcgen"; @line = 1; ]
+<init> {
+}

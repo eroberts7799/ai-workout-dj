@@ -1,0 +1,337 @@
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc"; @line = 6; @symbol_importdef<0> = [Toybox,6,7,13]; @symbol_importdef<1> = [Activity,6,14,22]; ]
+import Toybox.Activity;
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc"; @line = 7; @symbol_importdef<0> = [Toybox,7,7,13]; @symbol_importdef<1> = [Application,7,14,25]; @symbol_importdef<2> = [Properties,7,26,36]; ]
+import Toybox.Application.Properties;
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc"; @line = 8; @symbol_importdef<0> = [Toybox,8,7,13]; @symbol_importdef<1> = [Communications,8,14,28]; ]
+import Toybox.Communications;
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc"; @line = 9; @symbol_importdef<0> = [Toybox,9,7,13]; @symbol_importdef<1> = [Lang,9,14,18]; ]
+import Toybox.Lang;
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc"; @line = 10; @symbol_importdef<0> = [Toybox,10,7,13]; @symbol_importdef<1> = [System,10,14,20]; ]
+import Toybox.System;
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc"; @line = 11; @symbol_importdef<0> = [Toybox,11,7,13]; @symbol_importdef<1> = [Time,11,14,18]; ]
+import Toybox.Time;
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc"; @line = 12; @symbol_importdef<0> = [Toybox,12,7,13]; @symbol_importdef<1> = [WatchUi,12,14,21]; ]
+import Toybox.WatchUi;
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc"; @line = 14; @symbol_classdef = [AwdjField,14,6,15]; @symbol_extends<0> = [WatchUi,14,24,31]; @symbol_extends<1> = [SimpleDataField,14,32,47]; ]
+class AwdjField extends WatchUi.SimpleDataField {
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc"; @line = 14; ]
+    <init> {
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc"; @line = 14; ]
+    static
+    <init> {
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc"; @line = 15; @position = 14; @symbol_vardef = [_lastPostMs,15,14,25]; @symbol_type<0> = [Number,15,29,35]; ]
+    private
+    var _lastPostMs as Number = 0;
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc"; @line = 16; @position = 14; @symbol_vardef = [_pendingEvent,16,14,27]; @symbol_type<0> = [String,16,31,37]; ]
+    private
+    var _pendingEvent as String or Null = null;
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc"; @line = 18; @symbol_functiondef = [initialize,18,11,21]; ]
+    function initialize() as Void {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_18_24_21_2_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" 19 4 ]
+        symbol [ SimpleDataField %tmp.2 19 4 19 ];
+        %tmp.2 = getv ? :SimpleDataField;
+        symbol [ initialize %tmp.3 19 20 30 ];
+        %tmp.3 = getv function %tmp.2 :initialize;
+        invoke %tmp.2 %tmp.3();
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" 20 4 ]
+        %tmp.4 = "AI DJ";
+        symbol [ label ? 20 4 9 ];
+        putv self :label %tmp.4;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_18_24_21_2_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc"; @line = 23; @symbol_functiondef = [onTimerStart,23,11,23]; ]
+    function onTimerStart() as Void {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_23_34_25_2_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" 24 4 ]
+        %tmp.1 = "timerStart";
+        symbol [ _pendingEvent ? 24 4 17 ];
+        putv self :_pendingEvent %tmp.1;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_23_34_25_2_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc"; @line = 27; @symbol_functiondef = [onTimerPause,27,11,23]; ]
+    function onTimerPause() as Void {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_27_34_29_2_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" 28 4 ]
+        %tmp.1 = "timerPause";
+        symbol [ _pendingEvent ? 28 4 17 ];
+        putv self :_pendingEvent %tmp.1;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_27_34_29_2_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc"; @line = 31; @symbol_functiondef = [onTimerResume,31,11,24]; ]
+    function onTimerResume() as Void {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_31_35_33_2_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" 32 4 ]
+        %tmp.1 = "timerResume";
+        symbol [ _pendingEvent ? 32 4 17 ];
+        putv self :_pendingEvent %tmp.1;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_31_35_33_2_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc"; @line = 35; @symbol_functiondef = [onTimerStop,35,11,22]; ]
+    function onTimerStop() as Void {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_35_33_37_2_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" 36 4 ]
+        %tmp.1 = "timerStop";
+        symbol [ _pendingEvent ? 36 4 17 ];
+        putv self :_pendingEvent %tmp.1;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_35_33_37_2_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc"; @line = 39; @symbol_functiondef = [compute,39,11,18]; @symbol_param<0> = [info,39,19,23]; @symbol_param<0>_type<0> = [Activity,39,27,35]; @symbol_param<0>_type<1> = [Info,39,36,40]; @symbol_return<0> = [Numeric,39,45,52]; @symbol_return<1> = [Time,39,56,60]; @symbol_return<2> = [Duration,39,61,69]; @symbol_return<3> = [String,39,73,79]; ]
+    function compute(info as Activity.Info) as Numeric or Time.Duration or String or Null {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_39_88_47_2_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" 40 4 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_39_88_47_2_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_39_88_47_2_stop" ]
+        %now.1 = local;
+        symbol [ now %now.1 40 8 11 ];
+        symbol [ System %tmp.1 40 14 20 ];
+        %tmp.1 = getm $.Toybox.System;
+        symbol [ getTimer %tmp.2 40 21 29 ];
+        %tmp.2 = getv function %tmp.1 :getTimer;
+        %tmp.3 = invoke %tmp.1 %tmp.2();
+        lputv %now.1 %tmp.3;
+        symbol [ now %now.1 40 8 11 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" 42 4 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_42_4_45_4_if_stmt:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_42_8_42_54_begin:
+        symbol [ _pendingEvent %tmp.5 42 8 21 ];
+        %tmp.5 = getv ? :_pendingEvent;
+        %tmp.6 = null;
+        %tmp.7 = ne %tmp.5 %tmp.6;
+        bt %tmp.7 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_42_4_45_4_if_true;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_42_33_42_54_false:
+        %tmp.8 = lgetv %now.1;
+        symbol [ now %tmp.8 42 33 36 ];
+        symbol [ _lastPostMs %tmp.10 42 39 50 ];
+        %tmp.10 = getv ? :_lastPostMs;
+        %tmp.11 = sub %tmp.8 %tmp.10;
+        %tmp.12 = 1000;
+        %tmp.13 = gte %tmp.11 %tmp.12;
+        push %tmp.13;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_42_33_42_54_end:
+        %tmp.14 = phi [%tmp.7 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_42_8_42_54_begin] [%tmp.13 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_42_33_42_54_false] [%tmp.14 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_42_33_42_54_end];
+        bf %tmp.14 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_42_4_45_4_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_42_4_45_4_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_42_60_45_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" 43 6 ]
+        %tmp.15 = self;
+        symbol [ postSample %tmp.16 43 6 16 ];
+        %tmp.16 = getv function %tmp.15 :postSample;
+        %tmp.17 = lgetv %info;
+        symbol [ info %tmp.17 43 17 21 ];
+        invoke %tmp.15 %tmp.16(%tmp.17);
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" 44 6 ]
+        %tmp.18 = lgetv %now.1;
+        symbol [ now %tmp.18 44 20 23 ];
+        symbol [ _lastPostMs ? 44 6 17 ];
+        putv self :_lastPostMs %tmp.18;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_42_60_45_4_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_42_4_45_4_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_42_4_45_4_if_end:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" 46 4 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_46_11_46_67_begin:
+        %tmp.19 = lgetv %info;
+        symbol [ info %tmp.19 46 11 15 ];
+        symbol [ currentHeartRate %tmp.20 46 16 32 ];
+        %tmp.20 = getv %tmp.19 :currentHeartRate;
+        %tmp.21 = null;
+        %tmp.22 = ne %tmp.20 %tmp.21;
+        bf %tmp.22 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_46_11_46_67_else_false;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_46_11_46_67_true:
+        %tmp.23 = lgetv %info;
+        symbol [ info %tmp.23 46 43 47 ];
+        symbol [ currentHeartRate %tmp.24 46 48 64 ];
+        %tmp.24 = getv %tmp.23 :currentHeartRate;
+        push %tmp.24;
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_46_11_46_67_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_46_11_46_67_else_false:
+        %tmp.25 = 0;
+        push %tmp.25;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_46_11_46_67_end:
+        %tmp.26 = phi [%tmp.22 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_46_11_46_67_begin] [%tmp.24 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_46_11_46_67_true] [%tmp.25 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_46_11_46_67_else_false] [%tmp.26 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_46_11_46_67_end];
+        ret %tmp.26;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_39_88_47_2_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc"; @line = 49; @symbol_functiondef = [postSample,49,19,29]; @symbol_param<0> = [info,49,30,34]; @symbol_param<0>_type<0> = [Activity,49,38,46]; @symbol_param<0>_type<1> = [Info,49,47,51]; ]
+    private
+    function postSample(info as Activity.Info) as Void {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_49_61_77_2_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" 50 4 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_49_61_77_2_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_49_61_77_2_stop" ]
+        %url.1 = local;
+        symbol [ url %url.1 50 8 11 ];
+        symbol [ Properties %tmp.1 50 14 24 ];
+        %tmp.1 = getm $.Toybox.Application.Properties;
+        symbol [ getValue %tmp.2 50 25 33 ];
+        %tmp.2 = getv function %tmp.1 :getValue;
+        %tmp.3 = "endpoint";
+        %tmp.4 = invoke %tmp.1 %tmp.2(%tmp.3);
+        %tmp.5 = as %tmp.4 String or Null;
+        symbol [ String %tmp.5 50 49 55 ];
+        lputv %url.1 %tmp.5;
+        symbol [ url %url.1 50 8 11 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" 51 4 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_51_4_54_4_if_stmt:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_51_8_51_36_begin:
+        %tmp.6 = lgetv %url.1;
+        symbol [ url %tmp.6 51 8 11 ];
+        %tmp.7 = null;
+        %tmp.8 = eq %tmp.6 %tmp.7;
+        bt %tmp.8 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_51_4_54_4_if_true;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_51_23_51_36_false:
+        %tmp.9 = lgetv %url.1;
+        symbol [ url %tmp.9 51 23 26 ];
+        %tmp.10 = as %tmp.9 { (!Null) };
+        symbol [ equals %tmp.11 51 27 33 ];
+        %tmp.11 = getv function %tmp.10 :equals;
+        %tmp.12 = "";
+        %tmp.13 = invoke %tmp.10 %tmp.11(%tmp.12);
+        push %tmp.13;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_51_23_51_36_end:
+        %tmp.14 = phi [%tmp.8 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_51_8_51_36_begin] [%tmp.13 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_51_23_51_36_false] [%tmp.14 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_51_23_51_36_end];
+        bf %tmp.14 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_51_4_54_4_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_51_4_54_4_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_51_39_54_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" 53 6 ]
+        %tmp.15 = "http://172.20.8.136:5173/api/garmin";
+        lputv %url.1 %tmp.15;
+        symbol [ url %url.1 53 6 9 ];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_51_39_54_4_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_51_4_54_4_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_51_4_54_4_if_end:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" 55 4 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_49_61_77_2_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_49_61_77_2_stop" ]
+        %body.2 = local;
+        symbol [ body %body.2 55 8 12 ];
+        %tmp.16 = newd 5;
+        %tmp.17 = "event";
+        symbol [ _pendingEvent %tmp.19 56 17 30 ];
+        %tmp.19 = getv ? :_pendingEvent;
+        %tmp.20 = dup %tmp.16;
+        %tmp.21 = aputv %tmp.20 %tmp.17 %tmp.19;
+        %tmp.22 = "hr";
+        %tmp.23 = lgetv %info;
+        symbol [ info %tmp.23 57 14 18 ];
+        symbol [ currentHeartRate %tmp.24 57 19 35 ];
+        %tmp.24 = getv %tmp.23 :currentHeartRate;
+        %tmp.25 = dup %tmp.21;
+        %tmp.26 = aputv %tmp.25 %tmp.22 %tmp.24;
+        %tmp.27 = "timerMs";
+        %tmp.28 = lgetv %info;
+        symbol [ info %tmp.28 58 19 23 ];
+        symbol [ timerTime %tmp.29 58 24 33 ];
+        %tmp.29 = getv %tmp.28 :timerTime;
+        %tmp.30 = dup %tmp.26;
+        %tmp.31 = aputv %tmp.30 %tmp.27 %tmp.29;
+        %tmp.32 = "altitude";
+        %tmp.33 = lgetv %info;
+        symbol [ info %tmp.33 59 20 24 ];
+        symbol [ altitude %tmp.34 59 25 33 ];
+        %tmp.34 = getv %tmp.33 :altitude;
+        %tmp.35 = dup %tmp.31;
+        %tmp.36 = aputv %tmp.35 %tmp.32 %tmp.34;
+        %tmp.37 = "speed";
+        %tmp.38 = lgetv %info;
+        symbol [ info %tmp.38 60 17 21 ];
+        symbol [ currentSpeed %tmp.39 60 22 34 ];
+        %tmp.39 = getv %tmp.38 :currentSpeed;
+        %tmp.40 = dup %tmp.36;
+        %tmp.41 = aputv %tmp.40 %tmp.37 %tmp.39;
+        lputv %body.2 %tmp.41;
+        symbol [ body %body.2 55 8 12 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" 62 4 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_62_4_66_4_if_stmt:
+        %tmp.42 = lgetv %info;
+        symbol [ info %tmp.42 62 8 12 ];
+        symbol [ currentLocation %tmp.43 62 13 28 ];
+        %tmp.43 = getv %tmp.42 :currentLocation;
+        %tmp.44 = null;
+        %tmp.45 = ne %tmp.43 %tmp.44;
+        bf %tmp.45 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_62_4_66_4_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_62_4_66_4_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_62_38_66_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" 63 6 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_62_38_66_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_62_38_66_4_stop" ]
+        %deg.3 = local;
+        symbol [ deg %deg.3 63 10 13 ];
+        %tmp.46 = lgetv %info;
+        symbol [ info %tmp.46 63 16 20 ];
+        symbol [ currentLocation %tmp.47 63 21 36 ];
+        %tmp.47 = getv %tmp.46 :currentLocation;
+        symbol [ toDegrees %tmp.48 63 37 46 ];
+        %tmp.48 = getv function %tmp.47 :toDegrees;
+        %tmp.49 = invoke %tmp.47 %tmp.48();
+        lputv %deg.3 %tmp.49;
+        symbol [ deg %deg.3 63 10 13 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" 64 6 ]
+        %tmp.50 = lgetv %body.2;
+        symbol [ body %tmp.50 64 6 10 ];
+        %tmp.51 = lgetv %deg.3;
+        symbol [ deg %tmp.51 64 20 23 ];
+        %tmp.52 = 0;
+        %tmp.53 = agetv %tmp.51 %tmp.52;
+        %tmp.54 = "lat";
+        aputv %tmp.50 %tmp.54 %tmp.53;
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" 65 6 ]
+        %tmp.55 = lgetv %body.2;
+        symbol [ body %tmp.55 65 6 10 ];
+        %tmp.56 = lgetv %deg.3;
+        symbol [ deg %tmp.56 65 20 23 ];
+        %tmp.57 = 1;
+        %tmp.58 = agetv %tmp.56 %tmp.57;
+        %tmp.59 = "lon";
+        aputv %tmp.55 %tmp.59 %tmp.58;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_62_38_66_4_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_62_4_66_4_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_62_4_66_4_if_end:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" 67 4 ]
+        %tmp.60 = null;
+        symbol [ _pendingEvent ? 67 4 17 ];
+        putv self :_pendingEvent %tmp.60;
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" 68 4 ]
+        symbol [ Communications %tmp.61 68 4 18 ];
+        %tmp.61 = getm $.Toybox.Communications;
+        symbol [ makeWebRequest %tmp.62 68 19 33 ];
+        %tmp.62 = getv function %tmp.61 :makeWebRequest;
+        %tmp.63 = lgetv %url.1;
+        symbol [ url %tmp.63 69 6 9 ];
+        %tmp.64 = lgetv %body.2;
+        symbol [ body %tmp.64 70 6 10 ];
+        %tmp.65 = newd 2;
+        %tmp.67 = const :method;
+        symbol [ method %tmp.67 72 9 15 const ];
+        symbol [ Communications %tmp.68 72 19 33 ];
+        %tmp.68 = getm $.Toybox.Communications;
+        symbol [ HTTP_REQUEST_METHOD_POST %tmp.69 72 34 58 ];
+        %tmp.69 = getv %tmp.68 :HTTP_REQUEST_METHOD_POST;
+        %tmp.70 = dup %tmp.65;
+        %tmp.71 = aputv %tmp.70 %tmp.67 %tmp.69;
+        %tmp.73 = const :headers;
+        symbol [ headers %tmp.73 73 9 16 const ];
+        %tmp.74 = newd 1;
+        %tmp.75 = "Content-Type";
+        symbol [ Communications %tmp.76 73 40 54 ];
+        %tmp.76 = getm $.Toybox.Communications;
+        symbol [ REQUEST_CONTENT_TYPE_JSON %tmp.77 73 55 80 ];
+        %tmp.77 = getv %tmp.76 :REQUEST_CONTENT_TYPE_JSON;
+        %tmp.78 = dup %tmp.74;
+        %tmp.79 = aputv %tmp.78 %tmp.75 %tmp.77;
+        %tmp.80 = dup %tmp.71;
+        %tmp.81 = aputv %tmp.80 %tmp.73 %tmp.79;
+        %tmp.82 = self;
+        symbol [ method %tmp.83 75 6 12 ];
+        %tmp.83 = getv function %tmp.82 :method;
+        %tmp.85 = const :onResponse;
+        symbol [ onResponse %tmp.85 75 14 24 const ];
+        %tmp.86 = invoke %tmp.82 %tmp.83(%tmp.85);
+        invoke %tmp.61 %tmp.62(%tmp.63, %tmp.64, %tmp.81, %tmp.86);
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_49_61_77_2_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc"; @line = 79; @symbol_functiondef = [onResponse,79,11,21]; @symbol_param<0> = [code,79,22,26]; @symbol_param<0>_type<0> = [Number,79,30,36]; @symbol_param<1> = [data,79,38,42]; @symbol_param<1>_type<0> = [Dictionary,79,46,56]; @symbol_param<1>_type<1> = [String,79,60,66]; ]
+    function onResponse(code as Number, data as Dictionary or String or Null) as Void {
+    }
+}
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc"; @line = 6; ]
+<init> {
+}

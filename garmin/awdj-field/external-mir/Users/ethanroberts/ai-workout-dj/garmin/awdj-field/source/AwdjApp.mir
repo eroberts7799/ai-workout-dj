@@ -1,0 +1,57 @@
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc"; @line = 1; @symbol_importdef<0> = [Toybox,1,7,13]; @symbol_importdef<1> = [Application,1,14,25]; ]
+import Toybox.Application;
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc"; @line = 2; @symbol_importdef<0> = [Toybox,2,7,13]; @symbol_importdef<1> = [Lang,2,14,18]; ]
+import Toybox.Lang;
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc"; @line = 3; @symbol_importdef<0> = [Toybox,3,7,13]; @symbol_importdef<1> = [WatchUi,3,14,21]; ]
+import Toybox.WatchUi;
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc"; @line = 5; @symbol_classdef = [AwdjApp,5,6,13]; @symbol_extends<0> = [Application,5,22,33]; @symbol_extends<1> = [AppBase,5,34,41]; ]
+class AwdjApp extends Application.AppBase {
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc"; @line = 5; ]
+    <init> {
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc"; @line = 5; ]
+    static
+    <init> {
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc"; @line = 6; @symbol_functiondef = [initialize,6,11,21]; ]
+    function initialize() as Void {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjApp_mc_6_24_8_2_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc" 7 4 ]
+        symbol [ AppBase %tmp.2 7 4 11 ];
+        %tmp.2 = getv ? :AppBase;
+        symbol [ initialize %tmp.3 7 12 22 ];
+        %tmp.3 = getv function %tmp.2 :initialize;
+        invoke %tmp.2 %tmp.3();
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjApp_mc_6_24_8_2_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc"; @line = 10; @symbol_functiondef = [getInitialView,10,11,25]; @symbol_return<0> = [Views,10,32,37]; @symbol_return<1> = [Views,10,43,48]; @symbol_return<2> = [InputDelegates,10,50,64]; ]
+    function getInitialView() as [Views] or [Views, InputDelegates] {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjApp_mc_10_66_12_2_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc" 11 4 ]
+        %tmp.1 = newa 1;
+        symbol [ AwdjField %tmp.5 11 16 25 ];
+        %tmp.5 = getv ? :AwdjField;
+        %tmp.2 = newc %tmp.5 ();
+        %tmp.6 = dup %tmp.1;
+        %tmp.7 = aputv %tmp.6 0 %tmp.2;
+        ret %tmp.7;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjApp_mc_10_66_12_2_stop:
+    }
+}
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc"; @line = 15; @symbol_functiondef = [getApp,15,9,15]; @symbol_return<0> = [AwdjApp,15,21,28]; ]
+function getApp() as AwdjApp {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjApp_mc_15_29_17_0_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc" 16 2 ]
+    symbol [ Application %tmp.1 16 9 20 ];
+    %tmp.1 = getm $.Toybox.Application;
+    symbol [ getApp %tmp.2 16 21 27 ];
+    %tmp.2 = getv function %tmp.1 :getApp;
+    %tmp.3 = invoke %tmp.1 %tmp.2();
+    %tmp.4 = as %tmp.3 AwdjApp;
+    symbol [ AwdjApp %tmp.4 16 33 40 ];
+    ret %tmp.4;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjApp_mc_15_29_17_0_stop:
+}
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc"; @line = 1; ]
+<init> {
+}

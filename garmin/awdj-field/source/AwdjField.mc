@@ -8,6 +8,7 @@ import Toybox.Application.Properties;
 import Toybox.Communications;
 import Toybox.Lang;
 import Toybox.System;
+import Toybox.Time;
 import Toybox.WatchUi;
 
 class AwdjField extends WatchUi.SimpleDataField {
@@ -35,7 +36,7 @@ class AwdjField extends WatchUi.SimpleDataField {
     _pendingEvent = "timerStop";
   }
 
-  function compute(info as Activity.Info) as Numeric or Duration or String or Null {
+  function compute(info as Activity.Info) as Numeric or Time.Duration or String or Null {
     var now = System.getTimer();
     // Post immediately on events; otherwise 1Hz.
     if (_pendingEvent != null || now - _lastPostMs >= 1000) {
@@ -48,8 +49,8 @@ class AwdjField extends WatchUi.SimpleDataField {
   private function postSample(info as Activity.Info) as Void {
     var url = Properties.getValue("endpoint") as String?;
     if (url == null || url.equals("")) {
-      _pendingEvent = null;
-      return;
+      // Default: the conductor on the home LAN (settings can override).
+      url = "http://172.20.8.136:5173/api/garmin";
     }
     var body = {
       "event" => _pendingEvent,

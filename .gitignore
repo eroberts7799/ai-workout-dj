@@ -3,3 +3,5 @@ dist/
 .env
 .DS_Store
 .gstack/
+developer_key*
+*.prg
