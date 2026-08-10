@@ -34,6 +34,14 @@ export class SessionClock {
     return this.startedAt !== null
   }
 
+  /** Jump the workout clock to an arbitrary time (testing/scrubbing). */
+  seekTo(ms: number): void {
+    const n = this.now()
+    this.startedAt = n - ms
+    this.pausedTotal = 0
+    if (this.pausedAt !== null) this.pausedAt = n
+  }
+
   /** Workout time: wall time minus paused time. Frozen while paused. */
   nowMs(): number {
     if (this.startedAt === null) return 0

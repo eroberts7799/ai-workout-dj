@@ -28,6 +28,25 @@ describe('parsePlan', () => {
 })
 
 describe('SessionClock', () => {
+  test('seekTo jumps the clock, works while paused, and survives resume', () => {
+    let t = 1000
+    const clock = new SessionClock(() => t)
+    clock.start()
+    t = 5000
+    clock.seekTo(300_000)
+    expect(clock.nowMs()).toBe(300_000)
+    t = 6000
+    expect(clock.nowMs()).toBe(301_000)
+    clock.pause()
+    clock.seekTo(60_000)
+    expect(clock.nowMs()).toBe(60_000)
+    t = 99_000
+    expect(clock.nowMs()).toBe(60_000) // still paused
+    clock.resume()
+    t = 100_000
+    expect(clock.nowMs()).toBe(61_000)
+  })
+
   test('pause freezes workout time, resume continues', () => {
     let t = 1000
     const clock = new SessionClock(() => t)

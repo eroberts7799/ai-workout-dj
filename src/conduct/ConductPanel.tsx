@@ -88,10 +88,27 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
     const clock = clockRef.current
     if (phase === 'running') {
       clock.pause()
+      void sdk.player.pause() // workout paused = music paused
       setPhase('paused')
     } else if (phase === 'paused') {
       clock.resume()
+      void sdk.player.resume()
       setPhase('running')
+    }
+  }
+
+  /** Test scrubber: jump anywhere in the workout; playback state re-syncs to
+   *  whatever the setlist says should be playing at that moment. */
+  function scrubTo(ms: number) {
+    clockRef.current.seekTo(ms)
+    setClockMs(ms)
+    prevMsRef.current = ms // skip cues in between — we re-establish state directly
+    const past = cuesRef.current.filter((c) => c.atMs <= ms).sort((a, b) => b.atMs - a.atMs)[0]
+    if (past) {
+      const song = loadAllTags()[past.trackId]
+      const dur = song?.durationMs ?? 240_000
+      const pos = Math.max(0, Math.min(past.positionMs + (ms - past.atMs), dur - 5000))
+      playTrack(sdk.deviceId, past.uri, pos).catch(() => {})
     }
   }
 
@@ -161,6 +178,15 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
         {(phase === 'running' || phase === 'paused') && (
           <>
             <div style={{ fontSize: 40 }}>{fmtClock(clockMs)}</div>
+            <input
+              type="range"
+              min={0}
+              max={totalDurationMs(plan)}
+              value={Math.min(clockMs, totalDurationMs(plan))}
+              onChange={(e) => scrubTo(Number(e.target.value))}
+              style={{ padding: 0, margin: '8px 0' }}
+              title="Scrub anywhere in the workout (testing)"
+            />
             {nextCue && (
               <p className="muted">
                 next: {fmtClock(nextCue.atMs)} — {nextCue.reason}

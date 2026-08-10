@@ -84,10 +84,48 @@ describe('planSetlist', () => {
     expect(first.positionMs).toBe(75_000)
   })
 
-  test('no two consecutive cues use the same track', () => {
+  test('consecutive entry cues alternate tracks (loop-backs exempt — same track by design)', () => {
     const { cues } = planSetlist(intervalPlan, songs)
-    for (let i = 1; i < cues.length; i++) {
-      expect(cues[i].trackId).not.toBe(cues[i - 1].trackId)
+    const entries = cues.filter((c) => !c.reason.startsWith('loop back'))
+    for (let i = 1; i < entries.length; i++) {
+      expect(entries[i].trackId).not.toBe(entries[i - 1].trackId)
+    }
+  })
+
+  /** THE prime directive: music never stops. Simulate playback over the cue
+   *  list and assert no moment between t=0 and plan end lacks a playing track. */
+  function totalSilenceMs(cues: { atMs: number; trackId: string; positionMs: number }[], planEnd: number): number {
+    if (cues.length === 0) return planEnd
+    let silence = cues[0].atMs // before the first cue
+    for (let i = 0; i < cues.length; i++) {
+      const dur = 240_000 // all test songs are 4:00
+      const end = cues[i].atMs + (dur - cues[i].positionMs)
+      const next = i + 1 < cues.length ? cues[i + 1].atMs : planEnd
+      if (end < next) silence += next - end
+    }
+    return silence
+  }
+
+  test('zero silence across the whole plan (loops loop, songs chain, cooldown covered)', () => {
+    const { cues } = planSetlist(intervalPlan, songs)
+    expect(totalSilenceMs(cues, 1_440_000)).toBe(0)
+  })
+
+  test('zero silence even with a single song (repeats rather than stopping)', () => {
+    const { cues } = planSetlist(intervalPlan, [fullSong('solo')])
+    expect(totalSilenceMs(cues, 1_440_000)).toBe(0)
+  })
+
+  test('drop songs are never loop-interrupted before their drop lands', () => {
+    const { cues } = planSetlist(intervalPlan, songs)
+    const targets = hardStepStarts(intervalPlan)
+    for (const target of targets) {
+      const entry = cues
+        .filter((c) => c.atMs <= target && c.reason.startsWith('drop lands'))
+        .sort((a, b) => b.atMs - a.atMs)[0]
+      // no cue of any kind may interrupt between drop entry and the drop landing
+      const interrupters = cues.filter((c) => c.atMs > entry.atMs && c.atMs < target)
+      expect(interrupters).toEqual([])
     }
   })
 
@@ -102,11 +140,22 @@ describe('planSetlist', () => {
     }
   })
 
-  test('easy stretches get groove fills', () => {
+  test('easy stretches get groove fills that actually loop', () => {
     const { cues } = planSetlist(intervalPlan, songs)
     const fills = cues.filter((c) => c.reason.startsWith('groove fill'))
     expect(fills.length).toBeGreaterThan(0)
     for (const f of fills) expect(f.positionMs).toBe(30_000) // loop_start
+    // the first fill (t=0) must loop its 30s section rather than play past it
+    const loopBacks = cues.filter((c) => c.reason.startsWith('loop back') && c.atMs < 460_000)
+    expect(loopBacks.length).toBeGreaterThan(3)
+    for (const lb of loopBacks) expect(lb.positionMs).toBe(30_000)
+  })
+
+  test('fills start after the hard step ends, not on the drop moment', () => {
+    const { cues } = planSetlist(intervalPlan, songs)
+    // hard step 480-540s: nothing new may start inside it except its own drop entry
+    const inside = cues.filter((c) => c.atMs > 480_000 && c.atMs < 540_000)
+    expect(inside).toEqual([])
   })
 
   test('single droppable song: reused rather than silent, no crash', () => {
