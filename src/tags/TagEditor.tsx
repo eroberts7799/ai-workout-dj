@@ -5,6 +5,15 @@ import { playTrack } from '../spike/webapi-path'
 import { deleteTags, downloadTagsFile, importTagsFile, loadAllTags, saveTags } from './store'
 import { MARKER_LABEL, type Marker, type MarkerType, type SongTags } from './types'
 
+interface AnalysisEntry {
+  sourceFile: string
+  title: string
+  artist: string
+  durationMs: number
+  bpm: number | null
+  markers: { type: MarkerType; ms: number }[]
+}
+
 // Keypress markers are placed REACTION_OFFSET early to compensate human reaction
 // time; the ±nudge + audition loop is the real accuracy mechanism (design doc).
 const REACTION_OFFSET_MS = 200
@@ -173,6 +182,52 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
     await sdk.player.resume()
   }
 
+  /** Import analyzer output: match each song to a Spotify track via search, then save. */
+  async function importAnalysis(file: File) {
+    const parsed = JSON.parse(await file.text()) as { analysis?: AnalysisEntry[] }
+    const entries = parsed.analysis ?? []
+    if (entries.length === 0) {
+      setStatus('No analysis entries in that file — is it analyze.py output?')
+      return
+    }
+    const notes: string[] = []
+    for (const e of entries) {
+      try {
+        const q = encodeURIComponent(`track:${e.title} artist:${e.artist}`)
+        const res = await api(`/search?q=${q}&type=track&limit=1`)
+        if (!res.ok) throw new Error(`search ${res.status}`)
+        const json = (await res.json()) as {
+          tracks: { items: { id: string; uri: string; name: string; duration_ms: number; artists: { name: string }[] }[] }
+        }
+        const hit = json.tracks.items[0]
+        if (!hit) {
+          notes.push(`✗ ${e.title} — no Spotify match`)
+          continue
+        }
+        const durGap = Math.abs(hit.duration_ms - e.durationMs)
+        saveTags({
+          trackId: hit.id,
+          uri: hit.uri,
+          name: hit.name,
+          artists: hit.artists.map((a) => a.name).join(', '),
+          durationMs: hit.duration_ms,
+          bpm: e.bpm ? Math.round(e.bpm * 10) / 10 : null,
+          markers: e.markers.map((m) => ({ id: crypto.randomUUID(), type: m.type, ms: m.ms })),
+          updatedAt: new Date().toISOString(),
+        })
+        notes.push(
+          durGap > 3000
+            ? `⚠ ${hit.name} — matched, but duration differs by ${(durGap / 1000).toFixed(1)}s (wrong version? audition before trusting)`
+            : `✓ ${hit.name} — ${e.markers.length} markers (audition each to verify offset)`,
+        )
+      } catch (err) {
+        notes.push(`✗ ${e.title} — ${String(err)}`)
+      }
+    }
+    setLibrary(loadAllTags())
+    setStatus(notes.join(' · '))
+  }
+
   const sortedMarkers = tags ? [...tags.markers].sort((a, b) => a.ms - b.ms) : []
   const taggedSongs = Object.values(library).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
 
@@ -270,7 +325,7 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
         ))}
         <div style={{ marginTop: 10 }}>
           <button onClick={downloadTagsFile}>Download tags JSON</button>
-          <label style={{ display: 'inline-block' }}>
+          <label style={{ display: 'inline-block', marginRight: 12 }}>
             <span className="muted" style={{ cursor: 'pointer', textDecoration: 'underline' }}>Import tags file</span>
             <input
               type="file"
@@ -283,6 +338,18 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
                   setLibrary(loadAllTags())
                   setStatus(`Imported ${n} tagged song(s)`)
                 }
+              }}
+            />
+          </label>
+          <label style={{ display: 'inline-block' }}>
+            <span className="muted" style={{ cursor: 'pointer', textDecoration: 'underline' }}>Import analysis JSON (auto-tagged)</span>
+            <input
+              type="file"
+              accept="application/json"
+              style={{ display: 'none' }}
+              onChange={(e) => {
+                const f = e.target.files?.[0]
+                if (f) void importAnalysis(f)
               }}
             />
           </label>

@@ -1,0 +1,148 @@
+import { describe, expect, test } from 'bun:test'
+import { hardStepStarts, planSetlist, totalDurationMs } from './conductor'
+import type { SongTags, WorkoutPlan } from './types'
+
+function song(id: string, opts: Partial<SongTags> & { markers?: SongTags['markers'] } = {}): SongTags {
+  return {
+    trackId: id,
+    uri: `spotify:track:${id}`,
+    name: `Song ${id}`,
+    artists: 'Test Artist',
+    durationMs: 240_000,
+    bpm: 128,
+    markers: [],
+    updatedAt: '2026-08-10T00:00:00Z',
+    ...opts,
+  }
+}
+
+const marker = (type: 'buildup' | 'drop' | 'loop_start' | 'loop_end', ms: number) => ({
+  id: `${type}-${ms}`,
+  type,
+  ms,
+})
+
+/** 5min warmup, then 4 × (3min easy + 1min hard), 3min cooldown. */
+const intervalPlan: WorkoutPlan = {
+  name: 'test intervals',
+  steps: [
+    { kind: 'warmup', seconds: 300 },
+    ...Array.from({ length: 4 }, () => [
+      { kind: 'easy' as const, seconds: 180 },
+      { kind: 'hard' as const, seconds: 60 },
+    ]).flat(),
+    { kind: 'cooldown', seconds: 180 },
+  ],
+}
+
+const fullSong = (id: string) =>
+  song(id, {
+    markers: [
+      marker('loop_start', 30_000),
+      marker('loop_end', 60_000),
+      marker('buildup', 75_000),
+      marker('drop', 95_000),
+    ],
+  })
+
+describe('hardStepStarts', () => {
+  test('finds every hard-step start time', () => {
+    expect(hardStepStarts(intervalPlan)).toEqual([
+      480_000, // 5min warmup + 3min easy
+      720_000,
+      960_000,
+      1_200_000,
+    ])
+  })
+
+  test('totalDurationMs sums the plan', () => {
+    expect(totalDurationMs(intervalPlan)).toBe(1_440_000)
+  })
+})
+
+describe('planSetlist', () => {
+  const songs = [fullSong('aaa'), fullSong('bbb'), fullSong('ccc')]
+
+  test('every hard step gets a drop landing exactly on it', () => {
+    const { cues } = planSetlist(intervalPlan, songs)
+    for (const target of hardStepStarts(intervalPlan)) {
+      const cue = cues
+        .filter((c) => c.atMs <= target && c.reason.startsWith('drop lands'))
+        .sort((a, b) => b.atMs - a.atMs)[0]
+      expect(cue).toBeDefined()
+      // The invariant: drop marker time === entry position + elapsed since entry.
+      const dropMs = 95_000
+      expect(cue.positionMs + (target - cue.atMs)).toBe(dropMs)
+    }
+  })
+
+  test('buildup is entered at buildup start when there is room', () => {
+    const { cues } = planSetlist(intervalPlan, songs)
+    const first = cues.find((c) => c.reason.startsWith('drop lands'))!
+    // lead = drop − buildup = 20s, so entry at 480s − 20s with position at the buildup marker.
+    expect(first.atMs).toBe(480_000 - 20_000)
+    expect(first.positionMs).toBe(75_000)
+  })
+
+  test('no two consecutive cues use the same track', () => {
+    const { cues } = planSetlist(intervalPlan, songs)
+    for (let i = 1; i < cues.length; i++) {
+      expect(cues[i].trackId).not.toBe(cues[i - 1].trackId)
+    }
+  })
+
+  test('cues are sorted and in-bounds', () => {
+    const { cues } = planSetlist(intervalPlan, songs)
+    expect(cues.length).toBeGreaterThan(0)
+    for (let i = 0; i < cues.length; i++) {
+      expect(cues[i].atMs).toBeGreaterThanOrEqual(0)
+      expect(cues[i].positionMs).toBeGreaterThanOrEqual(0)
+      expect(cues[i].positionMs).toBeLessThan(240_000)
+      if (i > 0) expect(cues[i].atMs).toBeGreaterThanOrEqual(cues[i - 1].atMs)
+    }
+  })
+
+  test('easy stretches get groove fills', () => {
+    const { cues } = planSetlist(intervalPlan, songs)
+    const fills = cues.filter((c) => c.reason.startsWith('groove fill'))
+    expect(fills.length).toBeGreaterThan(0)
+    for (const f of fills) expect(f.positionMs).toBe(30_000) // loop_start
+  })
+
+  test('single droppable song: reused rather than silent, no crash', () => {
+    const { cues, warnings } = planSetlist(intervalPlan, [fullSong('solo')])
+    const drops = cues.filter((c) => c.reason.startsWith('drop lands'))
+    expect(drops.length).toBe(4)
+    expect(warnings).toEqual([])
+  })
+
+  test('no drop markers: warns instead of throwing', () => {
+    const { cues, warnings } = planSetlist(intervalPlan, [song('x')])
+    expect(cues.filter((c) => c.reason.startsWith('drop lands'))).toEqual([])
+    expect(warnings.some((w) => w.includes('No songs with drop markers'))).toBe(true)
+  })
+
+  test('no hard steps: warns instead of throwing', () => {
+    const easyPlan: WorkoutPlan = { name: 'recovery', steps: [{ kind: 'easy', seconds: 1800 }] }
+    const { warnings } = planSetlist(easyPlan, [fullSong('aaa')])
+    expect(warnings.some((w) => w.includes('no hard steps'))).toBe(true)
+  })
+
+  test('back-to-back hard steps truncate the buildup but never miss the drop', () => {
+    const tightPlan: WorkoutPlan = {
+      name: 'tight',
+      steps: [
+        { kind: 'warmup', seconds: 60 },
+        { kind: 'hard', seconds: 10 },
+        { kind: 'hard', seconds: 10 },
+      ],
+    }
+    const { cues } = planSetlist(tightPlan, [fullSong('aaa'), fullSong('bbb')])
+    const targets = hardStepStarts(tightPlan)
+    const drops = cues.filter((c) => c.reason.startsWith('drop lands'))
+    expect(drops.length).toBe(2)
+    for (let i = 0; i < targets.length; i++) {
+      expect(drops[i].positionMs + (targets[i] - drops[i].atMs)).toBe(95_000)
+    }
+  })
+})
