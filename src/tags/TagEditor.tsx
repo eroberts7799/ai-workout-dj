@@ -3,7 +3,17 @@ import { api } from '../auth/spotify-auth'
 import type { SdkHandle } from '../spike/sdk-path'
 import { playTrack } from '../spike/webapi-path'
 import { deleteTags, downloadTagsFile, importTagsFile, loadAllTags, saveTags } from './store'
+import { listAudioTrackIds, saveAudio } from '../audio/local-store'
 import { MARKER_LABEL, type Marker, type MarkerType, type SongTags } from './types'
+
+function normalizeTitle(s: string): string {
+  return s
+    .toLowerCase()
+    .replace(/\.(m4a|mp3|wav|flac|aac)$/, '')
+    .replace(/^\d+[\s.\-_]*/, '') // strip leading track numbers
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+}
 
 interface AnalysisEntry {
   sourceFile: string
@@ -39,10 +49,35 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
   const [taps, setTaps] = useState<number[]>([])
   const [status, setStatus] = useState('Load a track, then tag with B (buildup), D (drop), L (loop bounds), T (tap tempo), Space (play/pause), ←/→ (±2s, Shift ±0.2s)')
   const [library, setLibrary] = useState(loadAllTags())
+  const [localIds, setLocalIds] = useState<Set<string>>(new Set())
   const tagsRef = useRef<SongTags | null>(null)
   tagsRef.current = tags
   const posRef = useRef(0)
   posRef.current = pos
+
+  useEffect(() => {
+    void listAudioTrackIds().then((ids) => setLocalIds(new Set(ids)))
+  }, [])
+
+  /** Attach owned audio files: match by filename against library titles. */
+  async function attachAudioFiles(files: FileList) {
+    const lib = Object.values(loadAllTags())
+    const notes: string[] = []
+    for (const file of Array.from(files)) {
+      const fname = normalizeTitle(file.name)
+      const hit = lib.find(
+        (s) => fname.includes(normalizeTitle(s.name)) || normalizeTitle(s.name).includes(fname),
+      )
+      if (!hit) {
+        notes.push(`✗ ${file.name} — no matching song in the library`)
+        continue
+      }
+      await saveAudio(hit.trackId, file)
+      notes.push(`🎧 ${hit.name} — local audio attached`)
+    }
+    setLocalIds(new Set(await listAudioTrackIds()))
+    setStatus(notes.join(' · '))
+  }
 
   // Poll the local player for the playhead — SDK path only, low staleness.
   useEffect(() => {
@@ -317,7 +352,8 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
         {taggedSongs.map((s) => (
           <div key={s.trackId} style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 6 }}>
             <span style={{ flex: 1 }}>
-              {s.name} <span className="muted">— {s.artists} · {s.markers.length} markers{s.bpm ? ` · ${s.bpm} BPM` : ''}</span>
+              {localIds.has(s.trackId) ? '🎧 ' : ''}{s.name}{' '}
+              <span className="muted">— {s.artists} · {s.markers.length} markers{s.bpm ? ` · ${s.bpm} BPM` : ''}</span>
             </span>
             <button onClick={() => { setUriInput(s.uri); void loadTrack(s.uri) }}>Open</button>
             <button onClick={() => { deleteTags(s.trackId); setLibrary(loadAllTags()) }}>✕</button>
@@ -341,7 +377,7 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
               }}
             />
           </label>
-          <label style={{ display: 'inline-block' }}>
+          <label style={{ display: 'inline-block', marginRight: 12 }}>
             <span className="muted" style={{ cursor: 'pointer', textDecoration: 'underline' }}>Import analysis JSON (auto-tagged)</span>
             <input
               type="file"
@@ -350,6 +386,18 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
               onChange={(e) => {
                 const f = e.target.files?.[0]
                 if (f) void importAnalysis(f)
+              }}
+            />
+          </label>
+          <label style={{ display: 'inline-block' }}>
+            <span className="muted" style={{ cursor: 'pointer', textDecoration: 'underline' }}>Attach owned audio files (🎧 = real DJ crossfades)</span>
+            <input
+              type="file"
+              accept="audio/*,.m4a"
+              multiple
+              style={{ display: 'none' }}
+              onChange={(e) => {
+                if (e.target.files?.length) void attachAudioFiles(e.target.files)
               }}
             />
           </label>

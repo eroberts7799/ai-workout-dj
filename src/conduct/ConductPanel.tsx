@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
+import { LocalDeck } from '../audio/local-deck'
+import { loadAudio } from '../audio/local-store'
 import { planSetlist, totalDurationMs } from '../conductor/conductor'
 import type { Cue, WorkoutPlan } from '../conductor/types'
 import type { SdkHandle } from '../spike/sdk-path'
@@ -6,6 +8,13 @@ import { playTrack } from '../spike/webapi-path'
 import { loadAllTags } from '../tags/store'
 import { parsePlan } from './plan-parse'
 import { SessionClock, dueCues } from './runner'
+
+/** Crossfade length by cue intent: loop re-entries cut tight, drops punch, fills wash. */
+function fadeFor(cue: Cue): number {
+  if (cue.reason.startsWith('loop back')) return 0.25
+  if (cue.reason.startsWith('drop lands')) return 0.45
+  return 1.2
+}
 
 // Measured hour-one: SDK path median command latency ~27ms — issue cues that early.
 const LEAD_MS = 27
@@ -34,6 +43,9 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
   const prevMsRef = useRef(0)
   const cuesRef = useRef<Cue[]>([])
   const planRef = useRef<WorkoutPlan | null>(null)
+  const deckRef = useRef<LocalDeck | null>(null)
+  const [engine, setEngine] = useState<'local' | 'spotify'>('spotify')
+  const engineRef = useRef<'local' | 'spotify'>('spotify')
 
   const songs = Object.values(loadAllTags())
   const { plan, errors } = parsePlan('session', planText)
@@ -50,7 +62,11 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
       for (const cue of due) {
         // Mid-run failure policy: log and keep playing — never interrupt the run.
         try {
-          await playTrack(sdk.deviceId, cue.uri, cue.positionMs)
+          if (engineRef.current === 'local' && deckRef.current?.has(cue.trackId)) {
+            deckRef.current.play(cue.trackId, cue.positionMs, fadeFor(cue))
+          } else {
+            await playTrack(sdk.deviceId, cue.uri, cue.positionMs)
+          }
           setLog((prev) => [...prev, { plannedAtMs: cue.atMs, firedAtMs: now, cue, ok: true }])
         } catch (e) {
           setLog((prev) => [...prev, { plannedAtMs: cue.atMs, firedAtMs: now, cue, ok: false, error: String(e) }])
@@ -63,12 +79,31 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
     return () => clearInterval(t)
   }, [phase, sdk])
 
-  function startSession() {
+  async function startSession() {
     if (errors.length > 0 || setlist.cues.length === 0) return
     cuesRef.current = setlist.cues
     planRef.current = plan
     setLog([])
     prevMsRef.current = -1
+
+    // Engine choice: if every cued track has attached local audio, use the
+    // real-DJ deck (crossfades); otherwise fall back to Spotify jump-cuts.
+    const neededIds = [...new Set(setlist.cues.map((c) => c.trackId))]
+    const deck = (deckRef.current ??= new LocalDeck())
+    let allLocal = true
+    for (const id of neededIds) {
+      if (deck.has(id)) continue
+      const data = await loadAudio(id)
+      if (data) {
+        await deck.load(id, data)
+      } else {
+        allLocal = false
+        break
+      }
+    }
+    engineRef.current = allLocal ? 'local' : 'spotify'
+    setEngine(engineRef.current)
+
     setCountdown(3)
     const tick = (n: number) => {
       if (n === 0) {
@@ -88,11 +123,14 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
     const clock = clockRef.current
     if (phase === 'running') {
       clock.pause()
-      void sdk.player.pause() // workout paused = music paused
+      // workout paused = music paused
+      if (engineRef.current === 'local') void deckRef.current?.pause()
+      else void sdk.player.pause()
       setPhase('paused')
     } else if (phase === 'paused') {
       clock.resume()
-      void sdk.player.resume()
+      if (engineRef.current === 'local') void deckRef.current?.resume()
+      else void sdk.player.resume()
       setPhase('running')
     }
   }
@@ -108,7 +146,11 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
       const song = loadAllTags()[past.trackId]
       const dur = song?.durationMs ?? 240_000
       const pos = Math.max(0, Math.min(past.positionMs + (ms - past.atMs), dur - 5000))
-      playTrack(sdk.deviceId, past.uri, pos).catch(() => {})
+      if (engineRef.current === 'local' && deckRef.current?.has(past.trackId)) {
+        deckRef.current.play(past.trackId, pos, 0.2)
+      } else {
+        playTrack(sdk.deviceId, past.uri, pos).catch(() => {})
+      }
     }
   }
 
@@ -177,6 +219,11 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
         {countdown !== null && <span style={{ fontSize: 40, marginLeft: 12 }}>{countdown}</span>}
         {(phase === 'running' || phase === 'paused') && (
           <>
+            <p className={engine === 'local' ? 'ok' : 'warn'}>
+              {engine === 'local'
+                ? '🎧 Local DJ engine — real crossfades'
+                : 'Spotify engine — jump cuts (attach owned audio files in the Tagger for crossfades)'}
+            </p>
             <div style={{ fontSize: 40 }}>{fmtClock(clockMs)}</div>
             <input
               type="range"

@@ -47,7 +47,7 @@ Bonus artifact: the app logs every command against GPS/HR — rendered post-run 
 2. The differentiator is anticipatory choreography, not tempo matching — tempo matching is crowded and Spotify now does it natively.
 3. Song-structure data comes from outside Spotify (own analysis, third-party, or tagging).
 4. The real-time loop runs in a browser — desktop Chrome for v1 — fusing Garmin HR over BLE + plan (+ GPS in the route phase) into Spotify commands. No Garmin Connect IQ app, no native app for v1. *(Reworded after spec review: originally "runs on the phone"; the weekend architecture conducts from desktop because iOS Safari suspends locked-screen tabs. The phone becomes the conductor only when/if a native app ships.)*
-5. Transitions are jump-cuts on musical boundaries, made to feel intentional.
+5. Transitions are jump-cuts on musical boundaries, made to feel intentional — on the Spotify engine. *(Evolved 2026-08-10: for songs with owned, attached audio files, a Web Audio LocalDeck engine does real crossfades and DJ blends — Spotify's single stream was the constraint, not the browser. Spotify remains the fallback for unowned tracks.)*
 
 All five agreed 2026-08-09 (premise 4 reworded post-agreement for topology honesty; substance unchanged — still browser + BLE + Spotify commands, still no Garmin app).
 
