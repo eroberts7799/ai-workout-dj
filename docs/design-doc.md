@@ -124,3 +124,13 @@ Personal tool: runs locally (Vite dev server / static hosting later if useful). 
 - You named the honest failure mode of the manual alternative — "people could just put on a DJ mix but it would take a lot of manual effort to time things up... and likely be inaccurate" — which is exactly the pain that makes a tool worth building. You're building for a pain you personally have this week, not a hypothetical.
 - When asked about pre-planned routes, you didn't bluff: "i dont pre plan routes but for the purpose of this i definitely could." That's the right instinct — change your behavior to unlock the feature, but flag it honestly so the design doesn't depend on a habit you don't have yet.
 - You immediately saw the integration shape — "some sort of joint integration here between garmin, spotify and strava" — before any architecture discussion. The ecosystem-stitching instinct is the same one behind your newsletter and outreach automation projects.
+
+## Business Path (notes, 2026-08-10 — formalize via /plan-ceo-review)
+
+Premise 1 (personal learning project) still governs the build. If this becomes a product:
+
+- **Data blocker is solved with money, not miracles:** song structure is per-track fact data, analyzed once ever, company-side (buy each unique track once ~$1.29 amortized across all users, or license a DSP data feed). User corrections flow back into the shared DB — the compounding asset.
+- **The real blocker is Spotify's API policy** (25-user dev cap, 250K MAU for extended). Unblocks: (1) **Apple Music/MusicKit — no user cap**, converges with the native iOS app already planned for outdoor+HR; (2) Tidal/Beatport whose licenses permit on-device analysis (djay precedent); (3) Spotify partnership (lottery ticket, not a plan).
+- **Apple thesis:** Apple owns every input (Music, Watch HR, WorkoutKit, Fitness+) and needs a workout-music answer to Spotify's Running Mode — a working product here is acquisition-interesting as proof-of-demand + team. Counterweight: sherlock risk is real (Apple has Shazam + iOS 26 AutoMix; they need nothing technical from us).
+- **Defensible wedge Apple structurally ignores:** serious runners wear Garmin (not Apple Watch) and follow plans like Runna. Bridging Garmin + training plans + streaming music serves the serious-training segment Apple's integrated story leaves behind.
+- **Sequencing:** prove magic on current Spotify/desktop stack → native iOS phase 2 doubles as the MusicKit port (spike Apple player seek precision first) → Spotify version remains the dev harness.
