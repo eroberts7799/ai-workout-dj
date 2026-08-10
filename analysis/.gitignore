@@ -1,0 +1,9 @@
+.venv/
+struct/
+demix/
+spec/
+*.wav
+*.mp3
+*.m4a
+*.flac
+test-analysis.json

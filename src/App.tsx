@@ -20,13 +20,14 @@ import {
 import { summarize, verdict } from './spike/stats'
 import type { SpikeSummary, StalenessSample, Trial } from './spike/types'
 import TagEditor from './tags/TagEditor'
+import ConductPanel from './conduct/ConductPanel'
 
 // Default test track: The Killers — Mr. Brightside (any Premium-playable track works).
 const DEFAULT_TRACK = 'spotify:track:3n3Ppam7vgaVa1iaRUc9Lp'
 const TRIALS = 50
 const STALENESS_SAMPLES = 5
 
-type Tab = 'tagger' | 'spike'
+type Tab = 'tagger' | 'conduct' | 'spike'
 
 export default function App() {
   const [authed, setAuthed] = useState(isLoggedIn())
@@ -102,10 +103,13 @@ export default function App() {
         <>
           <div style={{ marginTop: 16 }}>
             <button onClick={() => setTab('tagger')} disabled={tab === 'tagger'}>Song Tagger</button>
+            <button onClick={() => setTab('conduct')} disabled={tab === 'conduct'}>Conduct</button>
             <button onClick={() => setTab('spike')} disabled={tab === 'spike'}>Latency Spike</button>
           </div>
           {tab === 'tagger' &&
             (sdk ? <TagEditor sdk={sdk} /> : <p className="muted">Connect the SDK player above to start tagging.</p>)}
+          {tab === 'conduct' &&
+            (sdk ? <ConductPanel sdk={sdk} /> : <p className="muted">Connect the SDK player above to conduct a session.</p>)}
           {tab === 'spike' && <SpikeRunner sdk={sdk} />}
         </>
       )}

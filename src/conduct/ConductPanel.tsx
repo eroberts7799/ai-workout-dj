@@ -1,0 +1,192 @@
+import { useEffect, useRef, useState } from 'react'
+import { planSetlist, totalDurationMs } from '../conductor/conductor'
+import type { Cue, WorkoutPlan } from '../conductor/types'
+import type { SdkHandle } from '../spike/sdk-path'
+import { playTrack } from '../spike/webapi-path'
+import { loadAllTags } from '../tags/store'
+import { parsePlan } from './plan-parse'
+import { SessionClock, dueCues } from './runner'
+
+// Measured hour-one: SDK path median command latency ~27ms — issue cues that early.
+const LEAD_MS = 27
+const TICK_MS = 100
+
+const DEFAULT_PLAN = `# time-based interval session (watch auto-pause OFF)
+warmup 5:00
+4x easy 3:00 hard 1:00
+cooldown 3:00`
+
+interface LogEntry {
+  plannedAtMs: number
+  firedAtMs: number
+  cue: Cue
+  ok: boolean
+  error?: string
+}
+
+export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
+  const [planText, setPlanText] = useState(DEFAULT_PLAN)
+  const [countdown, setCountdown] = useState<number | null>(null)
+  const [clockMs, setClockMs] = useState(0)
+  const [phase, setPhase] = useState<'idle' | 'running' | 'paused' | 'done'>('idle')
+  const [log, setLog] = useState<LogEntry[]>([])
+  const clockRef = useRef(new SessionClock())
+  const prevMsRef = useRef(0)
+  const cuesRef = useRef<Cue[]>([])
+  const planRef = useRef<WorkoutPlan | null>(null)
+
+  const songs = Object.values(loadAllTags())
+  const { plan, errors } = parsePlan('session', planText)
+  const setlist = planSetlist(plan, songs)
+
+  useEffect(() => {
+    if (phase !== 'running') return
+    const t = setInterval(async () => {
+      const clock = clockRef.current
+      const now = clock.nowMs()
+      setClockMs(now)
+      const due = dueCues(cuesRef.current, prevMsRef.current - LEAD_MS, now - LEAD_MS, 0)
+      prevMsRef.current = now
+      for (const cue of due) {
+        // Mid-run failure policy: log and keep playing — never interrupt the run.
+        try {
+          await playTrack(sdk.deviceId, cue.uri, cue.positionMs)
+          setLog((prev) => [...prev, { plannedAtMs: cue.atMs, firedAtMs: now, cue, ok: true }])
+        } catch (e) {
+          setLog((prev) => [...prev, { plannedAtMs: cue.atMs, firedAtMs: now, cue, ok: false, error: String(e) }])
+        }
+      }
+      if (planRef.current && now >= totalDurationMs(planRef.current)) {
+        setPhase('done')
+      }
+    }, TICK_MS)
+    return () => clearInterval(t)
+  }, [phase, sdk])
+
+  function startSession() {
+    if (errors.length > 0 || setlist.cues.length === 0) return
+    cuesRef.current = setlist.cues
+    planRef.current = plan
+    setLog([])
+    prevMsRef.current = -1
+    setCountdown(3)
+    const tick = (n: number) => {
+      if (n === 0) {
+        setCountdown(null)
+        clockRef.current = new SessionClock()
+        clockRef.current.start()
+        setPhase('running')
+        return
+      }
+      setCountdown(n)
+      setTimeout(() => tick(n - 1), 1000)
+    }
+    tick(3)
+  }
+
+  function togglePause() {
+    const clock = clockRef.current
+    if (phase === 'running') {
+      clock.pause()
+      setPhase('paused')
+    } else if (phase === 'paused') {
+      clock.resume()
+      setPhase('running')
+    }
+  }
+
+  function stopSession() {
+    setPhase('done')
+  }
+
+  function downloadSessionLog() {
+    const blob = new Blob(
+      [JSON.stringify({ exportedAt: new Date().toISOString(), plan, cues: cuesRef.current, log }, null, 2)],
+      { type: 'application/json' },
+    )
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob)
+    a.download = `session-log-${Date.now()}.json`
+    a.click()
+  }
+
+  const nextCue = setlist.cues.find((c) => c.atMs > clockMs)
+
+  return (
+    <>
+      <div className="card">
+        <h2 style={{ marginTop: 0 }}>Workout plan</h2>
+        <textarea
+          value={planText}
+          onChange={(e) => setPlanText(e.target.value)}
+          rows={6}
+          style={{ width: '100%', boxSizing: 'border-box', background: '#161b22', color: '#e6edf3', border: '1px solid #30363d', borderRadius: 6, padding: 8, font: 'inherit' }}
+        />
+        {errors.map((e) => (
+          <p key={e} className="bad">{e}</p>
+        ))}
+        <p className="muted">
+          {songs.length} tagged song(s) available · plan {Math.round(totalDurationMs(plan) / 60_000)}min
+        </p>
+      </div>
+
+      <div className="card">
+        <h2 style={{ marginTop: 0 }}>Setlist ({setlist.cues.length} cues)</h2>
+        {setlist.warnings.map((w) => (
+          <p key={w} className="warn">{w}</p>
+        ))}
+        <table>
+          <thead>
+            <tr><th>at</th><th>action</th></tr>
+          </thead>
+          <tbody>
+            {setlist.cues.map((c, i) => (
+              <tr key={i} style={{ opacity: phase !== 'idle' && c.atMs <= clockMs ? 0.5 : 1 }}>
+                <td>{fmtClock(c.atMs)}</td>
+                <td style={{ textAlign: 'left' }}>{c.reason} — enter at {fmtClock(c.positionMs)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="card">
+        <h2 style={{ marginTop: 0 }}>Session</h2>
+        {phase === 'idle' && (
+          <button onClick={startSession} disabled={errors.length > 0 || setlist.cues.length === 0}>
+            3-2-1-GO (start watch on GO)
+          </button>
+        )}
+        {countdown !== null && <span style={{ fontSize: 40, marginLeft: 12 }}>{countdown}</span>}
+        {(phase === 'running' || phase === 'paused') && (
+          <>
+            <div style={{ fontSize: 40 }}>{fmtClock(clockMs)}</div>
+            {nextCue && (
+              <p className="muted">
+                next: {fmtClock(nextCue.atMs)} — {nextCue.reason}
+              </p>
+            )}
+            <button onClick={togglePause}>{phase === 'paused' ? 'Resume' : 'Pause'}</button>
+            <button onClick={stopSession}>Stop choreography</button>
+          </>
+        )}
+        {phase === 'done' && (
+          <>
+            <p className="ok">Session complete — {log.filter((l) => l.ok).length}/{log.length} cues fired cleanly.</p>
+            <button onClick={downloadSessionLog}>Download session log</button>
+            <button onClick={() => { setPhase('idle'); setClockMs(0) }}>Reset</button>
+          </>
+        )}
+        {log.some((l) => !l.ok) && (
+          <p className="warn">{log.filter((l) => !l.ok).length} cue(s) failed — playback degraded gracefully, see log.</p>
+        )}
+      </div>
+    </>
+  )
+}
+
+function fmtClock(ms: number): string {
+  const m = Math.floor(ms / 60_000)
+  const s = Math.floor((ms % 60_000) / 1000)
+  return `${m}:${String(s).padStart(2, '0')}`
+}
