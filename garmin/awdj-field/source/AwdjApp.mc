@@ -1,0 +1,17 @@
+import Toybox.Application;
+import Toybox.Lang;
+import Toybox.WatchUi;
+
+class AwdjApp extends Application.AppBase {
+  function initialize() {
+    AppBase.initialize();
+  }
+
+  function getInitialView() as [Views] or [Views, InputDelegates] {
+    return [new AwdjField()];
+  }
+}
+
+function getApp() as AwdjApp {
+  return Application.getApp() as AwdjApp;
+}

@@ -33,6 +33,16 @@ interface LogEntry {
   error?: string
 }
 
+interface GarminSample {
+  receivedAt: number
+  event?: string
+  hr?: number
+  timerMs?: number
+  lat?: number
+  lon?: number
+  altitude?: number
+}
+
 export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
   const [planText, setPlanText] = useState(DEFAULT_PLAN)
   const [countdown, setCountdown] = useState<number | null>(null)
@@ -46,6 +56,46 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
   const deckRef = useRef<LocalDeck | null>(null)
   const [engine, setEngine] = useState<'local' | 'spotify'>('spotify')
   const engineRef = useRef<'local' | 'spotify'>('spotify')
+  const [garmin, setGarmin] = useState<GarminSample | null>(null)
+  const [armed, setArmed] = useState(false)
+  const armedRef = useRef(false)
+  armedRef.current = armed
+  const phaseRef = useRef(phase)
+  phaseRef.current = phase
+  const handledStartRef = useRef(0)
+  const hrLogRef = useRef<{ atMs: number; hr: number }[]>([])
+
+  // Live Garmin feed: poll the receiver once a second, always.
+  useEffect(() => {
+    const t = setInterval(async () => {
+      try {
+        const res = await fetch('/api/garmin')
+        const sample = (await res.json()) as GarminSample | null
+        setGarmin(sample)
+        if (!sample) return
+        const fresh = Date.now() - sample.receivedAt < 5_000
+        // Exact-sync auto-start: watch timer started → session starts, backdated.
+        if (
+          fresh &&
+          armedRef.current &&
+          phaseRef.current === 'idle' &&
+          sample.event === 'timerStart' &&
+          sample.receivedAt !== handledStartRef.current
+        ) {
+          handledStartRef.current = sample.receivedAt
+          const offset = (sample.timerMs ?? 0) + (Date.now() - sample.receivedAt)
+          void startFromGarmin(offset)
+        }
+        if (fresh && phaseRef.current === 'running' && typeof sample.hr === 'number') {
+          hrLogRef.current.push({ atMs: clockRef.current.nowMs(), hr: sample.hr })
+        }
+      } catch {
+        // receiver not reachable — fine, feed is optional
+      }
+    }, 1_000)
+    return () => clearInterval(t)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const songs = Object.values(loadAllTags())
   const { plan, errors } = parsePlan('session', planText)
@@ -79,11 +129,13 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
     return () => clearInterval(t)
   }, [phase, sdk])
 
-  async function startSession() {
-    if (errors.length > 0 || setlist.cues.length === 0) return
+  /** Common session prep: lock in cues + pick the engine. */
+  async function prepareSession(): Promise<boolean> {
+    if (errors.length > 0 || setlist.cues.length === 0) return false
     cuesRef.current = setlist.cues
     planRef.current = plan
     setLog([])
+    hrLogRef.current = []
     prevMsRef.current = -1
 
     // Engine choice: if every cued track has attached local audio, use the
@@ -103,20 +155,36 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
     }
     engineRef.current = allLocal ? 'local' : 'spotify'
     setEngine(engineRef.current)
+    return true
+  }
 
+  function beginAt(offsetMs: number) {
+    clockRef.current = new SessionClock()
+    clockRef.current.start()
+    setPhase('running')
+    scrubTo(offsetMs) // establishes clock offset AND correct playback state
+  }
+
+  /** Manual start: 3-2-1-GO countdown (start the watch on GO). */
+  async function startSession() {
+    if (!(await prepareSession())) return
     setCountdown(3)
     const tick = (n: number) => {
       if (n === 0) {
         setCountdown(null)
-        clockRef.current = new SessionClock()
-        clockRef.current.start()
-        setPhase('running')
+        beginAt(0)
         return
       }
       setCountdown(n)
       setTimeout(() => tick(n - 1), 1000)
     }
     tick(3)
+  }
+
+  /** Garmin start: the watch's timer already started offsetMs ago — sync to it. */
+  async function startFromGarmin(offsetMs: number) {
+    if (!(await prepareSession())) return
+    beginAt(offsetMs)
   }
 
   function togglePause() {
@@ -160,7 +228,13 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
 
   function downloadSessionLog() {
     const blob = new Blob(
-      [JSON.stringify({ exportedAt: new Date().toISOString(), plan, cues: cuesRef.current, log }, null, 2)],
+      [
+        JSON.stringify(
+          { exportedAt: new Date().toISOString(), plan, cues: cuesRef.current, log, hr: hrLogRef.current },
+          null,
+          2,
+        ),
+      ],
       { type: 'application/json' },
     )
     const a = document.createElement('a')
@@ -212,10 +286,23 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
       <div className="card">
         <h2 style={{ marginTop: 0 }}>Session</h2>
         {phase === 'idle' && (
-          <button onClick={startSession} disabled={errors.length > 0 || setlist.cues.length === 0}>
-            3-2-1-GO (start watch on GO)
-          </button>
+          <>
+            <button onClick={() => void startSession()} disabled={errors.length > 0 || setlist.cues.length === 0}>
+              3-2-1-GO (start watch on GO)
+            </button>
+            <label style={{ marginLeft: 12 }}>
+              <input type="checkbox" checked={armed} onChange={(e) => setArmed(e.target.checked)} style={{ width: 'auto' }} />{' '}
+              Arm Garmin auto-start
+            </label>
+          </>
         )}
+        <p className="muted">
+          {garmin && Date.now() - garmin.receivedAt < 10_000
+            ? `⌚ Garmin live: ${garmin.hr ?? '—'} bpm · timer ${garmin.timerMs != null ? fmtClock(garmin.timerMs) : '—'}${garmin.altitude != null ? ` · ${Math.round(garmin.altitude)}m` : ''}`
+            : armed
+              ? '⌚ Waiting for the watch… (Connect IQ field must be installed and posting)'
+              : ''}
+        </p>
         {countdown !== null && <span style={{ fontSize: 40, marginLeft: 12 }}>{countdown}</span>}
         {(phase === 'running' || phase === 'paused') && (
           <>
