@@ -47,8 +47,17 @@ def probe_metadata(path: Path) -> dict:
     }
 
 
+MAX_SNAP_SEC = 2.0
+
+
 def snap(downbeats: list[float], sec: float) -> float:
-    return min(downbeats, key=lambda d: abs(d - sec)) if downbeats else sec
+    """Snap to the nearest downbeat, but never move a marker more than
+    MAX_SNAP_SEC — a distant snap means the beat grid is unreliable there
+    (e.g. sparse intros), and the section boundary is the better truth."""
+    if not downbeats:
+        return sec
+    nearest = min(downbeats, key=lambda d: abs(d - sec))
+    return nearest if abs(nearest - sec) <= MAX_SNAP_SEC else sec
 
 
 def to_markers(segments, downbeats: list[float]) -> list[dict]:
