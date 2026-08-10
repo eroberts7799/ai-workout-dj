@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+  <setting propertyKey="@Properties.endpoint" title="@Strings.EndpointTitle">
+    <settingConfig type="alphaNumeric"/>
+  </setting>
+</settings>

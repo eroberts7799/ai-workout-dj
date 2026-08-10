@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<iq:manifest xmlns:iq="http://www.garmin.com/xml/connectiq" version="3">
+  <iq:application id="a7f3c2e8-41d9-4b6a-9c5e-2f8d71b04e63" type="datafield"
+      name="@Strings.AppName" entry="AwdjApp" minSdkVersion="5.0.0">
+    <iq:products>
+      <iq:product id="fr570"/>
+    </iq:products>
+    <iq:permissions>
+      <iq:uses-permission id="Communications"/>
+      <iq:uses-permission id="Positioning"/>
+    </iq:permissions>
+    <iq:languages>
+      <iq:language>eng</iq:language>
+    </iq:languages>
+  </iq:application>
+</iq:manifest>

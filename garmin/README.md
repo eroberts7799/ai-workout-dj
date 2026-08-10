@@ -5,8 +5,8 @@ conductor, and auto-starts the music session the instant you press start.
 
 ## Status
 
-Source is ready; the manifest needs the exact watch model before first build
-(each Connect IQ build targets specific devices).
+Source is ready; manifest targets fr570 (Forerunner 570)
+(target: Forerunner 570, device id fr570).
 
 ## Setup (once we know the watch model)
 
