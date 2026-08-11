@@ -21,13 +21,14 @@ import { summarize, verdict } from './spike/stats'
 import type { SpikeSummary, StalenessSample, Trial } from './spike/types'
 import TagEditor from './tags/TagEditor'
 import ConductPanel from './conduct/ConductPanel'
+import ReplayPanel from './replay/ReplayPanel'
 
 // Default test track: The Killers — Mr. Brightside (any Premium-playable track works).
 const DEFAULT_TRACK = 'spotify:track:3n3Ppam7vgaVa1iaRUc9Lp'
 const TRIALS = 50
 const STALENESS_SAMPLES = 5
 
-type Tab = 'tagger' | 'conduct' | 'spike'
+type Tab = 'tagger' | 'conduct' | 'replay' | 'spike'
 
 export default function App() {
   const [authed, setAuthed] = useState(isLoggedIn())
@@ -99,13 +100,20 @@ export default function App() {
         {(authError || sdkStatus) && <p className={authError ? 'bad' : 'muted'}>{authError ?? sdkStatus}</p>}
       </div>
 
-      {authed && (
-        <>
-          <div style={{ marginTop: 16 }}>
+      {/* Replay Lab is pure simulation — no Spotify needed, so it lives outside the auth gate. */}
+      <div style={{ marginTop: 16 }}>
+        {authed && (
+          <>
             <button onClick={() => setTab('tagger')} disabled={tab === 'tagger'}>Song Tagger</button>
             <button onClick={() => setTab('conduct')} disabled={tab === 'conduct'}>Conduct</button>
-            <button onClick={() => setTab('spike')} disabled={tab === 'spike'}>Latency Spike</button>
-          </div>
+          </>
+        )}
+        <button onClick={() => setTab('replay')} disabled={tab === 'replay'}>Replay Lab</button>
+        {authed && <button onClick={() => setTab('spike')} disabled={tab === 'spike'}>Latency Spike</button>}
+      </div>
+      {tab === 'replay' && <ReplayPanel />}
+      {authed && (
+        <>
           {tab === 'tagger' &&
             (sdk ? <TagEditor sdk={sdk} /> : <p className="muted">Connect the SDK player above to start tagging.</p>)}
           {tab === 'conduct' &&

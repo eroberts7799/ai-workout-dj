@@ -99,6 +99,23 @@ export class LiveEngine {
     if (this.loopable.length === 0) this.warnings.push('no loop-tagged songs')
   }
 
+  /** Read-only snapshot of the engine's mind — for UIs and the replay simulator. */
+  get state(): {
+    stepIdx: number
+    mode: Mode | null
+    paceSecPerKm: number
+    playingTrackId: string | null
+    etaToHardMs: number | null
+  } {
+    return {
+      stepIdx: this.stepIdx,
+      mode: this.mode,
+      paceSecPerKm: this.paceSecPerKm,
+      playingTrackId: this.playing?.song.trackId ?? null,
+      etaToHardMs: this.lastT != null ? this.etaToNextHardMs(this.lastT, this.lastDist) : null,
+    }
+  }
+
   /** Current playhead position in the active track at time t. */
   private playheadMs(t: number): number {
     if (!this.playing) return 0

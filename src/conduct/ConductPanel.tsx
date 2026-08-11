@@ -81,6 +81,10 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
   phaseRef.current = phase
   const handledStartRef = useRef(0)
   const hrLogRef = useRef<{ atMs: number; hr: number }[]>([])
+  // Raw watch stream (timer-clocked) — recorded so the run can be replayed
+  // through the LiveEngine in the Replay Lab afterwards.
+  const samplesRef = useRef<{ tMs: number; distanceM?: number; hr?: number; altitude?: number }[]>([])
+  const lastRecordedRef = useRef(0)
 
   // Live Garmin feed: poll the public relay once a second, always.
   useEffect(() => {
@@ -131,6 +135,10 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
         }
         if (fresh && phaseRef.current === 'running' && typeof sample.hr === 'number') {
           hrLogRef.current.push({ atMs: clockRef.current.nowMs(), hr: sample.hr })
+        }
+        if (fresh && phaseRef.current === 'running' && sample.timerMs != null && sample.receivedAt !== lastRecordedRef.current) {
+          lastRecordedRef.current = sample.receivedAt
+          samplesRef.current.push({ tMs: sample.timerMs, distanceM: sample.distance, hr: sample.hr, altitude: sample.altitude })
         }
       } catch {
         // receiver not reachable — fine, feed is optional
@@ -185,6 +193,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
     planRef.current = plan
     setLog([])
     hrLogRef.current = []
+    samplesRef.current = []
     prevMsRef.current = -1
 
     // Engine choice: the local crossfade deck only exists in this browser —
@@ -301,6 +310,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
     liveRef.current = new LiveEngine(plan, lib)
     setLog([])
     hrLogRef.current = []
+    samplesRef.current = []
     setPhase('running')
     setStatus(`LIVE — conducting ${plan.name} from your body's data`)
   }
@@ -382,7 +392,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
     const blob = new Blob(
       [
         JSON.stringify(
-          { exportedAt: new Date().toISOString(), plan, cues: cuesRef.current, log, hr: hrLogRef.current },
+          { exportedAt: new Date().toISOString(), plan, cues: cuesRef.current, log, hr: hrLogRef.current, samples: samplesRef.current },
           null,
           2,
         ),
