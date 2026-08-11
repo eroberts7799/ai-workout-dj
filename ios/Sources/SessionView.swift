@@ -92,7 +92,7 @@ struct SessionView: View {
         // LIVE mode: every fresh watch sample advances the conductor
         // (unless a simulated runner is already driving it).
         if engine.liveMode, !engine.simulating, let t = s.timerMs {
-          engine.advanceLive(timerMs: t, distanceM: s.distanceM)
+          engine.advanceLive(timerMs: t, distanceM: s.distanceM, hr: s.hr)
         }
       }
     }

@@ -26,6 +26,10 @@ final class SessionEngine: ObservableObject {
   private var lastHandledEvent: Double = 0
   private var live: LiveEngine?
   private var simTask: Task<Void, Never>?
+  /// Raw stream as conducted — uploaded at session end so every run becomes
+  /// a replayable test case in the cloud (the data flywheel).
+  private var recorded: [(t: Double, d: Double?, hr: Double?)] = []
+  private var uploaded = false
 
   var allAudioReady: Bool {
     guard let b = bundle, !b.songs.isEmpty else { return false }
@@ -194,6 +198,46 @@ final class SessionEngine: ObservableObject {
     simTask?.cancel()
     phase = .done
     status = "stopped — music left playing"
+    if live != nil { uploadSessionLog(source: simulating ? "ios-sim" : "ios") }
+  }
+
+  /// Fire-and-forget POST of the session log to the relay's archive.
+  private func uploadSessionLog(source: String) {
+    guard !uploaded, !recorded.isEmpty, let b = bundle else { return }
+    uploaded = true
+    var payload: [String: Any] = [
+      "source": source,
+      "name": b.name,
+      "plan": ["name": b.name, "steps": (b.plan ?? []).map { s -> [String: Any] in
+        var d: [String: Any] = ["kind": s.kind]
+        if let v = s.seconds { d["seconds"] = v }
+        if let v = s.meters { d["meters"] = v }
+        return d
+      }],
+      "samples": recorded.map { r -> [String: Any] in
+        var d: [String: Any] = ["tMs": r.t]
+        if let v = r.d { d["distanceM"] = v }
+        if let v = r.hr { d["hr"] = v }
+        return d
+      },
+    ]
+    if let live {
+      payload["landings"] = live.landings.map { ["targetTMs": $0.targetTMs, "actualTMs": $0.actualTMs, "errorMs": $0.errorMs] }
+      payload["commands"] = live.commands.map { ["tMs": $0.tMs, "trackId": $0.trackId, "positionMs": $0.positionMs, "reason": $0.reason] }
+    }
+    guard let data = try? JSONSerialization.data(withJSONObject: payload),
+          let url = URL(string: "https://awdj-relay.vercel.app/api/sessions?k=awdj-7g2k9x")
+    else { return }
+    var req = URLRequest(url: url)
+    req.httpMethod = "POST"
+    req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    req.httpBody = data
+    Task {
+      if let (_, res) = try? await URLSession.shared.data(for: req),
+         (res as? HTTPURLResponse)?.statusCode == 201 {
+        status += " · ☁️ log uploaded"
+      }
+    }
   }
 
   func reset() {
@@ -221,6 +265,8 @@ final class SessionEngine: ObservableObject {
     firedCount = 0
     landingCount = 0
     lastCommand = ""
+    recorded = []
+    uploaded = false
     prevMs = 0
     phase = .running
     status = "🛰 LIVE — conducting \(b.name) from your body's data"
@@ -229,9 +275,10 @@ final class SessionEngine: ObservableObject {
 
   /// Every fresh watch sample advances the engine — the watch's own timer and
   /// distance ARE the session clock, so pauses come free.
-  func advanceLive(timerMs: Double, distanceM: Double?) {
+  func advanceLive(timerMs: Double, distanceM: Double?, hr: Double? = nil) {
     guard phase == .running, let live else { return }
     clockMs = timerMs
+    recorded.append((t: timerMs, d: distanceM, hr: hr))
     for c in live.advance(LiveSample(tMs: timerMs, distanceM: distanceM)) {
       // Never interrupt the run: a missing file leaves current audio playing.
       try? deck.play(id: c.trackId, positionMs: c.positionMs, fadeSec: c.fadeSec)
@@ -271,6 +318,7 @@ final class SessionEngine: ObservableObject {
       phase = .done
       status = "simulated session complete — \(firedCount) cues · \(landingCount) landings"
       deck.stop()
+      uploadSessionLog(source: "ios-sim")
     }
   }
 

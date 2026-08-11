@@ -21,6 +21,9 @@ function fadeFor(cue: Cue): number {
 const LEAD_MS = 27
 const TICK_MS = 100
 
+export const RELAY_BASE = 'https://awdj-relay.vercel.app'
+export const RELAY_KEY = 'awdj-7g2k9x'
+
 const DEFAULT_PLAN = `# time-based interval session (watch auto-pause OFF)
 warmup 5:00
 4x easy 3:00 hard 1:00
@@ -80,6 +83,8 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
   const phaseRef = useRef(phase)
   phaseRef.current = phase
   const handledStartRef = useRef(0)
+  const [cloudState, setCloudState] = useState<'' | 'uploading' | 'uploaded' | 'failed'>('')
+  const uploadedRef = useRef(false)
   const hrLogRef = useRef<{ atMs: number; hr: number }[]>([])
   // Raw watch stream (timer-clocked) — recorded so the run can be replayed
   // through the LiveEngine in the Replay Lab afterwards.
@@ -152,6 +157,31 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
   const { plan, errors } = parsePlan('session', planText)
   const setlist = planSetlist(plan, songs)
 
+  // The data flywheel: every finished session auto-uploads its log so it
+  // becomes a replayable test case in the cloud (Replay Lab reads from there).
+  useEffect(() => {
+    if (phase !== 'done' || uploadedRef.current) return
+    uploadedRef.current = true
+    setCloudState('uploading')
+    const payload = {
+      exportedAt: new Date().toISOString(),
+      source: liveModeRef.current ? 'web-live' : 'web',
+      plan: planRef.current ?? plan,
+      cues: cuesRef.current,
+      log,
+      hr: hrLogRef.current,
+      samples: samplesRef.current,
+    }
+    fetch(`${RELAY_BASE}/api/sessions?k=${RELAY_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+      .then((r) => setCloudState(r.ok ? 'uploaded' : 'failed'))
+      .catch(() => setCloudState('failed'))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase])
+
   // Distance-based plans want the live engine — flip it on automatically.
   useEffect(() => {
     if (plan.steps.some((s) => s.meters != null)) setLiveMode(true)
@@ -194,6 +224,8 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
     setLog([])
     hrLogRef.current = []
     samplesRef.current = []
+    uploadedRef.current = false
+    setCloudState('')
     prevMsRef.current = -1
 
     // Engine choice: the local crossfade deck only exists in this browser —
@@ -308,9 +340,12 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
     engineRef.current = allLocal ? 'local' : 'spotify'
     setEngine(engineRef.current)
     liveRef.current = new LiveEngine(plan, lib)
+    planRef.current = plan
     setLog([])
     hrLogRef.current = []
     samplesRef.current = []
+    uploadedRef.current = false
+    setCloudState('')
     setPhase('running')
     setStatus(`LIVE — conducting ${plan.name} from your body's data`)
   }
@@ -540,6 +575,13 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
         {phase === 'done' && (
           <>
             <p className="ok">Session complete — {log.filter((l) => l.ok).length}/{log.length} cues fired cleanly.</p>
+            {cloudState && (
+              <p className={cloudState === 'failed' ? 'warn' : 'muted'}>
+                {cloudState === 'uploading' && '☁️ uploading session log…'}
+                {cloudState === 'uploaded' && '☁️ session log in the cloud — replayable from the Replay Lab anywhere'}
+                {cloudState === 'failed' && '☁️ upload failed — use Download to keep the log'}
+              </p>
+            )}
             <button onClick={downloadSessionLog}>Download session log</button>
             <button onClick={() => { setPhase('idle'); setClockMs(0) }}>Reset</button>
           </>

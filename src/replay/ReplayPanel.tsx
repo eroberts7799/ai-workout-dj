@@ -7,6 +7,7 @@ import { LocalDeck } from '../audio/local-deck'
 import { loadAudio } from '../audio/local-store'
 import type { SongTags, WorkoutPlan, WorkoutStep } from '../conductor/types'
 import { parsePlan } from '../conduct/plan-parse'
+import { RELAY_BASE, RELAY_KEY } from '../conduct/ConductPanel'
 import { loadAllTags } from '../tags/store'
 import {
   loadSessionLog,
@@ -81,6 +82,7 @@ export default function ReplayPanel() {
   const [loaded, setLoaded] = useState<LoadedLog | null>(null)
   const [result, setResult] = useState<SimResult | null>(null)
   const [status, setStatus] = useState('')
+  const [cloud, setCloud] = useState<{ pathname: string; size: number; uploadedAt: string }[] | null>(null)
 
   // Audible replay machinery.
   const deckRef = useRef<LocalDeck | null>(null)
@@ -124,23 +126,45 @@ export default function ReplayPanel() {
     setStatus('')
   }
 
+  function acceptLog(json: unknown, origin: string) {
+    const log = loadSessionLog(json)
+    if (log.samples.length === 0) {
+      setStatus(`${origin} has no replayable samples (record a new session — logs now carry the raw watch stream)`)
+      return
+    }
+    setLoaded(log)
+    setResult(null)
+    setStatus(
+      `loaded "${log.name}": ${log.samples.length} samples` +
+        `${log.samples.some((s) => s.distanceM != null) ? ' · distance ✓' : ' · time-only'}` +
+        `${log.samples.some((s) => s.hr != null) ? ' · HR ✓' : ''}` +
+        `${log.plan ? '' : ' · no plan in log — using the plan text above'}`,
+    )
+  }
+
   async function onLogFile(file: File) {
     try {
-      const log = loadSessionLog(JSON.parse(await file.text()))
-      if (log.samples.length === 0) {
-        setStatus('that log has no replayable samples (record a new session — logs now carry the raw watch stream)')
-        return
-      }
-      setLoaded(log)
-      setResult(null)
-      setStatus(
-        `loaded "${log.name}": ${log.samples.length} samples` +
-          `${log.samples.some((s) => s.distanceM != null) ? ' · distance ✓' : ' · time-only'}` +
-          `${log.samples.some((s) => s.hr != null) ? ' · HR ✓' : ''}` +
-          `${log.plan ? '' : ' · no plan in log — using the plan text above'}`,
-      )
+      acceptLog(JSON.parse(await file.text()), 'that log')
     } catch (e) {
       setStatus(`could not read log: ${String(e)}`)
+    }
+  }
+
+  async function loadCloudList() {
+    try {
+      const r = await fetch(`${RELAY_BASE}/api/sessions?k=${RELAY_KEY}`)
+      setCloud(await r.json())
+    } catch (e) {
+      setStatus(`cloud list failed: ${String(e)}`)
+    }
+  }
+
+  async function openCloud(pathname: string) {
+    try {
+      const r = await fetch(`${RELAY_BASE}/api/sessions?k=${RELAY_KEY}&file=${encodeURIComponent(pathname)}`)
+      acceptLog(await r.json(), 'that cloud session')
+    } catch (e) {
+      setStatus(`cloud fetch failed: ${String(e)}`)
     }
   }
 
@@ -248,10 +272,24 @@ export default function ReplayPanel() {
               }}
             />
           </label>
+          <button onClick={() => void loadCloudList()}>☁️ Cloud sessions</button>
           {loaded && (
             <button onClick={() => { setLoaded(null); setResult(null); setStatus('') }}>✕ back to simulated runner</button>
           )}
         </div>
+        {cloud && (
+          <div style={{ marginTop: 8, maxHeight: 180, overflowY: 'auto', border: '1px solid #30363d', borderRadius: 6, padding: 6 }}>
+            {cloud.length === 0 && <p className="muted" style={{ margin: 4 }}>no sessions in the cloud yet</p>}
+            {cloud.map((c) => (
+              <div key={c.pathname} style={{ display: 'flex', gap: 8, alignItems: 'center', padding: '2px 0' }}>
+                <button onClick={() => void openCloud(c.pathname)} style={{ fontSize: 12 }}>replay</button>
+                <span className="muted" style={{ fontSize: 12 }}>
+                  {c.pathname.replace('sessions/', '').replace(/-[A-Za-z0-9]{20,}\.json$/, '')} · {Math.round(c.size / 1024)}kB
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
         {usingDemo && (
           <p className="warn" style={{ marginBottom: 0 }}>
             No fully-tagged songs (need loop + drop markers) — using a 3-song demo library. Timeline works; audible
