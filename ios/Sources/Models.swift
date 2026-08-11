@@ -19,11 +19,39 @@ struct Cue: Codable {
   let reason: String
 }
 
+/// A tagged structural marker inside a song (from the web Tagger).
+struct Marker: Codable {
+  let type: String // "buildup" | "drop" | "loop_start" | "loop_end"
+  let ms: Double
+}
+
+/// Full tags for one song — what the LiveEngine picks loops and drops from.
+struct TaggedSong: Codable, Identifiable {
+  let trackId: String
+  let uri: String
+  let name: String
+  let artists: String
+  let durationMs: Double
+  let bpm: Double?
+  let markers: [Marker]
+  var id: String { trackId }
+}
+
+/// One workout step: time-based (seconds) or distance-based (meters).
+struct WorkoutStep: Codable {
+  let kind: String // warmup | easy | hard | rest | cooldown
+  let seconds: Double?
+  let meters: Double?
+}
+
 struct SessionBundle: Codable {
   let name: String
   let planEndMs: Double
   let cues: [Cue]
   let songs: [SongMeta]
+  // LIVE-mode payload (newer web exports; absent in older bundles).
+  let plan: [WorkoutStep]?
+  let tags: [TaggedSong]?
 }
 
 /// Crossfade length by cue intent — mirrors the web LocalDeck's taste.

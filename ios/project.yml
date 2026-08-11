@@ -26,3 +26,14 @@ targets:
         CODE_SIGN_STYLE: Automatic
         TARGETED_DEVICE_FAMILY: "1"
         SWIFT_VERSION: "5.9"
+  AwdjPlayerTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [Tests]
+    dependencies:
+      - target: AwdjPlayer
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.ethanroberts.awdjplayer.tests
+        SWIFT_VERSION: "5.9"
+        GENERATE_INFOPLIST_FILE: YES

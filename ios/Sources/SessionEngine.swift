@@ -14,16 +14,28 @@ final class SessionEngine: ObservableObject {
   @Published var bundle: SessionBundle?
   @Published var audioReady: [String: Bool] = [:]
   @Published var firedCount = 0
+  @Published var liveMode = false
+  @Published var lastCommand = ""
+  @Published var landingCount = 0
+  @Published var simulating = false
 
   let deck = DualDeck()
   private var clock = SessionClock()
   private var prevMs: Double = -1
   private var tick: Timer?
   private var lastHandledEvent: Double = 0
+  private var live: LiveEngine?
+  private var simTask: Task<Void, Never>?
 
   var allAudioReady: Bool {
     guard let b = bundle, !b.songs.isEmpty else { return false }
     return b.songs.allSatisfy { audioReady[$0.trackId] == true }
+  }
+
+  /// LIVE mode needs the plan + tag library (newer bundle exports).
+  var supportsLive: Bool {
+    guard let b = bundle else { return false }
+    return !(b.plan ?? []).isEmpty && !(b.tags ?? []).isEmpty
   }
 
   private var docs: URL {
@@ -80,7 +92,12 @@ final class SessionEngine: ObservableObject {
     guard let b = bundle else { return }
     let files = (try? FileManager.default.contentsOfDirectory(at: docs, includingPropertiesForKeys: nil)) ?? []
     let audio = files.filter { ["m4a", "mp3", "wav", "flac"].contains($0.pathExtension.lowercased()) }
-    for song in b.songs {
+    // LIVE mode can play any tagged song, not just the static setlist — match both.
+    var candidates = b.songs
+    for t in b.tags ?? [] where !candidates.contains(where: { $0.trackId == t.trackId }) {
+      candidates.append(SongMeta(trackId: t.trackId, name: t.name, artists: t.artists, durationMs: t.durationMs, bpm: t.bpm))
+    }
+    for song in candidates {
       let target = normalize(song.name)
       let hit = audio.first { f in
         let n = normalize(f.lastPathComponent)
@@ -155,7 +172,15 @@ final class SessionEngine: ObservableObject {
   }
 
   func resumeSession(atOffsetMs offset: Double? = nil) {
-    guard phase == .paused, let b = bundle else { return }
+    guard phase == .paused else { return }
+    if live != nil {
+      // LIVE follows the watch/sim clock — just unmute and continue.
+      clock.resume()
+      deck.resume()
+      phase = .running
+      return
+    }
+    guard let b = bundle else { return }
     clock.resume()
     if let o = offset { clock.seek(to: o) }
     let now = clock.nowMs()
@@ -166,16 +191,93 @@ final class SessionEngine: ObservableObject {
 
   func stopSession() {
     tick?.invalidate()
+    simTask?.cancel()
     phase = .done
     status = "stopped — music left playing"
   }
 
   func reset() {
     tick?.invalidate()
+    simTask?.cancel()
+    live = nil
     deck.stop()
     phase = .idle
     clockMs = 0
+    lastCommand = ""
+    landingCount = 0
     status = bundle.map { "bundle: \($0.name) · \($0.cues.count) cues" } ?? "import a session bundle to begin"
+  }
+
+  // MARK: - LIVE mode (LiveEngine conducts from the watch's stream)
+
+  func startLive() {
+    guard phase == .idle || phase == .done else { return }
+    guard let b = bundle, let plan = b.plan, let tags = b.tags, supportsLive else {
+      status = "this bundle has no LIVE payload — re-export from the web app"
+      return
+    }
+    deck.stop()
+    live = LiveEngine(plan: plan, songs: tags)
+    firedCount = 0
+    landingCount = 0
+    lastCommand = ""
+    prevMs = 0
+    phase = .running
+    status = "🛰 LIVE — conducting \(b.name) from your body's data"
+    for w in live?.warnings ?? [] { status += " · ⚠️ \(w)" }
+  }
+
+  /// Every fresh watch sample advances the engine — the watch's own timer and
+  /// distance ARE the session clock, so pauses come free.
+  func advanceLive(timerMs: Double, distanceM: Double?) {
+    guard phase == .running, let live else { return }
+    clockMs = timerMs
+    for c in live.advance(LiveSample(tMs: timerMs, distanceM: distanceM)) {
+      // Never interrupt the run: a missing file leaves current audio playing.
+      try? deck.play(id: c.trackId, positionMs: c.positionMs, fadeSec: c.fadeSec)
+      firedCount += 1
+      lastCommand = c.reason
+    }
+    landingCount = live.landings.count
+  }
+
+  // MARK: - Simulated run (no watch needed — demo + Thursday dress rehearsal)
+
+  func startSimulatedRun(speed: Double = 8) {
+    guard phase == .idle || phase == .done else { return }
+    guard let b = bundle, let plan = b.plan, supportsLive else {
+      status = "this bundle has no LIVE payload — re-export from the web app"
+      return
+    }
+    startLive()
+    guard phase == .running else { return }
+    status = "🧪 simulated runner ×\(Int(speed)) — \(b.name)"
+    let samples = syntheticSamples(plan: plan, scenario: RunScenario())
+    simTask?.cancel()
+    simulating = true
+    simTask = Task { // inherits @MainActor
+      defer { simulating = false }
+      for s in samples {
+        if Task.isCancelled { return }
+        while phase == .paused { // Pause holds the runner, doesn't kill it
+          try? await Task.sleep(nanoseconds: 200_000_000)
+          if Task.isCancelled { return }
+        }
+        guard phase == .running else { return }
+        advanceLive(timerMs: s.tMs, distanceM: s.distanceM)
+        try? await Task.sleep(nanoseconds: UInt64(1_000_000_000 / speed))
+      }
+      guard phase == .running else { return }
+      phase = .done
+      status = "simulated session complete — \(firedCount) cues · \(landingCount) landings"
+      deck.stop()
+    }
+  }
+
+  func stopSimulatedRun() {
+    simTask?.cancel()
+    simTask = nil
+    simulating = false
   }
 
   // MARK: - Garmin events (from the relay)
@@ -186,11 +288,11 @@ final class SessionEngine: ObservableObject {
     let backdated = (timerMs ?? 0) + (Date().timeIntervalSince1970 * 1000 - receivedAt)
     switch (event, phase) {
     case ("timerStart", .idle) where armed:
-      start(atOffsetMs: backdated)
+      liveMode && supportsLive ? startLive() : start(atOffsetMs: backdated)
     case ("timerPause", .running):
       pauseSession()
     case ("timerResume", .paused):
-      resumeSession(atOffsetMs: backdated)
+      resumeSession(atOffsetMs: backdated) // live-aware: LIVE just unmutes
     default:
       break
     }

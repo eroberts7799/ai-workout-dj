@@ -381,6 +381,18 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
       planEndMs: totalDurationMs(plan),
       cues: setlist.cues,
       songs: involved,
+      // LIVE-mode payload: with the plan and the full tag library on board,
+      // the phone can conduct from the watch's live stream — no Mac anywhere.
+      plan: plan.steps,
+      tags: Object.values(lib).map((s) => ({
+        trackId: s.trackId,
+        uri: s.uri,
+        name: s.name,
+        artists: s.artists,
+        durationMs: s.durationMs,
+        bpm: s.bpm,
+        markers: s.markers.map((m) => ({ type: m.type, ms: m.ms })),
+      })),
     }
     const a = document.createElement('a')
     a.href = URL.createObjectURL(new Blob([JSON.stringify(bundle, null, 2)], { type: 'application/json' }))

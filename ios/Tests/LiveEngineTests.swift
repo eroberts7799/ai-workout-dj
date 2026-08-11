@@ -1,0 +1,131 @@
+// Port-parity tests for the Swift LiveEngine — the same invariants the
+// TypeScript engine proves in src/live/live-engine.test.ts. If these hold,
+// the phone conducts like the browser does.
+import XCTest
+@testable import AwdjPlayer
+
+private func song(_ id: String) -> TaggedSong {
+  TaggedSong(
+    trackId: id,
+    uri: "spotify:track:\(id)",
+    name: "Song \(id)",
+    artists: "Test",
+    durationMs: 240_000,
+    bpm: 128,
+    markers: [
+      Marker(type: "loop_start", ms: 30_000),
+      Marker(type: "loop_end", ms: 60_000),
+      Marker(type: "buildup", ms: 75_000),
+      Marker(type: "drop", ms: 95_000),
+    ]
+  )
+}
+
+private let songs = [song("aaa"), song("bbb"), song("ccc")]
+
+/// 1Hz sample stream over piecewise-constant speeds.
+private func stream(_ phases: [(seconds: Int, mps: Double)]) -> [LiveSample] {
+  var out: [LiveSample] = []
+  var t: Double = 0
+  var d: Double = 0
+  for p in phases {
+    for _ in 0..<p.seconds {
+      t += 1000
+      d += p.mps
+      out.append(LiveSample(tMs: t, distanceM: d))
+    }
+  }
+  return out
+}
+
+/// Distance plan: 1min warmup, 1km easy, 400m hard, then easy.
+private let plan: [WorkoutStep] = [
+  WorkoutStep(kind: "warmup", seconds: 60, meters: nil),
+  WorkoutStep(kind: "easy", seconds: nil, meters: 1000),
+  WorkoutStep(kind: "hard", seconds: nil, meters: 400),
+  WorkoutStep(kind: "easy", seconds: nil, meters: 600),
+]
+
+final class LiveEngineTests: XCTestCase {
+  func testConstantPaceDropLandsWithin1500ms() {
+    let engine = LiveEngine(plan: plan, songs: songs, paceSecPerKm: 340)
+    for s in stream([(700, 3)]) { engine.advance(s) }
+    XCTAssertEqual(engine.landings.count, 1)
+    XCTAssertLessThanOrEqual(abs(engine.landings[0].errorMs), 1500)
+    XCTAssertTrue(engine.commands.contains { $0.reason.hasPrefix("buildup") })
+  }
+
+  func testSlowingRunnerStillLandsWithin4s() {
+    let engine = LiveEngine(plan: plan, songs: songs, paceSecPerKm: 340)
+    for s in stream([(200, 3), (500, 2)]) { engine.advance(s) }
+    XCTAssertEqual(engine.landings.count, 1)
+    XCTAssertLessThanOrEqual(abs(engine.landings[0].errorMs), 4000)
+  }
+
+  func testSlowerRunnerLoopsMore() {
+    let fast = LiveEngine(plan: plan, songs: songs, paceSecPerKm: 340)
+    for s in stream([(600, 3.4)]) { fast.advance(s) }
+    let slow = LiveEngine(plan: plan, songs: songs, paceSecPerKm: 340)
+    for s in stream([(900, 2.2)]) { slow.advance(s) }
+    let loops = { (e: LiveEngine) in e.commands.filter { $0.reason.hasPrefix("loop back") }.count }
+    XCTAssertGreaterThan(loops(slow), loops(fast))
+  }
+
+  func testNeverRunsOffTrackEnd() {
+    let engine = LiveEngine(plan: plan, songs: songs, paceSecPerKm: 340)
+    for s in stream([(900, 3)]) { engine.advance(s) }
+    let cmds = engine.commands
+    XCTAssertGreaterThanOrEqual(cmds.filter { $0.reason.hasPrefix("groove fill") }.count, 2)
+    for i in 0..<cmds.count {
+      let end = i + 1 < cmds.count ? cmds[i + 1].tMs : 900_000
+      let playedTo = cmds[i].positionMs + (end - cmds[i].tMs)
+      XCTAssertLessThanOrEqual(playedTo, 240_000 + 1500)
+    }
+  }
+
+  func testTimeOnlyPlansWorkWithoutDistance() {
+    let timePlan: [WorkoutStep] = [
+      WorkoutStep(kind: "easy", seconds: 120, meters: nil),
+      WorkoutStep(kind: "hard", seconds: 60, meters: nil),
+      WorkoutStep(kind: "cooldown", seconds: 60, meters: nil),
+    ]
+    let engine = LiveEngine(plan: timePlan, songs: songs)
+    for i in 1...240 { engine.advance(LiveSample(tMs: Double(i) * 1000, distanceM: nil)) }
+    XCTAssertEqual(engine.landings.count, 1)
+    XCTAssertLessThanOrEqual(abs(engine.landings[0].errorMs), 1500)
+  }
+
+  func testSyntheticRunnerCoversPlanAndLandsAllReps() {
+    let intervalPlan: [WorkoutStep] = [
+      WorkoutStep(kind: "warmup", seconds: 180, meters: nil),
+      WorkoutStep(kind: "easy", seconds: nil, meters: 400),
+      WorkoutStep(kind: "hard", seconds: nil, meters: 800),
+      WorkoutStep(kind: "easy", seconds: nil, meters: 400),
+      WorkoutStep(kind: "hard", seconds: nil, meters: 800),
+      WorkoutStep(kind: "cooldown", seconds: 120, meters: nil),
+    ]
+    let samples = syntheticSamples(plan: intervalPlan, scenario: RunScenario())
+    XCTAssertGreaterThanOrEqual(samples.last!.distanceM!, 2400)
+    let engine = LiveEngine(plan: intervalPlan, songs: songs)
+    for s in samples { engine.advance(s) }
+    XCTAssertEqual(engine.landings.count, 2)
+    for l in engine.landings { XCTAssertLessThanOrEqual(abs(l.errorMs), 8000) }
+  }
+
+  func testBundleDecodesLivePayloadAndTolerantOfOldFormat() throws {
+    let newJson = """
+    {"name":"x","planEndMs":60000,"cues":[],"songs":[],
+     "plan":[{"kind":"easy","meters":400}],
+     "tags":[{"trackId":"t","uri":"u","name":"n","artists":"a","durationMs":1000,"bpm":128,
+              "markers":[{"type":"drop","ms":500}]}]}
+    """
+    let b = try JSONDecoder().decode(SessionBundle.self, from: Data(newJson.utf8))
+    XCTAssertEqual(b.plan?.count, 1)
+    XCTAssertEqual(b.tags?.first?.markers.first?.type, "drop")
+
+    let oldJson = #"{"name":"x","planEndMs":60000,"cues":[],"songs":[]}"#
+    let old = try JSONDecoder().decode(SessionBundle.self, from: Data(oldJson.utf8))
+    XCTAssertNil(old.plan)
+    XCTAssertNil(old.tags)
+  }
+}
