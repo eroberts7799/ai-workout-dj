@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { LocalDeck } from '../audio/local-deck'
 import { loadAudio } from '../audio/local-store'
+import { beatAnchorMs } from '../conductor/beat'
 import { planSetlist, totalDurationMs } from '../conductor/conductor'
 import type { Cue, WorkoutPlan } from '../conductor/types'
 import type { SdkHandle } from '../spike/sdk-path'
@@ -206,7 +207,8 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
         // Mid-run failure policy: log and keep playing — never interrupt the run.
         try {
           if (engineRef.current === 'local' && deckRef.current?.has(cue.trackId)) {
-            deckRef.current.play(cue.trackId, cue.positionMs, fadeFor(cue))
+            // Non-drop cuts wait for the outgoing track's beat; drops are exact.
+            deckRef.current.play(cue.trackId, cue.positionMs, fadeFor(cue), { onBeat: !cue.reason.startsWith('drop lands') })
           } else {
             await playOnTarget(cue.uri, cue.positionMs)
           }
@@ -241,7 +243,10 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
       const neededIds = [...new Set(setlist.cues.map((c) => c.trackId))]
       const deck = (deckRef.current ??= new LocalDeck())
       allLocal = true
+      const lib = loadAllTags()
       for (const id of neededIds) {
+        const song = lib[id]
+        if (song) deck.setMeta(id, { bpm: song.bpm, anchorMs: beatAnchorMs(song.markers) })
         if (deck.has(id)) continue
         const data = await loadAudio(id)
         if (data) {
@@ -334,6 +339,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
     let allLocal = outputRef.current === 'browser'
     if (allLocal) {
       for (const s of lib) {
+        deck.setMeta(s.trackId, { bpm: s.bpm, anchorMs: beatAnchorMs(s.markers) })
         if (deck.has(s.trackId)) continue
         const data = await loadAudio(s.trackId)
         if (data) await deck.load(s.trackId, data)
@@ -360,7 +366,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
     const entry = { plannedAtMs: c.tMs, firedAtMs: c.tMs, cue: { atMs: c.tMs, trackId: c.trackId, uri: c.uri, positionMs: c.positionMs, reason: c.reason }, ok: true }
     try {
       if (engineRef.current === 'local' && deckRef.current?.has(c.trackId)) {
-        deckRef.current.play(c.trackId, c.positionMs, c.fadeSec)
+        deckRef.current.play(c.trackId, c.positionMs, c.fadeSec, { onBeat: !c.reason.startsWith('drop lands') })
       } else {
         await playOnTarget(c.uri, c.positionMs)
       }

@@ -6,6 +6,7 @@ import { useMemo, useRef, useState } from 'react'
 import { LocalDeck } from '../audio/local-deck'
 import { loadAudio } from '../audio/local-store'
 import type { SongTags, WorkoutPlan, WorkoutStep } from '../conductor/types'
+import { beatAnchorMs } from '../conductor/beat'
 import { parsePlan } from '../conduct/plan-parse'
 import { RELAY_BASE, RELAY_KEY } from '../conduct/ConductPanel'
 import { loadAllTags } from '../tags/store'
@@ -179,6 +180,8 @@ export default function ReplayPanel() {
     const ids = [...new Set(result.commands.map((c) => c.trackId))]
     let loadedCount = 0
     for (const id of ids) {
+      const song = engineSongs.find((s) => s.trackId === id)
+      if (song) deck.setMeta(id, { bpm: song.bpm, anchorMs: beatAnchorMs(song.markers) })
       if (deck.has(id)) {
         loadedCount++
         continue
@@ -198,7 +201,10 @@ export default function ReplayPanel() {
     for (const c of result.commands) {
       timersRef.current.push(
         setTimeout(() => {
-          if (deck.has(c.trackId)) deck.play(c.trackId, c.positionMs, Math.max(0.12, c.fadeSec / speed))
+          if (deck.has(c.trackId))
+            deck.play(c.trackId, c.positionMs, Math.max(0.12, c.fadeSec / speed), {
+              onBeat: speed === 1 && !c.reason.startsWith('drop lands'), // beat waits only make sense in real time
+            })
         }, c.tMs / speed),
       )
     }

@@ -13,3 +13,25 @@ export function snapToBeat(rawMs: number, anchorMs: number, bpm: number | null |
   const k = Math.round((anchorMs - rawMs) / beatMs)
   return Math.max(0, anchorMs - k * beatMs)
 }
+
+/**
+ * How long to wait (ms) so a cut leaves the OUTGOING track exactly on its
+ * next beat boundary. posMs is the playhead now; anchorMs any on-grid
+ * position of the same track. 0 without a BPM (cut immediately), and a
+ * boundary hit within 1ms counts as "on it".
+ */
+export function nextBeatDelayMs(posMs: number, bpm: number | null | undefined, anchorMs: number): number {
+  if (!bpm || bpm <= 0) return 0
+  const beatMs = 60_000 / bpm
+  const phase = ((((posMs - anchorMs) % beatMs) + beatMs) % beatMs)
+  return phase < 1 || beatMs - phase < 1 ? 0 : beatMs - phase
+}
+
+/** A song's beat-grid anchor: any marker the analyzer downbeat-snapped. */
+export function beatAnchorMs(markers: { type: string; ms: number }[]): number {
+  return (
+    markers.find((m) => m.type === 'drop')?.ms ??
+    markers.find((m) => m.type === 'loop_start')?.ms ??
+    0
+  )
+}
