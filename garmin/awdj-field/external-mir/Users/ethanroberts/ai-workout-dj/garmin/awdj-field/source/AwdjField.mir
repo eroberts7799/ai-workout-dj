@@ -194,7 +194,7 @@ _Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_51_23_51
 _Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_51_4_54_4_if_true:
 _Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_51_39_54_4_start:
 [ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" 53 6 ]
-        %tmp.15 = "http://172.20.8.136:5173/api/garmin";
+        %tmp.15 = "http://100.86.14.111:5173/api/garmin";
         lputv %url.1 %tmp.15;
         symbol [ url %url.1 53 6 9 ];
 _Users_ethanroberts_ai_workout_dj_garmin_awdj_field_source_AwdjField_mc_51_39_54_4_stop:

@@ -50,7 +50,7 @@ class AwdjField extends WatchUi.SimpleDataField {
     var url = Properties.getValue("endpoint") as String?;
     if (url == null || url.equals("")) {
       // Default: the conductor on the home LAN (settings can override).
-      url = "http://172.20.8.136:5173/api/garmin";
+      url = "http://100.86.14.111:5173/api/garmin";
     }
     var body = {
       "event" => _pendingEvent,
