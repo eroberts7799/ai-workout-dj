@@ -4,7 +4,7 @@ import { loadAudio } from '../audio/local-store'
 import { planSetlist, totalDurationMs } from '../conductor/conductor'
 import type { Cue, WorkoutPlan } from '../conductor/types'
 import type { SdkHandle } from '../spike/sdk-path'
-import { listDevices, playTrack, type ConnectDevice } from '../spike/webapi-path'
+import { listDevices, playTrack, transferTo, type ConnectDevice } from '../spike/webapi-path'
 import { loadAllTags } from '../tags/store'
 import { parsePlan } from './plan-parse'
 import { SessionClock, dueCues } from './runner'
@@ -119,7 +119,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
           if (engineRef.current === 'local' && deckRef.current?.has(cue.trackId)) {
             deckRef.current.play(cue.trackId, cue.positionMs, fadeFor(cue))
           } else {
-            await playTrack(targetDeviceId(), cue.uri, cue.positionMs)
+            await playOnTarget(cue.uri, cue.positionMs)
           }
           setLog((prev) => [...prev, { plannedAtMs: cue.atMs, firedAtMs: now, cue, ok: true }])
         } catch (e) {
@@ -165,9 +165,31 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
     return true
   }
 
-  /** Where Spotify commands go: the in-browser SDK device or a remote device. */
-  function targetDeviceId(): string {
-    return outputRef.current === 'browser' ? sdk.deviceId : outputRef.current
+  const remoteIdRef = useRef<string | null>(null)
+
+  /** Spotify device IDs churn (app restarts, wifi↔LTE hops). Resolve the
+   *  selected output by NAME, cache the id, and rediscover on demand. */
+  async function resolveRemoteId(rediscover: boolean): Promise<string> {
+    if (!rediscover && remoteIdRef.current) return remoteIdRef.current
+    const d = (await listDevices()).find((x) => x.name === outputRef.current)
+    if (!d) throw new Error(`"${outputRef.current}" not in Spotify's device list — open Spotify on it and tap play once`)
+    remoteIdRef.current = d.id
+    return d.id
+  }
+
+  /** Play on the selected output, surviving stale remote device ids. */
+  async function playOnTarget(uri: string, positionMs: number): Promise<void> {
+    if (outputRef.current === 'browser') {
+      await playTrack(sdk.deviceId, uri, positionMs)
+      return
+    }
+    try {
+      await playTrack(await resolveRemoteId(false), uri, positionMs)
+    } catch {
+      const id = await resolveRemoteId(true) // rediscover by name, re-activate, retry once
+      await transferTo(id)
+      await playTrack(id, uri, positionMs)
+    }
   }
 
   function beginAt(offsetMs: number) {
@@ -229,7 +251,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
       if (engineRef.current === 'local' && deckRef.current?.has(past.trackId)) {
         deckRef.current.play(past.trackId, pos, 0.2)
       } else {
-        playTrack(targetDeviceId(), past.uri, pos).catch(() => {})
+        playOnTarget(past.uri, pos).catch(() => {})
       }
     }
   }
@@ -308,12 +330,19 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
             </label>
             <div style={{ marginTop: 10 }}>
               <span className="muted">Audio output: </span>
-              <select value={output} onChange={(e) => setOutput(e.target.value)} style={{ width: 'auto' }}>
+              <select
+                value={output}
+                onChange={(e) => {
+                  setOutput(e.target.value)
+                  remoteIdRef.current = null
+                }}
+                style={{ width: 'auto' }}
+              >
                 <option value="browser">This browser (🎧 crossfades)</option>
                 {outputs
                   .filter((d) => !d.name.includes('spike'))
                   .map((d) => (
-                    <option key={d.id} value={d.id}>
+                    <option key={d.id} value={d.name}>
                       {d.name} ({d.type}) — jump cuts
                     </option>
                   ))}
