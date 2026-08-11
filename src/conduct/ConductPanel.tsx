@@ -4,7 +4,7 @@ import { loadAudio } from '../audio/local-store'
 import { planSetlist, totalDurationMs } from '../conductor/conductor'
 import type { Cue, WorkoutPlan } from '../conductor/types'
 import type { SdkHandle } from '../spike/sdk-path'
-import { listDevices, playTrack, transferTo, type ConnectDevice } from '../spike/webapi-path'
+import { listDevices, pausePlayback, playTrack, transferTo, type ConnectDevice } from '../spike/webapi-path'
 import { loadAllTags } from '../tags/store'
 import { parsePlan } from './plan-parse'
 import { SessionClock, dueCues } from './runner'
@@ -79,16 +79,26 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
         if (!sample) return
         const fresh = Date.now() - sample.receivedAt < 5_000
         // Exact-sync auto-start: watch timer started → session starts, backdated.
-        if (
-          fresh &&
-          armedRef.current &&
-          phaseRef.current === 'idle' &&
-          sample.event === 'timerStart' &&
-          sample.receivedAt !== handledStartRef.current
-        ) {
+        if (fresh && sample.event && sample.receivedAt !== handledStartRef.current) {
           handledStartRef.current = sample.receivedAt
-          const offset = (sample.timerMs ?? 0) + (Date.now() - sample.receivedAt)
-          void startFromGarmin(offset)
+          if (armedRef.current && phaseRef.current === 'idle' && sample.event === 'timerStart') {
+            const offset = (sample.timerMs ?? 0) + (Date.now() - sample.receivedAt)
+            void startFromGarmin(offset)
+          } else if (phaseRef.current === 'running' && sample.event === 'timerPause') {
+            // Watch paused → freeze the choreography clock and silence the music.
+            clockRef.current.pause()
+            if (engineRef.current === 'local') void deckRef.current?.pause()
+            else pauseOnTarget()
+            setPhase('paused')
+          } else if (phaseRef.current === 'paused' && sample.event === 'timerResume') {
+            // Watch resumed → re-sync to the watch's timer and re-establish
+            // exactly what should be playing (even if they played other music
+            // during the break — scrubTo overwrites playback state).
+            clockRef.current.resume()
+            const offset = (sample.timerMs ?? 0) + (Date.now() - sample.receivedAt)
+            scrubTo(offset)
+            setPhase('running')
+          }
         }
         if (fresh && phaseRef.current === 'running' && typeof sample.hr === 'number') {
           hrLogRef.current.push({ atMs: clockRef.current.nowMs(), hr: sample.hr })
@@ -177,6 +187,16 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
     return d.id
   }
 
+  function pauseOnTarget(): void {
+    if (outputRef.current === 'browser') {
+      void sdk.player.pause()
+    } else {
+      resolveRemoteId(false)
+        .then((id) => pausePlayback(id))
+        .catch(() => {})
+    }
+  }
+
   /** Play on the selected output, surviving stale remote device ids. */
   async function playOnTarget(uri: string, positionMs: number): Promise<void> {
     if (outputRef.current === 'browser') {
@@ -227,12 +247,12 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
       clock.pause()
       // workout paused = music paused
       if (engineRef.current === 'local') void deckRef.current?.pause()
-      else void sdk.player.pause()
+      else pauseOnTarget()
       setPhase('paused')
     } else if (phase === 'paused') {
       clock.resume()
       if (engineRef.current === 'local') void deckRef.current?.resume()
-      else void sdk.player.resume()
+      else scrubTo(clock.nowMs()) // re-establish the right song/position on the target
       setPhase('running')
     }
   }

@@ -28,6 +28,10 @@ export async function transferTo(deviceId: string): Promise<void> {
   if (!res.ok && res.status !== 204) throw new Error(`transfer: ${res.status}`)
 }
 
+export async function pausePlayback(deviceId: string): Promise<void> {
+  await api(`/me/player/pause?device_id=${encodeURIComponent(deviceId)}`, { method: 'PUT' })
+}
+
 export async function playTrack(deviceId: string, trackUri: string, positionMs = 20_000): Promise<void> {
   const res = await api(`/me/player/play?device_id=${encodeURIComponent(deviceId)}`, {
     method: 'PUT',
