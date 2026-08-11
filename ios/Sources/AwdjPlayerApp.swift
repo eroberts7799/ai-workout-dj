@@ -4,7 +4,10 @@ import SwiftUI
 struct AwdjPlayerApp: App {
   var body: some Scene {
     WindowGroup {
-      SpikeView()
+      TabView {
+        SessionView().tabItem { Label("Session", systemImage: "figure.run") }
+        SpikeView().tabItem { Label("Spike", systemImage: "waveform" ) }
+      }
     }
   }
 }

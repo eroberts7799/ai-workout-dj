@@ -77,4 +77,12 @@ final class DualDeck {
 
   func pause() { players.forEach { $0.pause() } }
   func resume() { players[active].play() }
+
+  func stop() {
+    fadeTimer?.invalidate()
+    players.forEach {
+      $0.stop()
+      $0.volume = 0
+    }
+  }
 }

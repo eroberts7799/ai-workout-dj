@@ -280,6 +280,25 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
     setPhase('done')
   }
 
+  /** Everything the iPhone app needs to run this session natively. */
+  function exportBundle() {
+    const lib = loadAllTags()
+    const involved = [...new Set(setlist.cues.map((c) => c.trackId))]
+      .map((id) => lib[id])
+      .filter(Boolean)
+      .map((s) => ({ trackId: s.trackId, name: s.name, artists: s.artists, durationMs: s.durationMs, bpm: s.bpm }))
+    const bundle = {
+      name: plan.name,
+      planEndMs: totalDurationMs(plan),
+      cues: setlist.cues,
+      songs: involved,
+    }
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(bundle, null, 2)], { type: 'application/json' }))
+    a.download = 'session-bundle.json'
+    a.click()
+  }
+
   function downloadSessionLog() {
     const blob = new Blob(
       [
@@ -313,7 +332,8 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
           <p key={e} className="bad">{e}</p>
         ))}
         <p className="muted">
-          {songs.length} tagged song(s) available · plan {Math.round(totalDurationMs(plan) / 60_000)}min
+          {songs.length} tagged song(s) available · plan {Math.round(totalDurationMs(plan) / 60_000)}min{' '}
+          <button onClick={exportBundle} disabled={setlist.cues.length === 0}>Export session bundle (for iPhone app)</button>
         </p>
       </div>
 
