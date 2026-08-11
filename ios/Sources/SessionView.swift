@@ -60,7 +60,13 @@ struct SessionView: View {
 
       HStack(spacing: 16) {
         Button("Import bundle") { showBundlePicker = true }
+          .fileImporter(isPresented: $showBundlePicker, allowedContentTypes: [.json]) { result in
+            if case .success(let url) = result { engine.importBundle(from: url) }
+          }
         Button("Import audio files") { showAudioPicker = true }
+          .fileImporter(isPresented: $showAudioPicker, allowedContentTypes: [.audio], allowsMultipleSelection: true) { result in
+            if case .success(let urls) = result { engine.importAudio(from: urls) }
+          }
       }
       .font(.footnote)
     }
@@ -70,12 +76,6 @@ struct SessionView: View {
       relay.onSample = { [weak engine] s in
         engine?.handleGarmin(event: s.event, timerMs: s.timerMs, receivedAt: s.receivedAt, armed: armed)
       }
-    }
-    .fileImporter(isPresented: $showBundlePicker, allowedContentTypes: [.json]) { result in
-      if case .success(let url) = result { engine.importBundle(from: url) }
-    }
-    .fileImporter(isPresented: $showAudioPicker, allowedContentTypes: [.audio], allowsMultipleSelection: true) { result in
-      if case .success(let urls) = result { engine.importAudio(from: urls) }
     }
   }
 }

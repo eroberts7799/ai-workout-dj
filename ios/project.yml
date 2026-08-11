@@ -22,5 +22,7 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.ethanroberts.awdjplayer
+        DEVELOPMENT_TEAM: 6N9T4GRA6U
+        CODE_SIGN_STYLE: Automatic
         TARGETED_DEVICE_FAMILY: "1"
         SWIFT_VERSION: "5.9"
