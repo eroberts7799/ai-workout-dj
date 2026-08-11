@@ -5,3 +5,6 @@ dist/
 .gstack/
 developer_key*
 *.prg
+ios/AwdjPlayer.xcodeproj/
+ios/build/
+*.xcresult

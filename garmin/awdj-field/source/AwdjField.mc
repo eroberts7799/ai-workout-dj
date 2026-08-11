@@ -60,6 +60,8 @@ class AwdjField extends WatchUi.SimpleDataField {
       "timerMs" => info.timerTime,
       "altitude" => info.altitude,
       "speed" => info.currentSpeed,
+      "distance" => info.elapsedDistance,
+      "cadence" => info.currentCadence,
     };
     if (info.currentLocation != null) {
       var deg = info.currentLocation.toDegrees();
