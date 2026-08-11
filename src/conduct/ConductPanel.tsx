@@ -69,11 +69,11 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
   const handledStartRef = useRef(0)
   const hrLogRef = useRef<{ atMs: number; hr: number }[]>([])
 
-  // Live Garmin feed: poll the receiver once a second, always.
+  // Live Garmin feed: poll the public relay once a second, always.
   useEffect(() => {
     const t = setInterval(async () => {
       try {
-        const res = await fetch('/api/garmin')
+        const res = await fetch('https://awdj-relay.vercel.app/api/garmin?k=awdj-7g2k9x')
         const sample = (await res.json()) as GarminSample | null
         setGarmin(sample)
         if (!sample) return

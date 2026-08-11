@@ -49,10 +49,12 @@ class AwdjField extends WatchUi.SimpleDataField {
   private function postSample(info as Activity.Info) as Void {
     var url = Properties.getValue("endpoint") as String?;
     if (url == null || url.equals("")) {
-      // Default: the conductor on the home LAN (settings can override).
-      url = "http://100.86.14.111:5173/api/garmin";
+      // Permanent public relay: HTTPS (Garmin requires it off-LAN), works
+      // from any network including LTE. Settings can still override.
+      url = "https://awdj-relay.vercel.app/api/garmin?k=awdj-7g2k9x";
     }
     var body = {
+      "via" => "relay",
       "event" => _pendingEvent,
       "hr" => info.currentHeartRate,
       "timerMs" => info.timerTime,
