@@ -7,8 +7,10 @@ targets:
   AwdjPlayer:
     type: application
     platform: iOS
-    sources: [Sources]
-    resources: [Resources]
+    sources:
+      - Sources
+      - path: Resources
+        buildPhase: resources
     info:
       path: Info.plist
       properties:

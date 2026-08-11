@@ -37,8 +37,8 @@ struct SpikeView: View {
         }
       } else {
         HStack(spacing: 16) {
-          Button("Deck A @ 5s") { deck.play(id: "a", positionMs: 5000); status = "A playing" }
-          Button("Deck B @ 20s") { deck.play(id: "b", positionMs: 20000); status = "crossfaded to B" }
+          Button("Deck A @ 5s") { tap("a", 5000) }
+          Button("Deck B @ 20s") { tap("b", 20000) }
         }
         HStack(spacing: 16) {
           Button("Pause") { deck.pause() }
@@ -49,5 +49,14 @@ struct SpikeView: View {
       Text(status).font(.footnote).foregroundColor(.secondary)
     }
     .padding()
+  }
+
+  private func tap(_ id: String, _ posMs: Double) {
+    do {
+      try deck.play(id: id, positionMs: posMs)
+      status = "\(id) playing · \(deck.debugState())"
+    } catch {
+      status = "play failed: \(error.localizedDescription) · \(deck.debugState())"
+    }
   }
 }

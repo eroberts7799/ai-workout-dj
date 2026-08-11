@@ -29,9 +29,18 @@ final class DualDeck {
 
   func has(id: String) -> Bool { files[id] != nil }
 
+  /// Human-readable engine state for the spike UI.
+  func debugState() -> String {
+    "engine=\(engine.isRunning ? "running" : "STOPPED") files=\(files.count) activeVol=\(players[active].volume)"
+  }
+
   /// Start `id` at positionMs, crossfading from whatever plays now.
-  func play(id: String, positionMs: Double, fadeSec: Double = 0.8) {
-    guard let file = files[id] else { return }
+  func play(id: String, positionMs: Double, fadeSec: Double = 0.8) throws {
+    if !engine.isRunning {
+      try AVAudioSession.sharedInstance().setActive(true)
+      try engine.start()
+    }
+    guard let file = files[id] else { throw NSError(domain: "awdj", code: 1, userInfo: [NSLocalizedDescriptionKey: "no file \(id)"]) }
     let incoming = players[1 - active]
     let outgoing = players[active]
     active = 1 - active
