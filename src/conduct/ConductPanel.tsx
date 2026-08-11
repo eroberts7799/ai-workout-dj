@@ -4,7 +4,7 @@ import { loadAudio } from '../audio/local-store'
 import { planSetlist, totalDurationMs } from '../conductor/conductor'
 import type { Cue, WorkoutPlan } from '../conductor/types'
 import type { SdkHandle } from '../spike/sdk-path'
-import { playTrack } from '../spike/webapi-path'
+import { listDevices, playTrack, type ConnectDevice } from '../spike/webapi-path'
 import { loadAllTags } from '../tags/store'
 import { parsePlan } from './plan-parse'
 import { SessionClock, dueCues } from './runner'
@@ -57,6 +57,10 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
   const [engine, setEngine] = useState<'local' | 'spotify'>('spotify')
   const engineRef = useRef<'local' | 'spotify'>('spotify')
   const [garmin, setGarmin] = useState<GarminSample | null>(null)
+  const [outputs, setOutputs] = useState<ConnectDevice[]>([])
+  const [output, setOutput] = useState<string>('browser')
+  const outputRef = useRef<string>('browser')
+  outputRef.current = output
   const [armed, setArmed] = useState(false)
   const armedRef = useRef(false)
   armedRef.current = armed
@@ -115,7 +119,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
           if (engineRef.current === 'local' && deckRef.current?.has(cue.trackId)) {
             deckRef.current.play(cue.trackId, cue.positionMs, fadeFor(cue))
           } else {
-            await playTrack(sdk.deviceId, cue.uri, cue.positionMs)
+            await playTrack(targetDeviceId(), cue.uri, cue.positionMs)
           }
           setLog((prev) => [...prev, { plannedAtMs: cue.atMs, firedAtMs: now, cue, ok: true }])
         } catch (e) {
@@ -138,24 +142,32 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
     hrLogRef.current = []
     prevMsRef.current = -1
 
-    // Engine choice: if every cued track has attached local audio, use the
-    // real-DJ deck (crossfades); otherwise fall back to Spotify jump-cuts.
-    const neededIds = [...new Set(setlist.cues.map((c) => c.trackId))]
-    const deck = (deckRef.current ??= new LocalDeck())
-    let allLocal = true
-    for (const id of neededIds) {
-      if (deck.has(id)) continue
-      const data = await loadAudio(id)
-      if (data) {
-        await deck.load(id, data)
-      } else {
-        allLocal = false
-        break
+    // Engine choice: the local crossfade deck only exists in this browser —
+    // remote outputs (e.g. the iPhone's Spotify app) always use jump-cuts.
+    let allLocal = false
+    if (outputRef.current === 'browser') {
+      const neededIds = [...new Set(setlist.cues.map((c) => c.trackId))]
+      const deck = (deckRef.current ??= new LocalDeck())
+      allLocal = true
+      for (const id of neededIds) {
+        if (deck.has(id)) continue
+        const data = await loadAudio(id)
+        if (data) {
+          await deck.load(id, data)
+        } else {
+          allLocal = false
+          break
+        }
       }
     }
     engineRef.current = allLocal ? 'local' : 'spotify'
     setEngine(engineRef.current)
     return true
+  }
+
+  /** Where Spotify commands go: the in-browser SDK device or a remote device. */
+  function targetDeviceId(): string {
+    return outputRef.current === 'browser' ? sdk.deviceId : outputRef.current
   }
 
   function beginAt(offsetMs: number) {
@@ -217,7 +229,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
       if (engineRef.current === 'local' && deckRef.current?.has(past.trackId)) {
         deckRef.current.play(past.trackId, pos, 0.2)
       } else {
-        playTrack(sdk.deviceId, past.uri, pos).catch(() => {})
+        playTrack(targetDeviceId(), past.uri, pos).catch(() => {})
       }
     }
   }
@@ -294,6 +306,20 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
               <input type="checkbox" checked={armed} onChange={(e) => setArmed(e.target.checked)} style={{ width: 'auto' }} />{' '}
               Arm Garmin auto-start
             </label>
+            <div style={{ marginTop: 10 }}>
+              <span className="muted">Audio output: </span>
+              <select value={output} onChange={(e) => setOutput(e.target.value)} style={{ width: 'auto' }}>
+                <option value="browser">This browser (🎧 crossfades)</option>
+                {outputs
+                  .filter((d) => !d.name.includes('spike'))
+                  .map((d) => (
+                    <option key={d.id} value={d.id}>
+                      {d.name} ({d.type}) — jump cuts
+                    </option>
+                  ))}
+              </select>{' '}
+              <button onClick={() => void listDevices().then(setOutputs).catch(() => {})}>Find devices</button>
+            </div>
           </>
         )}
         <p className="muted">
