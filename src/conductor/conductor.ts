@@ -18,23 +18,33 @@ export interface HardStep {
   endMs: number
 }
 
-export function hardSteps(plan: WorkoutPlan): HardStep[] {
+/** Default planning pace for distance steps: 6:00/km. The live conductor
+ *  replaces this assumption with real GPS distance. */
+export const DEFAULT_PACE_SEC_PER_KM = 360
+
+export function stepMs(step: { seconds?: number; meters?: number }, paceSecPerKm = DEFAULT_PACE_SEC_PER_KM): number {
+  if (step.seconds != null) return step.seconds * 1000
+  if (step.meters != null) return (step.meters / 1000) * paceSecPerKm * 1000
+  return 0
+}
+
+export function hardSteps(plan: WorkoutPlan, paceSecPerKm = DEFAULT_PACE_SEC_PER_KM): HardStep[] {
   const out: HardStep[] = []
   let t = 0
   for (const step of plan.steps) {
-    const end = t + step.seconds * 1000
+    const end = t + stepMs(step, paceSecPerKm)
     if (step.kind === 'hard') out.push({ startMs: t, endMs: end })
     t = end
   }
   return out
 }
 
-export function hardStepStarts(plan: WorkoutPlan): number[] {
-  return hardSteps(plan).map((h) => h.startMs)
+export function hardStepStarts(plan: WorkoutPlan, paceSecPerKm = DEFAULT_PACE_SEC_PER_KM): number[] {
+  return hardSteps(plan, paceSecPerKm).map((h) => h.startMs)
 }
 
-export function totalDurationMs(plan: WorkoutPlan): number {
-  return plan.steps.reduce((s, x) => s + x.seconds * 1000, 0)
+export function totalDurationMs(plan: WorkoutPlan, paceSecPerKm = DEFAULT_PACE_SEC_PER_KM): number {
+  return plan.steps.reduce((s, x) => s + stepMs(x, paceSecPerKm), 0)
 }
 
 interface DropChoice {
@@ -82,7 +92,12 @@ export function loopSection(song: SongTags): { startMs: number; endMs: number } 
  * - ZERO SILENCE: from t=0 to plan end, some track is always playing —
  *   loop sections loop, and songs repeat when the library is small
  */
-export function planSetlist(plan: WorkoutPlan, songs: SongTags[]): Setlist {
+export function planSetlist(
+  plan: WorkoutPlan,
+  songs: SongTags[],
+  opts: { paceSecPerKm?: number } = {},
+): Setlist {
+  const pace = opts.paceSecPerKm ?? DEFAULT_PACE_SEC_PER_KM
   const warnings: string[] = []
   const primary: PlannedCue[] = []
   const droppable = songs.flatMap(dropChoices).filter((c) => c.entryMs < c.dropMs)
@@ -91,9 +106,12 @@ export function planSetlist(plan: WorkoutPlan, songs: SongTags[]): Setlist {
     .filter((x): x is LoopChoice => x.loop !== null)
 
   if (droppable.length === 0) warnings.push('No songs with drop markers — hard steps get no choreography')
-  const targets = hardSteps(plan)
+  const targets = hardSteps(plan, pace)
   if (targets.length === 0) warnings.push('Plan has no hard steps — nothing to choreograph')
-  const planEnd = totalDurationMs(plan)
+  const planEnd = totalDurationMs(plan, pace)
+  if (plan.steps.some((s) => s.meters != null)) {
+    warnings.push(`Distance steps timed at assumed ${Math.floor(pace / 60)}:${String(pace % 60).padStart(2, '0')}/km pace — live GPS re-solving comes next`)
+  }
 
   let lastTrackId: string | null = null
   let dropIdx = 0

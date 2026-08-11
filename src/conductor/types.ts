@@ -1,9 +1,12 @@
 import type { SongTags } from '../tags/types'
 
-/** One step of a time-based structured workout (v1: time-deterministic only). */
+/** One step of a structured workout: time-based (seconds) or distance-based
+ *  (meters). Distance steps resolve to time via a pace assumption at planning
+ *  time; the live conductor will resolve them from real GPS distance. */
 export interface WorkoutStep {
   kind: 'warmup' | 'easy' | 'hard' | 'rest' | 'cooldown'
-  seconds: number
+  seconds?: number
+  meters?: number
   label?: string
 }
 

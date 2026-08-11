@@ -177,6 +177,24 @@ describe('planSetlist', () => {
     expect(warnings.some((w) => w.includes('no hard steps'))).toBe(true)
   })
 
+  test('distance steps resolve via pace and drops still land exactly', () => {
+    const distPlan: WorkoutPlan = {
+      name: 'track workout',
+      steps: [
+        { kind: 'warmup', seconds: 300 },
+        { kind: 'easy', meters: 1000 }, // at 6:00/km → 360s
+        { kind: 'hard', meters: 400 }, //  → 144s
+      ],
+    }
+    const { cues, warnings } = planSetlist(distPlan, songs, { paceSecPerKm: 360 })
+    const targets = hardStepStarts(distPlan, 360)
+    expect(targets).toEqual([(300 + 360) * 1000])
+    const drop = cues.filter((c) => c.reason.startsWith('drop lands')).pop()!
+    expect(drop.positionMs + (targets[0] - drop.atMs)).toBe(95_000)
+    expect(warnings.some((w) => w.includes('assumed 6:00/km'))).toBe(true)
+    expect(totalSilenceMs(cues, totalDurationMs(distPlan, 360))).toBe(0)
+  })
+
   test('back-to-back hard steps truncate the buildup but never miss the drop', () => {
     const tightPlan: WorkoutPlan = {
       name: 'tight',
