@@ -6,6 +6,7 @@
 // a coverage pass guarantees playback for the entire plan, looping sections
 // and repeating songs as needed. Time-based plans are fully deterministic, so
 // the whole setlist is computed upfront; live re-solving arrives with HR/route.
+import { snapToBeat } from './beat'
 import type { Cue, Setlist, SongTags, WorkoutPlan } from './types'
 
 const DEFAULT_LEAD_MS = 30_000
@@ -142,7 +143,11 @@ export function planSetlist(
       warnings.push(`Hard step at ${fmtMin(target.startMs)}: buildup truncated (${fmtMin(cursorMs)} entry)`)
     }
     const atMs = Math.max(entryAt, cursorMs, 0)
-    const positionMs = pick.dropMs - (target.startMs - atMs)
+    // Untruncated entries hit the buildup marker exactly (already on a
+    // downbeat). Truncated ones are arbitrary — snap them to the beat grid,
+    // trading ≤ half a beat of landing precision for a musical entry.
+    const rawPositionMs = pick.dropMs - (target.startMs - atMs)
+    const positionMs = atMs === entryAt ? rawPositionMs : snapToBeat(rawPositionMs, pick.dropMs, pick.song.bpm)
     if (positionMs < 0 || positionMs >= pick.song.durationMs) {
       warnings.push(`Hard step at ${fmtMin(target.startMs)}: skipped ${pick.song.name} (entry out of bounds)`)
       continue

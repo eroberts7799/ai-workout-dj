@@ -79,6 +79,8 @@ export default function ReplayPanel() {
   const [hardPace, setHardPace] = useState('4:45')
   const [fatiguePct, setFatiguePct] = useState(0)
   const [noisePct, setNoisePct] = useState(4)
+  const [hilly, setHilly] = useState(true)
+  const [withHr, setWithHr] = useState(true)
   const [loaded, setLoaded] = useState<LoadedLog | null>(null)
   const [result, setResult] = useState<SimResult | null>(null)
   const [status, setStatus] = useState('')
@@ -117,6 +119,8 @@ export default function ReplayPanel() {
           hardPaceSecPerKm: hard!,
           fatiguePct,
           noisePct,
+          hilly,
+          withHr,
         })
     if (samples.length === 0) {
       setStatus('no samples to replay')
@@ -251,6 +255,12 @@ export default function ReplayPanel() {
             <label title="second-to-second pace wobble">
               wobble {noisePct}%{' '}
               <input type="range" min={0} max={12} value={noisePct} onChange={(e) => setNoisePct(Number(e.target.value))} style={{ width: 100, verticalAlign: 'middle' }} />
+            </label>
+            <label title="two 4% climbs on the route — crest rewards fire at the top">
+              <input type="checkbox" checked={hilly} onChange={(e) => setHilly(e.target.checked)} style={{ width: 'auto' }} /> ⛰ hills
+            </label>
+            <label title="synthetic heart rate chasing each step's effort">
+              <input type="checkbox" checked={withHr} onChange={(e) => setWithHr(e.target.checked)} style={{ width: 'auto' }} /> ❤️ HR
             </label>
           </div>
         )}
@@ -399,10 +409,17 @@ function Timeline({ result, playheadMs }: { result: SimResult; playheadMs: numbe
   const { trace, durationMs } = result
   const hasHr = trace.some((p) => p.hr != null)
   const hasPace = trace.some((p) => p.distanceM != null)
+  const hasAlt = trace.some((p) => p.altitude != null)
 
-  const paceTop = 102
-  const hrTop = hasPace ? 172 : 102
-  const axisY = (hasHr ? hrTop + 60 : hasPace ? paceTop + 60 : 92) + 22
+  // Strips stack below the command lane: pace, HR, altitude — each 60 tall + 10 gap.
+  let lane = 102
+  const paceTop = lane
+  if (hasPace) lane += 70
+  const hrTop = lane
+  if (hasHr) lane += 70
+  const altTop = lane
+  if (hasAlt) lane += 70
+  const axisY = (lane > 102 ? lane - 10 : 92) + 22
   const H = axisY + 6
 
   const x = (t: number) => X0 + (t / durationMs) * XW
@@ -425,6 +442,10 @@ function Timeline({ result, playheadMs }: { result: SimResult; playheadMs: numbe
 
     const pacePath = hasPace ? linePath(trace.map((p) => [x(p.tMs), yPace(p.paceSecPerKm)])) : ''
     const hrPath = hasHr ? linePath(trace.filter((p) => p.hr != null).map((p) => [x(p.tMs), yHr(p.hr!)])) : ''
+    const alts = trace.filter((p) => p.altitude != null).map((p) => p.altitude!)
+    const [aLo, aHi] = hasAlt ? pad(Math.min(...alts), Math.max(...alts)) : [0, 1]
+    const yAlt = (v: number) => altTop + ((aHi - v) / (aHi - aLo)) * 60 // higher = up
+    const altPath = hasAlt ? linePath(trace.filter((p) => p.altitude != null).map((p) => [x(p.tMs), yAlt(p.altitude!)])) : ''
 
     return (
       <>
@@ -454,11 +475,16 @@ function Timeline({ result, playheadMs }: { result: SimResult; playheadMs: numbe
           </g>
         ))}
 
-        {/* command ticks */}
+        {/* command ticks (crest rewards get their mountain) */}
         {result.commands.map((c, i) => (
-          <line key={i} x1={x(c.tMs)} y1={60} x2={x(c.tMs)} y2={90} stroke={cmdColor(c.reason)} strokeWidth={2}>
-            <title>{`${fmtClock(c.tMs)} — ${c.reason} @ ${fmtClock(c.positionMs)}`}</title>
-          </line>
+          <g key={i}>
+            <line x1={x(c.tMs)} y1={60} x2={x(c.tMs)} y2={90} stroke={cmdColor(c.reason)} strokeWidth={2}>
+              <title>{`${fmtClock(c.tMs)} — ${c.reason} @ ${fmtClock(c.positionMs)}`}</title>
+            </line>
+            {c.reason.includes('crest reward') && (
+              <text x={x(c.tMs)} y={58} textAnchor="middle" fontSize={11}>⛰</text>
+            )}
+          </g>
         ))}
 
         {/* pace strip (engine's EMA — what decisions were made from) */}
@@ -480,6 +506,17 @@ function Timeline({ result, playheadMs }: { result: SimResult; playheadMs: numbe
             <path d={hrPath} fill="none" stroke="#e66767" strokeWidth={2} />
             <text x={X0 + 2} y={hrTop + 10} fontSize={10} fill="#8b949e">{Math.round(hHi)} bpm</text>
             <text x={X0 + 2} y={hrTop + 57} fontSize={10} fill="#8b949e">{Math.round(hLo)}</text>
+          </g>
+        )}
+
+        {/* altitude strip */}
+        {hasAlt && (
+          <g>
+            <line x1={X0} y1={altTop} x2={X0 + XW} y2={altTop} stroke="#21262d" />
+            <line x1={X0} y1={altTop + 60} x2={X0 + XW} y2={altTop + 60} stroke="#21262d" />
+            <path d={altPath} fill="none" stroke="#8b949e" strokeWidth={2} />
+            <text x={X0 + 2} y={altTop + 10} fontSize={10} fill="#8b949e">{Math.round(aHi)}m — elevation</text>
+            <text x={X0 + 2} y={altTop + 57} fontSize={10} fill="#8b949e">{Math.round(aLo)}m</text>
           </g>
         )}
 
@@ -507,7 +544,8 @@ function Timeline({ result, playheadMs }: { result: SimResult; playheadMs: numbe
       <div className="muted" style={{ minHeight: 20, fontSize: 13 }}>
         {hover
           ? `${fmtClock(hover.tMs)} · ${hover.distanceM != null ? `${(hover.distanceM / 1000).toFixed(2)}km · ` : ''}` +
-            `engine pace ${fmtPace(hover.paceSecPerKm)}${hover.hr != null ? ` · ${hover.hr} bpm` : ''} · ` +
+            `engine pace ${fmtPace(hover.paceSecPerKm)}${hover.hr != null ? ` · ${hover.hr} bpm z${hover.hrZone}` : ''}` +
+            `${hover.altitude != null ? ` · ${hover.gradePct >= 0 ? '+' : ''}${hover.gradePct.toFixed(1)}%${hover.climbing ? ' ⛰ climbing' : ''}` : ''} · ` +
             `${hover.mode ?? '—'}${hover.etaToHardMs != null ? ` · hard in ${Math.round(hover.etaToHardMs / 1000)}s` : ''}`
           : 'hover the timeline to inspect the engine’s mind at any moment'}
       </div>

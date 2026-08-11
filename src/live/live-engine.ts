@@ -11,12 +11,18 @@
 // simulator and the app both drive it the same way.
 import type { SongTags, WorkoutPlan, WorkoutStep } from '../conductor/types'
 import { DEFAULT_PACE_SEC_PER_KM } from '../conductor/conductor'
+import { snapToBeat } from '../conductor/beat'
+import { GradeTracker, HrTracker } from './rules'
 
 export interface LiveSample {
   /** Session clock, ms (watch timer). */
   tMs: number
   /** Accumulated activity distance, meters (absent for time-only plans). */
   distanceM?: number
+  /** Live heart rate, bpm. */
+  hr?: number
+  /** GPS/barometric altitude, meters. */
+  altitudeM?: number
 }
 
 export interface PlayCommand {
@@ -51,6 +57,10 @@ type Mode = 'fill' | 'build' | 'ride'
 const DEFAULT_LEAD_MS = 30_000
 /** EMA smoothing for pace (per sample at ~1Hz). */
 const PACE_ALPHA = 0.15
+/** Crest rewards stay clear of an imminent hard step — its drop owns the moment. */
+const CREST_MIN_ETA_MS = 45_000
+/** How long a crest-reward drop rides before returning to the groove. */
+const CREST_RIDE_MS = 25_000
 
 export class LiveEngine {
   private steps: WorkoutStep[]
@@ -70,14 +80,21 @@ export class LiveEngine {
   private playing: { song: SongTags; positionAtMs: number; atTMs: number } | null = null
   private loopBounds: { startMs: number; endMs: number } | null = null
   private buildTargetT: number | null = null
+  private crestRideUntil: number | null = null
+
+  private readonly gradeTracker = new GradeTracker()
+  private readonly hrTracker: HrTracker
+  private gradeState = { grade: 0, climbing: false, crest: false }
+  private hrState: { hr: number | null; zone: number } = { hr: null, zone: 0 }
 
   readonly commands: PlayCommand[] = []
   readonly landings: LandingReport[] = []
   readonly warnings: string[] = []
 
-  constructor(plan: WorkoutPlan, songs: SongTags[], opts: { paceSecPerKm?: number } = {}) {
+  constructor(plan: WorkoutPlan, songs: SongTags[], opts: { paceSecPerKm?: number; hrMax?: number } = {}) {
     this.steps = plan.steps
     this.paceSecPerKm = opts.paceSecPerKm ?? DEFAULT_PACE_SEC_PER_KM
+    this.hrTracker = new HrTracker(opts.hrMax)
     for (const song of songs) {
       for (const d of song.markers.filter((m) => m.type === 'drop')) {
         const buildups = song.markers
@@ -106,6 +123,9 @@ export class LiveEngine {
     paceSecPerKm: number
     playingTrackId: string | null
     etaToHardMs: number | null
+    gradePct: number
+    climbing: boolean
+    hrZone: number
   } {
     return {
       stepIdx: this.stepIdx,
@@ -113,6 +133,9 @@ export class LiveEngine {
       paceSecPerKm: this.paceSecPerKm,
       playingTrackId: this.playing?.song.trackId ?? null,
       etaToHardMs: this.lastT != null ? this.etaToNextHardMs(this.lastT, this.lastDist) : null,
+      gradePct: this.gradeState.grade * 100,
+      climbing: this.gradeState.climbing,
+      hrZone: this.hrState.zone,
     }
   }
 
@@ -226,6 +249,10 @@ export class LiveEngine {
     this.lastT = t
     this.lastDist = dist
 
+    // Body-signal trackers: grade/climb/crest from altitude, zones from HR.
+    this.gradeState = this.gradeTracker.update(dist, sample.altitudeM)
+    this.hrState = this.hrTracker.update(sample.hr)
+
     const entered = this.trackSteps(t, dist)
 
     // Actual hard-step arrival: score the landing, ensure we're riding a drop.
@@ -243,13 +270,38 @@ export class LiveEngine {
         }
         this.mode = 'ride'
         this.buildTargetT = null
+        this.crestRideUntil = null
       } else if (this.mode === 'ride') {
         // Hard step over — back to groove.
         this.startFill(t)
+        this.crestRideUntil = null
       }
     }
 
     if (this.mode === null) this.startFill(t)
+
+    // Crest reward: you ground up a real hill and just topped out — the drop
+    // hits NOW. Only from the groove (planned drops own their moments), only
+    // when no hard step is imminent, and only if the body actually worked
+    // for it (zone ≥ 3 when HR data exists).
+    if (this.gradeState.crest && this.mode === 'fill') {
+      const eta = this.etaToNextHardMs(t, dist)
+      const earned = this.hrState.hr == null || this.hrState.zone >= 3
+      if ((eta == null || eta > CREST_MIN_ETA_MS) && earned) {
+        const pick = this.pickDrop()
+        if (pick) {
+          this.emit(t, pick.song, pick.dropMs, 0.45, `drop lands (crest reward) (${pick.song.name})`)
+          this.mode = 'ride'
+          this.crestRideUntil = t + CREST_RIDE_MS
+        }
+      }
+    }
+
+    // Crest rides are time-boxed — drift back into the groove afterwards.
+    if (this.mode === 'ride' && this.crestRideUntil != null && t >= this.crestRideUntil) {
+      this.crestRideUntil = null
+      this.startFill(t)
+    }
 
     // Fill-mode loop management + commit decision at loop boundaries.
     if (this.mode === 'fill' && this.playing && this.loopBounds) {
@@ -261,11 +313,14 @@ export class LiveEngine {
         if (eta != null && pick) {
           const buildLen = pick.dropMs - pick.entryMs
           if (eta <= buildLen + loopLen) {
-            // Last viable boundary: enter so the drop lands exactly at ETA.
-            const positionMs = Math.max(0, pick.dropMs - eta)
+            // Last viable boundary: enter so the drop lands at ETA — snapped
+            // to the incoming song's beat grid (anchored at its downbeat-
+            // aligned drop), so the cut enters on the beat. Costs ≤ half a
+            // beat of landing precision; buys musical phrasing.
+            const positionMs = snapToBeat(Math.max(0, pick.dropMs - eta), pick.dropMs, pick.song.bpm)
             this.emit(t, pick.song, positionMs, 0.45, `buildup toward the effort (${pick.song.name})`)
             this.mode = 'build'
-            this.buildTargetT = t + eta
+            this.buildTargetT = t + (pick.dropMs - positionMs)
             return this.commands.slice(before)
           }
         }

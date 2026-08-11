@@ -93,6 +93,75 @@ describe('LiveEngine', () => {
     }
   })
 
+  test('buildup entry is snapped to the incoming song beat grid', () => {
+    const engine = new LiveEngine(plan, songs, { paceSecPerKm: 340 })
+    run(engine, stream([{ seconds: 700, mps: 3 }]))
+    const build = engine.commands.find((c) => c.reason.startsWith('buildup'))!
+    // 128bpm → 468.75ms beats anchored at the 95s drop: offset must be integral beats.
+    const beatMs = 60_000 / 128
+    const beats = (95_000 - build.positionMs) / beatMs
+    expect(Math.abs(beats - Math.round(beats))).toBeLessThan(1e-6)
+    // Landing still within tolerance despite the ≤ half-beat shift.
+    expect(Math.abs(engine.landings[0].errorMs)).toBeLessThanOrEqual(1500)
+  })
+
+  test('crest reward: topping a real hill in zone 4 fires a drop, once', () => {
+    // Long all-easy distance plan; hill from 800m→1200m at 4% (16m gain).
+    const easyPlan: WorkoutPlan = { name: 'hills', steps: [{ kind: 'easy', meters: 3000 }] }
+    const engine = new LiveEngine(easyPlan, songs, { paceSecPerKm: 340 })
+    let d = 0
+    let alt = 100
+    for (let i = 1; i <= 900; i++) {
+      d += 3
+      if (d > 800 && d <= 1200) alt += 3 * 0.04
+      engine.advance({ tMs: i * 1000, distanceM: d, altitudeM: alt, hr: 160 })
+    }
+    const crests = engine.commands.filter((c) => c.reason.includes('crest reward'))
+    expect(crests.length).toBe(1)
+    // Fires near the top of the hill (1200m ≈ t=400s), enters at the drop itself.
+    expect(crests[0].positionMs).toBe(95_000)
+    expect(crests[0].tMs).toBeGreaterThanOrEqual(395_000)
+    expect(crests[0].tMs).toBeLessThanOrEqual(430_000)
+    // And the groove returns afterwards (crest ride is time-boxed).
+    const after = engine.commands.find((c) => c.tMs > crests[0].tMs && c.reason.startsWith('groove fill'))
+    expect(after).toBeDefined()
+  })
+
+  test('crest with lazy heart rate earns nothing', () => {
+    const easyPlan: WorkoutPlan = { name: 'hills', steps: [{ kind: 'easy', meters: 3000 }] }
+    const engine = new LiveEngine(easyPlan, songs, { paceSecPerKm: 340 })
+    let d = 0
+    let alt = 100
+    for (let i = 1; i <= 900; i++) {
+      d += 3
+      if (d > 800 && d <= 1200) alt += 3 * 0.04
+      engine.advance({ tMs: i * 1000, distanceM: d, altitudeM: alt, hr: 100 }) // zone 1
+    }
+    expect(engine.commands.some((c) => c.reason.includes('crest reward'))).toBe(false)
+  })
+
+  test('crest near an imminent hard step defers to the planned drop', () => {
+    // Hill crests ~1200m; hard step starts at 1300m — ETA ≈ 33s < 45s guard.
+    const nearPlan: WorkoutPlan = {
+      name: 'hill-into-effort',
+      steps: [
+        { kind: 'easy', meters: 1300 },
+        { kind: 'hard', meters: 400 },
+        { kind: 'easy', meters: 1300 },
+      ],
+    }
+    const engine = new LiveEngine(nearPlan, songs, { paceSecPerKm: 340 })
+    let d = 0
+    let alt = 100
+    for (let i = 1; i <= 1000; i++) {
+      d += 3
+      if (d > 800 && d <= 1200) alt += 3 * 0.04
+      engine.advance({ tMs: i * 1000, distanceM: d, altitudeM: alt, hr: 160 })
+    }
+    expect(engine.commands.some((c) => c.reason.includes('crest reward'))).toBe(false)
+    expect(engine.landings.length).toBe(1) // the hard step still got its drop
+  })
+
   test('time-only plans work without distance data', () => {
     const timePlan: WorkoutPlan = {
       name: 't',

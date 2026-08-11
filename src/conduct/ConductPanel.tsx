@@ -105,7 +105,13 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
         // timer and distance ARE the session clock, so pauses come free.
         if (liveModeRef.current && phaseRef.current === 'running' && fresh && sample.timerMs != null) {
           setClockMs(sample.timerMs)
-          const cmds = liveRef.current?.advance({ tMs: sample.timerMs, distanceM: sample.distance }) ?? []
+          const cmds =
+            liveRef.current?.advance({
+              tMs: sample.timerMs,
+              distanceM: sample.distance,
+              hr: sample.hr,
+              altitudeM: sample.altitude,
+            }) ?? []
           for (const c of cmds) void handlersRef.current?.executeLive(c)
         }
         if (fresh && sample.event && sample.receivedAt !== handledStartRef.current) {

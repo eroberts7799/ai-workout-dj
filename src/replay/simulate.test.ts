@@ -82,6 +82,17 @@ describe('simulate', () => {
     }
   })
 
+  test('hilly scenario with HR fires at least one crest reward', () => {
+    const r = simulate(plan, songs, syntheticSamples(plan, { ...scenario, hilly: true, withHr: true }))
+    const crests = r.commands.filter((c) => c.reason.includes('crest reward'))
+    expect(crests.length).toBeGreaterThanOrEqual(1)
+    // Altitude and HR made it into the trace for the strips.
+    expect(r.trace.some((p) => p.altitude != null)).toBe(true)
+    expect(r.trace.some((p) => p.hrZone > 0)).toBe(true)
+    // Hard-step landings are unaffected by the scenery.
+    expect(r.landings.length).toBe(4)
+  })
+
   test('noisy, fatiguing runner still gets bounded landings', () => {
     const r = simulate(plan, songs, syntheticSamples(plan, { ...scenario, fatiguePct: 12, noisePct: 6 }))
     expect(r.landings.length).toBe(4)

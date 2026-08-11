@@ -22,16 +22,25 @@ export interface ScenarioOpts {
   fatiguePct?: number
   /** Deterministic pace wobble amplitude, % (two overlaid sine waves). */
   noisePct?: number
+  /** Two 4%-grade hills along the route (tests the crest-reward rule). */
+  hilly?: boolean
+  /** Synthesize a lagging heart rate that chases each step's effort. */
+  withHr?: boolean
+  hrMax?: number
 }
 
 export interface TracePoint {
   tMs: number
   distanceM?: number
   hr?: number
+  altitude?: number
   stepIdx: number
   mode: string | null
   paceSecPerKm: number
   etaToHardMs: number | null
+  gradePct: number
+  climbing: boolean
+  hrZone: number
 }
 
 export interface StepSpan {
@@ -67,15 +76,54 @@ export function nominalDurationMs(plan: WorkoutPlan, o: ScenarioOpts): number {
  * deterministic wobble. Steps complete exactly like the engine measures them —
  * time steps by elapsed time, distance steps by real meters covered.
  */
+/** Estimated total route distance for laying out synthetic hills. */
+function nominalDistanceM(plan: WorkoutPlan, o: ScenarioOpts): number {
+  return plan.steps.reduce((m, s) => {
+    if (s.meters != null) return m + s.meters
+    if (s.seconds != null) return m + (s.seconds / (s.kind === 'hard' ? o.hardPaceSecPerKm : o.easyPaceSecPerKm)) * 1000
+    return m
+  }, 0)
+}
+
 export function syntheticSamples(plan: WorkoutPlan, o: ScenarioOpts): SimSample[] {
   const out: SimSample[] = []
   const nominal = Math.max(1, nominalDurationMs(plan, o))
+  const totalM = Math.max(1, nominalDistanceM(plan, o))
+  const hrMax = o.hrMax ?? 190
   const maxMs = 3 * 3_600_000 // runaway backstop
   let t = 0
   let d = 0
+  let alt = 40
+  let hr = 90
   let stepIdx = 0
   let stepStartT = 0
   let stepStartD = 0
+
+  // Two 4% climbs with matching descents. Crest fractions (0.32, 0.54) are
+  // chosen to top out early in the EASY stretches of a classic interval
+  // plan — inside a hard step the engine (correctly) lets the planned drop
+  // own the moment, and a demo where the rule never fires teaches nothing.
+  const gradeAt = (dist: number): number => {
+    const f = dist / totalM
+    if ((f >= 0.24 && f < 0.32) || (f >= 0.46 && f < 0.54)) return 0.04
+    if ((f >= 0.32 && f < 0.4) || (f >= 0.54 && f < 0.62)) return -0.04
+    return 0
+  }
+
+  const push = (kind: WorkoutStep['kind'], dM: number) => {
+    if (o.hilly) alt += gradeAt(d) * dM
+    if (o.withHr) {
+      // HR chases the step's effort with a lag; climbing costs extra.
+      const target = (kind === 'hard' ? 0.88 : kind === 'cooldown' ? 0.62 : 0.72) * hrMax + (o.hilly && gradeAt(d) > 0 ? 8 : 0)
+      hr += (target - hr) * 0.04
+    }
+    out.push({
+      tMs: t,
+      distanceM: round1(d),
+      ...(o.hilly ? { altitude: round1(alt) } : {}),
+      ...(o.withHr ? { hr: Math.round(hr) } : {}),
+    })
+  }
 
   while (stepIdx < plan.steps.length && t < maxMs) {
     const step = plan.steps[stepIdx]
@@ -85,8 +133,9 @@ export function syntheticSamples(plan: WorkoutPlan, o: ScenarioOpts): SimSample[
     const wobble = Math.sin((2 * Math.PI * ts) / 45) * 0.6 + Math.sin((2 * Math.PI * ts) / 13) * 0.4
     const pace = basePace * fatigue * (1 + ((o.noisePct ?? 0) / 100) * wobble)
     t += 1000
-    d += 1000 / pace // meters covered this second
-    out.push({ tMs: t, distanceM: round1(d) })
+    const dM = 1000 / pace // meters covered this second
+    d += dM
+    push(step.kind, dM)
     const done =
       step.seconds != null ? t - stepStartT >= step.seconds * 1000 : step.meters != null && d - stepStartD >= step.meters
     if (done) {
@@ -99,8 +148,9 @@ export function syntheticSamples(plan: WorkoutPlan, o: ScenarioOpts): SimSample[
   // Short easy-pace tail past the plan end so the final transition is visible.
   for (let i = 0; i < 20; i++) {
     t += 1000
-    d += 1000 / o.easyPaceSecPerKm
-    out.push({ tMs: t, distanceM: round1(d) })
+    const dM = 1000 / o.easyPaceSecPerKm
+    d += dM
+    push('cooldown', dM)
   }
   return out
 }
@@ -119,16 +169,20 @@ export function simulate(
   const engine = new LiveEngine(plan, songs, opts)
   const trace: TracePoint[] = []
   for (const s of samples) {
-    engine.advance({ tMs: s.tMs, distanceM: s.distanceM })
+    engine.advance({ tMs: s.tMs, distanceM: s.distanceM, hr: s.hr, altitudeM: s.altitude })
     const st = engine.state
     trace.push({
       tMs: s.tMs,
       distanceM: s.distanceM,
       hr: s.hr,
+      altitude: s.altitude,
       stepIdx: st.stepIdx,
       mode: st.mode,
       paceSecPerKm: st.paceSecPerKm,
       etaToHardMs: st.etaToHardMs,
+      gradePct: st.gradePct,
+      climbing: st.climbing,
+      hrZone: st.hrZone,
     })
   }
   return {
