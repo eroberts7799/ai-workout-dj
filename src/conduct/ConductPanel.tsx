@@ -6,6 +6,7 @@ import type { Cue, WorkoutPlan } from '../conductor/types'
 import type { SdkHandle } from '../spike/sdk-path'
 import { listDevices, pausePlayback, playTrack, transferTo, type ConnectDevice } from '../spike/webapi-path'
 import { loadAllTags } from '../tags/store'
+import { LiveEngine, type PlayCommand } from '../live/live-engine'
 import { parsePlan } from './plan-parse'
 import { SessionClock, dueCues } from './runner'
 
@@ -41,6 +42,7 @@ interface GarminSample {
   lat?: number
   lon?: number
   altitude?: number
+  distance?: number
 }
 
 export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
@@ -49,6 +51,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
   const [clockMs, setClockMs] = useState(0)
   const [phase, setPhase] = useState<'idle' | 'running' | 'paused' | 'done'>('idle')
   const [log, setLog] = useState<LogEntry[]>([])
+  const [status, setStatus] = useState('')
   const clockRef = useRef(new SessionClock())
   const prevMsRef = useRef(0)
   const cuesRef = useRef<Cue[]>([])
@@ -61,6 +64,16 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
   const [output, setOutput] = useState<string>('browser')
   const outputRef = useRef<string>('browser')
   outputRef.current = output
+  const [liveMode, setLiveMode] = useState(false)
+  const liveModeRef = useRef(false)
+  liveModeRef.current = liveMode
+  const liveRef = useRef<LiveEngine | null>(null)
+  // Latest-render handlers for the once-created poll closure (stale-closure escape).
+  const handlersRef = useRef<{
+    startFromGarmin: (offset: number) => Promise<void>
+    startLive: () => Promise<void>
+    executeLive: (c: PlayCommand) => Promise<void>
+  } | null>(null)
   const [armed, setArmed] = useState(false)
   const armedRef = useRef(false)
   armedRef.current = armed
@@ -79,11 +92,22 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
         if (!sample) return
         const fresh = Date.now() - sample.receivedAt < 5_000
         // Exact-sync auto-start: watch timer started → session starts, backdated.
+        // LIVE mode: every fresh sample advances the engine — the watch's own
+        // timer and distance ARE the session clock, so pauses come free.
+        if (liveModeRef.current && phaseRef.current === 'running' && fresh && sample.timerMs != null) {
+          setClockMs(sample.timerMs)
+          const cmds = liveRef.current?.advance({ tMs: sample.timerMs, distanceM: sample.distance }) ?? []
+          for (const c of cmds) void handlersRef.current?.executeLive(c)
+        }
         if (fresh && sample.event && sample.receivedAt !== handledStartRef.current) {
           handledStartRef.current = sample.receivedAt
           if (armedRef.current && phaseRef.current === 'idle' && sample.event === 'timerStart') {
-            const offset = (sample.timerMs ?? 0) + (Date.now() - sample.receivedAt)
-            void startFromGarmin(offset)
+            if (liveModeRef.current) {
+              void handlersRef.current?.startLive()
+            } else {
+              const offset = (sample.timerMs ?? 0) + (Date.now() - sample.receivedAt)
+              void handlersRef.current?.startFromGarmin(offset)
+            }
           } else if (phaseRef.current === 'running' && sample.event === 'timerPause') {
             // Watch paused → freeze the choreography clock and silence the music.
             clockRef.current.pause()
@@ -91,13 +115,18 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
             else pauseOnTarget()
             setPhase('paused')
           } else if (phaseRef.current === 'paused' && sample.event === 'timerResume') {
-            // Watch resumed → re-sync to the watch's timer and re-establish
-            // exactly what should be playing (even if they played other music
-            // during the break — scrubTo overwrites playback state).
-            clockRef.current.resume()
-            const offset = (sample.timerMs ?? 0) + (Date.now() - sample.receivedAt)
-            scrubTo(offset)
-            setPhase('running')
+            if (liveModeRef.current) {
+              // Live engine follows the watch timer; just unmute and continue.
+              if (engineRef.current === 'local') void deckRef.current?.resume()
+              setPhase('running')
+            } else {
+              // Watch resumed → re-sync to the watch's timer and re-establish
+              // exactly what should be playing.
+              clockRef.current.resume()
+              const offset = (sample.timerMs ?? 0) + (Date.now() - sample.receivedAt)
+              scrubTo(offset)
+              setPhase('running')
+            }
           }
         }
         if (fresh && phaseRef.current === 'running' && typeof sample.hr === 'number') {
@@ -114,6 +143,12 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
   const songs = Object.values(loadAllTags())
   const { plan, errors } = parsePlan('session', planText)
   const setlist = planSetlist(plan, songs)
+
+  // Distance-based plans want the live engine — flip it on automatically.
+  useEffect(() => {
+    if (plan.steps.some((s) => s.meters != null)) setLiveMode(true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [planText])
 
   useEffect(() => {
     if (phase !== 'running') return
@@ -241,6 +276,50 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
     beginAt(offsetMs)
   }
 
+  /** LIVE start: hand the session to the LiveEngine — the watch's stream drives everything. */
+  async function startLive() {
+    const lib = Object.values(loadAllTags())
+    if (lib.length === 0) {
+      setStatus('no tagged songs — nothing to conduct')
+      return
+    }
+    const deck = (deckRef.current ??= new LocalDeck())
+    let allLocal = outputRef.current === 'browser'
+    if (allLocal) {
+      for (const s of lib) {
+        if (deck.has(s.trackId)) continue
+        const data = await loadAudio(s.trackId)
+        if (data) await deck.load(s.trackId, data)
+        else {
+          allLocal = false
+          break
+        }
+      }
+    }
+    engineRef.current = allLocal ? 'local' : 'spotify'
+    setEngine(engineRef.current)
+    liveRef.current = new LiveEngine(plan, lib)
+    setLog([])
+    hrLogRef.current = []
+    setPhase('running')
+    setStatus(`LIVE — conducting ${plan.name} from your body's data`)
+  }
+
+  async function executeLive(c: PlayCommand) {
+    const entry = { plannedAtMs: c.tMs, firedAtMs: c.tMs, cue: { atMs: c.tMs, trackId: c.trackId, uri: c.uri, positionMs: c.positionMs, reason: c.reason }, ok: true }
+    try {
+      if (engineRef.current === 'local' && deckRef.current?.has(c.trackId)) {
+        deckRef.current.play(c.trackId, c.positionMs, c.fadeSec)
+      } else {
+        await playOnTarget(c.uri, c.positionMs)
+      }
+      setLog((prev) => [...prev, entry])
+    } catch (e) {
+      setLog((prev) => [...prev, { ...entry, ok: false, error: String(e) }])
+    }
+  }
+  handlersRef.current = { startFromGarmin, startLive, executeLive }
+
   function togglePause() {
     const clock = clockRef.current
     if (phase === 'running') {
@@ -361,12 +440,20 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
         <h2 style={{ marginTop: 0 }}>Session</h2>
         {phase === 'idle' && (
           <>
-            <button onClick={() => void startSession()} disabled={errors.length > 0 || setlist.cues.length === 0}>
+            <button
+              onClick={() => void startSession()}
+              disabled={errors.length > 0 || setlist.cues.length === 0 || liveMode}
+              title={liveMode ? 'LIVE mode starts from the watch — press START on your Garmin' : ''}
+            >
               3-2-1-GO (start watch on GO)
             </button>
             <label style={{ marginLeft: 12 }}>
               <input type="checkbox" checked={armed} onChange={(e) => setArmed(e.target.checked)} style={{ width: 'auto' }} />{' '}
               Arm Garmin auto-start
+            </label>
+            <label style={{ marginLeft: 12 }} title="The watch's live distance/timer drives the DJ — drops land when you arrive, not when a clock guesses">
+              <input type="checkbox" checked={liveMode} onChange={(e) => setLiveMode(e.target.checked)} style={{ width: 'auto' }} />{' '}
+              🛰 LIVE mode (body-driven)
             </label>
             <div style={{ marginTop: 10 }}>
               <span className="muted">Audio output: </span>
@@ -391,6 +478,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
             </div>
           </>
         )}
+        {status && <p className="muted">{status}</p>}
         <p className="muted">
           {garmin && Date.now() - garmin.receivedAt < 10_000
             ? `⌚ Garmin live: ${garmin.hr ?? '—'} bpm · timer ${garmin.timerMs != null ? fmtClock(garmin.timerMs) : '—'}${garmin.altitude != null ? ` · ${Math.round(garmin.altitude)}m` : ''}`
@@ -407,15 +495,17 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
                 : 'Spotify engine — jump cuts (attach owned audio files in the Tagger for crossfades)'}
             </p>
             <div style={{ fontSize: 40 }}>{fmtClock(clockMs)}</div>
-            <input
-              type="range"
-              min={0}
-              max={totalDurationMs(plan)}
-              value={Math.min(clockMs, totalDurationMs(plan))}
-              onChange={(e) => scrubTo(Number(e.target.value))}
-              style={{ padding: 0, margin: '8px 0' }}
-              title="Scrub anywhere in the workout (testing)"
-            />
+            {!liveMode && (
+              <input
+                type="range"
+                min={0}
+                max={totalDurationMs(plan)}
+                value={Math.min(clockMs, totalDurationMs(plan))}
+                onChange={(e) => scrubTo(Number(e.target.value))}
+                style={{ padding: 0, margin: '8px 0' }}
+                title="Scrub anywhere in the workout (testing)"
+              />
+            )}
             {nextCue && (
               <p className="muted">
                 next: {fmtClock(nextCue.atMs)} — {nextCue.reason}
