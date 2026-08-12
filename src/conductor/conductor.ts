@@ -124,7 +124,11 @@ export function planSetlist(
     if (!pick) break
     const lead = pick.dropMs - pick.entryMs
     const entryAt = target.startMs - lead
-    if (entryAt - cursorMs >= MIN_FILL_MS && loopable.length > 0) {
+    // The head of the session always gets music: even a gap shorter than
+    // MIN_FILL_MS earns a fill when nothing has played yet (t=0 silence is
+    // the one thing the prime directive can never allow).
+    const headGap = primary.length === 0 && entryAt > cursorMs
+    if ((entryAt - cursorMs >= MIN_FILL_MS || headGap) && loopable.length > 0) {
       const fill = pickLoop(loopable, loopIdx, lastTrackId, pick.song.trackId)
       if (fill) {
         loopIdx++
