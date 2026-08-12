@@ -7,6 +7,7 @@ struct SessionView: View {
   @StateObject private var engine = SessionEngine()
   @StateObject private var relay = RelayPoller()
   @State private var armed = true
+  @State private var simSpeed = 8.0
   @State private var showBundlePicker = false
   @State private var showAudioPicker = false
 
@@ -47,8 +48,18 @@ struct SessionView: View {
         }
         .disabled(!engine.allAudioReady)
         if engine.supportsLive {
-          Button("🧪 Simulate run ×8 (no watch)") { engine.startSimulatedRun() }
-            .font(.footnote)
+          HStack(spacing: 8) {
+            Button("🧪 Simulate run (no watch)") { engine.startSimulatedRun(speed: simSpeed) }
+            Picker("speed", selection: $simSpeed) {
+              ForEach([1.0, 2.0, 4.0, 8.0], id: \.self) { Text("×\(Int($0))").tag($0) }
+            }
+            .pickerStyle(.segmented)
+            .frame(maxWidth: 160)
+          }
+          .font(.footnote)
+          Text(simSpeed == 1 ? "×1 = full dress rehearsal, real loop lengths" : "accelerated: loop-backs muted (time compression artifact)")
+            .font(.caption2)
+            .foregroundColor(.secondary)
         }
       case .running, .paused:
         Text(RelayPoller.clock(engine.clockMs)).font(.system(size: 48, design: .monospaced))

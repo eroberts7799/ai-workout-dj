@@ -26,6 +26,10 @@ final class SessionEngine: ObservableObject {
   private var lastHandledEvent: Double = 0
   private var live: LiveEngine?
   private var simTask: Task<Void, Never>?
+  /// At accelerated sim speeds the engine's musical clock outruns real-time
+  /// audio — executing loop-backs would re-cut every few seconds. Suppress
+  /// them on the deck (the engine still models them internally).
+  private var suppressLoopbacks = false
   /// Raw stream as conducted — uploaded at session end so every run becomes
   /// a replayable test case in the cloud (the data flywheel).
   private var recorded: [(t: Double, d: Double?, hr: Double?)] = []
@@ -270,6 +274,7 @@ final class SessionEngine: ObservableObject {
     lastCommand = ""
     recorded = []
     uploaded = false
+    suppressLoopbacks = false
     prevMs = 0
     phase = .running
     status = "🛰 LIVE — conducting \(b.name) from your body's data"
@@ -289,6 +294,7 @@ final class SessionEngine: ObservableObject {
     clockMs = timerMs
     recorded.append((t: timerMs, d: distanceM, hr: hr))
     for c in live.advance(LiveSample(tMs: timerMs, distanceM: distanceM)) {
+      if suppressLoopbacks && c.reason.hasPrefix("loop back") { continue }
       // Never interrupt the run: a missing file leaves current audio playing.
       try? deck.play(id: c.trackId, positionMs: c.positionMs, fadeSec: c.fadeSec)
       firedCount += 1
@@ -307,6 +313,7 @@ final class SessionEngine: ObservableObject {
     }
     startLive()
     guard phase == .running else { return }
+    suppressLoopbacks = speed > 1
     status = "🧪 simulated runner ×\(Int(speed)) — \(b.name)"
     let samples = syntheticSamples(plan: plan, scenario: RunScenario())
     simTask?.cancel()
@@ -335,6 +342,7 @@ final class SessionEngine: ObservableObject {
     simTask?.cancel()
     simTask = nil
     simulating = false
+    suppressLoopbacks = false
   }
 
   // MARK: - Garmin events (from the relay)

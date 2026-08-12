@@ -219,6 +219,10 @@ export default function ReplayPanel() {
     const skipped = result.commands.filter((c) => !deck.has(c.trackId)).length
     setStatus(skipped > 0 ? `${skipped} command(s) hit songs without audio — silent gaps` : '')
     for (const c of result.commands) {
+      // Time compression artifact: at ×N the engine's musical clock outruns
+      // 1× audio, so loop-backs would re-cut every few real seconds — mute
+      // them and let the groove play through. ×1 executes everything.
+      if (speed > 1 && c.reason.startsWith('loop back')) continue
       timersRef.current.push(
         setTimeout(() => {
           if (deck.has(c.trackId))
