@@ -11,6 +11,8 @@ targets:
       - Sources
       - path: Resources
         buildPhase: resources
+      - path: Assets.xcassets
+        buildPhase: resources
     info:
       path: Info.plist
       properties:
@@ -26,6 +28,7 @@ targets:
         CODE_SIGN_STYLE: Automatic
         TARGETED_DEVICE_FAMILY: "1"
         SWIFT_VERSION: "5.9"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
   AwdjPlayerTests:
     type: bundle.unit-test
     platform: iOS
