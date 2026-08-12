@@ -195,6 +195,20 @@ describe('LiveEngine', () => {
     expect(used.size).toBeGreaterThanOrEqual(3)
   })
 
+  test('freshness: no groove rides past the corpus ceiling when alternatives exist', () => {
+    // 20 minutes of pure easy running — pre-freshness this looped one song forever.
+    const easyPlan: WorkoutPlan = { name: 'lsd', steps: [{ kind: 'easy', seconds: 1200 }] }
+    const engine = new LiveEngine(easyPlan, songs, { paceSecPerKm: 340 })
+    const samples: LiveSample[] = Array.from({ length: 1200 }, (_, i) => ({ tMs: (i + 1) * 1000 }))
+    for (const s of samples) engine.advance(s)
+    const fills = engine.commands.filter((c) => c.reason.startsWith('groove fill'))
+    expect(fills.length).toBeGreaterThanOrEqual(5) // ~every ≤240s, not once
+    // No single stretch between fills exceeds the ceiling (+ loop slack).
+    for (let i = 1; i < fills.length; i++) {
+      expect(fills[i].tMs - fills[i - 1].tMs).toBeLessThanOrEqual(240_000)
+    }
+  })
+
   test('time-only plans work without distance data', () => {
     const timePlan: WorkoutPlan = {
       name: 't',

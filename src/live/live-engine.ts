@@ -61,6 +61,10 @@ const PACE_ALPHA = 0.15
 const CREST_MIN_ETA_MS = 45_000
 /** How long a crest-reward drop rides before returning to the groove. */
 const CREST_RIDE_MS = 25_000
+/** Corpus-learned freshness: across 653 measured rides in 65 real DJ sets
+ *  (Fred again.., Virji, Summit…) the median time-on-one-track is ~190s
+ *  (Fred: 140s). Past this, a fill trades its loop for a fresh groove. */
+const MAX_FILL_RIDE_MS = 180_000
 
 export class LiveEngine {
   private steps: WorkoutStep[]
@@ -78,6 +82,7 @@ export class LiveEngine {
 
   private mode: Mode | null = null
   private playing: { song: SongTags; positionAtMs: number; atTMs: number } | null = null
+  private fillStartedT: number | null = null
   private loopBounds: { startMs: number; endMs: number } | null = null
   private buildTargetT: number | null = null
   private crestRideUntil: number | null = null
@@ -246,6 +251,7 @@ export class LiveEngine {
     const fill = this.pickLoop()
     if (!fill) return
     this.mode = 'fill'
+    this.fillStartedT = t
     this.loopBounds = { startMs: fill.startMs, endMs: fill.endMs }
     this.emit(t, fill.song, fill.startMs, 1.2, `groove fill (${fill.song.name})`)
   }
@@ -343,7 +349,14 @@ export class LiveEngine {
             return this.commands.slice(before)
           }
         }
-        this.emit(t, this.playing.song, this.loopBounds.startMs, 0.25, `loop back (${this.playing.song.name})`)
+        // Freshness (corpus-learned): real DJs move on after ~3 minutes.
+        // At a loop boundary with no commit pending, a stale fill trades
+        // its loop for a fresh groove instead of looping back again.
+        if (this.fillStartedT != null && t - this.fillStartedT >= MAX_FILL_RIDE_MS && this.loopable.length > 1) {
+          this.startFill(t)
+        } else {
+          this.emit(t, this.playing.song, this.loopBounds.startMs, 0.25, `loop back (${this.playing.song.name})`)
+        }
       }
     }
 
