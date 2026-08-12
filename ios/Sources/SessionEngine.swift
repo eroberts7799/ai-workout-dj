@@ -128,6 +128,8 @@ final class SessionEngine: ObservableObject {
       status = "not ready — missing audio files"
       return
     }
+    recorded = []
+    uploaded = false
     deck.stop() // clean slate — nothing from a previous session may linger
     clock = SessionClock()
     clock.start()
@@ -157,6 +159,7 @@ final class SessionEngine: ObservableObject {
       phase = .done
       status = "session complete — \(firedCount) cues"
       tick?.invalidate()
+      uploadSessionLog(source: "ios")
     }
   }
 
@@ -198,7 +201,7 @@ final class SessionEngine: ObservableObject {
     simTask?.cancel()
     phase = .done
     status = "stopped — music left playing"
-    if live != nil { uploadSessionLog(source: simulating ? "ios-sim" : "ios") }
+    uploadSessionLog(source: simulating ? "ios-sim" : "ios")
   }
 
   /// Fire-and-forget POST of the session log to the relay's archive.
@@ -275,6 +278,12 @@ final class SessionEngine: ObservableObject {
 
   /// Every fresh watch sample advances the engine — the watch's own timer and
   /// distance ARE the session clock, so pauses come free.
+  /// Record a watch sample regardless of mode — every session feeds the flywheel.
+  func recordSample(timerMs: Double, distanceM: Double?, hr: Double?) {
+    guard phase == .running else { return }
+    recorded.append((t: timerMs, d: distanceM, hr: hr))
+  }
+
   func advanceLive(timerMs: Double, distanceM: Double?, hr: Double? = nil) {
     guard phase == .running, let live else { return }
     clockMs = timerMs

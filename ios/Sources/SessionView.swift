@@ -91,8 +91,12 @@ struct SessionView: View {
         engine.handleGarmin(event: s.event, timerMs: s.timerMs, receivedAt: s.receivedAt, armed: armed)
         // LIVE mode: every fresh watch sample advances the conductor
         // (unless a simulated runner is already driving it).
-        if engine.liveMode, !engine.simulating, let t = s.timerMs {
-          engine.advanceLive(timerMs: t, distanceM: s.distanceM, hr: s.hr)
+        if let t = s.timerMs, !engine.simulating {
+          if engine.liveMode {
+            engine.advanceLive(timerMs: t, distanceM: s.distanceM, hr: s.hr)
+          } else {
+            engine.recordSample(timerMs: t, distanceM: s.distanceM, hr: s.hr)
+          }
         }
       }
     }
