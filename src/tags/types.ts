@@ -15,6 +15,9 @@ export interface SongTags {
   durationMs: number
   /** Tap-tempo BPM; null until set. Used for grid snap and the jitter threshold. */
   bpm: number | null
+  /** Camelot wheel position (e.g. "9A") from key detection; null when unknown.
+   *  Harmonic compatibility drives DJ-crate song selection. */
+  camelot?: string | null
   markers: Marker[]
   updatedAt: string
 }

@@ -11,7 +11,7 @@
 // simulator and the app both drive it the same way.
 import type { SongTags, WorkoutPlan, WorkoutStep } from '../conductor/types'
 import { DEFAULT_PACE_SEC_PER_KM } from '../conductor/conductor'
-import { snapToBeat } from '../conductor/beat'
+import { mixScore, snapToBeat } from '../conductor/beat'
 import { GradeTracker, HrTracker } from './rules'
 
 export interface LiveSample {
@@ -199,28 +199,38 @@ export class LiveEngine {
     return 0
   }
 
-  private pickDrop(): DropChoice | null {
-    if (this.droppable.length === 0) return null
-    for (let i = 0; i < this.droppable.length; i++) {
-      const c = this.droppable[(this.dropIdx + i) % this.droppable.length]
-      if (c.song.trackId !== this.playing?.song.trackId) {
-        this.dropIdx += i + 1
-        return c
-      }
+  /** DJ-crate selection: prefer the candidate that mixes best out of what's
+   *  playing (tempo within tolerance, harmonic key), rotation breaks ties so
+   *  the set stays varied. Same-track repeats remain the last resort. */
+  private pickBest<T extends { song: SongTags }>(
+    choices: T[],
+    startIdx: number,
+  ): { choice: T; advance: number } | null {
+    if (choices.length === 0) return null
+    const from = this.playing?.song
+    let best: { choice: T; advance: number; score: number } | null = null
+    for (let i = 0; i < choices.length; i++) {
+      const c = choices[(startIdx + i) % choices.length]
+      if (c.song.trackId === this.playing?.song.trackId) continue
+      const score = from ? mixScore(from, c.song) : 0
+      if (!best || score > best.score) best = { choice: c, advance: i + 1, score }
     }
-    return this.droppable[this.dropIdx++ % this.droppable.length]
+    if (best) return best
+    return { choice: choices[startIdx % choices.length], advance: 1 }
+  }
+
+  private pickDrop(): DropChoice | null {
+    const r = this.pickBest(this.droppable, this.dropIdx)
+    if (!r) return null
+    this.dropIdx += r.advance
+    return r.choice
   }
 
   private pickLoop(): LoopChoice | null {
-    if (this.loopable.length === 0) return null
-    for (let i = 0; i < this.loopable.length; i++) {
-      const c = this.loopable[(this.loopIdx + i) % this.loopable.length]
-      if (c.song.trackId !== this.playing?.song.trackId) {
-        this.loopIdx += i + 1
-        return c
-      }
-    }
-    return this.loopable[this.loopIdx++ % this.loopable.length]
+    const r = this.pickBest(this.loopable, this.loopIdx)
+    if (!r) return null
+    this.loopIdx += r.advance
+    return r.choice
   }
 
   private startFill(t: number) {

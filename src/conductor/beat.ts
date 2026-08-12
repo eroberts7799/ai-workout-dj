@@ -36,6 +36,37 @@ export function beatAnchorMs(markers: { type: string; ms: number }[]): number {
   )
 }
 
+/**
+ * Camelot-wheel harmony: same number (relative major/minor) or a ±1 step on
+ * the same ring mixes cleanly. Unknown keys never block a transition.
+ */
+export function camelotCompatible(a: string | null | undefined, b: string | null | undefined): boolean {
+  if (!a || !b) return true
+  const ma = a.match(/^(\d{1,2})([AB])$/i)
+  const mb = b.match(/^(\d{1,2})([AB])$/i)
+  if (!ma || !mb) return true
+  const na = Number(ma[1])
+  const nb = Number(mb[1])
+  if (na === nb) return true
+  const diff = Math.min(Math.abs(na - nb), 12 - Math.abs(na - nb))
+  return diff === 1 && ma[2].toUpperCase() === mb[2].toUpperCase()
+}
+
+/**
+ * How DJ-able is the transition from one song to another? 0–3:
+ * +2 tempos within blend tolerance, +1 harmonically compatible keys
+ * (only when both keys are actually known — unknowns score no bonus).
+ */
+export function mixScore(
+  from: { bpm?: number | null; camelot?: string | null },
+  to: { bpm?: number | null; camelot?: string | null },
+): number {
+  let s = 0
+  if (from.bpm && to.bpm && Math.abs(1 - to.bpm / from.bpm) <= 0.03) s += 2
+  if (from.camelot && to.camelot && camelotCompatible(from.camelot, to.camelot)) s += 1
+  return s
+}
+
 /** Tempos within this ratio blend like a DJ; beyond it, cut clean. */
 const BLEND_BPM_TOLERANCE = 0.03
 /** A real blend needs room to breathe. */

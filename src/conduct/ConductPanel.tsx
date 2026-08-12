@@ -517,6 +517,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
         artists: s.artists,
         durationMs: s.durationMs,
         bpm: s.bpm,
+        camelot: s.camelot ?? null,
         markers: s.markers.map((m) => ({ type: m.type, ms: m.ms })),
       })),
     }

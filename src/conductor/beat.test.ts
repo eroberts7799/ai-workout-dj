@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { beatAnchorMs, blendPlan, nextBeatDelayMs, snapToBeat } from './beat'
+import { beatAnchorMs, blendPlan, camelotCompatible, mixScore, nextBeatDelayMs, snapToBeat } from './beat'
 
 describe('snapToBeat', () => {
   const beat = 60_000 / 128 // 468.75ms
@@ -66,6 +66,30 @@ describe('blendPlan', () => {
 
   test('short utility cuts stay short even between twins', () => {
     expect(blendPlan(0.25, 124, 124)).toEqual({ fadeSec: 0.25, bassSwap: false })
+  })
+})
+
+describe('camelotCompatible / mixScore', () => {
+  test('same number, neighbors on the ring, relative maj/min all mix', () => {
+    expect(camelotCompatible('9A', '9A')).toBe(true)
+    expect(camelotCompatible('9A', '9B')).toBe(true) // relative
+    expect(camelotCompatible('9A', '10A')).toBe(true)
+    expect(camelotCompatible('12A', '1A')).toBe(true) // wheel wraps
+    expect(camelotCompatible('9A', '10B')).toBe(false) // diagonal
+    expect(camelotCompatible('9A', '3A')).toBe(false) // across the wheel
+  })
+
+  test('unknown keys never block', () => {
+    expect(camelotCompatible(null, '9A')).toBe(true)
+    expect(camelotCompatible('garbage', '9A')).toBe(true)
+  })
+
+  test('mixScore: tempo 2 points, harmony 1, unknowns earn nothing', () => {
+    expect(mixScore({ bpm: 136, camelot: '9A' }, { bpm: 136, camelot: '9A' })).toBe(3)
+    expect(mixScore({ bpm: 136, camelot: '9A' }, { bpm: 136, camelot: '3B' })).toBe(2)
+    expect(mixScore({ bpm: 136, camelot: '9A' }, { bpm: 90, camelot: '9A' })).toBe(1)
+    expect(mixScore({ bpm: 136, camelot: null }, { bpm: 136, camelot: '9A' })).toBe(2)
+    expect(mixScore({ bpm: null, camelot: null }, { bpm: 136, camelot: '9A' })).toBe(0)
   })
 })
 

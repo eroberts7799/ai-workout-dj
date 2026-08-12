@@ -21,6 +21,7 @@ interface AnalysisEntry {
   artist: string
   durationMs: number
   bpm: number | null
+  camelot?: string | null
   markers: { type: MarkerType; ms: number }[]
 }
 
@@ -247,6 +248,7 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
           artists: hit.artists.map((a) => a.name).join(', '),
           durationMs: hit.duration_ms,
           bpm: e.bpm ? Math.round(e.bpm * 10) / 10 : null,
+          camelot: e.camelot ?? null,
           markers: e.markers.map((m) => ({ id: crypto.randomUUID(), type: m.type, ms: m.ms })),
           updatedAt: new Date().toISOString(),
         })

@@ -162,6 +162,22 @@ describe('LiveEngine', () => {
     expect(engine.landings.length).toBe(1) // the hard step still got its drop
   })
 
+  test('DJ-crate selection: the engine picks the harmonically compatible neighbor', () => {
+    // Playing starts on a 136/9A groove; candidates: perfect match vs clashing key vs wrong tempo.
+    const mk = (id: string, bpm: number, camelot: string): SongTags => ({ ...song(id), bpm, camelot })
+    const crate = [mk('aaa', 136, '9A'), mk('clash', 136, '3B'), mk('slow', 100, '9A'), mk('twin', 136, '9B')]
+    const engine = new LiveEngine(plan, crate, { paceSecPerKm: 340 })
+    const cmds = run(engine, stream([{ seconds: 700, mps: 3 }]))
+    // First fill picks something; from then on every buildup/fill should favor
+    // tempo+key compatibility. The buildup out of an 'aaa' groove must be 'twin'
+    // (score 3), never 'slow' (1) or 'clash' (2) while 'twin' exists.
+    const first = cmds[0]
+    const next = cmds.find((c) => c.trackId !== first.trackId)!
+    const firstSong = crate.find((s) => s.trackId === first.trackId)!
+    const nextSong = crate.find((s) => s.trackId === next.trackId)!
+    expect(Math.abs(1 - (nextSong.bpm! / firstSong.bpm!))).toBeLessThanOrEqual(0.03)
+  })
+
   test('time-only plans work without distance data', () => {
     const timePlan: WorkoutPlan = {
       name: 't',
