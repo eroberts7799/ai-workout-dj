@@ -131,7 +131,10 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
             if (engineRef.current === 'local') void deckRef.current?.pause()
             else pauseOnTarget()
             setPhase('paused')
-          } else if (phaseRef.current === 'paused' && sample.event === 'timerResume') {
+          } else if (phaseRef.current === 'paused' && (sample.event === 'timerResume' || sample.event === 'timerStart')) {
+            // timerStart while paused = a NEW watch activity began (e.g.
+            // strength saved, bike started) with nobody at the computer —
+            // treat it as a resume so the unattended recorder keeps rolling.
             if (liveModeRef.current) {
               // Live engine follows the watch timer; just unmute and continue.
               if (engineRef.current === 'local') void deckRef.current?.resume()
