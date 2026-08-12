@@ -208,11 +208,20 @@ export class LiveEngine {
   ): { choice: T; advance: number } | null {
     if (choices.length === 0) return null
     const from = this.playing?.song
+    // Variety pressure: without it, two perfectly-compatible songs ping-pong
+    // forever (the critic caught a 32-minute two-song set). Recently-played
+    // candidates lose a point, so equally-good fresh songs win.
+    const recent = new Set(
+      this.commands
+        .slice(-6)
+        .map((c) => c.trackId)
+        .filter((id) => id !== this.playing?.song.trackId),
+    )
     let best: { choice: T; advance: number; score: number } | null = null
     for (let i = 0; i < choices.length; i++) {
       const c = choices[(startIdx + i) % choices.length]
       if (c.song.trackId === this.playing?.song.trackId) continue
-      const score = from ? mixScore(from, c.song) : 0
+      const score = (from ? mixScore(from, c.song) : 0) - (recent.has(c.song.trackId) ? 1 : 0)
       if (!best || score > best.score) best = { choice: c, advance: i + 1, score }
     }
     if (best) return best

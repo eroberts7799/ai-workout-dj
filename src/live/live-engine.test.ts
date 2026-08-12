@@ -178,6 +178,23 @@ describe('LiveEngine', () => {
     expect(Math.abs(1 - (nextSong.bpm! / firstSong.bpm!))).toBeLessThanOrEqual(0.03)
   })
 
+  test('variety pressure: a twin pair cannot monopolize a long session', () => {
+    const mk = (id: string, bpm: number, camelot: string): SongTags => ({ ...song(id), bpm, camelot })
+    // Two perfect partners (same bpm+key) + two tempo-compatible others.
+    const crate = [mk('twin1', 140, '3A'), mk('twin2', 140, '3A'), mk('other1', 140, '8A'), mk('other2', 140, '9B')]
+    const longPlan: WorkoutPlan = {
+      name: 'long',
+      steps: Array.from({ length: 5 }, () => [
+        { kind: 'easy' as const, meters: 400 },
+        { kind: 'hard' as const, meters: 800 },
+      ]).flat(),
+    }
+    const engine = new LiveEngine(longPlan, crate, { paceSecPerKm: 340 })
+    run(engine, stream([{ seconds: 2200, mps: 3 }]))
+    const used = new Set(engine.commands.map((c) => c.trackId))
+    expect(used.size).toBeGreaterThanOrEqual(3)
+  })
+
   test('time-only plans work without distance data', () => {
     const timePlan: WorkoutPlan = {
       name: 't',

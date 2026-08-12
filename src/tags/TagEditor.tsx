@@ -299,7 +299,10 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
           uri: hit.uri,
           name: hit.name,
           artists: hit.artists.map((a) => a.name).join(', '),
-          durationMs: hit.duration_ms,
+          // The FILE's duration, not Spotify's: markers and playback both run
+          // against the owned file, and end-of-track math (never-silence)
+          // breaks when versions differ (radio edit vs extended mix).
+          durationMs: e.durationMs,
           bpm: e.bpm ? Math.round(e.bpm * 10) / 10 : null,
           camelot: e.camelot ?? null,
           markers: e.markers.map((m) => ({ id: crypto.randomUUID(), type: m.type, ms: m.ms })),
