@@ -66,7 +66,9 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
   async function attachAudioFiles(files: FileList) {
     const lib = Object.values(loadAllTags())
     const notes: string[] = []
-    for (const file of Array.from(files)) {
+    const all = Array.from(files)
+    for (const [i, file] of all.entries()) {
+      setStatus(`💾 attaching ${i + 1}/${all.length}: ${file.name} …`)
       const fname = normalizeTitle(file.name)
       let hit: SongTags | null = null
       let bestScore = 0
@@ -249,7 +251,8 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
     }
     type SpotifyHit = { id: string; uri: string; name: string; duration_ms: number; artists: { name: string }[] }
     const notes: string[] = []
-    for (const e of entries) {
+    for (const [i, e] of entries.entries()) {
+      setStatus(`🔎 matching ${i + 1}/${entries.length}: ${e.title} …`)
       try {
         // Three attempts, strict → loose; best hit = closest duration.
         const title = cleanTitle(e.title)
