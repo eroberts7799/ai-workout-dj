@@ -230,6 +230,16 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
   }
 
   /** Import analyzer output: match each song to a Spotify track via search, then save. */
+  /** Strip label-metadata noise ("(Extended Mix)", "- Original Mix") that
+   *  wrecks Spotify search queries. */
+  function cleanTitle(t: string): string {
+    return t
+      .replace(/[([][^)\]]*\b(original mix|extended(\s+mix)?|club edit|mixed|remaster[^)\]]*)\b[^)\]]*[)\]]/gi, '')
+      .replace(/-\s*(original mix|extended mix|club edit)\s*$/gi, '')
+      .replace(/\s+/g, ' ')
+      .trim()
+  }
+
   async function importAnalysis(file: File) {
     const parsed = JSON.parse(await file.text()) as { analysis?: AnalysisEntry[] }
     const entries = parsed.analysis ?? []
@@ -237,19 +247,37 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
       setStatus('No analysis entries in that file — is it analyze.py output?')
       return
     }
+    type SpotifyHit = { id: string; uri: string; name: string; duration_ms: number; artists: { name: string }[] }
     const notes: string[] = []
     for (const e of entries) {
       try {
-        const q = encodeURIComponent(`track:${e.title} artist:${e.artist}`)
-        const res = await api(`/search?q=${q}&type=track&limit=1`)
-        if (!res.ok) throw new Error(`search ${res.status}`)
-        const json = (await res.json()) as {
-          tracks: { items: { id: string; uri: string; name: string; duration_ms: number; artists: { name: string }[] }[] }
+        // Three attempts, strict → loose; best hit = closest duration.
+        const title = cleanTitle(e.title)
+        const artist = (e.artist ?? '').split(',')[0].trim()
+        const queries = [
+          `track:"${title}" artist:"${artist}"`,
+          `${title} ${artist}`,
+          title,
+        ]
+        let hit: SpotifyHit | null = null
+        for (const q of queries) {
+          const res = await api(`/search?q=${encodeURIComponent(q)}&type=track&limit=5`)
+          if (!res.ok) continue
+          const json = (await res.json()) as { tracks: { items: SpotifyHit[] } }
+          const items = json.tracks.items
+          if (items.length === 0) continue
+          const best = items.reduce((a, b) =>
+            Math.abs(a.duration_ms - e.durationMs) <= Math.abs(b.duration_ms - e.durationMs) ? a : b,
+          )
+          if (!hit || Math.abs(best.duration_ms - e.durationMs) < Math.abs(hit.duration_ms - e.durationMs)) hit = best
+          if (hit && Math.abs(hit.duration_ms - e.durationMs) < 5000) break // good enough, stop early
         }
-        const hit = json.tracks.items[0]
         if (!hit) {
-          notes.push(`✗ ${e.title} — no Spotify match`)
-          continue
+          // The owned-file tier doesn't need Spotify: mint a local identity so
+          // the track still joins the crate (deck plays by trackId).
+          const slug = `${title} ${artist}`.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40)
+          hit = { id: `local-${slug}`, uri: `local:${slug}`, name: title, duration_ms: e.durationMs, artists: [{ name: e.artist }] }
+          notes.push(`◎ ${title} — no Spotify match, kept as local-only track`)
         }
         const durGap = Math.abs(hit.duration_ms - e.durationMs)
         saveTags({

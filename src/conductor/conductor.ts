@@ -6,7 +6,7 @@
 // a coverage pass guarantees playback for the entire plan, looping sections
 // and repeating songs as needed. Time-based plans are fully deterministic, so
 // the whole setlist is computed upfront; live re-solving arrives with HR/route.
-import { snapToBeat } from './beat'
+import { mixScore, snapToBeat } from './beat'
 import type { Cue, Setlist, SongTags, WorkoutPlan } from './types'
 
 const DEFAULT_LEAD_MS = 30_000
@@ -114,13 +114,13 @@ export function planSetlist(
     warnings.push(`Distance steps timed at assumed ${Math.floor(pace / 60)}:${String(pace % 60).padStart(2, '0')}/km pace — live GPS re-solving comes next`)
   }
 
-  let lastTrackId: string | null = null
+  let lastSong: SongTags | null = null
   let dropIdx = 0
   let loopIdx = 0
   let cursorMs = 0
 
   for (const target of targets) {
-    const pick = pickDrop(droppable, dropIdx, lastTrackId)
+    const pick = pickDrop(droppable, dropIdx, lastSong)
     if (!pick) break
     const lead = pick.dropMs - pick.entryMs
     const entryAt = target.startMs - lead
@@ -129,7 +129,7 @@ export function planSetlist(
     // the one thing the prime directive can never allow).
     const headGap = primary.length === 0 && entryAt > cursorMs
     if ((entryAt - cursorMs >= MIN_FILL_MS || headGap) && loopable.length > 0) {
-      const fill = pickLoop(loopable, loopIdx, lastTrackId, pick.song.trackId)
+      const fill = pickLoop(loopable, loopIdx, lastSong, pick.song)
       if (fill) {
         loopIdx++
         primary.push({
@@ -140,7 +140,7 @@ export function planSetlist(
           positionMs: fill.loop.startMs,
           reason: `groove fill until the next effort (${fill.song.name})`,
         })
-        lastTrackId = fill.song.trackId
+        lastSong = fill.song
       }
     }
     if (entryAt < cursorMs) {
@@ -164,7 +164,7 @@ export function planSetlist(
       positionMs,
       reason: `drop lands on the ${fmtMin(target.startMs)} effort (${pick.song.name})`,
     })
-    lastTrackId = pick.song.trackId
+    lastSong = pick.song
     dropIdx++
     // The drop song rides through the effort; the next fill starts after it ends.
     cursorMs = target.endMs
@@ -263,26 +263,37 @@ function ensureCoverage(
     .map(({ kind: _kind, ...cue }) => cue)
 }
 
+/** DJ-crate fill selection: the fill leads INTO the upcoming drop song, so
+ *  score candidates by how well they mix toward it; rotation breaks ties. */
 function pickLoop(
   loopable: LoopChoice[],
   startIdx: number,
-  lastTrackId: string | null,
-  upcomingTrackId: string,
+  lastSong: SongTags | null,
+  upcomingSong: SongTags,
 ): LoopChoice | null {
+  if (loopable.length === 0) return null
+  let best: { c: LoopChoice; score: number } | null = null
   for (let i = 0; i < loopable.length; i++) {
     const c = loopable[(startIdx + i) % loopable.length]
-    if (c.song.trackId !== lastTrackId && c.song.trackId !== upcomingTrackId) return c
+    if (c.song.trackId === lastSong?.trackId || c.song.trackId === upcomingSong.trackId) continue
+    const score = mixScore(c.song, upcomingSong)
+    if (!best || score > best.score) best = { c, score }
   }
-  return loopable.length > 0 ? loopable[startIdx % loopable.length] : null
+  return best?.c ?? loopable[startIdx % loopable.length]
 }
 
-function pickDrop(choices: DropChoice[], startIdx: number, lastTrackId: string | null): DropChoice | null {
+/** DJ-crate drop selection: prefer the drop that mixes out of what just
+ *  played; rotation breaks ties, repeats stay last resort. */
+function pickDrop(choices: DropChoice[], startIdx: number, lastSong: SongTags | null): DropChoice | null {
   if (choices.length === 0) return null
+  let best: { c: DropChoice; score: number } | null = null
   for (let i = 0; i < choices.length; i++) {
     const c = choices[(startIdx + i) % choices.length]
-    if (c.song.trackId !== lastTrackId) return c
+    if (c.song.trackId === lastSong?.trackId) continue
+    const score = lastSong ? mixScore(lastSong, c.song) : 0
+    if (!best || score > best.score) best = { c, score }
   }
-  return choices[startIdx % choices.length]
+  return best?.c ?? choices[startIdx % choices.length]
 }
 
 function fmtMin(ms: number): string {
