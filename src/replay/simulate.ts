@@ -222,6 +222,43 @@ export interface LoadedLog {
 }
 
 /**
+ * Import a Garmin Connect TCX export. The watch records every activity
+ * natively (HR, distance, altitude, cadence at 1Hz), so ANY workout ever
+ * synced to Garmin — tonight's or years of history — becomes flywheel data,
+ * even when our own recorder never saw it.
+ */
+export function importTcx(xml: string): LoadedLog {
+  const samples: SimSample[] = []
+  let t0: number | null = null
+  let lastT = -1
+  for (const [, body] of xml.matchAll(/<Trackpoint>([\s\S]*?)<\/Trackpoint>/g)) {
+    const time = body.match(/<Time>([^<]+)<\/Time>/)?.[1]
+    if (!time) continue
+    const wall = Date.parse(time)
+    if (Number.isNaN(wall)) continue
+    t0 ??= wall
+    const tMs = wall - t0
+    if (tMs <= lastT) continue // lap boundaries duplicate trackpoints
+    lastT = tMs
+    const num = (re: RegExp) => {
+      const m = body.match(re)?.[1]
+      const v = m != null ? Number(m) : NaN
+      return Number.isFinite(v) ? v : undefined
+    }
+    samples.push({
+      tMs,
+      distanceM: num(/<DistanceMeters>([^<]+)<\/DistanceMeters>/),
+      altitude: num(/<AltitudeMeters>([^<]+)<\/AltitudeMeters>/),
+      hr: num(/<HeartRateBpm[^>]*>\s*<Value>([^<]+)<\/Value>/),
+      cadence: num(/<Cadence>([^<]+)<\/Cadence>/) ?? num(/<ns\d*:RunCadence>([^<]+)<\/ns\d*:RunCadence>/),
+    })
+  }
+  const sport = xml.match(/<Activity Sport="([^"]+)"/)?.[1] ?? 'activity'
+  const id = xml.match(/<Id>([^<]+)<\/Id>/)?.[1]?.slice(0, 10) ?? ''
+  return { name: `${sport.toLowerCase()} ${id}`.trim(), plan: null, samples }
+}
+
+/**
  * Read a downloaded session log. New logs carry the raw watch stream in
  * `samples`; older ones only logged HR, which still replays time-only plans.
  */

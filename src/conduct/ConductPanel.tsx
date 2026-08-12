@@ -87,6 +87,8 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
   const handledStartRef = useRef(0)
   const [cloudState, setCloudState] = useState<'' | 'uploading' | 'uploaded' | 'failed'>('')
   const uploadedRef = useRef(false)
+  const sessionIdRef = useRef('')
+  const [recovery, setRecovery] = useState<{ exportedAt: string; samples: number } | null>(null)
   const hrLogRef = useRef<{ atMs: number; hr: number }[]>([])
   // Raw watch stream (timer-clocked) — recorded so the run can be replayed
   // through the LiveEngine in the Replay Lab afterwards.
@@ -168,30 +170,99 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
   const { plan, errors } = parsePlan('session', planText)
   const setlist = planSetlist(plan, songs)
 
+  const logRef = useRef<LogEntry[]>([])
+  logRef.current = log
+
+  function buildLogPayload() {
+    return {
+      exportedAt: new Date().toISOString(),
+      source: liveModeRef.current ? 'web-live' : 'web',
+      sessionId: sessionIdRef.current,
+      plan: planRef.current ?? plan,
+      cues: cuesRef.current,
+      log: logRef.current,
+      hr: hrLogRef.current,
+      samples: samplesRef.current,
+    }
+  }
+
   // The data flywheel: every finished session auto-uploads its log so it
   // becomes a replayable test case in the cloud (Replay Lab reads from there).
   useEffect(() => {
     if (phase !== 'done' || uploadedRef.current) return
     uploadedRef.current = true
     setCloudState('uploading')
-    const payload = {
-      exportedAt: new Date().toISOString(),
-      source: liveModeRef.current ? 'web-live' : 'web',
-      plan: planRef.current ?? plan,
-      cues: cuesRef.current,
-      log,
-      hr: hrLogRef.current,
-      samples: samplesRef.current,
-    }
     fetch(`${RELAY_BASE}/api/sessions?k=${RELAY_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(buildLogPayload()),
     })
-      .then((r) => setCloudState(r.ok ? 'uploaded' : 'failed'))
+      .then((r) => {
+        setCloudState(r.ok ? 'uploaded' : 'failed')
+        if (r.ok) localStorage.removeItem('awdj-recovery')
+      })
       .catch(() => setCloudState('failed'))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase])
+
+  // Crash-proofing: a closed tab may cost ≤2 minutes, never a workout.
+  // localStorage snapshot every 30s; cloud checkpoint (same sessionId →
+  // same blob, overwritten) every 2 minutes.
+  useEffect(() => {
+    if (phase !== 'running' && phase !== 'paused') return
+    let tick = 0
+    const t = setInterval(() => {
+      tick++
+      const payload = buildLogPayload()
+      try {
+        localStorage.setItem('awdj-recovery', JSON.stringify(payload))
+      } catch {
+        // storage full — the cloud checkpoint still covers us
+      }
+      if (tick % 4 === 0 && samplesRef.current.length > 0) {
+        fetch(`${RELAY_BASE}/api/sessions?k=${RELAY_KEY}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        }).catch(() => {})
+      }
+    }, 30_000)
+    return () => clearInterval(t)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase])
+
+  // Offer to rescue an unfinished recording from a previous tab.
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('awdj-recovery')
+      if (!raw) return
+      const saved = JSON.parse(raw)
+      if (Array.isArray(saved.samples) && saved.samples.length > 30) {
+        setRecovery({ exportedAt: saved.exportedAt ?? '?', samples: saved.samples.length })
+      }
+    } catch {
+      localStorage.removeItem('awdj-recovery')
+    }
+  }, [])
+
+  function uploadRecovery() {
+    const raw = localStorage.getItem('awdj-recovery')
+    if (!raw) return setRecovery(null)
+    setStatus('☁️ uploading recovered session…')
+    fetch(`${RELAY_BASE}/api/sessions?k=${RELAY_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: raw,
+    })
+      .then((r) => {
+        if (r.ok) {
+          localStorage.removeItem('awdj-recovery')
+          setRecovery(null)
+          setStatus('☁️ recovered session uploaded — see the Replay Lab')
+        } else setStatus('recovery upload failed — try again')
+      })
+      .catch(() => setStatus('recovery upload failed — try again'))
+  }
 
   // Distance-based plans want the live engine — flip it on automatically.
   useEffect(() => {
@@ -237,6 +308,8 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
     hrLogRef.current = []
     samplesRef.current = []
     uploadedRef.current = false
+    sessionIdRef.current = Math.random().toString(36).slice(2, 10)
+    setRecovery(null)
     setCloudState('')
     prevMsRef.current = -1
 
@@ -361,6 +434,8 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
     hrLogRef.current = []
     samplesRef.current = []
     uploadedRef.current = false
+    sessionIdRef.current = Math.random().toString(36).slice(2, 10)
+    setRecovery(null)
     setCloudState('')
     setPhase('running')
     setStatus(`LIVE — conducting ${plan.name} from your body's data`)
@@ -511,6 +586,13 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
 
       <div className="card">
         <h2 style={{ marginTop: 0 }}>Session</h2>
+        {phase === 'idle' && recovery && (
+          <p className="warn">
+            💾 Unfinished session found ({recovery.samples} samples, {recovery.exportedAt.slice(0, 16)}) —{' '}
+            <button onClick={uploadRecovery}>Upload to cloud</button>{' '}
+            <button onClick={() => { localStorage.removeItem('awdj-recovery'); setRecovery(null) }}>Discard</button>
+          </p>
+        )}
         {phase === 'idle' && (
           <>
             <button

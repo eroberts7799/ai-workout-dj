@@ -11,6 +11,7 @@ import { parsePlan } from '../conduct/plan-parse'
 import { RELAY_BASE, RELAY_KEY } from '../conduct/ConductPanel'
 import { loadAllTags } from '../tags/store'
 import {
+  importTcx,
   loadSessionLog,
   simulate,
   syntheticSamples,
@@ -131,8 +132,7 @@ export default function ReplayPanel() {
     setStatus('')
   }
 
-  function acceptLog(json: unknown, origin: string) {
-    const log = loadSessionLog(json)
+  function acceptLog(log: LoadedLog, origin: string) {
     if (log.samples.length === 0) {
       setStatus(`${origin} has no replayable samples (record a new session — logs now carry the raw watch stream)`)
       return
@@ -149,9 +149,29 @@ export default function ReplayPanel() {
 
   async function onLogFile(file: File) {
     try {
-      acceptLog(JSON.parse(await file.text()), 'that log')
+      const text = await file.text()
+      if (file.name.toLowerCase().endsWith('.tcx') || text.trimStart().startsWith('<')) {
+        acceptLog(importTcx(text), 'that TCX export')
+      } else {
+        acceptLog(loadSessionLog(JSON.parse(text)), 'that log')
+      }
     } catch (e) {
       setStatus(`could not read log: ${String(e)}`)
+    }
+  }
+
+  /** Archive a locally-imported log (e.g. a Garmin TCX) to the cloud. */
+  async function saveLoadedToCloud() {
+    if (!loaded) return
+    try {
+      const r = await fetch(`${RELAY_BASE}/api/sessions?k=${RELAY_KEY}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: loaded.name, source: 'import', samples: loaded.samples, plan: loaded.plan ?? undefined }),
+      })
+      setStatus(r.ok ? `☁️ "${loaded.name}" archived to the cloud` : 'cloud save failed')
+    } catch (e) {
+      setStatus(`cloud save failed: ${String(e)}`)
     }
   }
 
@@ -167,7 +187,7 @@ export default function ReplayPanel() {
   async function openCloud(pathname: string) {
     try {
       const r = await fetch(`${RELAY_BASE}/api/sessions?k=${RELAY_KEY}&file=${encodeURIComponent(pathname)}`)
-      acceptLog(await r.json(), 'that cloud session')
+      acceptLog(loadSessionLog(await r.json()), 'that cloud session')
     } catch (e) {
       setStatus(`cloud fetch failed: ${String(e)}`)
     }
@@ -276,10 +296,10 @@ export default function ReplayPanel() {
             {loaded ? 'Replay recorded session' : 'Simulate run'}
           </button>
           <label className="muted" style={{ cursor: 'pointer' }}>
-            📄 Load session log…
+            📄 Load session log / Garmin TCX…
             <input
               type="file"
-              accept="application/json,.json"
+              accept="application/json,.json,.tcx"
               style={{ display: 'none' }}
               onChange={(e) => {
                 const f = e.target.files?.[0]
@@ -290,7 +310,10 @@ export default function ReplayPanel() {
           </label>
           <button onClick={() => void loadCloudList()}>☁️ Cloud sessions</button>
           {loaded && (
-            <button onClick={() => { setLoaded(null); setResult(null); setStatus('') }}>✕ back to simulated runner</button>
+            <>
+              <button onClick={() => void saveLoadedToCloud()}>☁️ archive this</button>
+              <button onClick={() => { setLoaded(null); setResult(null); setStatus('') }}>✕ back to simulated runner</button>
+            </>
           )}
         </div>
         {cloud && (

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 import type { SongTags, WorkoutPlan } from '../conductor/types'
-import { loadSessionLog, nominalDurationMs, simulate, syntheticSamples } from './simulate'
+import { importTcx, loadSessionLog, nominalDurationMs, simulate, syntheticSamples } from './simulate'
 
 function song(id: string): SongTags {
   return {
@@ -106,6 +106,41 @@ describe('simulate', () => {
     // Engine's EMA pace should converge near the easy pace during the easy km.
     const late = r.trace.find((p) => p.tMs === 170_000)!
     expect(Math.abs(late.paceSecPerKm - scenario.easyPaceSecPerKm)).toBeLessThanOrEqual(30)
+  })
+})
+
+describe('importTcx', () => {
+  const point = (iso: string, extra: string) => `<Trackpoint><Time>${iso}</Time>${extra}</Trackpoint>`
+  const tcx = `<?xml version="1.0"?>
+    <TrainingCenterDatabase>
+      <Activities><Activity Sport="Biking"><Id>2026-08-11T23:30:00.000Z</Id><Lap>
+        ${point('2026-08-11T23:30:00.000Z', '<HeartRateBpm><Value>95</Value></HeartRateBpm><Cadence>0</Cadence>')}
+        ${point('2026-08-11T23:30:01.000Z', '<AltitudeMeters>16.8</AltitudeMeters><DistanceMeters>4.2</DistanceMeters><HeartRateBpm><Value>97</Value></HeartRateBpm><Cadence>72</Cadence>')}
+        ${point('2026-08-11T23:30:01.000Z', '<HeartRateBpm><Value>97</Value></HeartRateBpm>')}
+        ${point('2026-08-11T23:30:02.000Z', '<DistanceMeters>9.1</DistanceMeters><HeartRateBpm><Value>101</Value></HeartRateBpm><Extensions><ns3:TPX><ns3:RunCadence>80</ns3:RunCadence></ns3:TPX></Extensions>')}
+      </Lap></Activity></Activities>
+    </TrainingCenterDatabase>`
+
+  test('parses trackpoints into samples, t0-relative, lap duplicates dropped', () => {
+    const log = importTcx(tcx)
+    expect(log.name).toBe('biking 2026-08-11')
+    expect(log.plan).toBeNull()
+    expect(log.samples.length).toBe(3) // duplicate timestamp dropped
+    expect(log.samples[0]).toEqual({ tMs: 0, distanceM: undefined, altitude: undefined, hr: 95, cadence: 0 })
+    expect(log.samples[1]).toEqual({ tMs: 1000, distanceM: 4.2, altitude: 16.8, hr: 97, cadence: 72 })
+    expect(log.samples[2].cadence).toBe(80) // RunCadence extension fallback
+  })
+
+  test('strength-style TCX (no distance) still yields HR samples', () => {
+    const xml = `<Activity Sport="Other"><Id>x</Id><Lap>${point('2026-08-11T23:00:00Z', '<HeartRateBpm><Value>120</Value></HeartRateBpm>')}${point('2026-08-11T23:00:01Z', '<HeartRateBpm><Value>121</Value></HeartRateBpm>')}</Lap></Activity>`
+    const log = importTcx(xml)
+    expect(log.samples.length).toBe(2)
+    expect(log.samples.every((s) => s.distanceM === undefined)).toBe(true)
+    expect(log.samples[1].hr).toBe(121)
+  })
+
+  test('garbage in, empty out — never throws', () => {
+    expect(importTcx('not xml at all').samples).toEqual([])
   })
 })
 

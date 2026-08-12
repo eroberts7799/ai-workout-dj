@@ -42,11 +42,16 @@ export async function POST(request) {
     .slice(0, 40)
   const source = typeof log.source === 'string' ? log.source.slice(0, 12) : 'web'
   const day = new Date().toISOString().slice(0, 10)
-  const blob = await put(`sessions/${day}-${source}-${name}.json`, text, {
-    access: 'public',
-    addRandomSuffix: true,
-    contentType: 'application/json',
-  })
+  // In-flight checkpoints: a sessionId pins the pathname so periodic saves
+  // overwrite instead of piling up — a closed tab can lose ≤2min, not a run.
+  const sid = typeof log.sessionId === 'string' ? log.sessionId.replace(/[^a-zA-Z0-9]/g, '').slice(0, 16) : null
+  const blob = await put(
+    `sessions/${day}-${source}-${name}${sid ? `-${sid}` : ''}.json`,
+    text,
+    sid
+      ? { access: 'public', allowOverwrite: true, contentType: 'application/json' }
+      : { access: 'public', addRandomSuffix: true, contentType: 'application/json' },
+  )
   return new Response(JSON.stringify({ ok: true, pathname: blob.pathname }), {
     status: 201,
     headers: { ...CORS, 'Content-Type': 'application/json' },
