@@ -170,6 +170,20 @@ export function planSetlist(
     cursorMs = target.endMs
   }
 
+  // A plan with no hard steps (easy long run) is still a session: seed a
+  // groove at t=0 and let the coverage pass loop/chain it to the end.
+  if (primary.length === 0 && loopable.length > 0 && planEnd > 0) {
+    const fill = pickLoop(loopable, 0, null, loopable[0].song) ?? loopable[0]
+    primary.push({
+      kind: 'fill',
+      atMs: 0,
+      trackId: fill.song.trackId,
+      uri: fill.song.uri,
+      positionMs: fill.loop.startMs,
+      reason: `groove fill (${fill.song.name})`,
+    })
+  }
+
   const cues = ensureCoverage(primary, planEnd, songs, loopable, warnings)
   return { cues, warnings }
 }

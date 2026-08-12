@@ -212,4 +212,18 @@ describe('planSetlist', () => {
       expect(drops[i].positionMs + (targets[i] - drops[i].atMs)).toBe(95_000)
     }
   })
+
+  test('an all-easy plan (long run) still gets wall-to-wall music', () => {
+    const easyPlan: WorkoutPlan = { name: 'lsd', steps: [{ kind: 'easy', seconds: 3180 }] }
+    const { cues } = planSetlist(easyPlan, [fullSong('aaa'), fullSong('bbb'), fullSong('ccc')])
+    expect(cues.length).toBeGreaterThan(0)
+    expect(cues[0].atMs).toBe(0)
+    // Coverage: no silence — consecutive cue gaps never exceed a track's length.
+    for (let i = 1; i < cues.length; i++) {
+      expect(cues[i].atMs - cues[i - 1].atMs).toBeLessThanOrEqual(240_000)
+    }
+    // And the last cue's natural playback reaches the plan end.
+    const last = cues[cues.length - 1]
+    expect(last.atMs + (240_000 - last.positionMs)).toBeGreaterThanOrEqual(3_180_000)
+  })
 })
