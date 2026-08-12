@@ -21,10 +21,31 @@ export function snapToBeat(rawMs: number, anchorMs: number, bpm: number | null |
  * boundary hit within 1ms counts as "on it".
  */
 export function nextBeatDelayMs(posMs: number, bpm: number | null | undefined, anchorMs: number): number {
+  return nextGridDelayMs(posMs, bpm, anchorMs, 1)
+}
+
+/**
+ * Delay (ms) to the outgoing track's next grid boundary of `beatsPerUnit`
+ * beats (1 = beat, 4 = bar — real DJs cut fills on bars). Anchored at any
+ * downbeat-snapped position of the same track.
+ */
+export function nextGridDelayMs(
+  posMs: number,
+  bpm: number | null | undefined,
+  anchorMs: number,
+  beatsPerUnit: number,
+): number {
   if (!bpm || bpm <= 0) return 0
-  const beatMs = 60_000 / bpm
-  const phase = ((((posMs - anchorMs) % beatMs) + beatMs) % beatMs)
-  return phase < 1 || beatMs - phase < 1 ? 0 : beatMs - phase
+  const unitMs = (60_000 / bpm) * Math.max(1, beatsPerUnit)
+  const phase = ((((posMs - anchorMs) % unitMs) + unitMs) % unitMs)
+  return phase < 1 || unitMs - phase < 1 ? 0 : unitMs - phase
+}
+
+/** Playback-rate for tempo-locking the incoming track to the outgoing one
+ *  during a blend. Clamped to ±4% (inaudible as pitch); 1 when unknown. */
+export function tempoLockRate(outgoingBpm: number | null | undefined, incomingBpm: number | null | undefined): number {
+  if (!outgoingBpm || !incomingBpm) return 1
+  return Math.min(1.04, Math.max(0.96, outgoingBpm / incomingBpm))
 }
 
 /** A song's beat-grid anchor: any marker the analyzer downbeat-snapped. */

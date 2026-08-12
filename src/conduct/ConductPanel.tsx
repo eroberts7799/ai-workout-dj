@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { LocalDeck } from '../audio/local-deck'
+import { LocalDeck, deckOptsFor } from '../audio/local-deck'
 import { loadAudio } from '../audio/local-store'
 import { beatAnchorMs } from '../conductor/beat'
 import { planSetlist, totalDurationMs } from '../conductor/conductor'
@@ -282,8 +282,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
         // Mid-run failure policy: log and keep playing — never interrupt the run.
         try {
           if (engineRef.current === 'local' && deckRef.current?.has(cue.trackId)) {
-            // Non-drop cuts wait for the outgoing track's beat; drops are exact.
-            deckRef.current.play(cue.trackId, cue.positionMs, fadeFor(cue), { onBeat: !cue.reason.startsWith('drop lands') })
+            deckRef.current.play(cue.trackId, cue.positionMs, fadeFor(cue), deckOptsFor(cue.reason))
           } else {
             await playOnTarget(cue.uri, cue.positionMs)
           }
@@ -445,7 +444,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
     const entry = { plannedAtMs: c.tMs, firedAtMs: c.tMs, cue: { atMs: c.tMs, trackId: c.trackId, uri: c.uri, positionMs: c.positionMs, reason: c.reason }, ok: true }
     try {
       if (engineRef.current === 'local' && deckRef.current?.has(c.trackId)) {
-        deckRef.current.play(c.trackId, c.positionMs, c.fadeSec, { onBeat: !c.reason.startsWith('drop lands') })
+        deckRef.current.play(c.trackId, c.positionMs, c.fadeSec, deckOptsFor(c.reason))
       } else {
         await playOnTarget(c.uri, c.positionMs)
       }

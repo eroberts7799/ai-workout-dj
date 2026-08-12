@@ -5,11 +5,21 @@
 // boundary, and the incoming entry is advanced by the same wait so its
 // musical timeline (and any drop landing) is preserved. Both edges of the
 // cut sit on the grid — it reads as mixed, not triggered.
-import { blendPlan, nextBeatDelayMs } from '../conductor/beat'
+import { blendPlan, nextGridDelayMs, tempoLockRate } from '../conductor/beat'
 
 /** Bass shelf below this frequency is what gets swapped between decks. */
 const BASS_HZ = 180
 const BASS_CUT_DB = -15
+
+/** How each cue intent cuts: fills mix like a DJ (bar-aligned, tempo-locked
+ *  blend); loop-backs and buildups cut on the beat (timing-critical, 1×);
+ *  drops fire exact-time. */
+export function deckOptsFor(reason: string): { onBeat?: boolean; grid?: 'beat' | 'bar'; tempoLock?: boolean } {
+  if (reason.startsWith('drop lands')) return { onBeat: false }
+  if (reason.startsWith('loop back')) return { onBeat: true, grid: 'beat' }
+  if (reason.startsWith('buildup')) return { onBeat: true, grid: 'beat' }
+  return { onBeat: true, grid: 'bar', tempoLock: true } // groove fills & chains
+}
 
 export interface DeckTrackMeta {
   bpm: number | null
@@ -28,6 +38,7 @@ export class LocalDeck {
     trackId: string
     positionAtMs: number
     startedAtCtx: number
+    rate: number
   } | null = null
 
   private ensureCtx(): AudioContext {
@@ -51,7 +62,7 @@ export class LocalDeck {
   /** Playhead of the active track right now, ms (null when nothing plays). */
   playheadMs(): number | null {
     if (!this.ctx || !this.current) return null
-    return this.current.positionAtMs + (this.ctx.currentTime - this.current.startedAtCtx) * 1000
+    return this.current.positionAtMs + (this.ctx.currentTime - this.current.startedAtCtx) * 1000 * this.current.rate
   }
 
   /**
@@ -60,7 +71,12 @@ export class LocalDeck {
    * groove re-entry reads as a cut, not a wash. With onBeat, the cut is
    * deferred to the outgoing track's next beat boundary (needs its meta).
    */
-  play(trackId: string, positionMs: number, fadeSec = 0.8, opts: { onBeat?: boolean } = {}): void {
+  play(
+    trackId: string,
+    positionMs: number,
+    fadeSec = 0.8,
+    opts: { onBeat?: boolean; grid?: 'beat' | 'bar'; tempoLock?: boolean } = {},
+  ): void {
     const ctx = this.ensureCtx()
     void ctx.resume()
     const buf = this.buffers.get(trackId)
@@ -72,11 +88,16 @@ export class LocalDeck {
     let delayMs = 0
     if (opts.onBeat && this.current) {
       const pos = this.playheadMs()
-      if (outMeta?.bpm && pos != null) delayMs = nextBeatDelayMs(pos, outMeta.bpm, outMeta.anchorMs)
+      // Fills cut on BARS like a real DJ; timing-sensitive cuts use beats.
+      const beats = opts.grid === 'bar' ? 4 : 1
+      if (outMeta?.bpm && pos != null) delayMs = nextGridDelayMs(pos, outMeta.bpm, outMeta.anchorMs, beats)
     }
-    // Compatible tempos earn the DJ treatment: longer blend + bass swap.
+    // Compatible tempos earn the DJ treatment: longer blend + bass swap,
+    // and (for non-timing-critical cuts) the incoming track tempo-locks to
+    // the outgoing one so the overlap phase-locks instead of drifting.
     const plan = blendPlan(fadeSec, outMeta?.bpm, inMeta?.bpm, { isDrop: !opts.onBeat })
     const blendSec = this.current ? plan.fadeSec : fadeSec
+    const rate = opts.tempoLock && plan.bassSwap ? tempoLockRate(outMeta?.bpm, inMeta?.bpm) : 1
 
     const now = ctx.currentTime
     const t = now + delayMs / 1000
@@ -85,6 +106,7 @@ export class LocalDeck {
 
     const src = ctx.createBufferSource()
     src.buffer = buf
+    src.playbackRate.value = rate
     const bass = ctx.createBiquadFilter()
     bass.type = 'lowshelf'
     bass.frequency.value = BASS_HZ
@@ -121,7 +143,7 @@ export class LocalDeck {
       }
       old.src.stop(t + blendSec + 0.1)
     }
-    this.current = { src, gain, bass, trackId, positionAtMs: startPosMs, startedAtCtx: t }
+    this.current = { src, gain, bass, trackId, positionAtMs: startPosMs, startedAtCtx: t, rate }
   }
 
   async pause(): Promise<void> {

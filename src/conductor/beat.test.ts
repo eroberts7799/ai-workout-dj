@@ -69,6 +69,22 @@ describe('blendPlan', () => {
   })
 })
 
+describe('nextGridDelayMs / tempoLockRate', () => {
+  const { nextGridDelayMs, tempoLockRate } = require('./beat') as typeof import('./beat')
+
+  test('bar grid waits to the next 4-beat boundary', () => {
+    // 120bpm → 500ms beats, 2000ms bars, anchor 30_000.
+    expect(nextGridDelayMs(30_500, 120, 30_000, 4)).toBeCloseTo(1500, 6)
+    expect(nextGridDelayMs(30_000 + 3 * 2000, 120, 30_000, 4)).toBe(0)
+  })
+
+  test('tempo lock: exact ratio within clamp, 1 when unknown', () => {
+    expect(tempoLockRate(136, 140)).toBeCloseTo(136 / 140, 6)
+    expect(tempoLockRate(120, 140)).toBe(0.96) // clamped
+    expect(tempoLockRate(null, 140)).toBe(1)
+  })
+})
+
 describe('camelotCompatible / mixScore', () => {
   test('same number, neighbors on the ring, relative maj/min all mix', () => {
     expect(camelotCompatible('9A', '9A')).toBe(true)

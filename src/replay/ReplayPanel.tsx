@@ -3,7 +3,7 @@
 // step boundaries as actually crossed, every cut, where each drop lands.
 // Optionally hear it through the local deck at accelerated speed.
 import { useMemo, useRef, useState } from 'react'
-import { LocalDeck } from '../audio/local-deck'
+import { LocalDeck, deckOptsFor } from '../audio/local-deck'
 import { loadAudio } from '../audio/local-store'
 import type { SongTags, WorkoutPlan, WorkoutStep } from '../conductor/types'
 import { beatAnchorMs } from '../conductor/beat'
@@ -226,9 +226,12 @@ export default function ReplayPanel() {
       timersRef.current.push(
         setTimeout(() => {
           if (deck.has(c.trackId))
-            deck.play(c.trackId, c.positionMs, Math.max(0.12, c.fadeSec / speed), {
-              onBeat: speed === 1 && !c.reason.startsWith('drop lands'), // beat waits only make sense in real time
-            })
+            deck.play(
+              c.trackId,
+              c.positionMs,
+              Math.max(0.12, c.fadeSec / speed),
+              speed === 1 ? deckOptsFor(c.reason) : {}, // beat waits/locks only make sense in real time
+            )
         }, c.tMs / speed),
       )
     }
