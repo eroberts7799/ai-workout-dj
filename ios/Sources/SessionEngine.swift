@@ -139,6 +139,13 @@ final class SessionEngine: ObservableObject {
         audioReady[song.trackId] = audioReady[song.trackId] ?? false
       }
     }
+    // Beat meta for the DJ deck: tags carry bpm + downbeat-snapped markers.
+    for t in b.tags ?? [] {
+      deck.setMeta(id: t.trackId, bpm: t.bpm, anchorMs: BeatMath.beatAnchorMs(markers: t.markers))
+    }
+    for s in b.songs where (b.tags ?? []).first(where: { $0.trackId == s.trackId }) == nil {
+      deck.setMeta(id: s.trackId, bpm: s.bpm, anchorMs: 0)
+    }
   }
 
   // MARK: - Session control
@@ -172,7 +179,7 @@ final class SessionEngine: ObservableObject {
     clockMs = now
     for cue in dueCues(b.cues, prevMs: prevMs, nowMs: now, leadMs: 0) {
       // Never interrupt the run: a failed cue leaves current audio playing.
-      try? deck.play(id: cue.trackId, positionMs: cue.positionMs, fadeSec: fadeSeconds(for: cue))
+      try? deck.play(id: cue.trackId, positionMs: cue.positionMs, fadeSec: fadeSeconds(for: cue), opts: BeatMath.deckOpts(for: cue.reason))
       firedCount += 1
     }
     prevMs = now
@@ -313,7 +320,7 @@ final class SessionEngine: ObservableObject {
     for c in live.advance(LiveSample(tMs: timerMs, distanceM: distanceM)) {
       if suppressLoopbacks && c.reason.hasPrefix("loop back") { continue }
       // Never interrupt the run: a missing file leaves current audio playing.
-      try? deck.play(id: c.trackId, positionMs: c.positionMs, fadeSec: c.fadeSec)
+      try? deck.play(id: c.trackId, positionMs: c.positionMs, fadeSec: c.fadeSec, opts: BeatMath.deckOpts(for: c.reason))
       firedCount += 1
       lastCommand = c.reason
     }
