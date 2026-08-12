@@ -75,8 +75,15 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
       for (const s of lib) {
         const title = normalizeTitle(s.name)
         if (!title) continue
+        // Word-boundary or nothing: bare substrings let "ten" claim every
+        // file containing "exTENded". fname-inside-title allowed only for
+        // meaningfully long filenames.
         const boundary = new RegExp(`(^| )${title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}( |$)`)
-        const score = boundary.test(fname) ? 2 + title.length / 1000 : fname.includes(title) || title.includes(fname) ? 1 + title.length / 1000 : 0
+        const score = boundary.test(fname)
+          ? 2 + title.length / 1000
+          : fname.length >= 8 && title.includes(fname)
+            ? 1 + title.length / 1000
+            : 0
         if (score > bestScore) {
           bestScore = score
           hit = s
@@ -257,23 +264,27 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
         // Three attempts, strict → loose; best hit = closest duration.
         const title = cleanTitle(e.title)
         const artist = (e.artist ?? '').split(',')[0].trim()
-        const queries = [
-          `track:"${title}" artist:"${artist}"`,
-          `${title} ${artist}`,
-          title,
-        ]
+        // Two attempts only — no desperate title-only searches (that's how
+        // FISHER's "Stay" becomes the Bee Gees). A candidate must share an
+        // artist and be within 20s of our file, else honest local-only wins.
+        const queries = [`track:"${title}" artist:"${artist}"`, `${title} ${artist}`]
+        const artistToken = artist.toLowerCase().split(/\s+/)[0] ?? ''
         let hit: SpotifyHit | null = null
         for (const q of queries) {
           const res = await api(`/search?q=${encodeURIComponent(q)}&type=track&limit=5`)
           if (!res.ok) continue
           const json = (await res.json()) as { tracks: { items: SpotifyHit[] } }
-          const items = json.tracks.items
-          if (items.length === 0) continue
-          const best = items.reduce((a, b) =>
+          const credible = json.tracks.items.filter(
+            (i) =>
+              Math.abs(i.duration_ms - e.durationMs) < 20_000 &&
+              (!artistToken || i.artists.some((a) => a.name.toLowerCase().includes(artistToken))),
+          )
+          if (credible.length === 0) continue
+          const best = credible.reduce((a, b) =>
             Math.abs(a.duration_ms - e.durationMs) <= Math.abs(b.duration_ms - e.durationMs) ? a : b,
           )
           if (!hit || Math.abs(best.duration_ms - e.durationMs) < Math.abs(hit.duration_ms - e.durationMs)) hit = best
-          if (hit && Math.abs(hit.duration_ms - e.durationMs) < 5000) break // good enough, stop early
+          if (hit && Math.abs(hit.duration_ms - e.durationMs) < 5000) break
         }
         if (!hit) {
           // The owned-file tier doesn't need Spotify: mint a local identity so
@@ -433,6 +444,20 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
               }}
             />
           </label>
+          <button
+            style={{ marginRight: 12 }}
+            title="Delete ALL songs and start clean (attached audio blobs are kept and re-match on the next attach)"
+            onClick={() => {
+              const lib = Object.values(loadAllTags())
+              if (lib.length === 0) return
+              if (!confirm(`Delete ALL ${lib.length} songs from the library? (Use before a clean re-import.)`)) return
+              for (const s of lib) deleteTags(s.trackId)
+              setLibrary(loadAllTags())
+              setStatus(`🗑 library reset — ${lib.length} song(s) removed`)
+            }}
+          >
+            🗑 Reset library
+          </button>
           <button
             style={{ marginRight: 12 }}
             title="Deletes every song that has no attached audio file — bad Spotify matches can never receive audio, so this sweeps import junk. Attach your audio FIRST."
