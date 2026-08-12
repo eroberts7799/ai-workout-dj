@@ -107,9 +107,26 @@ final class SessionEngine: ObservableObject {
     }
     for song in candidates {
       let target = normalize(song.name)
-      let hit = audio.first { f in
+      guard !target.isEmpty else { continue }
+      // Word-boundary matches outrank substrings ("ten" must not steal
+      // TENTEN's file); longest title wins ties — mirrors the web matcher.
+      let boundary = "(^| )\(NSRegularExpression.escapedPattern(for: target))( |$)"
+      var hit: URL?
+      var bestScore = 0.0
+      for f in audio {
         let n = normalize(f.lastPathComponent)
-        return n.contains(target) || target.contains(n)
+        let score: Double
+        if n.range(of: boundary, options: .regularExpression) != nil {
+          score = 2 + Double(target.count) / 1000
+        } else if n.contains(target) || target.contains(n) {
+          score = 1 + Double(target.count) / 1000
+        } else {
+          score = 0
+        }
+        if score > bestScore {
+          bestScore = score
+          hit = f
+        }
       }
       if let hit, !(audioReady[song.trackId] ?? false) {
         do {
