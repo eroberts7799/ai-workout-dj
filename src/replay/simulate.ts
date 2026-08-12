@@ -11,6 +11,7 @@ export interface SimSample {
   distanceM?: number
   hr?: number
   altitude?: number
+  cadence?: number
 }
 
 export interface ScenarioOpts {
@@ -227,7 +228,7 @@ export interface LoadedLog {
 export function loadSessionLog(json: unknown): LoadedLog {
   const log = json as {
     plan?: WorkoutPlan
-    samples?: { tMs: number; distanceM?: number; hr?: number; altitude?: number }[]
+    samples?: { tMs: number; distanceM?: number; hr?: number; altitude?: number; cadence?: number }[]
     hr?: { atMs: number; hr: number }[]
   }
   const plan = log.plan && Array.isArray(log.plan.steps) ? log.plan : null
@@ -235,7 +236,7 @@ export function loadSessionLog(json: unknown): LoadedLog {
   if (Array.isArray(log.samples) && log.samples.length > 0) {
     samples = log.samples
       .filter((s) => typeof s.tMs === 'number')
-      .map((s) => ({ tMs: s.tMs, distanceM: s.distanceM, hr: s.hr, altitude: s.altitude }))
+      .map((s) => ({ tMs: s.tMs, distanceM: s.distanceM, hr: s.hr, altitude: s.altitude, cadence: s.cadence }))
   } else if (Array.isArray(log.hr)) {
     samples = log.hr.filter((s) => typeof s.atMs === 'number').map((s) => ({ tMs: s.atMs, hr: s.hr }))
   }
