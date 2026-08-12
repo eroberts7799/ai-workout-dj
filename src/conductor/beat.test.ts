@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { beatAnchorMs, nextBeatDelayMs, snapToBeat } from './beat'
+import { beatAnchorMs, blendPlan, nextBeatDelayMs, snapToBeat } from './beat'
 
 describe('snapToBeat', () => {
   const beat = 60_000 / 128 // 468.75ms
@@ -46,6 +46,26 @@ describe('nextBeatDelayMs', () => {
       expect(d).toBeLessThan(beat)
     }
     expect(nextBeatDelayMs(1234, null, 0)).toBe(0)
+  })
+})
+
+describe('blendPlan', () => {
+  test('compatible tempos earn a long bass-swapped blend', () => {
+    expect(blendPlan(1.2, 124, 126)).toEqual({ fadeSec: 2.4, bassSwap: true })
+    expect(blendPlan(3.0, 124, 124)).toEqual({ fadeSec: 3.0, bassSwap: true }) // longer request kept
+  })
+
+  test('incompatible tempos cut clean at the requested fade', () => {
+    expect(blendPlan(1.2, 124, 90)).toEqual({ fadeSec: 1.2, bassSwap: false })
+  })
+
+  test('drops are never stretched; unknown bpm means no blend', () => {
+    expect(blendPlan(0.45, 124, 125, { isDrop: true })).toEqual({ fadeSec: 0.45, bassSwap: false })
+    expect(blendPlan(1.2, null, 124)).toEqual({ fadeSec: 1.2, bassSwap: false })
+  })
+
+  test('short utility cuts stay short even between twins', () => {
+    expect(blendPlan(0.25, 124, 124)).toEqual({ fadeSec: 0.25, bassSwap: false })
   })
 })
 

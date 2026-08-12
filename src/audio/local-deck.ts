@@ -5,7 +5,11 @@
 // boundary, and the incoming entry is advanced by the same wait so its
 // musical timeline (and any drop landing) is preserved. Both edges of the
 // cut sit on the grid — it reads as mixed, not triggered.
-import { nextBeatDelayMs } from '../conductor/beat'
+import { blendPlan, nextBeatDelayMs } from '../conductor/beat'
+
+/** Bass shelf below this frequency is what gets swapped between decks. */
+const BASS_HZ = 180
+const BASS_CUT_DB = -15
 
 export interface DeckTrackMeta {
   bpm: number | null
@@ -20,6 +24,7 @@ export class LocalDeck {
   private current: {
     src: AudioBufferSourceNode
     gain: GainNode
+    bass: BiquadFilterNode
     trackId: string
     positionAtMs: number
     startedAtCtx: number
@@ -61,12 +66,18 @@ export class LocalDeck {
     const buf = this.buffers.get(trackId)
     if (!buf) throw new Error(`no local audio for ${trackId}`)
 
+    const outMeta = this.current ? this.meta.get(this.current.trackId) : undefined
+    const inMeta = this.meta.get(trackId)
+
     let delayMs = 0
     if (opts.onBeat && this.current) {
-      const m = this.meta.get(this.current.trackId)
       const pos = this.playheadMs()
-      if (m?.bpm && pos != null) delayMs = nextBeatDelayMs(pos, m.bpm, m.anchorMs)
+      if (outMeta?.bpm && pos != null) delayMs = nextBeatDelayMs(pos, outMeta.bpm, outMeta.anchorMs)
     }
+    // Compatible tempos earn the DJ treatment: longer blend + bass swap.
+    const plan = blendPlan(fadeSec, outMeta?.bpm, inMeta?.bpm, { isDrop: !opts.onBeat })
+    const blendSec = this.current ? plan.fadeSec : fadeSec
+
     const now = ctx.currentTime
     const t = now + delayMs / 1000
     // The incoming track enters later by the same wait — its timeline holds.
@@ -74,12 +85,26 @@ export class LocalDeck {
 
     const src = ctx.createBufferSource()
     src.buffer = buf
+    const bass = ctx.createBiquadFilter()
+    bass.type = 'lowshelf'
+    bass.frequency.value = BASS_HZ
     const gain = ctx.createGain()
-    src.connect(gain)
+    src.connect(bass)
+    bass.connect(gain)
     gain.connect(ctx.destination)
     gain.gain.setValueAtTime(0.0001, t)
-    gain.gain.exponentialRampToValueAtTime(1, t + fadeSec)
+    gain.gain.exponentialRampToValueAtTime(1, t + blendSec)
     src.start(t, startPosMs / 1000)
+
+    const swapAt = t + blendSec * 0.5 // basses trade hands mid-blend
+    if (plan.bassSwap && this.current) {
+      // Incoming enters bass-cut, takes the low end at the swap.
+      bass.gain.setValueAtTime(BASS_CUT_DB, t)
+      bass.gain.setValueAtTime(BASS_CUT_DB, swapAt)
+      bass.gain.linearRampToValueAtTime(0, swapAt + 0.35)
+    } else {
+      bass.gain.setValueAtTime(0, t)
+    }
 
     if (this.current) {
       const old = this.current
@@ -87,10 +112,16 @@ export class LocalDeck {
       old.gain.gain.cancelScheduledValues(now)
       old.gain.gain.setValueAtTime(held, now)
       old.gain.gain.setValueAtTime(held, t) // stay full until the cut moment
-      old.gain.gain.exponentialRampToValueAtTime(0.0001, t + fadeSec)
-      old.src.stop(t + fadeSec + 0.1)
+      old.gain.gain.exponentialRampToValueAtTime(0.0001, t + blendSec)
+      if (plan.bassSwap) {
+        // Outgoing surrenders the low end as the incoming takes it.
+        old.bass.gain.setValueAtTime(0, t)
+        old.bass.gain.setValueAtTime(0, swapAt)
+        old.bass.gain.linearRampToValueAtTime(BASS_CUT_DB, swapAt + 0.35)
+      }
+      old.src.stop(t + blendSec + 0.1)
     }
-    this.current = { src, gain, trackId, positionAtMs: startPosMs, startedAtCtx: t }
+    this.current = { src, gain, bass, trackId, positionAtMs: startPosMs, startedAtCtx: t }
   }
 
   async pause(): Promise<void> {

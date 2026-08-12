@@ -35,3 +35,34 @@ export function beatAnchorMs(markers: { type: string; ms: number }[]): number {
     0
   )
 }
+
+/** Tempos within this ratio blend like a DJ; beyond it, cut clean. */
+const BLEND_BPM_TOLERANCE = 0.03
+/** A real blend needs room to breathe. */
+const BLEND_FADE_SEC = 2.4
+
+export interface BlendPlan {
+  fadeSec: number
+  /** Swap the bass at the cut: incoming enters bass-cut, basses trade at the boundary. */
+  bassSwap: boolean
+}
+
+/**
+ * How should this transition sound? Compatible tempos (both known, within
+ * ~3%) earn a long bass-swapped blend — the classic DJ overlap. Everything
+ * else keeps its requested fade as a clean cut. Drops are never stretched:
+ * their fade is exact-time by design.
+ */
+export function blendPlan(
+  requestedFadeSec: number,
+  outgoingBpm: number | null | undefined,
+  incomingBpm: number | null | undefined,
+  opts: { isDrop?: boolean } = {},
+): BlendPlan {
+  if (opts.isDrop || !outgoingBpm || !incomingBpm) return { fadeSec: requestedFadeSec, bassSwap: false }
+  const ratio = Math.abs(1 - incomingBpm / outgoingBpm)
+  if (ratio > BLEND_BPM_TOLERANCE) return { fadeSec: requestedFadeSec, bassSwap: false }
+  // Short utility cuts (loop-backs) stay short even between compatible songs.
+  if (requestedFadeSec < 0.8) return { fadeSec: requestedFadeSec, bassSwap: false }
+  return { fadeSec: Math.max(requestedFadeSec, BLEND_FADE_SEC), bassSwap: true }
+}
