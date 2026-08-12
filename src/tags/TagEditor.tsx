@@ -60,15 +60,26 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
     void listAudioTrackIds().then((ids) => setLocalIds(new Set(ids)))
   }, [])
 
-  /** Attach owned audio files: match by filename against library titles. */
+  /** Attach owned audio files: match by filename against library titles.
+   *  Word-boundary matches outrank substrings (so "ten" can't steal
+   *  TENTEN's file), and the longest matching title wins ties. */
   async function attachAudioFiles(files: FileList) {
     const lib = Object.values(loadAllTags())
     const notes: string[] = []
     for (const file of Array.from(files)) {
       const fname = normalizeTitle(file.name)
-      const hit = lib.find(
-        (s) => fname.includes(normalizeTitle(s.name)) || normalizeTitle(s.name).includes(fname),
-      )
+      let hit: SongTags | null = null
+      let bestScore = 0
+      for (const s of lib) {
+        const title = normalizeTitle(s.name)
+        if (!title) continue
+        const boundary = new RegExp(`(^| )${title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}( |$)`)
+        const score = boundary.test(fname) ? 2 + title.length / 1000 : fname.includes(title) || title.includes(fname) ? 1 + title.length / 1000 : 0
+        if (score > bestScore) {
+          bestScore = score
+          hit = s
+        }
+      }
       if (!hit) {
         notes.push(`✗ ${file.name} — no matching song in the library`)
         continue
