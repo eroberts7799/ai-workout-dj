@@ -433,6 +433,21 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
               }}
             />
           </label>
+          <button
+            style={{ marginRight: 12 }}
+            title="Deletes every song that has no attached audio file — bad Spotify matches can never receive audio, so this sweeps import junk. Attach your audio FIRST."
+            onClick={() => {
+              const lib = Object.values(loadAllTags())
+              const junk = lib.filter((s) => !localIds.has(s.trackId))
+              if (junk.length === 0) return setStatus('nothing to prune — every song has audio')
+              if (!confirm(`Delete ${junk.length} song(s) without attached audio?\n\n${junk.map((s) => s.name).join('\n').slice(0, 600)}`)) return
+              for (const s of junk) deleteTags(s.trackId)
+              setLibrary(loadAllTags())
+              setStatus(`🧹 pruned ${junk.length} song(s) without audio`)
+            }}
+          >
+            🧹 Prune songs without audio
+          </button>
           <label style={{ display: 'inline-block' }}>
             <span className="muted" style={{ cursor: 'pointer', textDecoration: 'underline' }}>Attach owned audio files (🎧 = real DJ crossfades)</span>
             <input
