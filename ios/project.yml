@@ -19,6 +19,7 @@ targets:
         CFBundleDisplayName: AI Workout DJ
         UILaunchScreen: {}
         UIBackgroundModes: [audio]
+        ITSAppUsesNonExemptEncryption: false
         NSAppTransportSecurity:
           NSAllowsArbitraryLoads: false
     settings:
@@ -29,6 +30,9 @@ targets:
         TARGETED_DEVICE_FAMILY: "1"
         SWIFT_VERSION: "5.9"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        GENERATE_INFOPLIST_FILE: NO
   AwdjPlayerTests:
     type: bundle.unit-test
     platform: iOS

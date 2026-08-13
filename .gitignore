@@ -8,3 +8,5 @@ developer_key*
 ios/AwdjPlayer.xcodeproj/
 ios/build/
 *.xcresult
+data/
+ios/.asc/
