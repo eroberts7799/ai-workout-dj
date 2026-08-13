@@ -53,6 +53,8 @@ struct SessionBundle: Codable {
   // LIVE-mode payload (newer web exports; absent in older bundles).
   let plan: [WorkoutStep]?
   let tags: [TaggedSong]?
+  /// Built-in demo bundles: trackId → bundled audio resource filename.
+  let files: [String: String]?
 }
 
 /// Crossfade length by cue intent — mirrors the web LocalDeck's taste.

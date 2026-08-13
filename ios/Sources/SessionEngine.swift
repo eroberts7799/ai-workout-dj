@@ -89,12 +89,21 @@ final class SessionEngine: ObservableObject {
   }
 
   /// On launch or after imports: restore bundle and match Documents audio to songs.
+  /// First launch with nothing imported: the built-in demo set loads itself —
+  /// a new tester hears the DJ in minute one, zero setup.
   func restore() {
     if bundle == nil,
        let data = try? Data(contentsOf: docs.appendingPathComponent("session-bundle.json")),
        let b = try? JSONDecoder().decode(SessionBundle.self, from: data) {
       bundle = b
       status = "bundle: \(b.name) · \(b.cues.count) cues"
+    }
+    if bundle == nil,
+       let url = Bundle.main.url(forResource: "demo-bundle", withExtension: "json"),
+       let data = try? Data(contentsOf: url),
+       let b = try? JSONDecoder().decode(SessionBundle.self, from: data) {
+      bundle = b
+      status = "demo set loaded — press Start, or Simulate a run"
     }
     matchAudioFiles()
   }
@@ -109,6 +118,16 @@ final class SessionEngine: ObservableObject {
 
   private func matchAudioFiles() {
     guard let b = bundle else { return }
+    // Built-in demo audio ships inside the app bundle, mapped explicitly.
+    for (trackId, fname) in b.files ?? [:] {
+      let base = (fname as NSString).deletingPathExtension
+      let ext = (fname as NSString).pathExtension
+      if !(audioReady[trackId] ?? false), let url = Bundle.main.url(forResource: base, withExtension: ext) {
+        if (try? deck.load(id: trackId, url: url)) != nil {
+          audioReady[trackId] = true
+        }
+      }
+    }
     let files = (try? FileManager.default.contentsOfDirectory(at: docs, includingPropertiesForKeys: nil)) ?? []
     let audio = files.filter { ["m4a", "mp3", "wav", "flac"].contains($0.pathExtension.lowercased()) }
     // LIVE mode can play any tagged song, not just the static setlist — match both.
