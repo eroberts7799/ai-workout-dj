@@ -6,7 +6,10 @@ struct AwdjPlayerApp: App {
     WindowGroup {
       TabView {
         SessionView().tabItem { Label("Session", systemImage: "figure.run") }
-        SpikeView().tabItem { Label("Spike", systemImage: "waveform" ) }
+        // Dev bench only — latency/crossfade proofs. Never ships to testers.
+        #if DEBUG
+          SpikeView().tabItem { Label("Spike", systemImage: "waveform") }
+        #endif
       }
       .preferredColorScheme(.dark)
       .tint(Theme.pulseSolid)
