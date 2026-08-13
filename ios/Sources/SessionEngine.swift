@@ -243,12 +243,23 @@ final class SessionEngine: ObservableObject {
     uploadSessionLog(source: simulating ? "ios-sim" : "ios")
   }
 
+  /// Anonymous per-install identity — multi-user flywheel data needs to
+  /// tell bodies apart without knowing who anyone is.
+  private var athleteId: String {
+    let key = "awdj.athleteId"
+    if let v = UserDefaults.standard.string(forKey: key) { return v }
+    let v = "a-" + UUID().uuidString.prefix(12).lowercased()
+    UserDefaults.standard.set(v, forKey: key)
+    return v
+  }
+
   /// Fire-and-forget POST of the session log to the relay's archive.
   private func uploadSessionLog(source: String) {
     guard !uploaded, !recorded.isEmpty, let b = bundle else { return }
     uploaded = true
     var payload: [String: Any] = [
       "source": source,
+      "athlete": athleteId,
       "name": b.name,
       "plan": ["name": b.name, "steps": (b.plan ?? []).map { s -> [String: Any] in
         var d: [String: Any] = ["kind": s.kind]
