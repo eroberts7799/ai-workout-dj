@@ -1,0 +1,254 @@
+{
+ "generatedBy": "scripts/gen-parity-fixture.ts",
+ "gridCases": [
+  {
+   "posMs": 30500,
+   "bpm": 120,
+   "anchorMs": 30000,
+   "beatsPerUnit": 4,
+   "expect": 1500
+  },
+  {
+   "posMs": 36000,
+   "bpm": 120,
+   "anchorMs": 30000,
+   "beatsPerUnit": 4,
+   "expect": 0
+  },
+  {
+   "posMs": 30200,
+   "bpm": 120,
+   "anchorMs": 30000,
+   "beatsPerUnit": 1,
+   "expect": 300
+  },
+  {
+   "posMs": 29600,
+   "bpm": 120,
+   "anchorMs": 30000,
+   "beatsPerUnit": 1,
+   "expect": 400
+  },
+  {
+   "posMs": 61007,
+   "bpm": 128,
+   "anchorMs": 95000,
+   "beatsPerUnit": 1,
+   "expect": 243
+  },
+  {
+   "posMs": 1234,
+   "bpm": null,
+   "anchorMs": 0,
+   "beatsPerUnit": 1,
+   "expect": 0
+  }
+ ],
+ "rateCases": [
+  {
+   "out": 136,
+   "inn": 140,
+   "expect": 0.9714285714285714
+  },
+  {
+   "out": 120,
+   "inn": 140,
+   "expect": 0.96
+  },
+  {
+   "out": 140,
+   "inn": 120,
+   "expect": 1.04
+  },
+  {
+   "out": null,
+   "inn": 140,
+   "expect": 1
+  }
+ ],
+ "blendCases": [
+  {
+   "fade": 1.2,
+   "out": 124,
+   "inn": 126,
+   "isDrop": false,
+   "expect": {
+    "fadeSec": 2.4,
+    "bassSwap": true
+   }
+  },
+  {
+   "fade": 3,
+   "out": 124,
+   "inn": 124,
+   "isDrop": false,
+   "expect": {
+    "fadeSec": 3,
+    "bassSwap": true
+   }
+  },
+  {
+   "fade": 1.2,
+   "out": 124,
+   "inn": 90,
+   "isDrop": false,
+   "expect": {
+    "fadeSec": 1.2,
+    "bassSwap": false
+   }
+  },
+  {
+   "fade": 0.45,
+   "out": 124,
+   "inn": 125,
+   "isDrop": true,
+   "expect": {
+    "fadeSec": 0.45,
+    "bassSwap": false
+   }
+  },
+  {
+   "fade": 0.25,
+   "out": 124,
+   "inn": 124,
+   "isDrop": false,
+   "expect": {
+    "fadeSec": 0.25,
+    "bassSwap": false
+   }
+  },
+  {
+   "fade": 1.2,
+   "out": null,
+   "inn": 124,
+   "isDrop": false,
+   "expect": {
+    "fadeSec": 1.2,
+    "bassSwap": false
+   }
+  }
+ ],
+ "camelotCases": [
+  {
+   "a": "9A",
+   "b": "9A",
+   "expect": true
+  },
+  {
+   "a": "9A",
+   "b": "9B",
+   "expect": true
+  },
+  {
+   "a": "9A",
+   "b": "10A",
+   "expect": true
+  },
+  {
+   "a": "12A",
+   "b": "1A",
+   "expect": true
+  },
+  {
+   "a": "9A",
+   "b": "10B",
+   "expect": false
+  },
+  {
+   "a": "9A",
+   "b": "3A",
+   "expect": false
+  },
+  {
+   "a": null,
+   "b": "9A",
+   "expect": true
+  }
+ ],
+ "mixScoreCases": [
+  {
+   "f": {
+    "bpm": 136,
+    "camelot": "9A"
+   },
+   "t": {
+    "bpm": 136,
+    "camelot": "9A"
+   },
+   "expect": 3
+  },
+  {
+   "f": {
+    "bpm": 136,
+    "camelot": "9A"
+   },
+   "t": {
+    "bpm": 136,
+    "camelot": "3B"
+   },
+   "expect": 2
+  },
+  {
+   "f": {
+    "bpm": 136,
+    "camelot": "9A"
+   },
+   "t": {
+    "bpm": 90,
+    "camelot": "9A"
+   },
+   "expect": 1
+  },
+  {
+   "f": {
+    "bpm": 136,
+    "camelot": null
+   },
+   "t": {
+    "bpm": 136,
+    "camelot": "9A"
+   },
+   "expect": 2
+  },
+  {
+   "f": {
+    "bpm": null,
+    "camelot": null
+   },
+   "t": {
+    "bpm": 136,
+    "camelot": "9A"
+   },
+   "expect": 0
+  }
+ ],
+ "snapCases": [
+  {
+   "raw": 61007,
+   "anchor": 95000,
+   "bpm": 128,
+   "expect": 60781.25
+  },
+  {
+   "raw": 10000,
+   "anchor": 95000,
+   "bpm": 128,
+   "expect": 10156.25
+  },
+  {
+   "raw": 1234,
+   "anchor": 95000,
+   "bpm": null,
+   "expect": 1234
+  }
+ ],
+ "constants": {
+  "maxFillRideMs": 180000,
+  "minClimbGainM": 30,
+  "crestMinEtaMs": 45000,
+  "crestRideMs": 25000,
+  "defaultHrMax": 190,
+  "bassHz": 180,
+  "bassCutDb": -15
+ }
+}

@@ -32,7 +32,10 @@ targets:
   AwdjPlayerTests:
     type: bundle.unit-test
     platform: iOS
-    sources: [Tests]
+    sources:
+      - Tests
+      - path: Tests/parity-fixture.json
+        buildPhase: resources
     dependencies:
       - target: AwdjPlayer
     settings:
