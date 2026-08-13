@@ -14,10 +14,36 @@ import Toybox.WatchUi;
 class AwdjField extends WatchUi.SimpleDataField {
   private var _lastPostMs as Number = 0;
   private var _pendingEvent as String? = null;
+  private var _stepSeq as Number = 0;
+  private var _lastStepSig as String = "";
 
   function initialize() {
     SimpleDataField.initialize();
     label = "AI DJ";
+  }
+
+  // The watch already knows the Runna plan: structured-workout steps are
+  // exposed live. Map Garmin intensity to the conductor's step vocabulary.
+  private function kindOf(intensity as Number?) as String {
+    if (intensity == Activity.WORKOUT_INTENSITY_ACTIVE) { return "hard"; }
+    if (intensity == Activity.WORKOUT_INTENSITY_INTERVAL) { return "hard"; }
+    if (intensity == Activity.WORKOUT_INTENSITY_WARMUP) { return "warmup"; }
+    if (intensity == Activity.WORKOUT_INTENSITY_COOLDOWN) { return "cooldown"; }
+    if (intensity == Activity.WORKOUT_INTENSITY_RECOVERY) { return "easy"; }
+    if (intensity == Activity.WORKOUT_INTENSITY_REST) { return "rest"; }
+    return "easy";
+  }
+
+  private function stepDict(step as Activity.WorkoutStepInfo?) as Dictionary? {
+    if (step == null || step.step == null) { return null; }
+    var ws = step.step;
+    if (!(ws instanceof Activity.WorkoutStep)) { return null; } // interval blocks etc.
+    return {
+      "kind" => kindOf(step.intensity), // intensity lives on the info wrapper
+      "durationType" => ws.durationType,
+      "durationValue" => ws.durationValue,
+      "name" => step.name,
+    };
   }
 
   function onTimerStart() as Void {
@@ -63,6 +89,23 @@ class AwdjField extends WatchUi.SimpleDataField {
       "distance" => info.elapsedDistance,
       "cadence" => info.currentCadence,
     };
+    // Structured-workout awareness (Runna, Garmin Coach…): current + next
+    // step, plus a sequence number that bumps on every step change so the
+    // conductor can timestamp step starts from its own clock.
+    var cur = stepDict(Activity.getCurrentWorkoutStep());
+    if (cur != null) {
+      var sig = (cur["kind"] as String) + "|" + cur["durationType"] + "|" + cur["durationValue"];
+      if (!sig.equals(_lastStepSig)) {
+        _lastStepSig = sig;
+        _stepSeq += 1;
+      }
+      body["wkStep"] = cur;
+      body["wkStepSeq"] = _stepSeq;
+      var nxt = stepDict(Activity.getNextWorkoutStep());
+      if (nxt != null) {
+        body["wkNext"] = nxt;
+      }
+    }
     if (info.currentLocation != null) {
       var deg = info.currentLocation.toDegrees();
       body["lat"] = deg[0];

@@ -2,12 +2,23 @@
 // watch with no Mac anywhere. Feeds both the UI line and the SessionEngine.
 import Foundation
 
+struct WatchWorkoutStep {
+  let kind: String?
+  let durationType: Double?
+  let durationValue: Double?
+}
+
 struct GarminSample {
   let hr: Double?
   let timerMs: Double?
   let distanceM: Double?
+  let altitude: Double?
   let event: String?
   let receivedAt: Double
+  /// Structured-workout awareness from the watch (Runna, Garmin Coach…).
+  let wkStep: WatchWorkoutStep?
+  let wkNext: WatchWorkoutStep?
+  let wkStepSeq: Double?
 }
 
 @MainActor
@@ -41,12 +52,24 @@ final class RelayPoller: ObservableObject {
       line = "⌚ waiting for watch…"
       return
     }
+    func step(_ key: String) -> WatchWorkoutStep? {
+      guard let d = obj[key] as? [String: Any] else { return nil }
+      return WatchWorkoutStep(
+        kind: d["kind"] as? String,
+        durationType: (d["durationType"] as? NSNumber)?.doubleValue,
+        durationValue: (d["durationValue"] as? NSNumber)?.doubleValue
+      )
+    }
     let sample = GarminSample(
       hr: obj["hr"] as? Double,
       timerMs: obj["timerMs"] as? Double,
       distanceM: obj["distance"] as? Double,
+      altitude: obj["altitude"] as? Double,
       event: obj["event"] as? String,
-      receivedAt: receivedAt
+      receivedAt: receivedAt,
+      wkStep: step("wkStep"),
+      wkNext: step("wkNext"),
+      wkStepSeq: (obj["wkStepSeq"] as? NSNumber)?.doubleValue
     )
     let hr = sample.hr.map { String(Int($0)) } ?? "—"
     let dist = sample.distanceM.map { String(format: "%.2fkm", $0 / 1000) } ?? "—"

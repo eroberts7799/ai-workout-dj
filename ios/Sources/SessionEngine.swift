@@ -32,7 +32,18 @@ final class SessionEngine: ObservableObject {
   private var suppressLoopbacks = false
   /// Raw stream as conducted — uploaded at session end so every run becomes
   /// a replayable test case in the cloud (the data flywheel).
-  private var recorded: [(t: Double, d: Double?, hr: Double?)] = []
+  struct RecordedSample {
+    let t: Double
+    let d: Double?
+    let hr: Double?
+    var altitude: Double? = nil
+    var wkSeq: Double? = nil
+    var wkKind: String? = nil
+    var wkDurType: Double? = nil
+    var wkDurVal: Double? = nil
+    var wkNextKind: String? = nil
+  }
+  private var recorded: [RecordedSample] = []
   private var uploaded = false
 
   var allAudioReady: Bool {
@@ -249,6 +260,15 @@ final class SessionEngine: ObservableObject {
         var d: [String: Any] = ["tMs": r.t]
         if let v = r.d { d["distanceM"] = v }
         if let v = r.hr { d["hr"] = v }
+        if let v = r.altitude { d["altitude"] = v }
+        if let v = r.wkSeq { d["wkStepSeq"] = v }
+        if let k = r.wkKind {
+          var s: [String: Any] = ["kind": k]
+          if let v = r.wkDurType { s["durationType"] = v }
+          if let v = r.wkDurVal { s["durationValue"] = v }
+          d["wkStep"] = s
+        }
+        if let k = r.wkNextKind { d["wkNext"] = ["kind": k] }
         return d
       },
     ]
@@ -308,15 +328,21 @@ final class SessionEngine: ObservableObject {
   /// Every fresh watch sample advances the engine — the watch's own timer and
   /// distance ARE the session clock, so pauses come free.
   /// Record a watch sample regardless of mode — every session feeds the flywheel.
-  func recordSample(timerMs: Double, distanceM: Double?, hr: Double?) {
-    guard phase == .running else { return }
-    recorded.append((t: timerMs, d: distanceM, hr: hr))
+  func recordSample(_ s: GarminSample) {
+    guard phase == .running, let t = s.timerMs else { return }
+    recorded.append(RecordedSample(
+      t: t, d: s.distanceM, hr: s.hr, altitude: s.altitude,
+      wkSeq: s.wkStepSeq, wkKind: s.wkStep?.kind,
+      wkDurType: s.wkStep?.durationType, wkDurVal: s.wkStep?.durationValue,
+      wkNextKind: s.wkNext?.kind
+    ))
   }
 
+  // NOTE: capture happens in recordSample (all modes, full fidelity) — the
+  // simulator appends its own samples. advanceLive only conducts.
   func advanceLive(timerMs: Double, distanceM: Double?, hr: Double? = nil) {
     guard phase == .running, let live else { return }
     clockMs = timerMs
-    recorded.append((t: timerMs, d: distanceM, hr: hr))
     for c in live.advance(LiveSample(tMs: timerMs, distanceM: distanceM)) {
       if suppressLoopbacks && c.reason.hasPrefix("loop back") { continue }
       // Never interrupt the run: a missing file leaves current audio playing.
@@ -352,6 +378,7 @@ final class SessionEngine: ObservableObject {
         }
         guard phase == .running else { return }
         advanceLive(timerMs: s.tMs, distanceM: s.distanceM)
+        recorded.append(RecordedSample(t: s.tMs, d: s.distanceM, hr: nil))
         try? await Task.sleep(nanoseconds: UInt64(1_000_000_000 / speed))
       }
       guard phase == .running else { return }

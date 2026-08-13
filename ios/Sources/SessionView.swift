@@ -105,9 +105,10 @@ struct SessionView: View {
         if let t = s.timerMs, !engine.simulating {
           if engine.liveMode {
             engine.advanceLive(timerMs: t, distanceM: s.distanceM, hr: s.hr)
-          } else {
-            engine.recordSample(timerMs: t, distanceM: s.distanceM, hr: s.hr)
           }
+          // Full-fidelity capture in every mode (workout steps, altitude —
+          // the flywheel and the follow-mode brain learn from these).
+          engine.recordSample(s)
         }
       }
     }

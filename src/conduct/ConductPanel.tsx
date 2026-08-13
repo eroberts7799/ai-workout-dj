@@ -38,6 +38,13 @@ interface LogEntry {
   error?: string
 }
 
+interface WatchWorkoutStep {
+  kind?: string
+  durationType?: number
+  durationValue?: number
+  name?: string
+}
+
 interface GarminSample {
   receivedAt: number
   event?: string
@@ -48,6 +55,10 @@ interface GarminSample {
   altitude?: number
   distance?: number
   cadence?: number
+  /** Structured-workout awareness from the watch (Runna, Garmin Coach…). */
+  wkStep?: WatchWorkoutStep
+  wkNext?: WatchWorkoutStep
+  wkStepSeq?: number
 }
 
 export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
@@ -92,7 +103,18 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
   const hrLogRef = useRef<{ atMs: number; hr: number }[]>([])
   // Raw watch stream (timer-clocked) — recorded so the run can be replayed
   // through the LiveEngine in the Replay Lab afterwards.
-  const samplesRef = useRef<{ tMs: number; distanceM?: number; hr?: number; altitude?: number; cadence?: number }[]>([])
+  const samplesRef = useRef<
+    {
+      tMs: number
+      distanceM?: number
+      hr?: number
+      altitude?: number
+      cadence?: number
+      wkStep?: WatchWorkoutStep
+      wkNext?: WatchWorkoutStep
+      wkStepSeq?: number
+    }[]
+  >([])
   const lastRecordedRef = useRef(0)
 
   // Live Garmin feed: poll the public relay once a second, always.
@@ -156,7 +178,16 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
         }
         if (fresh && phaseRef.current === 'running' && sample.timerMs != null && sample.receivedAt !== lastRecordedRef.current) {
           lastRecordedRef.current = sample.receivedAt
-          samplesRef.current.push({ tMs: sample.timerMs, distanceM: sample.distance, hr: sample.hr, altitude: sample.altitude, cadence: sample.cadence })
+          samplesRef.current.push({
+            tMs: sample.timerMs,
+            distanceM: sample.distance,
+            hr: sample.hr,
+            altitude: sample.altitude,
+            cadence: sample.cadence,
+            wkStep: sample.wkStep,
+            wkNext: sample.wkNext,
+            wkStepSeq: sample.wkStepSeq,
+          })
         }
       } catch {
         // receiver not reachable — fine, feed is optional
