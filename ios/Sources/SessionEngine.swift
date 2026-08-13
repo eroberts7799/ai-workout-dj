@@ -260,6 +260,8 @@ final class SessionEngine: ObservableObject {
     var payload: [String: Any] = [
       "source": source,
       "athlete": athleteId,
+      "athleteName": UserDefaults.standard.string(forKey: "awdj.profileName") ?? "",
+      "athletePhone": UserDefaults.standard.string(forKey: "awdj.profilePhone") ?? "",
       "name": b.name,
       "plan": ["name": b.name, "steps": (b.plan ?? []).map { s -> [String: Any] in
         var d: [String: Any] = ["kind": s.kind]

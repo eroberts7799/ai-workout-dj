@@ -10,10 +10,15 @@ struct SessionView: View {
   @State private var simSpeed = 8.0
   @State private var showBundlePicker = false
   @State private var showAudioPicker = false
+  @AppStorage("awdj.profileName") private var profileName = ""
+  @AppStorage("awdj.profilePhone") private var profilePhone = ""
+  @State private var showProfile = false
 
   var body: some View {
     VStack(spacing: 20) {
-      Text("AI Workout DJ").font(.title2).bold()
+      Text(profileName.isEmpty ? "AI Workout DJ" : "AI Workout DJ · \(profileName)")
+        .font(.title2).bold()
+        .onTapGesture { showProfile = true }
 
       Text(relay.line)
         .font(.system(.body, design: .monospaced))
@@ -95,7 +100,24 @@ struct SessionView: View {
       .font(.footnote)
     }
     .padding()
+    .sheet(isPresented: $showProfile) {
+      VStack(spacing: 16) {
+        Text("Who's working out?").font(.title3).bold()
+        Text("Your name labels your sessions so the DJ can learn YOUR body. Phone is optional — only used so Ethan can follow up on your feedback.")
+          .font(.footnote).foregroundColor(.secondary).multilineTextAlignment(.center)
+        TextField("Name", text: $profileName)
+          .textFieldStyle(.roundedBorder)
+        TextField("Phone (optional)", text: $profilePhone)
+          .textFieldStyle(.roundedBorder)
+          .keyboardType(.phonePad)
+        Button(profileName.isEmpty ? "Skip for now" : "Let's go 🎧") { showProfile = false }
+          .buttonStyle(.borderedProminent)
+      }
+      .padding(24)
+      .presentationDetents([.medium])
+    }
     .onAppear {
+      if profileName.isEmpty { showProfile = true }
       engine.restore()
       relay.onSample = { [weak engine] s in
         guard let engine else { return }
