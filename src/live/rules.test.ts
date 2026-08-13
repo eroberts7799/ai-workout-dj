@@ -20,14 +20,14 @@ describe('GradeTracker', () => {
   test('detects the climb and fires exactly one crest at the top', () => {
     const events = walk(new GradeTracker(), [
       [500, 0],
-      [400, 0.04], // 16m gain
+      [900, 0.04], // 36m gain
       [500, 0],
     ])
     const crests = events.filter((e) => e.state.crest)
     expect(crests.length).toBe(1)
     // Crest fires shortly after the 900m mark where the hill tops out.
-    expect(crests[0].dist).toBeGreaterThanOrEqual(900)
-    expect(crests[0].dist).toBeLessThanOrEqual(1050)
+    expect(crests[0].dist).toBeGreaterThanOrEqual(1400)
+    expect(crests[0].dist).toBeLessThanOrEqual(1550)
     // Mid-climb the tracker knows it's climbing at ~4%.
     const mid = events.find((e) => e.dist >= 800)!
     expect(mid.state.climbing).toBe(true)
@@ -41,10 +41,10 @@ describe('GradeTracker', () => {
   })
 
   test('a bump below the gain floor is not celebrated', () => {
-    // 100m at 4% = 4m gain < 6m floor.
+    // 400m at 4% = 16m gain < 30m floor.
     const events = walk(new GradeTracker(), [
       [500, 0],
-      [100, 0.04],
+      [400, 0.04],
       [500, 0],
     ])
     expect(events.some((e) => e.state.crest)).toBe(false)
@@ -53,11 +53,11 @@ describe('GradeTracker', () => {
   test('two hills, two crests', () => {
     const events = walk(new GradeTracker(), [
       [300, 0],
-      [300, 0.04],
-      [300, -0.04],
+      [900, 0.04],
+      [900, -0.04],
       [300, 0],
-      [300, 0.04],
-      [300, -0.04],
+      [900, 0.04],
+      [900, -0.04],
     ])
     expect(events.filter((e) => e.state.crest).length).toBe(2)
   })

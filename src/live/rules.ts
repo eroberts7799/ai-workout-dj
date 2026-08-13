@@ -11,8 +11,10 @@
 const CREST_GRADE = 0.005
 /** Grade at which sustained ascent counts as climbing. */
 const CLIMB_GRADE = 0.025
-/** Minimum vertical gain before a crest is worth celebrating. */
-const MIN_CLIMB_GAIN_M = 6
+/** Minimum vertical gain before a crest is worth celebrating.
+ *  Data-tuned 2026-08-13 over 562 real runs (185 trail): 6m fired 13×/trail
+ *  run (spam) and 1.7×/ROAD run (GPS noise); 30m → 3.8/trail, 0.18/road. */
+const MIN_CLIMB_GAIN_M = 30
 /** EMA smoothing for grade (per ~1Hz sample). */
 const GRADE_ALPHA = 0.25
 

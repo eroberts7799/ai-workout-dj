@@ -106,22 +106,22 @@ describe('LiveEngine', () => {
   })
 
   test('crest reward: topping a real hill in zone 4 fires a drop, once', () => {
-    // Long all-easy distance plan; hill from 800m→1200m at 4% (16m gain).
+    // Long all-easy distance plan; hill from 800m→1700m at 4% (36m gain).
     const easyPlan: WorkoutPlan = { name: 'hills', steps: [{ kind: 'easy', meters: 3000 }] }
     const engine = new LiveEngine(easyPlan, songs, { paceSecPerKm: 340 })
     let d = 0
     let alt = 100
     for (let i = 1; i <= 900; i++) {
       d += 3
-      if (d > 800 && d <= 1200) alt += 3 * 0.04
+      if (d > 800 && d <= 1700) alt += 3 * 0.04
       engine.advance({ tMs: i * 1000, distanceM: d, altitudeM: alt, hr: 160 })
     }
     const crests = engine.commands.filter((c) => c.reason.includes('crest reward'))
     expect(crests.length).toBe(1)
     // Fires near the top of the hill (1200m ≈ t=400s), enters at the drop itself.
     expect(crests[0].positionMs).toBe(95_000)
-    expect(crests[0].tMs).toBeGreaterThanOrEqual(395_000)
-    expect(crests[0].tMs).toBeLessThanOrEqual(430_000)
+    expect(crests[0].tMs).toBeGreaterThanOrEqual(560_000)
+    expect(crests[0].tMs).toBeLessThanOrEqual(600_000)
     // And the groove returns afterwards (crest ride is time-boxed).
     const after = engine.commands.find((c) => c.tMs > crests[0].tMs && c.reason.startsWith('groove fill'))
     expect(after).toBeDefined()
@@ -134,18 +134,18 @@ describe('LiveEngine', () => {
     let alt = 100
     for (let i = 1; i <= 900; i++) {
       d += 3
-      if (d > 800 && d <= 1200) alt += 3 * 0.04
+      if (d > 800 && d <= 1700) alt += 3 * 0.04
       engine.advance({ tMs: i * 1000, distanceM: d, altitudeM: alt, hr: 100 }) // zone 1
     }
     expect(engine.commands.some((c) => c.reason.includes('crest reward'))).toBe(false)
   })
 
   test('crest near an imminent hard step defers to the planned drop', () => {
-    // Hill crests ~1200m; hard step starts at 1300m — ETA ≈ 33s < 45s guard.
+    // Hill crests ~1700m; hard step starts at 1800m — ETA ≈ 33s < 45s guard.
     const nearPlan: WorkoutPlan = {
       name: 'hill-into-effort',
       steps: [
-        { kind: 'easy', meters: 1300 },
+        { kind: 'easy', meters: 1800 },
         { kind: 'hard', meters: 400 },
         { kind: 'easy', meters: 1300 },
       ],
@@ -155,7 +155,7 @@ describe('LiveEngine', () => {
     let alt = 100
     for (let i = 1; i <= 1000; i++) {
       d += 3
-      if (d > 800 && d <= 1200) alt += 3 * 0.04
+      if (d > 800 && d <= 1700) alt += 3 * 0.04
       engine.advance({ tMs: i * 1000, distanceM: d, altitudeM: alt, hr: 160 })
     }
     expect(engine.commands.some((c) => c.reason.includes('crest reward'))).toBe(false)

@@ -100,14 +100,14 @@ export function syntheticSamples(plan: WorkoutPlan, o: ScenarioOpts): SimSample[
   let stepStartT = 0
   let stepStartD = 0
 
-  // Two 4% climbs with matching descents. Crest fractions (0.32, 0.54) are
-  // chosen to top out early in the EASY stretches of a classic interval
-  // plan — inside a hard step the engine (correctly) lets the planned drop
-  // own the moment, and a demo where the rule never fires teaches nothing.
+  // Two 5% climbs (~33m gain each — clears the data-tuned 30m earned-crest
+  // bar) with matching descents. Crest fractions (0.32, 0.56) top out early
+  // in the EASY stretches of a classic interval plan — inside a hard step
+  // the engine (correctly) lets the planned drop own the moment.
   const gradeAt = (dist: number): number => {
     const f = dist / totalM
-    if ((f >= 0.24 && f < 0.32) || (f >= 0.46 && f < 0.54)) return 0.04
-    if ((f >= 0.32 && f < 0.4) || (f >= 0.54 && f < 0.62)) return -0.04
+    if ((f >= 0.2 && f < 0.32) || (f >= 0.44 && f < 0.56)) return 0.05
+    if ((f >= 0.32 && f < 0.44) || (f >= 0.56 && f < 0.68)) return -0.05
     return 0
   }
 
