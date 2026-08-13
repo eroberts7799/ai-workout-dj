@@ -36,7 +36,7 @@ struct SessionView: View {
         .padding(.top, 8)
       }
     }
-    .preferredColorScheme(.dark)
+    .preferredColorScheme(.light)
     .tint(Theme.pulseSolid)
     .sheet(isPresented: $showProfile) { profileSheet }
     .onAppear {
@@ -253,6 +253,6 @@ struct SessionView: View {
       .padding(26)
     }
     .presentationDetents([.medium])
-    .preferredColorScheme(.dark)
+    .preferredColorScheme(.light)
   }
 }

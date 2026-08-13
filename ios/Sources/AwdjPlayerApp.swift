@@ -11,7 +11,7 @@ struct AwdjPlayerApp: App {
           SpikeView().tabItem { Label("Spike", systemImage: "waveform") }
         #endif
       }
-      .preferredColorScheme(.dark)
+      .preferredColorScheme(.light)
       .tint(Theme.pulseSolid)
     }
   }

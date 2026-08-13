@@ -3,15 +3,15 @@
 import SwiftUI
 
 enum Theme {
-  // Surfaces — deep, warm-black layers (never pure black: it flattens).
-  static let bg = Color(red: 0.043, green: 0.043, blue: 0.059)          // #0B0B0F
-  static let card = Color(red: 0.086, green: 0.086, blue: 0.11)         // #16161C
-  static let stroke = Color.white.opacity(0.08)
+  // Surfaces — warm paper, never clinical white (pure white glares).
+  static let bg = Color(red: 0.984, green: 0.98, blue: 0.973)           // #FBFAF8
+  static let card = Color(red: 0.955, green: 0.949, blue: 0.937)        // #F4F2EF
+  static let stroke = Color.black.opacity(0.1)
 
   // Ink
-  static let ink = Color.white.opacity(0.92)
-  static let inkDim = Color.white.opacity(0.55)
-  static let inkFaint = Color.white.opacity(0.32)
+  static let ink = Color(red: 0.08, green: 0.08, blue: 0.09)
+  static let inkDim = Color.black.opacity(0.55)
+  static let inkFaint = Color.black.opacity(0.33)
 
   // The pulse — the icon's gradient, spent sparingly.
   static let pulse = LinearGradient(
@@ -25,10 +25,11 @@ enum Theme {
   static let pulseSolid = Color(red: 0.94, green: 0.20, blue: 0.37)
 }
 
-/// Editorial serif for display text — the Raya move.
+/// Editorial serif for display text — DM Serif Display (OFL-licensed
+/// high-contrast Didone; the fashion-editorial genus, not Apple's default).
 extension View {
   func displaySerif(_ size: CGFloat, weight: Font.Weight = .medium) -> some View {
-    font(.system(size: size, weight: weight, design: .serif))
+    font(.custom("DM Serif Display", size: size))
   }
 }
 
