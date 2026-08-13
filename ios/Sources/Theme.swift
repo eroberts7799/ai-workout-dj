@@ -32,20 +32,12 @@ extension View {
   }
 }
 
-/// Room card: elevated near-black panel with a hairline stroke.
-struct RoomCard: ViewModifier {
-  func body(content: Content) -> some View {
-    content
-      .padding(18)
-      .frame(maxWidth: .infinity, alignment: .leading)
-      .background(Theme.card)
-      .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-      .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous).stroke(Theme.stroke, lineWidth: 1))
+/// A single hairline — the only divider this design allows. Content is
+/// structured by whitespace and type scale, never by boxes.
+struct Hairline: View {
+  var body: some View {
+    Rectangle().fill(Theme.stroke).frame(height: 1)
   }
-}
-
-extension View {
-  func roomCard() -> some View { modifier(RoomCard()) }
 }
 
 /// The one loud button in the room.
@@ -63,17 +55,13 @@ struct PulseButtonStyle: ButtonStyle {
   }
 }
 
-/// Quiet secondary action.
+/// Quiet secondary action: bare text, small caps energy, no chrome.
 struct QuietButtonStyle: ButtonStyle {
   func makeBody(configuration: Configuration) -> some View {
     configuration.label
-      .font(.system(size: 15, weight: .medium))
+      .font(.system(size: 14, weight: .medium))
       .foregroundColor(Theme.inkDim)
-      .padding(.vertical, 12)
-      .padding(.horizontal, 18)
-      .background(Theme.card)
-      .clipShape(Capsule())
-      .overlay(Capsule().stroke(Theme.stroke, lineWidth: 1))
-      .opacity(configuration.isPressed ? 0.7 : 1)
+      .padding(.vertical, 10)
+      .opacity(configuration.isPressed ? 0.5 : 1)
   }
 }

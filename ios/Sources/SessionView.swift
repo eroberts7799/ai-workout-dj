@@ -84,20 +84,21 @@ struct SessionView: View {
   }
 
   private func bundleCard(_ b: SessionBundle) -> some View {
-    VStack(alignment: .leading, spacing: 10) {
+    VStack(alignment: .leading, spacing: 12) {
+      Hairline()
       Text("TONIGHT'S PROGRAM")
         .font(.system(size: 11, weight: .semibold))
         .tracking(3)
         .foregroundColor(Theme.inkFaint)
       Text("\(b.name) — \(Int(b.planEndMs / 60000)) min · \(b.cues.count) cues")
-        .displaySerif(18)
+        .displaySerif(19)
         .foregroundColor(Theme.ink)
-      VStack(alignment: .leading, spacing: 6) {
+      VStack(alignment: .leading, spacing: 7) {
         ForEach(b.songs) { s in
           HStack(spacing: 10) {
             Circle()
               .fill(engine.audioReady[s.trackId] == true ? AnyShapeStyle(Theme.pulse) : AnyShapeStyle(Theme.inkFaint))
-              .frame(width: 6, height: 6)
+              .frame(width: 5, height: 5)
             Text(s.name)
               .font(.system(size: 14))
               .foregroundColor(engine.audioReady[s.trackId] == true ? Theme.inkDim : Theme.inkFaint)
@@ -105,8 +106,9 @@ struct SessionView: View {
           }
         }
       }
+      Hairline()
     }
-    .roomCard()
+    .frame(maxWidth: .infinity, alignment: .leading)
   }
 
   @ViewBuilder private var phaseSection: some View {
@@ -228,17 +230,22 @@ struct SessionView: View {
           .foregroundColor(Theme.inkDim)
           .multilineTextAlignment(.center)
           .padding(.horizontal, 8)
-        VStack(spacing: 12) {
-          TextField("Name", text: $profileName)
-          TextField("Phone (optional)", text: $profilePhone)
-            .keyboardType(.phonePad)
+        VStack(spacing: 22) {
+          VStack(spacing: 6) {
+            TextField("Name", text: $profileName)
+              .textFieldStyle(.plain)
+              .foregroundColor(Theme.ink)
+            Hairline()
+          }
+          VStack(spacing: 6) {
+            TextField("Phone (optional)", text: $profilePhone)
+              .textFieldStyle(.plain)
+              .keyboardType(.phonePad)
+              .foregroundColor(Theme.ink)
+            Hairline()
+          }
         }
-        .textFieldStyle(.plain)
-        .padding(14)
-        .background(Theme.card)
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(Theme.stroke, lineWidth: 1))
-        .foregroundColor(Theme.ink)
+        .padding(.vertical, 6)
 
         Button(profileName.isEmpty ? "Skip for now" : "Let's go") { showProfile = false }
           .buttonStyle(PulseButtonStyle())
