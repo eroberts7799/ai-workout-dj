@@ -54,6 +54,32 @@ enum BeatMath {
     return DeckOpts(onBeat: true, barGrid: true, tempoLock: true)
   }
 
+  /// Camelot-wheel harmony (mirrors camelotCompatible in beat.ts): same
+  /// number, or ±1 on the same ring. Unknown keys never block.
+  static func camelotCompatible(_ a: String?, _ b: String?) -> Bool {
+    guard let a, let b else { return true }
+    let re = try! NSRegularExpression(pattern: "^(\\d{1,2})([ABab])$")
+    func parse(_ s: String) -> (Int, String)? {
+      guard let m = re.firstMatch(in: s, range: NSRange(s.startIndex..., in: s)),
+            let nr = Range(m.range(at: 1), in: s), let lr = Range(m.range(at: 2), in: s),
+            let n = Int(s[nr]) else { return nil }
+      return (n, s[lr].uppercased())
+    }
+    guard let pa = parse(a), let pb = parse(b) else { return true }
+    if pa.0 == pb.0 { return true }
+    let diff = min(abs(pa.0 - pb.0), 12 - abs(pa.0 - pb.0))
+    return diff == 1 && pa.1 == pb.1
+  }
+
+  /// Mirrors mixScore in beat.ts: tempo within 3% = 2 pts, known-compatible
+  /// keys = 1 pt.
+  static func mixScore(fromBpm: Double?, fromKey: String?, toBpm: Double?, toKey: String?) -> Int {
+    var s = 0
+    if let f = fromBpm, let t = toBpm, f > 0, abs(1 - t / f) <= 0.03 { s += 2 }
+    if fromKey != nil, toKey != nil, camelotCompatible(fromKey, toKey) { s += 1 }
+    return s
+  }
+
   /// A song's beat-grid anchor: any marker the analyzer downbeat-snapped.
   static func beatAnchorMs(markers: [Marker]) -> Double {
     markers.first(where: { $0.type == "drop" })?.ms

@@ -12,6 +12,7 @@ private func song(_ id: String) -> TaggedSong {
     artists: "Test",
     durationMs: 240_000,
     bpm: 128,
+    camelot: nil,
     markers: [
       Marker(type: "loop_start", ms: 30_000),
       Marker(type: "loop_end", ms: 60_000),
@@ -110,6 +111,19 @@ final class LiveEngineTests: XCTestCase {
     for s in samples { engine.advance(s) }
     XCTAssertEqual(engine.landings.count, 2)
     for l in engine.landings { XCTAssertLessThanOrEqual(abs(l.errorMs), 8000) }
+  }
+
+  func testFreshnessNoSingleSongMonopolizesAnEasyRun() {
+    // The 2026-08-13 morning-run bug: all-easy plan, one song looped forever.
+    let easyPlan = [WorkoutStep(kind: "easy", seconds: 1200, meters: nil)]
+    let engine = LiveEngine(plan: easyPlan, songs: songs)
+    for i in 1...1200 { engine.advance(LiveSample(tMs: Double(i) * 1000, distanceM: nil)) }
+    let fills = engine.commands.filter { $0.reason.hasPrefix("groove fill") }
+    XCTAssertGreaterThanOrEqual(fills.count, 5)
+    for i in 1..<fills.count {
+      XCTAssertLessThanOrEqual(fills[i].tMs - fills[i - 1].tMs, 240_000)
+    }
+    XCTAssertGreaterThanOrEqual(Set(engine.commands.map { $0.trackId }).count, 2)
   }
 
   func testBundleDecodesLivePayloadAndTolerantOfOldFormat() throws {

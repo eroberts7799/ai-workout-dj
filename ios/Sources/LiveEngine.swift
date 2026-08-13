@@ -49,6 +49,9 @@ final class LiveEngine {
   private static let defaultLeadMs: Double = 30_000
   /// EMA smoothing for pace (per sample at ~1Hz).
   private static let paceAlpha = 0.15
+  /// Corpus-learned freshness (65 real DJ sets, median ride ~190s):
+  /// past this, a fill trades its loop for a fresh groove. Mirrors TS.
+  private static let maxFillRideMs: Double = 180_000
 
   private let steps: [WorkoutStep]
   private var droppable: [DropChoice] = []
@@ -65,6 +68,7 @@ final class LiveEngine {
 
   private var mode: Mode?
   private var playing: (song: TaggedSong, positionAtMs: Double, atTMs: Double)?
+  private var fillStartedT: Double?
   private var loopBounds: (startMs: Double, endMs: Double)?
   private var buildTargetT: Double?
 
@@ -165,14 +169,28 @@ final class LiveEngine {
     return 0
   }
 
+  /// DJ-crate selection with variety pressure — mirrors pickBest in the TS
+  /// engine: best mix score out of what's playing wins, recently-played
+  /// candidates lose a point, same-track repeats stay the last resort.
+  private func recentIds() -> Set<String> {
+    Set(commands.suffix(6).map { $0.trackId }.filter { $0 != playing?.song.trackId })
+  }
+
   private func pickDrop() -> DropChoice? {
     guard !droppable.isEmpty else { return nil }
+    let from = playing?.song
+    let recent = recentIds()
+    var best: (c: DropChoice, advance: Int, score: Int)?
     for i in 0..<droppable.count {
       let c = droppable[(dropIdx + i) % droppable.count]
-      if c.song.trackId != playing?.song.trackId {
-        dropIdx += i + 1
-        return c
-      }
+      if c.song.trackId == playing?.song.trackId { continue }
+      var score = from != nil ? BeatMath.mixScore(fromBpm: from!.bpm, fromKey: from!.camelot, toBpm: c.song.bpm, toKey: c.song.camelot) : 0
+      if recent.contains(c.song.trackId) { score -= 1 }
+      if best == nil || score > best!.score { best = (c, i + 1, score) }
+    }
+    if let b = best {
+      dropIdx += b.advance
+      return b.c
     }
     let c = droppable[dropIdx % droppable.count]
     dropIdx += 1
@@ -181,12 +199,19 @@ final class LiveEngine {
 
   private func pickLoop() -> LoopChoice? {
     guard !loopable.isEmpty else { return nil }
+    let from = playing?.song
+    let recent = recentIds()
+    var best: (c: LoopChoice, advance: Int, score: Int)?
     for i in 0..<loopable.count {
       let c = loopable[(loopIdx + i) % loopable.count]
-      if c.song.trackId != playing?.song.trackId {
-        loopIdx += i + 1
-        return c
-      }
+      if c.song.trackId == playing?.song.trackId { continue }
+      var score = from != nil ? BeatMath.mixScore(fromBpm: from!.bpm, fromKey: from!.camelot, toBpm: c.song.bpm, toKey: c.song.camelot) : 0
+      if recent.contains(c.song.trackId) { score -= 1 }
+      if best == nil || score > best!.score { best = (c, i + 1, score) }
+    }
+    if let b = best {
+      loopIdx += b.advance
+      return b.c
     }
     let c = loopable[loopIdx % loopable.count]
     loopIdx += 1
@@ -196,6 +221,7 @@ final class LiveEngine {
   private func startFill(_ t: Double) {
     guard let fill = pickLoop() else { return }
     mode = .fill
+    fillStartedT = t
     loopBounds = (startMs: fill.startMs, endMs: fill.endMs)
     emit(t: t, song: fill.song, positionMs: fill.startMs, fadeSec: 1.2, reason: "groove fill (\(fill.song.name))")
   }
@@ -261,7 +287,13 @@ final class LiveEngine {
             return Array(commands[before...])
           }
         }
-        emit(t: t, song: p.song, positionMs: bounds.startMs, fadeSec: 0.25, reason: "loop back (\(p.song.name))")
+        // Freshness (corpus-learned): a stale fill trades its loop for a
+        // fresh groove instead of looping back — mirrors the TS engine.
+        if let started = fillStartedT, t - started >= Self.maxFillRideMs, loopable.count > 1 {
+          startFill(t)
+        } else {
+          emit(t: t, song: p.song, positionMs: bounds.startMs, fadeSec: 0.25, reason: "loop back (\(p.song.name))")
+        }
       }
     }
 

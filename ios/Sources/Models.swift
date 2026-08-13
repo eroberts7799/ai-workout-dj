@@ -33,6 +33,7 @@ struct TaggedSong: Codable, Identifiable {
   let artists: String
   let durationMs: Double
   let bpm: Double?
+  let camelot: String?
   let markers: [Marker]
   var id: String { trackId }
 }
