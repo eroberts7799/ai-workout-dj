@@ -199,18 +199,18 @@ struct SessionView: View {
   }
 
   private var importRow: some View {
-    HStack(spacing: 14) {
+    HStack(spacing: 12) {
       Button("Import program") { showBundlePicker = true }
+        .buttonStyle(QuietButtonStyle(compact: true))
         .fileImporter(isPresented: $showBundlePicker, allowedContentTypes: [.json]) { result in
           if case .success(let url) = result { engine.importBundle(from: url) }
         }
       Button("Import music") { showAudioPicker = true }
+        .buttonStyle(QuietButtonStyle(compact: true))
         .fileImporter(isPresented: $showAudioPicker, allowedContentTypes: [.audio], allowsMultipleSelection: true) { result in
           if case .success(let urls) = result { engine.importAudio(from: urls) }
         }
     }
-    .font(.system(size: 13))
-    .foregroundColor(Theme.inkFaint)
     .padding(.top, 6)
   }
 

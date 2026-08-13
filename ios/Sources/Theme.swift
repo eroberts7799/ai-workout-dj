@@ -56,13 +56,18 @@ struct PulseButtonStyle: ButtonStyle {
   }
 }
 
-/// Quiet secondary action: bare text, small caps energy, no chrome.
+/// Quiet secondary action: the tailored outlined pill — unmistakably a
+/// button (Ethan's rule: all buttons obvious), never a filled box.
 struct QuietButtonStyle: ButtonStyle {
+  var compact = false
   func makeBody(configuration: Configuration) -> some View {
     configuration.label
-      .font(.system(size: 14, weight: .medium))
-      .foregroundColor(Theme.inkDim)
-      .padding(.vertical, 10)
+      .font(.system(size: compact ? 13 : 15, weight: .medium))
+      .foregroundColor(Theme.ink)
+      .padding(.vertical, compact ? 8 : 12)
+      .padding(.horizontal, compact ? 16 : 22)
+      .overlay(Capsule().stroke(Theme.ink.opacity(0.35), lineWidth: 1))
+      .contentShape(Capsule())
       .opacity(configuration.isPressed ? 0.5 : 1)
   }
 }
