@@ -13,16 +13,12 @@ enum Theme {
   static let inkDim = Color.black.opacity(0.55)
   static let inkFaint = Color.black.opacity(0.33)
 
-  // The pulse — the icon's gradient, spent sparingly.
-  static let pulse = LinearGradient(
-    colors: [
-      Color(red: 1.0, green: 0.42, blue: 0.16),   // hot orange
-      Color(red: 0.94, green: 0.20, blue: 0.37),  // magenta red
-      Color(red: 0.55, green: 0.36, blue: 0.96),  // violet
-    ],
-    startPoint: .leading, endPoint: .trailing
-  )
-  static let pulseSolid = Color(red: 0.94, green: 0.20, blue: 0.37)
+  // One color: blue. White room, ink text, blue action (Ethan: "israel
+  // colors so just white and blue").
+  static let accent = Color(red: 0.0, green: 0.22, blue: 0.72)          // #0038B8
+  // Kept names so call sites read the same; both resolve to the blue.
+  static let pulse = LinearGradient(colors: [accent, accent], startPoint: .leading, endPoint: .trailing)
+  static let pulseSolid = accent
 }
 
 /// Display text: plain system type, maximum legibility. (The serif
@@ -41,18 +37,17 @@ struct Hairline: View {
   }
 }
 
-/// The one loud button in the room.
+/// The one loud button in the room: solid blue, calm, no glow.
 struct PulseButtonStyle: ButtonStyle {
   func makeBody(configuration: Configuration) -> some View {
     configuration.label
-      .font(.system(size: 16, weight: .semibold))
+      .font(.system(size: 17, weight: .semibold))
       .foregroundColor(.white)
-      .padding(.vertical, 14)
+      .padding(.vertical, 16)
       .frame(maxWidth: .infinity)
-      .background(Theme.pulse)
+      .background(Theme.accent)
       .clipShape(Capsule())
       .opacity(configuration.isPressed ? 0.85 : 1)
-      .shadow(color: Theme.pulseSolid.opacity(0.35), radius: 14, y: 4)
   }
 }
 
@@ -62,11 +57,12 @@ struct QuietButtonStyle: ButtonStyle {
   var compact = false
   func makeBody(configuration: Configuration) -> some View {
     configuration.label
-      .font(.system(size: compact ? 13 : 15, weight: .medium))
-      .foregroundColor(Theme.ink)
-      .padding(.vertical, compact ? 8 : 12)
-      .padding(.horizontal, compact ? 16 : 22)
-      .overlay(Capsule().stroke(Theme.ink.opacity(0.35), lineWidth: 1))
+      .font(.system(size: 15, weight: .medium))
+      .foregroundColor(Theme.accent)
+      .padding(.vertical, 12)
+      .frame(maxWidth: compact ? nil : .infinity)
+      .padding(.horizontal, compact ? 20 : 0)
+      .overlay(Capsule().stroke(Theme.accent.opacity(0.45), lineWidth: 1))
       .contentShape(Capsule())
       .opacity(configuration.isPressed ? 0.5 : 1)
   }
