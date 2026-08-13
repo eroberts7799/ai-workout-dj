@@ -19,7 +19,6 @@ targets:
         CFBundleDisplayName: AI Workout DJ
         UILaunchScreen: {}
         UIBackgroundModes: [audio]
-        UIAppFonts: [DMSerifDisplay-Regular.ttf]
         ITSAppUsesNonExemptEncryption: false
         NSAppTransportSecurity:
           NSAllowsArbitraryLoads: false
