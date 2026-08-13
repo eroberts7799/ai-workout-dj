@@ -25,11 +25,11 @@ enum Theme {
   static let pulseSolid = Color(red: 0.94, green: 0.20, blue: 0.37)
 }
 
-/// Editorial serif for display text — DM Serif Display (OFL-licensed
-/// high-contrast Didone; the fashion-editorial genus, not Apple's default).
+/// Display text: plain system type, maximum legibility. (The serif
+/// experiment lost — Ethan's final call: simple, easy to read, uncrowded.)
 extension View {
-  func displaySerif(_ size: CGFloat, weight: Font.Weight = .medium) -> some View {
-    font(.custom("DM Serif Display", size: size))
+  func displaySerif(_ size: CGFloat, weight: Font.Weight = .semibold) -> some View {
+    font(.system(size: size, weight: weight))
   }
 }
 
