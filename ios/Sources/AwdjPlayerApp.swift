@@ -8,6 +8,8 @@ struct AwdjPlayerApp: App {
         SessionView().tabItem { Label("Session", systemImage: "figure.run") }
         SpikeView().tabItem { Label("Spike", systemImage: "waveform" ) }
       }
+      .preferredColorScheme(.dark)
+      .tint(Theme.pulseSolid)
     }
   }
 }
