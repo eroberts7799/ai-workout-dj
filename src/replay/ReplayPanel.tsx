@@ -531,6 +531,7 @@ export default function ReplayPanel() {
               <p key={w} className="warn">{w}</p>
             ))}
             {replayMs != null && <LiveStatus result={result} tMs={replayMs} songs={engineSongs} />}
+            <CourseView result={result} playheadMs={replayMs} songs={engineSongs} />
             <Timeline result={result} playheadMs={replayMs} truth={loaded?.boundaries ?? null} />
             <div style={{ marginTop: 10, display: 'flex', gap: 8, alignItems: 'center' }}>
               {replayMs == null ? (
@@ -597,6 +598,186 @@ export default function ReplayPanel() {
         </>
       )}
     </>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// CourseView: the race-profile picture — the course drawn in DISTANCE space
+// (elevation filled underneath, hard intervals as shaded climb columns,
+// steep grades labeled), with every musical event pinned where it happens on
+// the course and a runner moving through it during replay. The question it
+// answers at a glance: do the songs switch at the points that matter?
+
+const CV_H = 190
+const CV_PROFILE_TOP = 46
+const CV_PROFILE_BOT = CV_H - 24
+
+function CourseView({ result, playheadMs, songs }: { result: SimResult; playheadMs: number | null; songs: SongTags[] }) {
+  const { trace, durationMs } = result
+  const hasDist = trace.some((p) => p.distanceM != null)
+  const geometry = useMemo(() => {
+    if (trace.length === 0) return null
+    // Course domain: distance when we have it, time as a stand-in when not —
+    // the picture still reads, the axis label says which it is.
+    const domain = (p: TracePoint) => (hasDist ? (p.distanceM ?? 0) : p.tMs)
+    const total = domain(trace[trace.length - 1])
+    if (total <= 0) return null
+    const x = (v: number) => X0 + (v / total) * XW
+    const atT = (tMs: number) => {
+      const idx = Math.max(0, Math.min(trace.length - 1, Math.round(tMs / 1000) - 1))
+      return domain(trace[idx])
+    }
+    // Elevation, lightly smoothed; flat ribbon when the run has none.
+    const alts = trace.map((p) => p.altitude)
+    const hasAlt = alts.some((a) => a != null)
+    const smooth: number[] = []
+    if (hasAlt) {
+      const raw = alts.map((a, i) => a ?? alts[i - 1] ?? 0)
+      for (let i = 0; i < raw.length; i++) {
+        const lo = Math.max(0, i - 7)
+        const win = raw.slice(lo, i + 8)
+        smooth.push(win.reduce((s, v) => s + v, 0) / win.length)
+      }
+    }
+    const aLo = hasAlt ? Math.min(...smooth) : 0
+    const aHi = hasAlt ? Math.max(...smooth, aLo + 8) : 1
+    const yAlt = (a: number) => CV_PROFILE_BOT - ((a - aLo) / (aHi - aLo)) * (CV_PROFILE_BOT - CV_PROFILE_TOP)
+    const surface = (v: number) => {
+      if (!hasAlt) return CV_PROFILE_BOT - (CV_PROFILE_BOT - CV_PROFILE_TOP) * 0.35
+      // nearest trace point in course space
+      let best = 0
+      let bestD = Infinity
+      for (let i = 0; i < trace.length; i += 4) {
+        const d = Math.abs(domain(trace[i]) - v)
+        if (d < bestD) { bestD = d; best = i }
+      }
+      return yAlt(smooth[best])
+    }
+    const profile = hasAlt
+      ? `M${X0},${CV_PROFILE_BOT} ` +
+        trace.map((p, i) => `L${x(domain(p)).toFixed(1)},${yAlt(smooth[i]).toFixed(1)}`).join(' ') +
+        ` L${X0 + XW},${CV_PROFILE_BOT} Z`
+      : `M${X0},${CV_PROFILE_BOT} L${X0},${surface(0)} L${X0 + XW},${surface(0)} L${X0 + XW},${CV_PROFILE_BOT} Z`
+    return { x, atT, total, surface, profile, hasAlt }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [result])
+  if (!geometry) return null
+  const { x, atT, total, surface, profile } = geometry
+
+  const fmtCourse = (v: number) => (hasDist ? `${(v / 1000).toFixed(v < 9950 ? 1 : 0)}km` : fmtClock(v))
+  const ticks: number[] = []
+  const step = hasDist ? [500, 1000, 2000, 5000].find((s) => total / s <= 12) ?? 10000 : Math.max(60_000, Math.ceil(total / 10 / 60_000) * 60_000)
+  for (let v = step; v < total; v += step) ticks.push(v)
+
+  // Hard intervals as climb-style shaded columns, labeled with avg grade.
+  const hardCols = result.stepSpans
+    .filter((s) => s.step.kind === 'hard')
+    .map((s) => {
+      const a = atT(s.startMs)
+      const b = atT(s.endMs)
+      const grades = trace.filter((p) => p.tMs >= s.startMs && p.tMs < s.endMs).map((p) => p.gradePct)
+      const avgGrade = grades.length > 0 ? grades.reduce((x1, y) => x1 + y, 0) / grades.length : 0
+      return { a, b, avgGrade }
+    })
+
+  // Drop badges come from LANDINGS: a committed buildup lands with no new
+  // command (the audio simply arrives at the drop), so commands alone miss
+  // most drops. Crest rewards are commands-only (never landings) — ⛰ pins.
+  const crests = result.commands.filter((c) => c.reason.includes('crest reward'))
+  const others = result.commands.filter((c) => !c.reason.startsWith('drop lands') && !c.reason.startsWith('loop back'))
+  const runnerV = playheadMs != null ? atT(Math.min(playheadMs, durationMs)) : null
+  const nowCmd = playheadMs != null ? [...result.commands].reverse().find((c) => c.tMs <= playheadMs) : null
+  const nowSong = nowCmd ? songs.find((s) => s.trackId === nowCmd.trackId) : null
+
+  return (
+    <svg viewBox={`0 0 ${W} ${CV_H}`} style={{ width: '100%', display: 'block', background: '#0d1117', border: '1px solid #30363d', borderRadius: 6, marginBottom: 8 }}>
+      {/* course profile */}
+      <path d={profile} fill="#2b4a8f" opacity={0.9} />
+      {/* hard-interval climb columns */}
+      {hardCols.map((c, i) => {
+        const w = x(c.b) - x(c.a)
+        return (
+          <g key={i}>
+            <rect x={x(c.a)} y={CV_PROFILE_TOP - 14} width={Math.max(1, w)} height={CV_PROFILE_BOT - CV_PROFILE_TOP + 14} fill="#8a4a6d" opacity={0.38} />
+            {w > 30 && (
+              <text x={x(c.a) + w / 2} y={CV_PROFILE_BOT - 6} textAnchor="middle" fontSize={10} fill="#e6edf3" opacity={0.9}>
+                {Math.abs(c.avgGrade) >= 1 ? `${c.avgGrade > 0 ? '+' : ''}${c.avgGrade.toFixed(1)}%` : 'hard'}
+              </text>
+            )}
+          </g>
+        )
+      })}
+      {/* song-change pins (fills, buildups, re-aims) */}
+      {others.map((c, i) => {
+        const v = atT(c.tMs)
+        const sy = surface(v)
+        return (
+          <g key={`p${i}`}>
+            <line x1={x(v)} y1={sy - 16} x2={x(v)} y2={sy} stroke={cmdColor(c.reason)} strokeWidth={1.5} />
+            <circle cx={x(v)} cy={sy - 18} r={3} fill={cmdColor(c.reason)}>
+              <title>{`${fmtCourse(v)} · ${fmtClock(c.tMs)} — ${c.reason}`}</title>
+            </circle>
+          </g>
+        )
+      })}
+      {/* drops: one numbered badge per landing, colored by accuracy */}
+      {result.landings.map((l, i) => {
+        const v = atT(l.targetTMs)
+        const sy = surface(v)
+        const col = landingColor(l.errorMs)
+        return (
+          <g key={`d${i}`}>
+            <line x1={x(v)} y1={sy - 26} x2={x(v)} y2={sy} stroke={col} strokeWidth={1.5} />
+            <circle cx={x(v)} cy={sy - 32} r={9} fill={col}>
+              <title>{`drop ${i + 1} · ${fmtCourse(v)} · ${fmtClock(l.targetTMs)} — landed ${l.errorMs >= 0 ? '+' : '−'}${(Math.abs(l.errorMs) / 1000).toFixed(1)}s`}</title>
+            </circle>
+            <text x={x(v)} y={sy - 28.5} textAnchor="middle" fontSize={10} fontWeight={700} fill="#fff">{i + 1}</text>
+          </g>
+        )
+      })}
+      {/* crest-reward drops (unplanned moments the body earned) */}
+      {crests.map((c, i) => {
+        const v = atT(c.tMs)
+        const sy = surface(v)
+        return (
+          <text key={`c${i}`} x={x(v)} y={sy - 24} textAnchor="middle" fontSize={13}>
+            ⛰<title>{`${fmtCourse(v)} · ${fmtClock(c.tMs)} — ${c.reason}`}</title>
+          </text>
+        )
+      })}
+      {/* start / finish */}
+      <circle cx={X0 + 4} cy={surface(0) - 10} r={8} fill="#199e70" />
+      <text x={X0 + 4} y={surface(0) - 6.5} textAnchor="middle" fontSize={10} fontWeight={700} fill="#fff">S</text>
+      <text x={X0 + XW - 4} y={surface(total) - 12} textAnchor="middle" fontSize={13}>🏁</text>
+      {/* the runner */}
+      {runnerV != null && (
+        <g>
+          <line x1={x(runnerV)} y1={surface(runnerV)} x2={x(runnerV)} y2={CV_PROFILE_BOT} stroke="#e6edf3" opacity={0.5} />
+          <text
+            x={x(runnerV)}
+            y={surface(runnerV) - 8}
+            textAnchor="middle"
+            fontSize={16}
+            transform={`translate(${x(runnerV) * 2}, 0) scale(-1, 1)`}
+          >
+            🏃
+          </text>
+          {nowSong && (
+            <text x={Math.min(Math.max(x(runnerV), 60), W - 60)} y={CV_PROFILE_TOP - 28} textAnchor="middle" fontSize={11} fill="#8b949e" fontStyle="italic">
+              🎧 {nowSong.name}
+            </text>
+          )}
+        </g>
+      )}
+      {/* course axis */}
+      {ticks.map((v) => (
+        <g key={v}>
+          <line x1={x(v)} y1={CV_PROFILE_BOT} x2={x(v)} y2={CV_PROFILE_BOT + 4} stroke="#8b949e" />
+          <text x={x(v)} y={CV_H - 8} textAnchor="middle" fontSize={10} fill="#8b949e">{fmtCourse(v)}</text>
+        </g>
+      ))}
+      <text x={X0} y={CV_H - 8} fontSize={10} fill="#8b949e">{hasDist ? 'course' : 'time'}</text>
+    </svg>
   )
 }
 
