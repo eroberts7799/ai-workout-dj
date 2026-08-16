@@ -23,6 +23,14 @@ export interface LiveSample {
   hr?: number
   /** GPS/barometric altitude, meters. */
   altitudeM?: number
+  /** Watch workout-step sequence counter (CIQ field v2, Runna workouts) —
+   *  increments exactly when the watch advances to the next plan step. When
+   *  the stream carries this, step boundaries come from HERE: the watch KNOWS
+   *  where you are in the workout; estimating it from our own odometer is a
+   *  guess that drifts (backtest 2026-08-16: compounding overshoot reached
+   *  34.8s late by rep 4). Internal time/distance tracking then powers
+   *  anticipation only — the trigger doctrine's deterministic skeleton. */
+  wkStepSeq?: number
 }
 
 export interface PlayCommand {
@@ -79,12 +87,16 @@ export class LiveEngine {
   private lastT: number | null = null
   private lastDist: number | null = null
   private paceSecPerKm: number
+  /** Last watch step-sequence value; once seen, the watch owns boundaries. */
+  private wkSeq: number | null = null
 
   private mode: Mode | null = null
   private playing: { song: SongTags; positionAtMs: number; atTMs: number } | null = null
   private fillStartedT: number | null = null
   private loopBounds: { startMs: number; endMs: number } | null = null
   private buildTargetT: number | null = null
+  private buildDropMs: number | null = null
+  private lastReaimT = -Infinity
   private crestRideUntil: number | null = null
 
   private readonly gradeTracker = new GradeTracker()
@@ -159,9 +171,73 @@ export class LiveEngine {
     return this.steps[this.stepIdx] ?? null
   }
 
-  /** Progress current step; advance through completed steps. Returns kinds entered. */
-  private trackSteps(t: number, dist: number | null): WorkoutStep[] {
+  /** Progress current step; advance through completed steps. Returns kinds entered.
+   *  Two regimes:
+   *  - Watch-driven (wkStepSeq in the stream): a seq increment IS the boundary
+   *    — exact, drift-free. Our own estimate never advances steps.
+   *  - Estimated (no watch step stream — old logs, synthetic sims): advance on
+   *    our own time/distance. Distance steps advance stepStartDist by the
+   *    step's PRESCRIBED meters, not the sample's current distance — sampling
+   *    overshoot must not compound into the next rep (the time path always
+   *    did this correctly; the distance path drifted 34.8s over 4 reps). */
+  /** Where inside the last sample window did the current step's boundary
+   *  actually fall? Samples quantize (1Hz live, 4–7s on smart-recording
+   *  logs); the model can do better: time steps end at exact prescriptive
+   *  arithmetic, distance steps at the interpolated crossing of the
+   *  prescribed meters. Falls back to the sample itself when the model's
+   *  estimate lies outside the window. */
+  private boundaryEstimate(
+    step: WorkoutStep,
+    prevT: number | null,
+    prevDist: number | null,
+    t: number,
+    dist: number | null,
+  ): { bT: number; bD: number | null } {
+    if (step.seconds != null) {
+      const est = this.stepStartT + step.seconds * 1000
+      if (prevT != null && est > prevT && est <= t) {
+        const bD =
+          prevDist != null && dist != null && t > prevT
+            ? prevDist + ((dist - prevDist) * (est - prevT)) / (t - prevT)
+            : dist
+        return { bT: est, bD }
+      }
+    } else if (step.meters != null && dist != null) {
+      const cross = this.stepStartDist + step.meters
+      if (prevT != null && prevDist != null && dist > prevDist && cross > prevDist && cross <= dist) {
+        return { bT: prevT + ((t - prevT) * (cross - prevDist)) / (dist - prevDist), bD: cross }
+      }
+      if (cross <= dist) return { bT: t, bD: cross }
+    }
+    return { bT: t, bD: dist }
+  }
+
+  private trackSteps(t: number, dist: number | null, wkSeq?: number): WorkoutStep[] {
     const entered: WorkoutStep[] = []
+    const prevT = this.lastT
+    const prevDist = this.lastDist
+    if (wkSeq != null && this.wkSeq == null) this.wkSeq = wkSeq // align: current seq ↔ current step
+    if (this.wkSeq != null) {
+      // Watch-driven: the seq increment IS the boundary (which step —
+      // drift-free truth); the model refines WHEN within the sample window.
+      if (wkSeq != null && wkSeq > this.wkSeq) {
+        let advanceBy = wkSeq - this.wkSeq
+        this.wkSeq = wkSeq
+        while (advanceBy-- > 0) {
+          const step = this.currentStep()
+          if (!step) break
+          const { bT, bD } = this.boundaryEstimate(step, prevT, prevDist, t, dist)
+          this.stepIdx++
+          this.stepStartT = bT
+          this.stepStartDist = bD ?? this.stepStartDist
+          const next = this.currentStep()
+          if (next) entered.push(next)
+        }
+      }
+      return entered
+    }
+    // Estimated (no watch step stream): advance on our own time/distance,
+    // boundary times refined the same way so overshoot never compounds.
     for (;;) {
       const step = this.currentStep()
       if (!step) break
@@ -172,20 +248,22 @@ export class LiveEngine {
             ? dist - this.stepStartDist >= step.meters
             : false
       if (!done) break
+      const { bT, bD } = this.boundaryEstimate(step, prevT, prevDist, t, dist)
       this.stepIdx++
-      this.stepStartT = step.seconds != null ? this.stepStartT + step.seconds * 1000 : t
-      this.stepStartDist = dist ?? this.stepStartDist
+      this.stepStartT = step.seconds != null ? this.stepStartT + step.seconds * 1000 : bT
+      this.stepStartDist = step.meters != null ? this.stepStartDist + step.meters : (bD ?? this.stepStartDist)
       const next = this.currentStep()
       if (next) entered.push(next)
     }
     return entered
   }
 
-  /** ms until the next hard step STARTS (null if none ahead or currently in one). */
+  /** ms until the next hard step STARTS — including the next rep while
+   *  already in a hard step (interval blocks: every rep start is a drop
+   *  moment, not just the first). Null when no hard step lies ahead. */
   private etaToNextHardMs(t: number, dist: number | null): number | null {
     const cur = this.currentStep()
     if (!cur) return null
-    if (cur.kind === 'hard') return null
     let eta = this.remainingMs(cur, t, dist)
     for (let i = this.stepIdx + 1; i < this.steps.length; i++) {
       const s = this.steps[i]
@@ -271,14 +349,15 @@ export class LiveEngine {
         this.paceSecPerKm = this.paceSecPerKm * (1 - PACE_ALPHA) + instPace * PACE_ALPHA
       }
     }
-    this.lastT = t
-    this.lastDist = dist
-
     // Body-signal trackers: grade/climb/crest from altitude, zones from HR.
     this.gradeState = this.gradeTracker.update(dist, sample.altitudeM)
     this.hrState = this.hrTracker.update(sample.hr)
 
-    const entered = this.trackSteps(t, dist)
+    // trackSteps reads lastT/lastDist as the PREVIOUS sample (boundary
+    // interpolation window) — update them only after.
+    const entered = this.trackSteps(t, dist, sample.wkStepSeq)
+    this.lastT = t
+    this.lastDist = dist
 
     // Actual hard-step arrival: score the landing, ensure we're riding a drop.
     for (const step of entered) {
@@ -295,6 +374,7 @@ export class LiveEngine {
         }
         this.mode = 'ride'
         this.buildTargetT = null
+        this.buildDropMs = null
         this.crestRideUntil = null
       } else if (this.mode === 'ride') {
         // Hard step over — back to groove.
@@ -303,7 +383,23 @@ export class LiveEngine {
       }
     }
 
-    if (this.mode === null) this.startFill(t)
+    // First sample of the session: a plan that OPENS on a hard step opens on
+    // a drop (backtest 2026-08-16: every progressive long run's first effort
+    // was missed — step 0 is never "entered", so nothing choreographed it).
+    if (this.mode === null) {
+      if (this.currentStep()?.kind === 'hard') {
+        const pick = this.pickDrop()
+        if (pick) {
+          this.emit(t, pick.song, pick.dropMs, 0.3, `drop lands (opening) (${pick.song.name})`)
+          this.landings.push({ targetTMs: t, actualTMs: t, errorMs: 0 })
+          this.mode = 'ride'
+        } else {
+          this.startFill(t)
+        }
+      } else {
+        this.startFill(t)
+      }
+    }
 
     // Crest reward: you ground up a real hill and just topped out — the drop
     // hits NOW. Only from the groove (planned drops own their moments), only
@@ -328,6 +424,53 @@ export class LiveEngine {
       this.startFill(t)
     }
 
+    // Next-rep anticipation: in an interval block the engine used to be blind
+    // mid-ride — every rep after the first got a jarring truncated cut
+    // (backtest 2026-08-16: 8/8 truncated on Rolling 800s). Riding a drop and
+    // the NEXT hard start's ETA now fits the best candidate's buildup → cut
+    // into that buildup so the next drop lands as the next rep begins.
+    if (this.mode === 'ride' && this.crestRideUntil == null) {
+      const eta = this.etaToNextHardMs(t, dist)
+      if (eta != null) {
+        const r = this.pickBest(this.droppable, this.dropIdx)
+        if (r) {
+          const buildLen = r.choice.dropMs - r.choice.entryMs
+          if (eta <= buildLen) {
+            this.dropIdx += r.advance
+            const positionMs = snapToBeat(Math.max(0, r.choice.dropMs - eta), r.choice.dropMs, r.choice.song.bpm)
+            this.emit(t, r.choice.song, positionMs, 0.45, `buildup toward next rep (${r.choice.song.name})`)
+            this.mode = 'build'
+            this.buildTargetT = t + (r.choice.dropMs - positionMs)
+            this.buildDropMs = r.choice.dropMs
+          }
+        }
+      }
+    }
+
+    // Mid-build re-aim: the commit predicted the arrival 20–30s out; real legs
+    // fade or surge over a rep's last 150m (backtest 2026-08-16: ±3–6s tail).
+    // If the live ETA has drifted more than half a beat off the committed
+    // landing, re-cut within the buildup on the beat — inaudible in a rising
+    // build — so the drop still lands on ARRIVAL, not on the stale forecast.
+    // Never inside the last 3s (let it land), at most once per 4s.
+    if (this.mode === 'build' && this.buildTargetT != null && this.buildDropMs != null && this.playing) {
+      const eta = this.etaToNextHardMs(t, dist)
+      if (eta != null && eta > 3000) {
+        const beatMs = 60_000 / (this.playing.song.bpm || 125)
+        const driftMs = t + eta - this.buildTargetT
+        // Funnel threshold: only the LAST correction sets the landing, so
+        // tolerate drift proportional to time-out (12%) far from the drop and
+        // tighten to half a beat close in — one or two cuts per build, not six.
+        const threshold = Math.max(beatMs / 2, eta * 0.12)
+        if (Math.abs(driftMs) > threshold && t - this.lastReaimT >= 4000) {
+          const positionMs = snapToBeat(Math.max(0, this.buildDropMs - eta), this.buildDropMs, this.playing.song.bpm)
+          this.emit(t, this.playing.song, positionMs, 0.2, `build re-aim (${this.playing.song.name})`)
+          this.buildTargetT = t + (this.buildDropMs - positionMs)
+          this.lastReaimT = t
+        }
+      }
+    }
+
     // Fill-mode loop management + commit decision at loop boundaries.
     if (this.mode === 'fill' && this.playing && this.loopBounds) {
       const pos = this.playheadMs(t)
@@ -346,6 +489,7 @@ export class LiveEngine {
             this.emit(t, pick.song, positionMs, 0.45, `buildup toward the effort (${pick.song.name})`)
             this.mode = 'build'
             this.buildTargetT = t + (pick.dropMs - positionMs)
+            this.buildDropMs = pick.dropMs
             return this.commands.slice(before)
           }
         }

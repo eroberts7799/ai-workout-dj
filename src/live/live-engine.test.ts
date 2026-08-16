@@ -224,4 +224,68 @@ describe('LiveEngine', () => {
     expect(engine.landings.length).toBe(1)
     expect(Math.abs(engine.landings[0].errorMs)).toBeLessThanOrEqual(1500)
   })
+
+  test('plan opening on a hard step opens on a drop, not a groove fill', () => {
+    // Progressive long runs start hard — backtest 2026-08-16 missed all of them.
+    const p: WorkoutPlan = { name: 'prog', steps: [{ kind: 'hard', meters: 1000 }, { kind: 'easy', meters: 500 }] }
+    const engine = new LiveEngine(p, songs, { paceSecPerKm: 340 })
+    run(engine, stream([{ seconds: 30, mps: 3 }]))
+    expect(engine.commands[0].reason).toStartWith('drop lands (opening)')
+    expect(engine.landings.length).toBe(1)
+  })
+
+  test('consecutive hard reps: every rep start gets a buildup, none truncated', () => {
+    // Rolling-800s shape — the baseline truncated 8/8 of these.
+    const p: WorkoutPlan = {
+      name: 'rolling',
+      steps: [
+        { kind: 'warmup', seconds: 60 },
+        { kind: 'hard', meters: 600 },
+        { kind: 'hard', meters: 600 },
+        { kind: 'hard', meters: 600 },
+        { kind: 'cooldown', seconds: 60 },
+      ],
+    }
+    const engine = new LiveEngine(p, songs, { paceSecPerKm: 340 })
+    run(engine, stream([{ seconds: 700, mps: 3 }]))
+    expect(engine.landings.length).toBe(3)
+    for (const l of engine.landings) expect(Math.abs(l.errorMs)).toBeLessThanOrEqual(1500)
+    expect(engine.commands.filter((c) => c.reason.startsWith('buildup toward next rep')).length).toBeGreaterThanOrEqual(2)
+    expect(engine.commands.some((c) => c.reason.includes('truncated'))).toBe(false)
+  })
+
+  test('wkStepSeq is authoritative: boundaries follow the watch, not the odometer', () => {
+    // Distance stream reads 20% short (GPS under-count) — estimation alone
+    // would cross every boundary late. The watch's step events correct it.
+    const p: WorkoutPlan = {
+      name: 'w',
+      steps: [
+        { kind: 'easy', meters: 900 },
+        { kind: 'hard', meters: 300 },
+        { kind: 'easy', meters: 600 },
+      ],
+    }
+    const engine = new LiveEngine(p, songs, { paceSecPerKm: 340 })
+    // True boundaries at 300s and 400s (3 m/s real speed); stream distance is scaled 0.8×.
+    const samples: LiveSample[] = []
+    for (let i = 1; i <= 600; i++) {
+      const t = i * 1000
+      const trueDist = i * 3
+      samples.push({ tMs: t, distanceM: trueDist * 0.8, wkStepSeq: t < 300_000 ? 1 : t < 400_000 ? 2 : 3 })
+    }
+    for (const s of samples) engine.advance(s)
+    expect(engine.landings.length).toBe(1)
+    // Engine's believed hard start must sit at the watch boundary (300s), not
+    // the odometer's late crossing (375s).
+    expect(Math.abs(engine.landings[0].actualTMs - 300_000)).toBeLessThanOrEqual(2000)
+  })
+
+  test('mid-build slowdown triggers a re-aim and the drop still lands tight', () => {
+    // Fade hard in the last stretch before the rep — exactly when the old
+    // engine rode a stale forecast into an early drop.
+    const engine = new LiveEngine(plan, songs, { paceSecPerKm: 340 })
+    run(engine, stream([{ seconds: 370, mps: 3 }, { seconds: 200, mps: 1.8 }]))
+    expect(engine.landings.length).toBe(1)
+    expect(Math.abs(engine.landings[0].errorMs)).toBeLessThanOrEqual(2000)
+  })
 })

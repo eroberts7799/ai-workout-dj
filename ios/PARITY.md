@@ -25,10 +25,22 @@ replays every case against `BeatMath`. Regenerate after any `beat.ts` change.
 - [ ] Deck: web LocalDeck holds outgoing at full volume until the beat-wait
       cut moment; verify DualDeck's delayed-fade path matches exactly.
 
+- [ ] Beat-snapped commit entries: TS snaps buildup entry positions to the
+      incoming song's grid (snapToBeat in fill/ride/re-aim commits); Swift
+      LiveEngine uses unsnapped positions — BeatMath has no snapToBeat port.
+      (Found 2026-08-16 during the decision-engine port; the ledger previously
+      claimed this was ported. It was not.)
+
 ## Ported and guarded
 
 - [x] BeatMath: grid delays, tempo lock, blend plan, camelot, mixScore,
       deck opts (ParityTests, 31 fixture cases)
 - [x] LiveEngine: freshness (maxFillRideMs), DJ-crate selection with
-      recency penalty, beat-snapped buildups
+      recency penalty
+- [x] LiveEngine decision core 2026-08-16 (same-session port, 4 new
+      port-parity tests): wkStepSeq watch-driven step tracking +
+      boundaryEstimate interpolation, non-compounding distance advance,
+      next-rep anticipation (hard→hard buildups), opening-hard drop,
+      mid-build funnel re-aim. Backtest on 41 real structured runs went
+      88%→95-98% on-time, max error 34.8s→3-5s, 0 missed.
 - [x] DualDeck: tempo-locked blends, bar cuts, bass swap

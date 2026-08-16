@@ -402,10 +402,10 @@ final class SessionEngine: ObservableObject {
 
   // NOTE: capture happens in recordSample (all modes, full fidelity) — the
   // simulator appends its own samples. advanceLive only conducts.
-  func advanceLive(timerMs: Double, distanceM: Double?, hr: Double? = nil) {
+  func advanceLive(timerMs: Double, distanceM: Double?, hr: Double? = nil, wkStepSeq: Double? = nil) {
     guard phase == .running, let live else { return }
     clockMs = timerMs
-    for c in live.advance(LiveSample(tMs: timerMs, distanceM: distanceM)) {
+    for c in live.advance(LiveSample(tMs: timerMs, distanceM: distanceM, wkStepSeq: wkStepSeq)) {
       if suppressLoopbacks && c.reason.hasPrefix("loop back") { continue }
       // Never interrupt the run: a missing file leaves current audio playing.
       try? deck.play(id: c.trackId, positionMs: c.positionMs, fadeSec: c.fadeSec, opts: BeatMath.deckOpts(for: c.reason))

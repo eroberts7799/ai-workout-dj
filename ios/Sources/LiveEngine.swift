@@ -12,6 +12,11 @@ import Foundation
 struct LiveSample {
   let tMs: Double
   let distanceM: Double?
+  /// Watch workout-step sequence counter — increments exactly when the watch
+  /// advances to the next plan step. When present, step boundaries come from
+  /// HERE (drift-free); our own tracking powers anticipation only. Mirrors
+  /// the TS engine's trigger-doctrine split (2026-08-16).
+  var wkStepSeq: Double? = nil
 }
 
 struct LivePlayCommand {
@@ -65,12 +70,16 @@ final class LiveEngine {
   private var lastT: Double?
   private var lastDist: Double?
   private var paceSecPerKm: Double
+  /// Last watch step-sequence value; once seen, the watch owns boundaries.
+  private var wkSeq: Double?
 
   private var mode: Mode?
   private var playing: (song: TaggedSong, positionAtMs: Double, atTMs: Double)?
   private var fillStartedT: Double?
   private var loopBounds: (startMs: Double, endMs: Double)?
   private var buildTargetT: Double?
+  private var buildDropMs: Double?
+  private var lastReaimT: Double = -.infinity
 
   private(set) var commands: [LivePlayCommand] = []
   private(set) var landings: [LandingReport] = []
@@ -125,9 +134,57 @@ final class LiveEngine {
     stepIdx < steps.count ? steps[stepIdx] : nil
   }
 
+  /// Where inside the last sample window did the current step's boundary
+  /// fall? Time steps end at exact prescriptive arithmetic; distance steps
+  /// at the interpolated crossing of the prescribed meters. Mirrors TS
+  /// boundaryEstimate (2026-08-16).
+  private func boundaryEstimate(step: WorkoutStep, prevT: Double?, prevDist: Double?, t: Double, dist: Double?) -> (bT: Double, bD: Double?) {
+    if let seconds = step.seconds {
+      let est = stepStartT + seconds * 1000
+      if let prevT, est > prevT, est <= t {
+        let bD: Double?
+        if let prevDist, let dist, t > prevT {
+          bD = prevDist + ((dist - prevDist) * (est - prevT)) / (t - prevT)
+        } else {
+          bD = dist
+        }
+        return (est, bD)
+      }
+    } else if let meters = step.meters, let dist {
+      let cross = stepStartDist + meters
+      if let prevT, let prevDist, dist > prevDist, cross > prevDist, cross <= dist {
+        return (prevT + ((t - prevT) * (cross - prevDist)) / (dist - prevDist), cross)
+      }
+      if cross <= dist { return (t, cross) }
+    }
+    return (t, dist)
+  }
+
   /// Progress current step; advance through completed steps. Returns steps entered.
-  private func trackSteps(t: Double, dist: Double?) -> [WorkoutStep] {
+  /// Watch-driven regime (wkStepSeq in the stream): a seq increment IS the
+  /// boundary — drift-free truth for WHICH step; the model refines WHEN.
+  /// Estimated regime: our own time/distance, with the prescribed-meters
+  /// advance so sampling overshoot never compounds (34.8s field drift class).
+  private func trackSteps(t: Double, dist: Double?, wkStepSeq: Double?) -> [WorkoutStep] {
     var entered: [WorkoutStep] = []
+    let prevT = lastT
+    let prevDist = lastDist
+    if let seq = wkStepSeq, wkSeq == nil { wkSeq = seq } // align: current seq ↔ current step
+    if let known = wkSeq {
+      if let seq = wkStepSeq, seq > known {
+        var advanceBy = Int(seq - known)
+        wkSeq = seq
+        while advanceBy > 0, let step = currentStep() {
+          advanceBy -= 1
+          let (bT, bD) = boundaryEstimate(step: step, prevT: prevT, prevDist: prevDist, t: t, dist: dist)
+          stepIdx += 1
+          stepStartT = bT
+          stepStartDist = bD ?? stepStartDist
+          if let next = currentStep() { entered.append(next) }
+        }
+      }
+      return entered
+    }
     while true {
       guard let step = currentStep() else { break }
       let done: Bool
@@ -139,18 +196,20 @@ final class LiveEngine {
         done = false
       }
       if !done { break }
+      let (bT, bD) = boundaryEstimate(step: step, prevT: prevT, prevDist: prevDist, t: t, dist: dist)
       stepIdx += 1
-      stepStartT = step.seconds != nil ? stepStartT + step.seconds! * 1000 : t
-      stepStartDist = dist ?? stepStartDist
+      stepStartT = step.seconds != nil ? stepStartT + step.seconds! * 1000 : bT
+      stepStartDist = step.meters != nil ? stepStartDist + step.meters! : (bD ?? stepStartDist)
       if let next = currentStep() { entered.append(next) }
     }
     return entered
   }
 
-  /// ms until the next hard step STARTS (nil if none ahead or currently in one).
+  /// ms until the next hard step STARTS — including the next rep while
+  /// already in a hard step (every rep start is a drop moment). Nil when no
+  /// hard step lies ahead.
   private func etaToNextHardMs(t: Double, dist: Double?) -> Double? {
     guard let cur = currentStep() else { return nil }
-    if cur.kind == "hard" { return nil }
     var eta = remainingMs(step: cur, t: t, dist: dist)
     for i in (stepIdx + 1)..<steps.count {
       let s = steps[i]
@@ -176,7 +235,9 @@ final class LiveEngine {
     Set(commands.suffix(6).map { $0.trackId }.filter { $0 != playing?.song.trackId })
   }
 
-  private func pickDrop() -> DropChoice? {
+  /// Peek the best drop candidate WITHOUT consuming rotation — the ride-mode
+  /// commit needs to inspect the candidate's buildup length before deciding.
+  private func bestDrop() -> (c: DropChoice, advance: Int)? {
     guard !droppable.isEmpty else { return nil }
     let from = playing?.song
     let recent = recentIds()
@@ -188,13 +249,14 @@ final class LiveEngine {
       if recent.contains(c.song.trackId) { score -= 1 }
       if best == nil || score > best!.score { best = (c, i + 1, score) }
     }
-    if let b = best {
-      dropIdx += b.advance
-      return b.c
-    }
-    let c = droppable[dropIdx % droppable.count]
-    dropIdx += 1
-    return c
+    if let b = best { return (b.c, b.advance) }
+    return (droppable[dropIdx % droppable.count], 1)
+  }
+
+  private func pickDrop() -> DropChoice? {
+    guard let b = bestDrop() else { return nil }
+    dropIdx += b.advance
+    return b.c
   }
 
   private func pickLoop() -> LoopChoice? {
@@ -242,10 +304,11 @@ final class LiveEngine {
         paceSecPerKm = paceSecPerKm * (1 - Self.paceAlpha) + instPace * Self.paceAlpha
       }
     }
+    // trackSteps reads lastT/lastDist as the PREVIOUS sample (boundary
+    // interpolation window) — update them only after.
+    let entered = trackSteps(t: t, dist: dist, wkStepSeq: sample.wkStepSeq)
     lastT = t
     lastDist = dist
-
-    let entered = trackSteps(t: t, dist: dist)
 
     // Actual hard-step arrival: score the landing, ensure we're riding a drop.
     for step in entered {
@@ -261,13 +324,60 @@ final class LiveEngine {
         }
         mode = .ride
         buildTargetT = nil
+        buildDropMs = nil
       } else if mode == .ride {
         // Hard step over — back to groove.
         startFill(t)
       }
     }
 
-    if mode == nil { startFill(t) }
+    // First sample: a plan that OPENS on a hard step opens on a drop —
+    // mirrors TS (backtest: every progressive long run's first effort missed).
+    if mode == nil {
+      if currentStep()?.kind == "hard", let pick = pickDrop() {
+        emit(t: t, song: pick.song, positionMs: pick.dropMs, fadeSec: 0.3, reason: "drop lands (opening) (\(pick.song.name))")
+        landings.append(LandingReport(targetTMs: t, actualTMs: t, errorMs: 0))
+        mode = .ride
+      } else {
+        startFill(t)
+      }
+    }
+
+    // Next-rep anticipation: riding a drop and the NEXT hard start's ETA fits
+    // the best candidate's buildup → cut into that buildup so the next drop
+    // lands as the next rep begins (interval blocks used to truncate 8/8).
+    if mode == .ride {
+      if let eta = etaToNextHardMs(t: t, dist: dist), let r = bestDrop() {
+        let buildLen = r.c.dropMs - r.c.entryMs
+        if eta <= buildLen {
+          dropIdx += r.advance
+          let positionMs = max(0, r.c.dropMs - eta)
+          emit(t: t, song: r.c.song, positionMs: positionMs, fadeSec: 0.45, reason: "buildup toward next rep (\(r.c.song.name))")
+          mode = .build
+          buildTargetT = t + (r.c.dropMs - positionMs)
+          buildDropMs = r.c.dropMs
+        }
+      }
+    }
+
+    // Mid-build re-aim (funnel threshold): if the live ETA drifts off the
+    // committed landing — loose far out (12% of time-to-drop), half a beat
+    // close in — re-cut within the buildup so the drop lands on ARRIVAL.
+    // Never inside the last 3s; at most once per 4s. Mirrors TS.
+    if mode == .build, let target = buildTargetT, let dropMs = buildDropMs, let p = playing {
+      if let eta = etaToNextHardMs(t: t, dist: dist), eta > 3000 {
+        let bpm = p.song.bpm ?? 125
+        let beatMs = 60_000 / (bpm > 0 ? bpm : 125)
+        let driftMs = t + eta - target
+        let threshold = max(beatMs / 2, eta * 0.12)
+        if abs(driftMs) > threshold, t - lastReaimT >= 4000 {
+          let positionMs = max(0, dropMs - eta)
+          emit(t: t, song: p.song, positionMs: positionMs, fadeSec: 0.2, reason: "build re-aim (\(p.song.name))")
+          buildTargetT = t + (dropMs - positionMs)
+          lastReaimT = t
+        }
+      }
+    }
 
     // Fill-mode loop management + commit decision at loop boundaries.
     if mode == .fill, let p = playing, let bounds = loopBounds {
@@ -284,6 +394,7 @@ final class LiveEngine {
             emit(t: t, song: pick.song, positionMs: positionMs, fadeSec: 0.45, reason: "buildup toward the effort (\(pick.song.name))")
             mode = .build
             buildTargetT = t + eta
+            buildDropMs = pick.dropMs
             return Array(commands[before...])
           }
         }

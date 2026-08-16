@@ -126,6 +126,59 @@ final class LiveEngineTests: XCTestCase {
     XCTAssertGreaterThanOrEqual(Set(engine.commands.map { $0.trackId }).count, 2)
   }
 
+  func testHardOpeningPlanOpensOnADrop() {
+    let p: [WorkoutStep] = [
+      WorkoutStep(kind: "hard", seconds: nil, meters: 1000),
+      WorkoutStep(kind: "easy", seconds: nil, meters: 500),
+    ]
+    let engine = LiveEngine(plan: p, songs: songs, paceSecPerKm: 340)
+    for s in stream([(30, 3)]) { engine.advance(s) }
+    XCTAssertTrue(engine.commands.first?.reason.hasPrefix("drop lands (opening)") ?? false)
+    XCTAssertEqual(engine.landings.count, 1)
+  }
+
+  func testConsecutiveHardRepsGetBuildupsNotTruncatedCuts() {
+    let p: [WorkoutStep] = [
+      WorkoutStep(kind: "warmup", seconds: 60, meters: nil),
+      WorkoutStep(kind: "hard", seconds: nil, meters: 600),
+      WorkoutStep(kind: "hard", seconds: nil, meters: 600),
+      WorkoutStep(kind: "hard", seconds: nil, meters: 600),
+      WorkoutStep(kind: "cooldown", seconds: 60, meters: nil),
+    ]
+    let engine = LiveEngine(plan: p, songs: songs, paceSecPerKm: 340)
+    for s in stream([(700, 3)]) { engine.advance(s) }
+    XCTAssertEqual(engine.landings.count, 3)
+    for l in engine.landings { XCTAssertLessThanOrEqual(abs(l.errorMs), 1500) }
+    XCTAssertGreaterThanOrEqual(engine.commands.filter { $0.reason.hasPrefix("buildup toward next rep") }.count, 2)
+    XCTAssertFalse(engine.commands.contains { $0.reason.contains("truncated") })
+  }
+
+  func testWkStepSeqIsAuthoritativeOverTheOdometer() {
+    // Distance stream reads 20% short — the watch's step events correct it.
+    let p: [WorkoutStep] = [
+      WorkoutStep(kind: "easy", seconds: nil, meters: 900),
+      WorkoutStep(kind: "hard", seconds: nil, meters: 300),
+      WorkoutStep(kind: "easy", seconds: nil, meters: 600),
+    ]
+    let engine = LiveEngine(plan: p, songs: songs, paceSecPerKm: 340)
+    for i in 1...600 {
+      let t = Double(i) * 1000
+      let trueDist = Double(i) * 3
+      let seq: Double = t < 300_000 ? 1 : (t < 400_000 ? 2 : 3)
+      engine.advance(LiveSample(tMs: t, distanceM: trueDist * 0.8, wkStepSeq: seq))
+    }
+    XCTAssertEqual(engine.landings.count, 1)
+    XCTAssertLessThanOrEqual(abs(engine.landings[0].actualTMs - 300_000), 2000)
+  }
+
+  func testMidBuildSlowdownReaimsAndLandsTight() {
+    let engine = LiveEngine(plan: plan, songs: songs, paceSecPerKm: 340)
+    for s in stream([(370, 3), (200, 1.8)]) { engine.advance(s) }
+    XCTAssertEqual(engine.landings.count, 1)
+    XCTAssertLessThanOrEqual(abs(engine.landings[0].errorMs), 2000)
+    XCTAssertTrue(engine.commands.contains { $0.reason.hasPrefix("build re-aim") })
+  }
+
   func testBundleDecodesLivePayloadAndTolerantOfOldFormat() throws {
     let newJson = """
     {"name":"x","planEndMs":60000,"cues":[],"songs":[],

@@ -131,7 +131,7 @@ struct SessionView: View {
         // (unless a simulated runner is already driving it).
         if let t = s.timerMs, !engine.simulating {
           if engine.liveMode {
-            engine.advanceLive(timerMs: t, distanceM: s.distanceM, hr: s.hr)
+            engine.advanceLive(timerMs: t, distanceM: s.distanceM, hr: s.hr, wkStepSeq: s.wkStepSeq)
           }
           // Full-fidelity capture in every mode (workout steps, altitude —
           // the flywheel and the follow-mode brain learn from these).

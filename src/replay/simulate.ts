@@ -12,6 +12,8 @@ export interface SimSample {
   hr?: number
   altitude?: number
   cadence?: number
+  /** Watch step-sequence counter (recorded in LIVE logs from 2026-08-16 on). */
+  wkStepSeq?: number
 }
 
 export interface ScenarioOpts {
@@ -170,7 +172,7 @@ export function simulate(
   const engine = new LiveEngine(plan, songs, opts)
   const trace: TracePoint[] = []
   for (const s of samples) {
-    engine.advance({ tMs: s.tMs, distanceM: s.distanceM, hr: s.hr, altitudeM: s.altitude })
+    engine.advance({ tMs: s.tMs, distanceM: s.distanceM, hr: s.hr, altitudeM: s.altitude, wkStepSeq: s.wkStepSeq })
     const st = engine.state
     trace.push({
       tMs: s.tMs,
@@ -267,7 +269,7 @@ export function importTcx(xml: string): LoadedLog {
 export function loadSessionLog(json: unknown): LoadedLog {
   const log = json as {
     plan?: WorkoutPlan
-    samples?: { tMs: number; distanceM?: number; hr?: number; altitude?: number; cadence?: number }[]
+    samples?: { tMs: number; distanceM?: number; hr?: number; altitude?: number; cadence?: number; wkStepSeq?: number }[]
     hr?: { atMs: number; hr: number }[]
     hrMax?: number
   }
@@ -276,7 +278,7 @@ export function loadSessionLog(json: unknown): LoadedLog {
   if (Array.isArray(log.samples) && log.samples.length > 0) {
     samples = log.samples
       .filter((s) => typeof s.tMs === 'number')
-      .map((s) => ({ tMs: s.tMs, distanceM: s.distanceM, hr: s.hr, altitude: s.altitude, cadence: s.cadence }))
+      .map((s) => ({ tMs: s.tMs, distanceM: s.distanceM, hr: s.hr, altitude: s.altitude, cadence: s.cadence, wkStepSeq: s.wkStepSeq }))
   } else if (Array.isArray(log.hr)) {
     samples = log.hr.filter((s) => typeof s.atMs === 'number').map((s) => ({ tMs: s.atMs, hr: s.hr }))
   }
