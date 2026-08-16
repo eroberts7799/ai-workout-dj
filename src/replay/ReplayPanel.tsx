@@ -118,12 +118,16 @@ export default function ReplayPanel() {
   const [batch, setBatch] = useState<BatchRow[] | null>(null)
   const [batchBusy, setBatchBusy] = useState('')
 
-  // Audible replay machinery.
+  // Replay machinery — seekable: a position (replayMs) that the slider can
+  // move anywhere, and a play mode that advances it in real time (×1 default:
+  // the session takes exactly as long as the data says it will).
   const deckRef = useRef<LocalDeck | null>(null)
   const timersRef = useRef<ReturnType<typeof setTimeout>[]>([])
   const tickerRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  const [replayMs, setReplayMs] = useState<number | null>(null)
-  const [speed, setSpeed] = useState(8)
+  const anchorRef = useRef<{ perf: number; ms: number } | null>(null)
+  const [replayMs, setReplayMs] = useState(0)
+  const [playMode, setPlayMode] = useState<'idle' | 'silent' | 'audio'>('idle')
+  const [speed, setSpeed] = useState(1)
 
   const lib = Object.values(loadAllTags())
   const hasDrop = lib.some((s) => s.markers.some((m) => m.type === 'drop'))
@@ -290,50 +294,28 @@ export default function ReplayPanel() {
     }
   }
 
-  /** Run the playhead so LiveStatus + timeline animate. */
-  function startTicker(durationMs: number) {
-    setReplayMs(0)
-    const startedAt = performance.now()
-    tickerRef.current = setInterval(() => {
-      const ms = (performance.now() - startedAt) * speed
-      if (ms >= durationMs) stopReplay()
-      else setReplayMs(ms)
-    }, 100)
+  function clearTimers() {
+    for (const t of timersRef.current) clearTimeout(t)
+    timersRef.current = []
+    if (tickerRef.current) clearInterval(tickerRef.current)
+    tickerRef.current = null
   }
 
-  /** Silent observation: the dashboard runs, no audio needed. */
-  function startWatch() {
-    if (!result) return
-    stopReplay()
-    startTicker(result.durationMs)
+  /** Cue the audio to what should be playing at ms (last command before it). */
+  function establishAudio(ms: number) {
+    const deck = deckRef.current
+    if (!deck || !result) return
+    const cmd = [...result.commands].reverse().find((c) => c.tMs <= ms && deck.has(c.trackId))
+    if (cmd) deck.play(cmd.trackId, cmd.positionMs + (ms - cmd.tMs), 0.15)
+    else void deck.pause()
   }
 
-  /** Schedule every command through the local deck at ×speed. */
-  async function startReplay() {
-    if (!result) return
-    const deck = (deckRef.current ??= new LocalDeck())
-    const ids = [...new Set(result.commands.map((c) => c.trackId))]
-    let loadedCount = 0
-    for (const id of ids) {
-      const song = engineSongs.find((s) => s.trackId === id)
-      if (song) deck.setMeta(id, { bpm: song.bpm, anchorMs: beatAnchorMs(song.markers) })
-      if (deck.has(id)) {
-        loadedCount++
-        continue
-      }
-      const data = await loadAudio(id)
-      if (data) {
-        await deck.load(id, data)
-        loadedCount++
-      }
-    }
-    if (loadedCount === 0) {
-      setStatus('audible replay needs songs with attached audio files (Tagger → attach file) — the timeline above is still the full story')
-      return
-    }
-    const skipped = result.commands.filter((c) => !deck.has(c.trackId)).length
-    setStatus(skipped > 0 ? `${skipped} command(s) hit songs without audio — silent gaps` : '')
+  /** Schedule the commands from ms onward at ×speed. */
+  function scheduleAudioFrom(ms: number) {
+    const deck = deckRef.current
+    if (!deck || !result) return
     for (const c of result.commands) {
+      if (c.tMs < ms) continue
       // Time compression artifact: at ×N the engine's musical clock outruns
       // 1× audio, so loop-backs would re-cut every few real seconds — mute
       // them and let the groove play through. ×1 executes everything.
@@ -347,19 +329,87 @@ export default function ReplayPanel() {
               Math.max(0.12, c.fadeSec / speed),
               speed === 1 ? deckOptsFor(c.reason) : {}, // beat waits/locks only make sense in real time
             )
-        }, c.tMs / speed),
+        }, (c.tMs - ms) / speed),
       )
     }
-    startTicker(result.durationMs)
   }
 
+  function startTicker(fromMs: number, durationMs: number) {
+    anchorRef.current = { perf: performance.now(), ms: fromMs }
+    tickerRef.current = setInterval(() => {
+      const a = anchorRef.current
+      if (!a) return
+      const ms = a.ms + (performance.now() - a.perf) * speed
+      if (ms >= durationMs) {
+        pausePlayback()
+        setReplayMs(durationMs)
+      } else {
+        setReplayMs(ms)
+      }
+    }, 100)
+  }
+
+  /** Play from the slider position — silent (dashboard only) or with audio. */
+  async function play(withAudio: boolean) {
+    if (!result) return
+    clearTimers()
+    const from = replayMs >= result.durationMs - 1000 ? 0 : replayMs
+    setReplayMs(from)
+    if (withAudio) {
+      const deck = (deckRef.current ??= new LocalDeck())
+      const ids = [...new Set(result.commands.map((c) => c.trackId))]
+      let loadedCount = 0
+      for (const id of ids) {
+        const song = engineSongs.find((s) => s.trackId === id)
+        if (song) deck.setMeta(id, { bpm: song.bpm, anchorMs: beatAnchorMs(song.markers) })
+        if (deck.has(id)) {
+          loadedCount++
+          continue
+        }
+        const data = await loadAudio(id)
+        if (data) {
+          await deck.load(id, data)
+          loadedCount++
+        }
+      }
+      if (loadedCount === 0) {
+        setStatus('listening needs songs with attached audio files (Tagger → attach file) — ▶ Watch works without them')
+        return
+      }
+      const skipped = result.commands.filter((c) => !deck.has(c.trackId)).length
+      setStatus(skipped > 0 ? `${skipped} command(s) hit songs without audio — silent gaps` : '')
+      establishAudio(from)
+      scheduleAudioFrom(from)
+    }
+    setPlayMode(withAudio ? 'audio' : 'silent')
+    startTicker(from, result.durationMs)
+  }
+
+  function pausePlayback() {
+    clearTimers()
+    void deckRef.current?.pause()
+    setPlayMode('idle')
+  }
+
+  /** Slide anywhere in the session; playback (and audio) follow. */
+  function seek(ms: number) {
+    setReplayMs(ms)
+    if (playMode === 'idle') return
+    anchorRef.current = { perf: performance.now(), ms }
+    if (playMode === 'audio') {
+      clearTimers()
+      establishAudio(ms)
+      scheduleAudioFrom(ms)
+      if (result) startTicker(ms, result.durationMs)
+    }
+  }
+
+  /** Full reset (new sim / new load): pause and rewind. */
   function stopReplay() {
-    for (const t of timersRef.current) clearTimeout(t)
-    timersRef.current = []
-    if (tickerRef.current) clearInterval(tickerRef.current)
-    tickerRef.current = null
+    clearTimers()
     deckRef.current?.stop()
-    setReplayMs(null)
+    setPlayMode('idle')
+    setReplayMs(0)
   }
 
   const worst = result && result.landings.length > 0 ? Math.max(...result.landings.map((l) => Math.abs(l.errorMs))) : null
@@ -530,24 +580,37 @@ export default function ReplayPanel() {
             {result.warnings.map((w) => (
               <p key={w} className="warn">{w}</p>
             ))}
-            {replayMs != null && <LiveStatus result={result} tMs={replayMs} songs={engineSongs} />}
+            <LiveStatus result={result} tMs={replayMs} songs={engineSongs} />
             <CourseView result={result} playheadMs={replayMs} songs={engineSongs} />
             <Timeline result={result} playheadMs={replayMs} truth={loaded?.boundaries ?? null} />
-            <div style={{ marginTop: 10, display: 'flex', gap: 8, alignItems: 'center' }}>
-              {replayMs == null ? (
+            <div style={{ marginTop: 10, display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+              {playMode === 'idle' ? (
                 <>
-                  <button onClick={startWatch}>▶ Watch</button>
-                  <button onClick={() => void startReplay()}>🎧 Audible replay</button>
+                  <button onClick={() => void play(false)}>▶ Watch</button>
+                  <button onClick={() => void play(true)}>🎧 Listen</button>
                 </>
               ) : (
-                <button onClick={stopReplay}>⏹ Stop ({fmtClock(replayMs)})</button>
+                <button onClick={pausePlayback}>⏸ Pause</button>
               )}
-              <select value={speed} onChange={(e) => setSpeed(Number(e.target.value))} style={{ width: 'auto' }} disabled={replayMs != null}>
+              <select value={speed} onChange={(e) => setSpeed(Number(e.target.value))} style={{ width: 'auto' }} disabled={playMode !== 'idle'} title="×1 = real time — the session takes as long as the data says">
                 {[1, 2, 4, 8, 16].map((x) => (
-                  <option key={x} value={x}>×{x}</option>
+                  <option key={x} value={x}>×{x}{x === 1 ? ' (real time)' : ''}</option>
                 ))}
               </select>
+              <span className="muted" style={{ fontVariantNumeric: 'tabular-nums' }}>
+                {fmtClock(replayMs)} / {fmtClock(result.durationMs)}
+              </span>
             </div>
+            <input
+              type="range"
+              min={0}
+              max={result.durationMs}
+              step={1000}
+              value={Math.min(replayMs, result.durationMs)}
+              onChange={(e) => seek(Number(e.target.value))}
+              style={{ width: '100%', marginTop: 6 }}
+              title="Slide to any moment — the dashboard, course, and audio follow"
+            />
           </div>
 
           <div className="card">
