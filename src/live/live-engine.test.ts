@@ -280,6 +280,37 @@ describe('LiveEngine', () => {
     expect(Math.abs(engine.landings[0].actualTMs - 300_000)).toBeLessThanOrEqual(2000)
   })
 
+  test('stalled watch seq (identical adjacent steps) — overdue fallback advances by odometer', () => {
+    // The CIQ field detects step changes by signature; two identical adjacent
+    // steps produce no bump, ever. The engine must not freeze, and later
+    // seq bumps (new boundaries) must still advance normally.
+    const p: WorkoutPlan = {
+      name: 'identical reps',
+      steps: [
+        { kind: 'hard', meters: 600 },
+        { kind: 'hard', meters: 600 }, // identical sig — watch misses this boundary
+        { kind: 'rest', seconds: 60 }, // sig differs — watch bumps here
+        { kind: 'hard', meters: 600 },
+      ],
+    }
+    const engine = new LiveEngine(p, songs, { paceSecPerKm: 340 })
+    for (let i = 1; i <= 700; i++) {
+      const t = i * 1000
+      const d = i * 3
+      // watch seq: stuck at 1 through both 600s (boundary at 200s missed),
+      // bumps to 2 at the rest (400s), to 3 at the last rep (460s).
+      const seq = t < 400_000 ? 1 : t < 460_000 ? 2 : 3
+      engine.advance({ tMs: t, distanceM: d, wkStepSeq: seq })
+    }
+    // 3 hard-step landings total (opening + missed-boundary rep + final rep)
+    expect(engine.landings.length).toBe(3)
+    expect(engine.warnings.some((w) => w.includes('stalled'))).toBe(true)
+    // The absorbed late bump must not have skipped the rest step early:
+    // final landing sits near the true 460s boundary.
+    const last = engine.landings[engine.landings.length - 1]
+    expect(Math.abs(last.actualTMs - 460_000)).toBeLessThanOrEqual(5000)
+  })
+
   test('mid-build slowdown triggers a re-aim and the drop still lands tight', () => {
     // Fade hard in the last stretch before the rep — exactly when the old
     // engine rode a stale forecast into an early drop.

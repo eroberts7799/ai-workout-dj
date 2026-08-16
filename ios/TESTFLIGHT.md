@@ -15,16 +15,29 @@ left needs Ethan's Apple ID — none of it is automatable without your login.
    a different Team ID than `6N9T4GRA6U`, update `DEVELOPMENT_TEAM` in
    `project.yml` and re-run `xcodegen`.
 
-## Every upload (~5 min, mostly automated)
+## Every upload (~5 min, fully CLI — no Xcode UI, proven builds 1–6)
 
 ```sh
-cd ios && xcodegen
+cd ios
+# 1. bump CURRENT_PROJECT_VERSION in project.yml, then:
+xcodegen
+# 2. archive (cloud signing via the ASC Admin key in .asc/):
 DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer \
   xcodebuild -project AwdjPlayer.xcodeproj -scheme AwdjPlayer \
-  -destination 'generic/platform=iOS' -archivePath build/AwdjPlayer.xcarchive archive
-# Then: Xcode → Window → Organizer → Archives → Distribute App → TestFlight & App Store.
-# (CLI alternative once an App Store Connect API key exists:
-#  xcodebuild -exportArchive with method app-store-connect + notarize via altool successor.)
+  -destination 'generic/platform=iOS' -archivePath build/AwdjPlayer.xcarchive \
+  -allowProvisioningUpdates \
+  -authenticationKeyPath "$PWD/.asc/AuthKey_R8827W4635.p8" \
+  -authenticationKeyID R8827W4635 \
+  -authenticationKeyIssuerID 2ea54037-c0ac-4593-9fe7-3ce2dd7ccafb archive
+# 3. export + upload straight to App Store Connect:
+DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer \
+  xcodebuild -exportArchive -archivePath build/AwdjPlayer.xcarchive \
+  -exportOptionsPlist ExportOptions.plist -allowProvisioningUpdates \
+  -authenticationKeyPath "$PWD/.asc/AuthKey_R8827W4635.p8" \
+  -authenticationKeyID R8827W4635 \
+  -authenticationKeyIssuerID 2ea54037-c0ac-4593-9fe7-3ce2dd7ccafb
+# Internal testers get it automatically after ~5-15 min of processing
+# (ITSAppUsesNonExemptEncryption=false is declared — no compliance prompt).
 ```
 
 3. **Testers** — App Store Connect → TestFlight tab → Internal Testing → add

@@ -43,6 +43,10 @@ class AwdjField extends WatchUi.SimpleDataField {
       "durationType" => ws.durationType,
       "durationValue" => ws.durationValue,
       "name" => step.name,
+      // Target band (pace/HR) — distinguishes same-shape adjacent steps and
+      // feeds the conductor's ETA priors later.
+      "targetLow" => ws.targetValueLow,
+      "targetHigh" => ws.targetValueHigh,
     };
   }
 
@@ -94,7 +98,13 @@ class AwdjField extends WatchUi.SimpleDataField {
     // conductor can timestamp step starts from its own clock.
     var cur = stepDict(Activity.getCurrentWorkoutStep());
     if (cur != null) {
-      var sig = (cur["kind"] as String) + "|" + cur["durationType"] + "|" + cur["durationValue"];
+      // Signature must separate ADJACENT steps that share a shape: Rolling
+      // 800s = 8 back-to-back distance-804m actives differing only by target
+      // pace. Name + target band carry that difference. (Truly identical
+      // adjacent steps stay undetectable here — the conductor's odometer
+      // fallback covers those.)
+      var sig = (cur["kind"] as String) + "|" + cur["durationType"] + "|" + cur["durationValue"]
+        + "|" + cur["targetLow"] + "|" + cur["targetHigh"] + "|" + cur["name"];
       if (!sig.equals(_lastStepSig)) {
         _lastStepSig = sig;
         _stepSeq += 1;

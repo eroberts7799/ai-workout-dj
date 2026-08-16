@@ -234,6 +234,41 @@ export class LiveEngine {
           if (next) entered.push(next)
         }
       }
+      // Belt and braces: the watch's step-change detection is signature-based
+      // and PERMANENTLY misses a boundary between identical adjacent steps
+      // (seen in the wild: Rolling 800s = 8 back-to-back same-shape actives).
+      // If our own tracking says the step is far past done — 25% / ≥12s
+      // beyond the prescription, far beyond the watch's real 1–3s seq lag —
+      // advance by odometer. A later seq bump is always a NEW boundary
+      // (sig misses never re-detect), so no double-advance bookkeeping.
+      const cur = this.currentStep()
+      if (cur) {
+        const overdue =
+          cur.seconds != null
+            ? t - this.stepStartT - cur.seconds * 1000 > Math.max(12_000, cur.seconds * 250)
+            : dist != null && cur.meters != null
+              ? dist - this.stepStartDist - cur.meters > Math.max(50, cur.meters * 0.25)
+              : false
+        if (overdue) {
+          // The real boundary was ~the prescription ago, not now — backdate
+          // so the steps after it don't inherit the detection delay.
+          let bT: number
+          let bD: number | null
+          if (cur.seconds != null) {
+            bT = this.stepStartT + cur.seconds * 1000
+            bD = dist != null ? dist - ((t - bT) / 1000) * (1000 / this.paceSecPerKm) : null
+          } else {
+            bD = this.stepStartDist + (cur.meters ?? 0)
+            bT = dist != null ? t - ((dist - bD) / 1000) * this.paceSecPerKm * 1000 : t
+          }
+          this.stepIdx++
+          this.stepStartT = bT
+          this.stepStartDist = bD ?? this.stepStartDist
+          this.warnings.push(`watch step stream stalled — advanced step ${this.stepIdx} by odometer`)
+          const next = this.currentStep()
+          if (next) entered.push(next)
+        }
+      }
       return entered
     }
     // Estimated (no watch step stream): advance on our own time/distance,

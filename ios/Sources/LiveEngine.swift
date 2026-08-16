@@ -183,6 +183,35 @@ final class LiveEngine {
           if let next = currentStep() { entered.append(next) }
         }
       }
+      // Belt and braces: sig-based step detection PERMANENTLY misses a
+      // boundary between identical adjacent steps. 25% / ≥12s past the
+      // prescription (≫ the watch's real 1–3s seq lag) → advance by
+      // odometer, backdating to the prescribed boundary. Mirrors TS.
+      if let cur = currentStep() {
+        var overdue = false
+        if let seconds = cur.seconds {
+          overdue = t - stepStartT - seconds * 1000 > max(12_000, seconds * 250)
+        } else if let dist, let meters = cur.meters {
+          overdue = dist - stepStartDist - meters > max(50, meters * 0.25)
+        }
+        if overdue {
+          let bT: Double
+          let bD: Double?
+          if let seconds = cur.seconds {
+            bT = stepStartT + seconds * 1000
+            bD = dist.map { $0 - ((t - bT) / 1000) * (1000 / paceSecPerKm) }
+          } else {
+            let cross = stepStartDist + (cur.meters ?? 0)
+            bD = cross
+            bT = dist != nil ? t - ((dist! - cross) / 1000) * paceSecPerKm * 1000 : t
+          }
+          stepIdx += 1
+          stepStartT = bT
+          stepStartDist = bD ?? stepStartDist
+          warnings.append("watch step stream stalled — advanced step \(stepIdx) by odometer")
+          if let next = currentStep() { entered.append(next) }
+        }
+      }
       return entered
     }
     while true {

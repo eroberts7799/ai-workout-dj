@@ -171,6 +171,25 @@ final class LiveEngineTests: XCTestCase {
     XCTAssertLessThanOrEqual(abs(engine.landings[0].actualTMs - 300_000), 2000)
   }
 
+  func testStalledWatchSeqOverdueFallbackAdvances() {
+    let p: [WorkoutStep] = [
+      WorkoutStep(kind: "hard", seconds: nil, meters: 600),
+      WorkoutStep(kind: "hard", seconds: nil, meters: 600), // identical sig — watch misses
+      WorkoutStep(kind: "rest", seconds: 60, meters: nil),
+      WorkoutStep(kind: "hard", seconds: nil, meters: 600),
+    ]
+    let engine = LiveEngine(plan: p, songs: songs, paceSecPerKm: 340)
+    for i in 1...700 {
+      let t = Double(i) * 1000
+      let d = Double(i) * 3
+      let seq: Double = t < 400_000 ? 1 : (t < 460_000 ? 2 : 3)
+      engine.advance(LiveSample(tMs: t, distanceM: d, wkStepSeq: seq))
+    }
+    XCTAssertEqual(engine.landings.count, 3)
+    XCTAssertTrue(engine.warnings.contains { $0.contains("stalled") })
+    XCTAssertLessThanOrEqual(abs(engine.landings.last!.actualTMs - 460_000), 5000)
+  }
+
   func testMidBuildSlowdownReaimsAndLandsTight() {
     let engine = LiveEngine(plan: plan, songs: songs, paceSecPerKm: 340)
     for s in stream([(370, 3), (200, 1.8)]) { engine.advance(s) }
