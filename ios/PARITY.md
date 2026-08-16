@@ -43,4 +43,10 @@ replays every case against `BeatMath`. Regenerate after any `beat.ts` change.
       next-rep anticipation (hard→hard buildups), opening-hard drop,
       mid-build funnel re-aim. Backtest on 41 real structured runs went
       88%→95-98% on-time, max error 34.8s→3-5s, 0 missed.
+- [x] Cruise listening model 2026-08-16 (same-session port): loop-backs
+      removed entirely — songs play through, chains at song end / ~3min
+      freshness, buildup commits watched every tick from cruise AND ride.
+      Critic: 51→19 transitions per session, landings unchanged. Known
+      open: freshness chains can land mid-breakdown (dip −9.6dB) —
+      energy-aware chain points from analysis segments are the next rung.
 - [x] DualDeck: tempo-locked blends, bar cuts, bass swap

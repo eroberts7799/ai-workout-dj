@@ -93,7 +93,6 @@ export class LiveEngine {
   private mode: Mode | null = null
   private playing: { song: SongTags; positionAtMs: number; atTMs: number } | null = null
   private fillStartedT: number | null = null
-  private loopBounds: { startMs: number; endMs: number } | null = null
   private buildTargetT: number | null = null
   private buildDropMs: number | null = null
   private lastReaimT = -Infinity
@@ -360,12 +359,16 @@ export class LiveEngine {
     return r.choice
   }
 
+  /** Cruise: enter the next song at its groove and LET IT PLAY. No loops —
+   *  the listener hears most of a song; changes happen at song ends, at the
+   *  ~3min freshness mark, or when a rep demands a buildup. (Loop-backs as
+   *  default texture were "the UX sucks when it loops every 30 seconds" —
+   *  Ethan, 2026-08-16. The loop markers stay as groove ENTRY points.) */
   private startFill(t: number) {
     const fill = this.pickLoop()
     if (!fill) return
     this.mode = 'fill'
     this.fillStartedT = t
-    this.loopBounds = { startMs: fill.startMs, endMs: fill.endMs }
     this.emit(t, fill.song, fill.startMs, 1.2, `groove fill (${fill.song.name})`)
   }
 
@@ -464,7 +467,10 @@ export class LiveEngine {
     // (backtest 2026-08-16: 8/8 truncated on Rolling 800s). Riding a drop and
     // the NEXT hard start's ETA now fits the best candidate's buildup → cut
     // into that buildup so the next drop lands as the next rep begins.
-    if (this.mode === 'ride' && this.crestRideUntil == null) {
+    // The SAME check runs while cruising: the engine watches the ETA every
+    // second and leaves the current song exactly buildup-length before the
+    // effort — no loop boundary to wait for, no holding pattern.
+    if ((this.mode === 'ride' || this.mode === 'fill') && this.crestRideUntil == null) {
       const eta = this.etaToNextHardMs(t, dist)
       if (eta != null) {
         const r = this.pickBest(this.droppable, this.dropIdx)
@@ -473,7 +479,8 @@ export class LiveEngine {
           if (eta <= buildLen) {
             this.dropIdx += r.advance
             const positionMs = snapToBeat(Math.max(0, r.choice.dropMs - eta), r.choice.dropMs, r.choice.song.bpm)
-            this.emit(t, r.choice.song, positionMs, 0.45, `buildup toward next rep (${r.choice.song.name})`)
+            const reason = this.mode === 'ride' ? 'buildup toward next rep' : 'buildup toward the effort'
+            this.emit(t, r.choice.song, positionMs, 0.45, `${reason} (${r.choice.song.name})`)
             this.mode = 'build'
             this.buildTargetT = t + (r.choice.dropMs - positionMs)
             this.buildDropMs = r.choice.dropMs
@@ -506,37 +513,12 @@ export class LiveEngine {
       }
     }
 
-    // Fill-mode loop management + commit decision at loop boundaries.
-    if (this.mode === 'fill' && this.playing && this.loopBounds) {
-      const pos = this.playheadMs(t)
-      if (pos >= this.loopBounds.endMs) {
-        const eta = this.etaToNextHardMs(t, dist)
-        const loopLen = this.loopBounds.endMs - this.loopBounds.startMs
-        const pick = eta != null ? this.pickDrop() : null
-        if (eta != null && pick) {
-          const buildLen = pick.dropMs - pick.entryMs
-          if (eta <= buildLen + loopLen) {
-            // Last viable boundary: enter so the drop lands at ETA — snapped
-            // to the incoming song's beat grid (anchored at its downbeat-
-            // aligned drop), so the cut enters on the beat. Costs ≤ half a
-            // beat of landing precision; buys musical phrasing.
-            const positionMs = snapToBeat(Math.max(0, pick.dropMs - eta), pick.dropMs, pick.song.bpm)
-            this.emit(t, pick.song, positionMs, 0.45, `buildup toward the effort (${pick.song.name})`)
-            this.mode = 'build'
-            this.buildTargetT = t + (pick.dropMs - positionMs)
-            this.buildDropMs = pick.dropMs
-            return this.commands.slice(before)
-          }
-        }
-        // Freshness (corpus-learned): real DJs move on after ~3 minutes.
-        // At a loop boundary with no commit pending, a stale fill trades
-        // its loop for a fresh groove instead of looping back again.
-        if (this.fillStartedT != null && t - this.fillStartedT >= MAX_FILL_RIDE_MS && this.loopable.length > 1) {
-          this.startFill(t)
-        } else {
-          this.emit(t, this.playing.song, this.loopBounds.startMs, 0.25, `loop back (${this.playing.song.name})`)
-        }
-      }
+    // Cruise freshness (corpus-learned): real DJs move on after ~3 minutes.
+    // A stale cruise chains to a fresh groove on a bar boundary (the deck
+    // handles the bar-aligned, tempo-locked blend) — but never when a commit
+    // could be imminent within the next chain's ride.
+    if (this.mode === 'fill' && this.fillStartedT != null && t - this.fillStartedT >= MAX_FILL_RIDE_MS && this.loopable.length > 1) {
+      this.startFill(t)
     }
 
     // Never-silence: chain a fresh groove if the current track would end.

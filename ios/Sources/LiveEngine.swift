@@ -76,7 +76,6 @@ final class LiveEngine {
   private var mode: Mode?
   private var playing: (song: TaggedSong, positionAtMs: Double, atTMs: Double)?
   private var fillStartedT: Double?
-  private var loopBounds: (startMs: Double, endMs: Double)?
   private var buildTargetT: Double?
   private var buildDropMs: Double?
   private var lastReaimT: Double = -.infinity
@@ -309,11 +308,12 @@ final class LiveEngine {
     return c
   }
 
+  /// Cruise: enter the next song at its groove and let it PLAY — no loops.
+  /// The loop markers remain the entry anchors. Mirrors TS.
   private func startFill(_ t: Double) {
     guard let fill = pickLoop() else { return }
     mode = .fill
     fillStartedT = t
-    loopBounds = (startMs: fill.startMs, endMs: fill.endMs)
     emit(t: t, song: fill.song, positionMs: fill.startMs, fadeSec: 1.2, reason: "groove fill (\(fill.song.name))")
   }
 
@@ -372,16 +372,17 @@ final class LiveEngine {
       }
     }
 
-    // Next-rep anticipation: riding a drop and the NEXT hard start's ETA fits
-    // the best candidate's buildup → cut into that buildup so the next drop
-    // lands as the next rep begins (interval blocks used to truncate 8/8).
-    if mode == .ride {
+    // Effort anticipation from ride OR cruise: the engine watches the ETA
+    // every tick and leaves the current song exactly buildup-length before
+    // the effort — no loop boundary to wait for. Mirrors TS.
+    if mode == .ride || mode == .fill {
       if let eta = etaToNextHardMs(t: t, dist: dist), let r = bestDrop() {
         let buildLen = r.c.dropMs - r.c.entryMs
         if eta <= buildLen {
           dropIdx += r.advance
           let positionMs = max(0, r.c.dropMs - eta)
-          emit(t: t, song: r.c.song, positionMs: positionMs, fadeSec: 0.45, reason: "buildup toward next rep (\(r.c.song.name))")
+          let reason = mode == .ride ? "buildup toward next rep" : "buildup toward the effort"
+          emit(t: t, song: r.c.song, positionMs: positionMs, fadeSec: 0.45, reason: "\(reason) (\(r.c.song.name))")
           mode = .build
           buildTargetT = t + (r.c.dropMs - positionMs)
           buildDropMs = r.c.dropMs
@@ -408,33 +409,12 @@ final class LiveEngine {
       }
     }
 
-    // Fill-mode loop management + commit decision at loop boundaries.
-    if mode == .fill, let p = playing, let bounds = loopBounds {
-      let pos = playheadMs(t)
-      if pos >= bounds.endMs {
-        let eta = etaToNextHardMs(t: t, dist: dist)
-        let loopLen = bounds.endMs - bounds.startMs
-        let pick = eta != nil ? pickDrop() : nil
-        if let eta, let pick {
-          let buildLen = pick.dropMs - pick.entryMs
-          if eta <= buildLen + loopLen {
-            // Last viable boundary: enter so the drop lands exactly at ETA.
-            let positionMs = max(0, pick.dropMs - eta)
-            emit(t: t, song: pick.song, positionMs: positionMs, fadeSec: 0.45, reason: "buildup toward the effort (\(pick.song.name))")
-            mode = .build
-            buildTargetT = t + eta
-            buildDropMs = pick.dropMs
-            return Array(commands[before...])
-          }
-        }
-        // Freshness (corpus-learned): a stale fill trades its loop for a
-        // fresh groove instead of looping back — mirrors the TS engine.
-        if let started = fillStartedT, t - started >= Self.maxFillRideMs, loopable.count > 1 {
-          startFill(t)
-        } else {
-          emit(t: t, song: p.song, positionMs: bounds.startMs, fadeSec: 0.25, reason: "loop back (\(p.song.name))")
-        }
-      }
+    // Cruise freshness (corpus-learned): real DJs move on after ~3 minutes —
+    // a stale cruise chains to a fresh groove. No loop-backs, ever: songs
+    // play through; changes happen at song ends, the freshness mark, or a
+    // rep's buildup. Mirrors TS (Ethan's 2026-08-16 verdict on loop texture).
+    if mode == .fill, let started = fillStartedT, t - started >= Self.maxFillRideMs, loopable.count > 1 {
+      startFill(t)
     }
 
     // Never-silence: chain a fresh groove if the current track would end.

@@ -63,13 +63,14 @@ final class LiveEngineTests: XCTestCase {
     XCTAssertLessThanOrEqual(abs(engine.landings[0].errorMs), 4000)
   }
 
-  func testSlowerRunnerLoopsMore() {
-    let fast = LiveEngine(plan: plan, songs: songs, paceSecPerKm: 340)
-    for s in stream([(600, 3.4)]) { fast.advance(s) }
-    let slow = LiveEngine(plan: plan, songs: songs, paceSecPerKm: 340)
-    for s in stream([(900, 2.2)]) { slow.advance(s) }
-    let loops = { (e: LiveEngine) in e.commands.filter { $0.reason.hasPrefix("loop back") }.count }
-    XCTAssertGreaterThan(loops(slow), loops(fast))
+  func testCruiseNeverLoopsAndStaysUnderTransitionBudget() {
+    let engine = LiveEngine(plan: plan, songs: songs, paceSecPerKm: 340)
+    for s in stream([(900, 2.2)]) { engine.advance(s) }
+    XCTAssertFalse(engine.commands.contains { $0.reason.hasPrefix("loop back") })
+    let budget = Int(ceil(900_000.0 / 165_000.0)) + engine.landings.count * 3 + 2
+    XCTAssertLessThanOrEqual(engine.commands.count, budget)
+    XCTAssertEqual(engine.landings.count, 1)
+    XCTAssertLessThanOrEqual(abs(engine.landings[0].errorMs), 1500)
   }
 
   func testNeverRunsOffTrackEnd() {
@@ -194,8 +195,9 @@ final class LiveEngineTests: XCTestCase {
     let engine = LiveEngine(plan: plan, songs: songs, paceSecPerKm: 340)
     for s in stream([(370, 3), (200, 1.8)]) { engine.advance(s) }
     XCTAssertEqual(engine.landings.count, 1)
+    // Cruise-mode commits fire closer in (fresher pace), so a re-aim may not
+    // even be needed — the contract is the tight landing, same as TS.
     XCTAssertLessThanOrEqual(abs(engine.landings[0].errorMs), 2000)
-    XCTAssertTrue(engine.commands.contains { $0.reason.hasPrefix("build re-aim") })
   }
 
   func testBundleDecodesLivePayloadAndTolerantOfOldFormat() throws {

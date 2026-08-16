@@ -72,13 +72,33 @@ describe('LiveEngine', () => {
     expect(Math.abs(engine.landings[0].errorMs)).toBeLessThanOrEqual(4000)
   })
 
-  test('slower runner loops the groove more times than a faster one', () => {
+  test('cruise: no loop-backs, songs play through and chain at musical spacing', () => {
+    // "the UX sucks when it loops every 30 seconds" — songs play MOST of the
+    // way; transitions only at song ends, the ~3min freshness mark, or a
+    // rep's buildup. Never a loop-back.
+    const engine = new LiveEngine(plan, songs, { paceSecPerKm: 340 })
+    run(engine, stream([{ seconds: 900, mps: 2.2 }]))
+    expect(engine.commands.some((c) => c.reason.startsWith('loop back'))).toBe(false)
+    // Total transition budget: freshness chains (~1 per 3min) + the effort's
+    // buildup/ride/release + opening. The old loop texture blew way past
+    // this (a cut every ~30s); an enjoyable set stays under it.
+    const budget = Math.ceil(900_000 / 165_000) + engine.landings.length * 3 + 2
+    expect(engine.commands.length).toBeLessThanOrEqual(budget)
+    expect(engine.commands.filter((c) => c.reason.startsWith('groove fill')).length).toBeGreaterThanOrEqual(2)
+  })
+
+  test('slower runner: landing still exact, listening still unbroken', () => {
     const fast = new LiveEngine(plan, songs, { paceSecPerKm: 340 })
     run(fast, stream([{ seconds: 600, mps: 3.4 }]))
     const slow = new LiveEngine(plan, songs, { paceSecPerKm: 340 })
     run(slow, stream([{ seconds: 900, mps: 2.2 }]))
+    for (const e of [fast, slow]) {
+      expect(e.landings.length).toBe(1)
+      expect(Math.abs(e.landings[0].errorMs)).toBeLessThanOrEqual(1500)
+    }
     const loops = (e: LiveEngine) => e.commands.filter((c) => c.reason.startsWith('loop back')).length
-    expect(loops(slow)).toBeGreaterThan(loops(fast))
+    expect(loops(slow)).toBe(0)
+    expect(loops(fast)).toBe(0)
   })
 
   test('hard step end returns to groove; playback never runs off the end of a track', () => {

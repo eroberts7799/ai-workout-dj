@@ -583,7 +583,7 @@ export default function ReplayPanel() {
               <span className="muted" style={{ fontWeight: 'normal', fontSize: 14 }}>
                 {result.landings.length} landing(s)
                 {worst != null && <> · worst {(worst / 1000).toFixed(1)}s off</>} ·{' '}
-                {result.commands.filter((c) => c.reason.startsWith('loop back')).length} loop-backs ·{' '}
+                {result.commands.length} transitions ·{' '}
                 {fmtClock(result.durationMs)} total
               </span>
             </h2>
@@ -1079,8 +1079,7 @@ function Timeline({
         {playheadMs != null && <line x1={x(playheadMs)} y1={6} x2={x(playheadMs)} y2={axisY - 16} stroke="#e6edf3" strokeWidth={1.5} />}
       </svg>
       <div className="muted" style={{ display: 'flex', gap: 14, flexWrap: 'wrap', fontSize: 12, marginTop: 6 }}>
-        <span><span style={{ color: '#3987e5' }}>▍</span> groove fill</span>
-        <span><span style={{ color: '#199e70' }}>▍</span> loop back</span>
+        <span><span style={{ color: '#3987e5' }}>▍</span> song change</span>
         <span><span style={{ color: '#9085e9' }}>▍</span> buildup</span>
         <span><span style={{ color: '#d55181' }}>▍</span> drop</span>
         <span><span style={{ color: '#199e70' }}>●</span> landing ≤2s</span>
