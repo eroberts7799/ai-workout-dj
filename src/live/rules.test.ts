@@ -83,6 +83,22 @@ describe('HrTracker', () => {
     expect(state.zone).toBe(5) // 175/190 = 92%
   })
 
+  test('calibrated max moves the zone boundaries', () => {
+    // 175bpm: zone 5 for a 190-max athlete, zone 4 at Ethan's calibrated
+    // 197 (analysis/hr_calibration.py 2026-08-16) — the whole point of
+    // per-athlete calibration.
+    const at190 = new HrTracker(190)
+    const at197 = new HrTracker(197)
+    let a = at190.update(175)
+    let b = at197.update(175)
+    for (let i = 0; i < 40; i++) {
+      a = at190.update(175)
+      b = at197.update(175)
+    }
+    expect(a.zone).toBe(5) // 175/190 = 92.1%
+    expect(b.zone).toBe(4) // 175/197 = 88.8%
+  })
+
   test('no data → zone 0; data survives gaps', () => {
     const t = new HrTracker()
     expect(t.update(undefined).zone).toBe(0)

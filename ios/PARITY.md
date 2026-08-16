@@ -14,6 +14,11 @@ replays every case against `BeatMath`. Regenerate after any `beat.ts` change.
 
 - [ ] Crest/HR rules (GradeTracker, HrTracker, crest reward + 30m data-tuned
       gain bar). Blocker: iOS RelayPoller doesn't parse `altitude` yet.
+      2026-08-16: web HrTracker now runs with a CALIBRATED per-athlete hrMax
+      (analysis/hr_calibration.py — ethan 197, not the invented 190).
+      Delivery to the phone is already wired: bundles carry `hrMax`, import
+      stores it at UserDefaults `awdj.hrMax`. The rules port must read that
+      key (fallback DEFAULT 190), never hardcode.
 - [ ] Static-conductor path: freshness in `ensureCoverage` (web TODO too —
       an all-easy static schedule still loops one song on both platforms;
       LIVE mode unaffected).

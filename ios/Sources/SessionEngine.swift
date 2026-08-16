@@ -95,6 +95,11 @@ final class SessionEngine: ObservableObject {
       let data = try Data(contentsOf: url)
       bundle = try JSONDecoder().decode(SessionBundle.self, from: data)
       try data.write(to: docs.appendingPathComponent("session-bundle.json"))
+      // Calibrated zone anchor rides in on real bundles; keep it even when
+      // the demo set later replaces the bundle in memory.
+      if let m = bundle!.hrMax, m >= 120, m <= 230 {
+        UserDefaults.standard.set(m, forKey: "awdj.hrMax")
+      }
       matchAudioFiles()
       status = "bundle: \(bundle!.name) · \(bundle!.cues.count) cues"
     } catch {

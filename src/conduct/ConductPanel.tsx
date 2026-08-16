@@ -8,6 +8,7 @@ import type { SdkHandle } from '../spike/sdk-path'
 import { listDevices, pausePlayback, playTrack, transferTo, type ConnectDevice } from '../spike/webapi-path'
 import { loadAllTags } from '../tags/store'
 import { LiveEngine, type PlayCommand } from '../live/live-engine'
+import { getHrMax, setHrMax } from '../profile'
 import { parsePlan } from './plan-parse'
 import { SessionClock, dueCues } from './runner'
 
@@ -81,6 +82,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
   const outputRef = useRef<string>('browser')
   outputRef.current = output
   const [liveMode, setLiveMode] = useState(false)
+  const [hrMax, setHrMaxUi] = useState(getHrMax())
   const liveModeRef = useRef(false)
   liveModeRef.current = liveMode
   const liveRef = useRef<LiveEngine | null>(null)
@@ -214,6 +216,9 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
       log: logRef.current,
       hr: hrLogRef.current,
       samples: samplesRef.current,
+      // Zone anchor this session ran with — replays stay faithful to what
+      // the engine actually decided.
+      hrMax: getHrMax(),
     }
   }
 
@@ -458,7 +463,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
     }
     engineRef.current = allLocal ? 'local' : 'spotify'
     setEngine(engineRef.current)
-    liveRef.current = new LiveEngine(plan, lib)
+    liveRef.current = new LiveEngine(plan, lib, { hrMax: getHrMax() })
     planRef.current = plan
     setLog([])
     hrLogRef.current = []
@@ -550,6 +555,9 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
         camelot: s.camelot ?? null,
         markers: s.markers.map((m) => ({ type: m.type, ms: m.ms })),
       })),
+      // Calibrated zone anchor rides along so the phone conducts with the
+      // same effort model (Swift HR rules pending — see ios/PARITY.md).
+      hrMax: getHrMax(),
     }
     const a = document.createElement('a')
     a.href = URL.createObjectURL(new Blob([JSON.stringify(bundle, null, 2)], { type: 'application/json' }))
@@ -640,6 +648,21 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
             <label style={{ marginLeft: 12 }} title="The watch's live distance/timer drives the DJ — drops land when you arrive, not when a clock guesses">
               <input type="checkbox" checked={liveMode} onChange={(e) => setLiveMode(e.target.checked)} style={{ width: 'auto' }} />{' '}
               🛰 LIVE mode (body-driven)
+            </label>
+            <label style={{ marginLeft: 12 }} title="Calibrated max HR — anchors effort zones (crest rewards fire only on real efforts). Get yours: python3 analysis/hr_calibration.py">
+              max HR{' '}
+              <input
+                type="number"
+                min={120}
+                max={230}
+                value={hrMax}
+                onChange={(e) => {
+                  const v = Number(e.target.value)
+                  setHrMaxUi(v)
+                  setHrMax(v)
+                }}
+                style={{ width: 56 }}
+              />
             </label>
             <div style={{ marginTop: 10 }}>
               <span className="muted">Audio output: </span>

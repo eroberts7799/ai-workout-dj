@@ -165,7 +165,7 @@ export function simulate(
   plan: WorkoutPlan,
   songs: SongTags[],
   samples: SimSample[],
-  opts: { paceSecPerKm?: number } = {},
+  opts: { paceSecPerKm?: number; hrMax?: number } = {},
 ): SimResult {
   const engine = new LiveEngine(plan, songs, opts)
   const trace: TracePoint[] = []
@@ -219,6 +219,8 @@ export interface LoadedLog {
   name: string
   plan: WorkoutPlan | null
   samples: SimSample[]
+  /** Zone anchor the session actually ran with (logs from 2026-08-16 on). */
+  hrMax?: number
 }
 
 /**
@@ -267,6 +269,7 @@ export function loadSessionLog(json: unknown): LoadedLog {
     plan?: WorkoutPlan
     samples?: { tMs: number; distanceM?: number; hr?: number; altitude?: number; cadence?: number }[]
     hr?: { atMs: number; hr: number }[]
+    hrMax?: number
   }
   const plan = log.plan && Array.isArray(log.plan.steps) ? log.plan : null
   let samples: SimSample[] = []
@@ -278,5 +281,6 @@ export function loadSessionLog(json: unknown): LoadedLog {
     samples = log.hr.filter((s) => typeof s.atMs === 'number').map((s) => ({ tMs: s.atMs, hr: s.hr }))
   }
   samples.sort((a, b) => a.tMs - b.tMs)
-  return { name: plan?.name ?? 'recorded session', plan, samples }
+  const hrMax = typeof log.hrMax === 'number' && log.hrMax >= 120 && log.hrMax <= 230 ? log.hrMax : undefined
+  return { name: plan?.name ?? 'recorded session', plan, samples, hrMax }
 }

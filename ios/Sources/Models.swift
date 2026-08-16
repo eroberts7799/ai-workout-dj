@@ -53,6 +53,9 @@ struct SessionBundle: Codable {
   // LIVE-mode payload (newer web exports; absent in older bundles).
   let plan: [WorkoutStep]?
   let tags: [TaggedSong]?
+  /// Calibrated max HR from the athlete's history (bundles from 2026-08-16
+  /// on) — the zone anchor for the HR rules port. See ios/PARITY.md.
+  let hrMax: Double?
   /// Built-in demo bundles: trackId → bundled audio resource filename.
   let files: [String: String]?
 }

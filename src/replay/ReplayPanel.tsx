@@ -128,7 +128,7 @@ export default function ReplayPanel() {
       setStatus('no samples to replay')
       return
     }
-    setResult(simulate(activePlan, engineSongs, samples))
+    setResult(simulate(activePlan, engineSongs, samples, loaded?.hrMax != null ? { hrMax: loaded.hrMax } : {}))
     setStatus('')
   }
 
