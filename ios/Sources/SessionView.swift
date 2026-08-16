@@ -42,6 +42,11 @@ struct SessionView: View {
 
       switch engine.phase {
       case .idle:
+        Menu("Program ▾") {
+          ForEach(SessionEngine.builtinPrograms, id: \.resource) { p in
+            Button(p.title) { engine.loadBuiltin(p.resource) }
+          }
+        }
         Toggle("Arm Garmin auto-start", isOn: $armed).frame(maxWidth: 280)
         if engine.supportsLive {
           Toggle("🛰 LIVE mode (body-driven)", isOn: $engine.liveMode).frame(maxWidth: 280)

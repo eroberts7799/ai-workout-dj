@@ -51,6 +51,31 @@ final class SessionEngine: ObservableObject {
     return b.songs.allSatisfy { audioReady[$0.trackId] == true }
   }
 
+  /// Built-in programs: the demo set + HIIT presets shaped by real interval
+  /// data (292 structured sessions: ~60s work / ~45s rest, ~11 bouts).
+  static let builtinPrograms: [(resource: String, title: String)] = [
+    ("demo-bundle", "Demo Set — 15 min"),
+    ("preset-hiit-express", "HIIT Express — 12 min"),
+    ("preset-hiit-classic", "HIIT Classic — 25 min"),
+    ("preset-intervals", "Long Intervals — 22 min"),
+  ]
+
+  func loadBuiltin(_ resource: String) {
+    guard phase == .idle || phase == .done else { return }
+    guard let url = Bundle.main.url(forResource: resource, withExtension: "json"),
+          let data = try? Data(contentsOf: url),
+          let b = try? JSONDecoder().decode(SessionBundle.self, from: data)
+    else {
+      status = "program \(resource) missing from app bundle"
+      return
+    }
+    bundle = b
+    phase = .idle
+    clockMs = 0
+    status = "program: \(b.name)"
+    matchAudioFiles()
+  }
+
   /// LIVE mode needs the plan + tag library (newer bundle exports).
   var supportsLive: Bool {
     guard let b = bundle else { return false }
