@@ -13,12 +13,38 @@ import { loadAllTags } from '../tags/store'
 import {
   importTcx,
   loadSessionLog,
+  loadStructuredRun,
   simulate,
   syntheticSamples,
   type LoadedLog,
   type SimResult,
   type TracePoint,
 } from './simulate'
+
+/** One corpus entry from the dev server's /api/corpus listing. */
+interface CorpusEntry {
+  file: string
+  name: string
+  date: string
+  steps: number
+  hard: number
+  samples: number
+}
+
+/** One row of the mass-test table. */
+interface BatchRow {
+  file: string
+  name: string
+  hard: number
+  landings: number
+  onTime: number
+  worstMs: number
+  truncated: number
+  reaims: number
+  warnings: number
+}
+
+const ON_TIME_MS = 1_920 // one 4-beat bar at ~125bpm — reads as "on the moment"
 
 const DEFAULT_PLAN = `# the live-run target workout
 warmup 3:00
@@ -87,6 +113,10 @@ export default function ReplayPanel() {
   const [result, setResult] = useState<SimResult | null>(null)
   const [status, setStatus] = useState('')
   const [cloud, setCloud] = useState<{ pathname: string; size: number; uploadedAt: string }[] | null>(null)
+  const [corpus, setCorpus] = useState<CorpusEntry[] | null>(null)
+  const [useWkStep, setUseWkStep] = useState(true)
+  const [batch, setBatch] = useState<BatchRow[] | null>(null)
+  const [batchBusy, setBatchBusy] = useState('')
 
   // Audible replay machinery.
   const deckRef = useRef<LocalDeck | null>(null)
@@ -114,7 +144,7 @@ export default function ReplayPanel() {
 
   function runSim() {
     stopReplay()
-    const samples = loaded
+    let samples = loaded
       ? loaded.samples
       : syntheticSamples(activePlan, {
           easyPaceSecPerKm: easy!,
@@ -124,12 +154,79 @@ export default function ReplayPanel() {
           hilly,
           withHr,
         })
+    // Comparing the engine's two regimes: with the watch's step stream
+    // (boundaries exact) or estimation-only (odometer + plan).
+    if (!useWkStep) samples = samples.map(({ wkStepSeq: _seq, ...s }) => s)
     if (samples.length === 0) {
       setStatus('no samples to replay')
       return
     }
     setResult(simulate(activePlan, engineSongs, samples, loaded?.hrMax != null ? { hrMax: loaded.hrMax } : {}))
     setStatus('')
+  }
+
+  // ---- Real-run corpus (served by the dev server from the local extract) ----
+
+  async function loadCorpusList() {
+    try {
+      const r = await fetch('/api/corpus')
+      const list = (await r.json()) as CorpusEntry[]
+      setCorpus(list)
+      if (list.length === 0)
+        setStatus('no extracted runs — run analysis/extract_structured_runs.py over the FIT takeout first')
+    } catch (e) {
+      setStatus(`corpus list failed (dev server only): ${String(e)}`)
+    }
+  }
+
+  /** One click from list to verdict: load a real run and simulate it. */
+  async function openCorpusRun(file: string) {
+    try {
+      const r = await fetch(`/api/corpus/${encodeURIComponent(file)}`)
+      const log = loadStructuredRun(await r.json())
+      acceptLog(log, 'that run')
+      stopReplay()
+      const samples = useWkStep ? log.samples : log.samples.map(({ wkStepSeq: _s, ...rest }) => rest)
+      if (log.plan && samples.length > 0) {
+        setResult(simulate(log.plan, engineSongs, samples, log.hrMax != null ? { hrMax: log.hrMax } : {}))
+      }
+    } catch (e) {
+      setStatus(`corpus fetch failed: ${String(e)}`)
+    }
+  }
+
+  /** Mass test: every real run in the corpus through the engine, one table. */
+  async function runBatch() {
+    if (!corpus || corpus.length === 0) return
+    stopReplay()
+    setBatch(null)
+    const rows: BatchRow[] = []
+    for (let i = 0; i < corpus.length; i++) {
+      setBatchBusy(`testing ${i + 1}/${corpus.length} — ${corpus[i].name}`)
+      await new Promise((r) => setTimeout(r)) // let the progress line paint
+      try {
+        const raw = await (await fetch(`/api/corpus/${encodeURIComponent(corpus[i].file)}`)).json()
+        let log = loadStructuredRun(raw)
+        if (!useWkStep) log = { ...log, samples: log.samples.map(({ wkStepSeq: _s, ...rest }) => rest) }
+        const res = simulate(log.plan!, engineSongs, log.samples, log.hrMax != null ? { hrMax: log.hrMax } : {})
+        const errs = res.landings.map((l) => Math.abs(l.errorMs))
+        rows.push({
+          file: corpus[i].file,
+          name: log.name,
+          hard: corpus[i].hard,
+          landings: res.landings.length,
+          onTime: errs.filter((e) => e <= ON_TIME_MS).length,
+          worstMs: errs.length > 0 ? Math.max(...errs) : 0,
+          truncated: res.commands.filter((c) => c.reason.includes('truncated')).length,
+          reaims: res.commands.filter((c) => c.reason.startsWith('build re-aim')).length,
+          warnings: res.warnings.length,
+        })
+      } catch {
+        rows.push({ file: corpus[i].file, name: `${corpus[i].name} (failed)`, hard: corpus[i].hard, landings: 0, onTime: 0, worstMs: 0, truncated: 0, reaims: 0, warnings: 1 })
+      }
+    }
+    setBatchBusy('')
+    setBatch(rows.sort((a, b) => b.worstMs - a.worstMs))
   }
 
   function acceptLog(log: LoadedLog, origin: string) {
@@ -193,6 +290,24 @@ export default function ReplayPanel() {
     }
   }
 
+  /** Run the playhead so LiveStatus + timeline animate. */
+  function startTicker(durationMs: number) {
+    setReplayMs(0)
+    const startedAt = performance.now()
+    tickerRef.current = setInterval(() => {
+      const ms = (performance.now() - startedAt) * speed
+      if (ms >= durationMs) stopReplay()
+      else setReplayMs(ms)
+    }, 100)
+  }
+
+  /** Silent observation: the dashboard runs, no audio needed. */
+  function startWatch() {
+    if (!result) return
+    stopReplay()
+    startTicker(result.durationMs)
+  }
+
   /** Schedule every command through the local deck at ×speed. */
   async function startReplay() {
     if (!result) return
@@ -235,13 +350,7 @@ export default function ReplayPanel() {
         }, c.tMs / speed),
       )
     }
-    setReplayMs(0)
-    const startedAt = performance.now()
-    tickerRef.current = setInterval(() => {
-      const ms = (performance.now() - startedAt) * speed
-      if (ms >= result.durationMs) stopReplay()
-      else setReplayMs(ms)
-    }, 100)
+    startTicker(result.durationMs)
   }
 
   function stopReplay() {
@@ -316,6 +425,11 @@ export default function ReplayPanel() {
             />
           </label>
           <button onClick={() => void loadCloudList()}>☁️ Cloud sessions</button>
+          <button onClick={() => void loadCorpusList()}>🏃 Real runs</button>
+          <label title="Feed the engine the watch's step-change stream (exact boundaries) or make it estimate from time/distance alone">
+            <input type="checkbox" checked={useWkStep} onChange={(e) => setUseWkStep(e.target.checked)} style={{ width: 'auto' }} />{' '}
+            ⌚ watch step stream
+          </label>
           {loaded && (
             <>
               <button onClick={() => void saveLoadedToCloud()}>☁️ archive this</button>
@@ -323,6 +437,26 @@ export default function ReplayPanel() {
             </>
           )}
         </div>
+        {corpus && (
+          <div style={{ marginTop: 8 }}>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <button onClick={() => void runBatch()} disabled={batchBusy !== '' || corpus.length === 0}>
+                ▶ Test all {corpus.length} runs
+              </button>
+              {batchBusy && <span className="muted" style={{ fontSize: 12 }}>{batchBusy}</span>}
+            </div>
+            <div style={{ marginTop: 6, maxHeight: 200, overflowY: 'auto', border: '1px solid #30363d', borderRadius: 6, padding: 6 }}>
+              {corpus.map((c) => (
+                <div key={c.file} style={{ display: 'flex', gap: 8, alignItems: 'center', padding: '2px 0' }}>
+                  <button onClick={() => void openCorpusRun(c.file)} style={{ fontSize: 12 }}>replay</button>
+                  <span className="muted" style={{ fontSize: 12 }}>
+                    {c.date} · {c.name} · {c.steps} steps ({c.hard} hard)
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
         {cloud && (
           <div style={{ marginTop: 8, maxHeight: 180, overflowY: 'auto', border: '1px solid #30363d', borderRadius: 6, padding: 6 }}>
             {cloud.length === 0 && <p className="muted" style={{ margin: 4 }}>no sessions in the cloud yet</p>}
@@ -345,6 +479,42 @@ export default function ReplayPanel() {
         {status && <p className="muted">{status}</p>}
       </div>
 
+      {batch && (
+        <div className="card">
+          <h2 style={{ marginTop: 0 }}>
+            Mass test — {batch.length} real runs{' '}
+            <span className="muted" style={{ fontWeight: 'normal', fontSize: 14 }}>
+              {batch.reduce((n, r) => n + r.onTime, 0)}/{batch.reduce((n, r) => n + r.landings, 0)} drops on-time (≤
+              {(ON_TIME_MS / 1000).toFixed(1)}s) · worst{' '}
+              {(Math.max(0, ...batch.map((r) => r.worstMs)) / 1000).toFixed(1)}s ·{' '}
+              {useWkStep ? 'watch-driven' : 'estimation-only'}
+            </span>
+          </h2>
+          <div style={{ maxHeight: 320, overflowY: 'auto' }}>
+            <table>
+              <thead>
+                <tr><th>run</th><th>reps</th><th>on-time</th><th>worst</th><th>trunc</th><th>re-aims</th><th></th></tr>
+              </thead>
+              <tbody>
+                {batch.map((r) => (
+                  <tr key={r.file}>
+                    <td style={{ textAlign: 'left' }} title={r.file}>{r.name.slice(0, 34)}{r.warnings > 0 ? ' ⚠️' : ''}</td>
+                    <td>{r.hard}</td>
+                    <td style={{ color: r.onTime === r.landings && r.landings > 0 ? '#199e70' : undefined }}>
+                      {r.onTime}/{r.landings}
+                    </td>
+                    <td style={{ color: landingColor(r.worstMs) }}>{(r.worstMs / 1000).toFixed(1)}s</td>
+                    <td>{r.truncated || ''}</td>
+                    <td>{r.reaims || ''}</td>
+                    <td><button style={{ fontSize: 12 }} onClick={() => void openCorpusRun(r.file)}>watch</button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
       {result && (
         <>
           <div className="card">
@@ -360,10 +530,14 @@ export default function ReplayPanel() {
             {result.warnings.map((w) => (
               <p key={w} className="warn">{w}</p>
             ))}
-            <Timeline result={result} playheadMs={replayMs} />
+            {replayMs != null && <LiveStatus result={result} tMs={replayMs} songs={engineSongs} />}
+            <Timeline result={result} playheadMs={replayMs} truth={loaded?.boundaries ?? null} />
             <div style={{ marginTop: 10, display: 'flex', gap: 8, alignItems: 'center' }}>
               {replayMs == null ? (
-                <button onClick={() => void startReplay()}>🎧 Audible replay</button>
+                <>
+                  <button onClick={startWatch}>▶ Watch</button>
+                  <button onClick={() => void startReplay()}>🎧 Audible replay</button>
+                </>
               ) : (
                 <button onClick={stopReplay}>⏹ Stop ({fmtClock(replayMs)})</button>
               )}
@@ -427,6 +601,44 @@ export default function ReplayPanel() {
 }
 
 // ---------------------------------------------------------------------------
+// LiveStatus: the engine's mind while the replay runs — what the runner is
+// doing, what the DJ is thinking, what's playing, what's about to happen.
+
+function LiveStatus({ result, tMs, songs }: { result: SimResult; tMs: number; songs: SongTags[] }) {
+  const { trace } = result
+  const idx = Math.max(0, Math.min(trace.length - 1, Math.floor(tMs / 1000) - 1))
+  const p = trace[idx]
+  const cmd = [...result.commands].reverse().find((c) => c.tMs <= tMs)
+  const song = cmd ? songs.find((s) => s.trackId === cmd.trackId) : null
+  const songPos = cmd ? cmd.positionMs + (tMs - cmd.tMs) : 0
+  const step = result.stepSpans.find((s) => tMs >= s.startMs && tMs < s.endMs)
+  const stepPct = step ? Math.round(((tMs - step.startMs) / Math.max(1, step.endMs - step.startMs)) * 100) : null
+  const eta = p?.etaToHardMs
+  return (
+    <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', alignItems: 'baseline', padding: '6px 0 10px' }}>
+      <span style={{ fontSize: 26, fontVariantNumeric: 'tabular-nums' }}>{fmtClock(tMs)}</span>
+      {step && (
+        <span style={{ fontSize: 17, color: step.step.kind === 'hard' ? '#d55181' : '#e6edf3' }}>
+          {step.step.kind}
+          {step.step.meters != null ? ` ${Math.round(step.step.meters)}m` : ''} · {stepPct}%
+        </span>
+      )}
+      {p?.distanceM != null && <span className="muted">{(p.distanceM / 1000).toFixed(2)}km · {fmtPace(p.paceSecPerKm)}</span>}
+      {p?.hr != null && <span style={{ color: '#e66767' }}>♥ {Math.round(p.hr)} z{p.hrZone}</span>}
+      <span style={{ color: cmd ? cmdColor(cmd.reason) : '#8b949e' }}>
+        {p?.mode ?? '—'}
+        {eta != null && eta < 120_000 && p?.mode !== 'ride' && ` · drop in ${Math.max(0, Math.round(eta / 1000))}s`}
+      </span>
+      {song && (
+        <span className="muted" style={{ fontStyle: 'italic' }}>
+          🎧 {song.name} · {fmtClock(songPos)}
+        </span>
+      )}
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------------------
 // Timeline: step bands as actually crossed, commands, landings, then pace and
 // HR as separate strips on the shared time axis (never a dual axis).
 
@@ -440,7 +652,15 @@ function stepFill(kind: WorkoutStep['kind']): string {
   return 'rgba(139, 148, 158, 0.05)' // warmup / cooldown
 }
 
-function Timeline({ result, playheadMs }: { result: SimResult; playheadMs: number | null }) {
+function Timeline({
+  result,
+  playheadMs,
+  truth,
+}: {
+  result: SimResult
+  playheadMs: number | null
+  truth: { tMs: number; stepIdx: number; end?: boolean }[] | null
+}) {
   const [hover, setHover] = useState<TracePoint | null>(null)
   const { trace, durationMs } = result
   const hasHr = trace.some((p) => p.hr != null)
@@ -500,6 +720,13 @@ function Timeline({ result, playheadMs }: { result: SimResult; playheadMs: numbe
             </g>
           )
         })}
+
+        {/* ground truth: the watch's actual step boundaries (▾ above the bands) */}
+        {truth?.filter((b) => !b.end && b.tMs > 0 && b.tMs < durationMs).map((b, i) => (
+          <path key={`tb${i}`} d={`M${x(b.tMs) - 4},1 L${x(b.tMs) + 4},1 L${x(b.tMs)},7 Z`} fill="#e6edf3" opacity={0.8}>
+            <title>{`true step ${b.stepIdx + 1} start — ${fmtClock(b.tMs)}`}</title>
+          </path>
+        ))}
 
         {/* landings: where each drop actually hit vs. the hard-step start */}
         {result.landings.map((l, i) => (
@@ -566,7 +793,7 @@ function Timeline({ result, playheadMs }: { result: SimResult; playheadMs: numbe
       </>
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [result])
+  }, [result, truth])
 
   function onMove(e: React.MouseEvent<SVGSVGElement>) {
     const rect = e.currentTarget.getBoundingClientRect()

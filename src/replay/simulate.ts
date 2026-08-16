@@ -223,6 +223,42 @@ export interface LoadedLog {
   samples: SimSample[]
   /** Zone anchor the session actually ran with (logs from 2026-08-16 on). */
   hrMax?: number
+  /** Ground-truth step boundaries (structured-run corpus) — what actually
+   *  happened on the watch, for scoring the engine against reality. */
+  boundaries?: { tMs: number; stepIdx: number; end?: boolean }[]
+}
+
+/**
+ * Load one extracted structured run (data/garmin-history-structured/, via the
+ * dev server's /api/corpus): the prescriptive plan, the 1Hz body stream, and
+ * the true boundaries. Samples get the wkStepSeq the watch would have
+ * streamed, so replays exercise the watch-driven engine path.
+ */
+export function loadStructuredRun(json: unknown): LoadedLog {
+  const run = json as {
+    name?: string
+    wktName?: string
+    planSteps?: { kind: WorkoutPlan['steps'][number]['kind']; seconds?: number; meters?: number; open?: boolean }[]
+    boundaries?: { tMs: number; stepIdx: number; end?: boolean }[]
+    samples?: SimSample[]
+    hrMax?: number
+  }
+  const boundaries = run.boundaries ?? []
+  const stepBounds = boundaries.filter((b) => !b.end)
+  const steps = (run.planSteps ?? []).map((s, i) => {
+    if (s.seconds != null || s.meters != null) return { kind: s.kind, seconds: s.seconds, meters: s.meters }
+    // Open (press-lap) step: substitute the executed duration — only the
+    // watch's step stream can end these live.
+    const start = boundaries[i]?.tMs
+    const end = boundaries[i + 1]?.tMs
+    return { kind: s.kind, seconds: start != null && end != null ? (end - start) / 1000 : 60 }
+  })
+  const name = run.wktName ?? run.name ?? 'structured run'
+  const samples = (run.samples ?? []).map((s) => ({
+    ...s,
+    wkStepSeq: stepBounds.filter((b) => b.tMs <= s.tMs).length,
+  }))
+  return { name, plan: { name, steps }, samples, boundaries, hrMax: run.hrMax }
 }
 
 /**
