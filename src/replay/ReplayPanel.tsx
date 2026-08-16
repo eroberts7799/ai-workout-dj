@@ -249,14 +249,24 @@ export default function ReplayPanel() {
   }
 
   async function onLogFile(file: File) {
+    const text = await file.text()
     try {
-      const text = await file.text()
       if (file.name.toLowerCase().endsWith('.tcx') || text.trimStart().startsWith('<')) {
         acceptLog(importTcx(text), 'that TCX export')
       } else {
         acceptLog(loadSessionLog(JSON.parse(text)), 'that log')
       }
     } catch (e) {
+      // Not a log — maybe it's a PLAN text file (docs/tuesday-*.txt). Picking
+      // a plan through this picker is the natural move; route it home.
+      const { plan: asPlan, errors: planErrors } = parsePlan(file.name, text)
+      if (planErrors.length === 0 && asPlan.steps.length > 0) {
+        setLoaded(null)
+        setResult(null)
+        setPlanText(text)
+        setStatus(`"${file.name}" loaded as a plan (${asPlan.steps.length} steps) — set paces, then Simulate run`)
+        return
+      }
       setStatus(`could not read log: ${String(e)}`)
     }
   }
