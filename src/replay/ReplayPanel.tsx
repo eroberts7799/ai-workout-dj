@@ -477,7 +477,7 @@ export default function ReplayPanel() {
             📄 Load session log / Garmin TCX…
             <input
               type="file"
-              accept="application/json,.json,.tcx"
+              accept="application/json,.json,.tcx,.txt,text/plain"
               style={{ display: 'none' }}
               onChange={(e) => {
                 const f = e.target.files?.[0]
