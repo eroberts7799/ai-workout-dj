@@ -145,17 +145,14 @@ export class LiveEngine {
         const entryMs = buildups[0]?.ms ?? Math.max(0, d.ms - DEFAULT_LEAD_MS)
         if (entryMs < d.ms) this.droppable.push({ song, dropMs: d.ms, entryMs })
       }
-      const starts = song.markers.filter((m) => m.type === 'loop_start').sort((a, b) => a.ms - b.ms)
-      for (const s of starts) {
-        const end = song.markers.find((m) => m.type === 'loop_end' && m.ms > s.ms)
-        if (end) {
-          this.loopable.push({ song, startMs: s.ms, endMs: end.ms })
-          break
-        }
-      }
+      // Cruise plays from 0:00 — EVERY song is cruise-capable. (Loop markers
+      // used to gate this; that's the loop era's leftover, and it silently
+      // excluded songs whose analysis found no loopable section — common
+      // outside EDM.)
+      this.loopable.push({ song, startMs: 0, endMs: 0 })
     }
     if (this.droppable.length === 0) this.warnings.push('no drop-tagged songs')
-    if (this.loopable.length === 0) this.warnings.push('no loop-tagged songs')
+    if (this.loopable.length === 0) this.warnings.push('no songs')
   }
 
   /** Read-only snapshot of the engine's mind — for UIs and the replay simulator. */

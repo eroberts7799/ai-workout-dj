@@ -128,16 +128,11 @@ final class LiveEngine {
         let entryMs = buildups.first?.ms ?? max(0, d.ms - Self.defaultLeadMs)
         if entryMs < d.ms { droppable.append(DropChoice(song: song, dropMs: d.ms, entryMs: entryMs)) }
       }
-      let starts = song.markers.filter { $0.type == "loop_start" }.sorted { $0.ms < $1.ms }
-      for s in starts {
-        if let end = song.markers.first(where: { $0.type == "loop_end" && $0.ms > s.ms }) {
-          loopable.append(LoopChoice(song: song, startMs: s.ms, endMs: end.ms))
-          break
-        }
-      }
+      // Cruise plays from 0:00 — EVERY song is cruise-capable. Mirrors TS.
+      loopable.append(LoopChoice(song: song, startMs: 0, endMs: 0))
     }
     if droppable.isEmpty { warnings.append("no drop-tagged songs") }
-    if loopable.isEmpty { warnings.append("no loop-tagged songs") }
+    if loopable.isEmpty { warnings.append("no songs") }
   }
 
   /// Read-only snapshot of the engine's mind — for the UI.

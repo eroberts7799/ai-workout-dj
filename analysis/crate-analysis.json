@@ -1,0 +1,5503 @@
+{
+ "version": 1,
+ "analysis": [
+  {
+   "sourceFile": "Beam, Skin On Skin, Fred again.. - the floor (skin on skin remix).mp3",
+   "title": "the floor (skin on skin remix)",
+   "artist": "Beam, Skin On Skin, Fred again..",
+   "durationMs": 234429,
+   "bpm": 140,
+   "markers": [
+    {
+     "type": "buildup",
+     "ms": 34320
+    },
+    {
+     "type": "drop",
+     "ms": 48020
+    },
+    {
+     "type": "loop_start",
+     "ms": 61750
+    },
+    {
+     "type": "buildup",
+     "ms": 89160
+    },
+    {
+     "type": "loop_end",
+     "ms": 89160
+    },
+    {
+     "type": "drop",
+     "ms": 102880
+    },
+    {
+     "type": "buildup",
+     "ms": 185170
+    },
+    {
+     "type": "drop",
+     "ms": 198870
+    }
+   ],
+   "segments": [
+    {
+     "label": "intro",
+     "startMs": 0,
+     "endMs": 20
+    },
+    {
+     "label": "intro",
+     "startMs": 20,
+     "endMs": 20590
+    },
+    {
+     "label": "inst",
+     "startMs": 20590,
+     "endMs": 34740
+    },
+    {
+     "label": "verse",
+     "startMs": 34740,
+     "endMs": 48030
+    },
+    {
+     "label": "chorus",
+     "startMs": 48030,
+     "endMs": 61740
+    },
+    {
+     "label": "inst",
+     "startMs": 61740,
+     "endMs": 89160
+    },
+    {
+     "label": "verse",
+     "startMs": 89160,
+     "endMs": 103290
+    },
+    {
+     "label": "chorus",
+     "startMs": 103290,
+     "endMs": 118300
+    },
+    {
+     "label": "chorus",
+     "startMs": 118300,
+     "endMs": 145730
+    },
+    {
+     "label": "chorus",
+     "startMs": 145730,
+     "endMs": 171450
+    },
+    {
+     "label": "inst",
+     "startMs": 171450,
+     "endMs": 185150
+    },
+    {
+     "label": "inst",
+     "startMs": 185150,
+     "endMs": 198870
+    },
+    {
+     "label": "chorus",
+     "startMs": 198870,
+     "endMs": 213020
+    },
+    {
+     "label": "chorus",
+     "startMs": 213020,
+     "endMs": 232960
+    },
+    {
+     "label": "end",
+     "startMs": 232960,
+     "endMs": 234480
+    }
+   ],
+   "camelot": "3A",
+   "key": "A#m"
+  },
+  {
+   "sourceFile": "Bia, Fred again.., Oppidan - ..FEISTY (Oppidan remix).mp3",
+   "title": "..FEISTY (Oppidan remix)",
+   "artist": "Bia, Fred again.., Oppidan",
+   "durationMs": 161739,
+   "bpm": 115,
+   "markers": [
+    {
+     "type": "buildup",
+     "ms": 20
+    },
+    {
+     "type": "loop_start",
+     "ms": 20
+    },
+    {
+     "type": "drop",
+     "ms": 25070
+    },
+    {
+     "type": "loop_end",
+     "ms": 25070
+    },
+    {
+     "type": "buildup",
+     "ms": 58460
+    },
+    {
+     "type": "drop",
+     "ms": 75150
+    },
+    {
+     "type": "buildup",
+     "ms": 125240
+    },
+    {
+     "type": "drop",
+     "ms": 141930
+    }
+   ],
+   "segments": [
+    {
+     "label": "verse",
+     "startMs": 0,
+     "endMs": 20
+    },
+    {
+     "label": "verse",
+     "startMs": 20,
+     "endMs": 25060
+    },
+    {
+     "label": "chorus",
+     "startMs": 25060,
+     "endMs": 41770
+    },
+    {
+     "label": "verse",
+     "startMs": 41770,
+     "endMs": 58460
+    },
+    {
+     "label": "verse",
+     "startMs": 58460,
+     "endMs": 75150
+    },
+    {
+     "label": "chorus",
+     "startMs": 75150,
+     "endMs": 91850
+    },
+    {
+     "label": "bridge",
+     "startMs": 91850,
+     "endMs": 108530
+    },
+    {
+     "label": "bridge",
+     "startMs": 108530,
+     "endMs": 125240
+    },
+    {
+     "label": "verse",
+     "startMs": 125240,
+     "endMs": 141930
+    },
+    {
+     "label": "chorus",
+     "startMs": 141930,
+     "endMs": 157600
+    },
+    {
+     "label": "end",
+     "startMs": 157600,
+     "endMs": 161780
+    }
+   ],
+   "camelot": "2B",
+   "key": "F#"
+  },
+  {
+   "sourceFile": "Blanco, Kettama, Fred again.. - solo (KETTAMA remix).mp3",
+   "title": "solo (KETTAMA remix)",
+   "artist": "Blanco, Kettama, Fred again..",
+   "durationMs": 260571,
+   "bpm": 140,
+   "markers": [
+    {
+     "type": "buildup",
+     "ms": 17170
+    },
+    {
+     "type": "loop_start",
+     "ms": 17170
+    },
+    {
+     "type": "drop",
+     "ms": 54880
+    },
+    {
+     "type": "loop_end",
+     "ms": 54880
+    },
+    {
+     "type": "buildup",
+     "ms": 174880
+    },
+    {
+     "type": "drop",
+     "ms": 188600
+    }
+   ],
+   "segments": [
+    {
+     "label": "start",
+     "startMs": 0,
+     "endMs": 20
+    },
+    {
+     "label": "intro",
+     "startMs": 20,
+     "endMs": 17160
+    },
+    {
+     "label": "verse",
+     "startMs": 17160,
+     "endMs": 54870
+    },
+    {
+     "label": "chorus",
+     "startMs": 54870,
+     "endMs": 78880
+    },
+    {
+     "label": "chorus",
+     "startMs": 78880,
+     "endMs": 106310
+    },
+    {
+     "label": "chorus",
+     "startMs": 106310,
+     "endMs": 133740
+    },
+    {
+     "label": "inst",
+     "startMs": 133740,
+     "endMs": 161170
+    },
+    {
+     "label": "inst",
+     "startMs": 161170,
+     "endMs": 174020
+    },
+    {
+     "label": "verse",
+     "startMs": 174020,
+     "endMs": 189020
+    },
+    {
+     "label": "chorus",
+     "startMs": 189020,
+     "endMs": 202290
+    },
+    {
+     "label": "chorus",
+     "startMs": 202290,
+     "endMs": 214740
+    },
+    {
+     "label": "chorus",
+     "startMs": 214740,
+     "endMs": 243450
+    },
+    {
+     "label": "outro",
+     "startMs": 243450,
+     "endMs": 257160
+    },
+    {
+     "label": "end",
+     "startMs": 257160,
+     "endMs": 260600
+    }
+   ],
+   "camelot": "3A",
+   "key": "A#m"
+  },
+  {
+   "sourceFile": "Chika, Anderson .Paak, Fred again.. - places to be (Original Mix).mp3",
+   "title": "places to be (Original Mix)",
+   "artist": "Chika, Anderson .Paak, Fred again..",
+   "durationMs": 226677,
+   "bpm": 176,
+   "markers": [
+    {
+     "type": "buildup",
+     "ms": 27600
+    },
+    {
+     "type": "drop",
+     "ms": 49680
+    },
+    {
+     "type": "buildup",
+     "ms": 96570
+    },
+    {
+     "type": "loop_start",
+     "ms": 96570
+    },
+    {
+     "type": "drop",
+     "ms": 126920
+    },
+    {
+     "type": "loop_end",
+     "ms": 126920
+    },
+    {
+     "type": "buildup",
+     "ms": 148980
+    },
+    {
+     "type": "drop",
+     "ms": 171060
+    }
+   ],
+   "segments": [
+    {
+     "label": "verse",
+     "startMs": 0,
+     "endMs": 4150
+    },
+    {
+     "label": "intro",
+     "startMs": 4150,
+     "endMs": 27600
+    },
+    {
+     "label": "verse",
+     "startMs": 27600,
+     "endMs": 49670
+    },
+    {
+     "label": "chorus",
+     "startMs": 49670,
+     "endMs": 71740
+    },
+    {
+     "label": "verse",
+     "startMs": 71740,
+     "endMs": 96560
+    },
+    {
+     "label": "verse",
+     "startMs": 96560,
+     "endMs": 126920
+    },
+    {
+     "label": "chorus",
+     "startMs": 126920,
+     "endMs": 148980
+    },
+    {
+     "label": "bridge",
+     "startMs": 148980,
+     "endMs": 171050
+    },
+    {
+     "label": "chorus",
+     "startMs": 171050,
+     "endMs": 187600
+    },
+    {
+     "label": "chorus",
+     "startMs": 187600,
+     "endMs": 204160
+    },
+    {
+     "label": "chorus",
+     "startMs": 204160,
+     "endMs": 226690
+    },
+    {
+     "label": "end",
+     "startMs": 226690,
+     "endMs": 226720
+    }
+   ],
+   "camelot": "7A",
+   "key": "Dm"
+  },
+  {
+   "sourceFile": "Cloonee, Young M.A, InntRaw - Stephanie  (HNTR Remix).mp3",
+   "title": "Stephanie (HNTR Remix)",
+   "artist": "Cloonee, Young M.A, InntRaw",
+   "durationMs": 237511,
+   "bpm": 133,
+   "markers": [
+    {
+     "type": "buildup",
+     "ms": 53790
+    },
+    {
+     "type": "loop_start",
+     "ms": 53790
+    },
+    {
+     "type": "drop",
+     "ms": 93180
+    },
+    {
+     "type": "loop_end",
+     "ms": 93180
+    },
+    {
+     "type": "buildup",
+     "ms": 132590
+    },
+    {
+     "type": "drop",
+     "ms": 164820
+    }
+   ],
+   "segments": [
+    {
+     "label": "intro",
+     "startMs": 0,
+     "endMs": 40
+    },
+    {
+     "label": "intro",
+     "startMs": 40,
+     "endMs": 12590
+    },
+    {
+     "label": "intro",
+     "startMs": 12590,
+     "endMs": 30500
+    },
+    {
+     "label": "intro",
+     "startMs": 30500,
+     "endMs": 54680
+    },
+    {
+     "label": "verse",
+     "startMs": 54680,
+     "endMs": 93180
+    },
+    {
+     "label": "chorus",
+     "startMs": 93180,
+     "endMs": 107500
+    },
+    {
+     "label": "chorus",
+     "startMs": 107500,
+     "endMs": 120050
+    },
+    {
+     "label": "inst",
+     "startMs": 120050,
+     "endMs": 133480
+    },
+    {
+     "label": "verse",
+     "startMs": 133480,
+     "endMs": 164820
+    },
+    {
+     "label": "chorus",
+     "startMs": 164820,
+     "endMs": 179150
+    },
+    {
+     "label": "chorus",
+     "startMs": 179150,
+     "endMs": 193490
+    },
+    {
+     "label": "outro",
+     "startMs": 193490,
+     "endMs": 209610
+    },
+    {
+     "label": "outro",
+     "startMs": 209610,
+     "endMs": 236490
+    },
+    {
+     "label": "end",
+     "startMs": 236490,
+     "endMs": 237560
+    }
+   ],
+   "camelot": "11A",
+   "key": "F#m"
+  },
+  {
+   "sourceFile": "Disclosure, Anderson .Paak - NO CAP (Extended Mix).mp3",
+   "title": "NO CAP (Extended Mix)",
+   "artist": "Disclosure, Anderson .Paak",
+   "durationMs": 336768,
+   "bpm": 130,
+   "markers": [
+    {
+     "type": "drop",
+     "ms": 29660
+    },
+    {
+     "type": "buildup",
+     "ms": 88750
+    },
+    {
+     "type": "drop",
+     "ms": 103520
+    },
+    {
+     "type": "buildup",
+     "ms": 166290
+    },
+    {
+     "type": "drop",
+     "ms": 181050
+    },
+    {
+     "type": "loop_start",
+     "ms": 254910
+    },
+    {
+     "type": "loop_end",
+     "ms": 277050
+    }
+   ],
+   "segments": [
+    {
+     "label": "start",
+     "startMs": 0,
+     "endMs": 120
+    },
+    {
+     "label": "intro",
+     "startMs": 120,
+     "endMs": 14880
+    },
+    {
+     "label": "intro",
+     "startMs": 14880,
+     "endMs": 29660
+    },
+    {
+     "label": "chorus",
+     "startMs": 29660,
+     "endMs": 44430
+    },
+    {
+     "label": "chorus",
+     "startMs": 44430,
+     "endMs": 59200
+    },
+    {
+     "label": "inst",
+     "startMs": 59200,
+     "endMs": 73970
+    },
+    {
+     "label": "verse",
+     "startMs": 73970,
+     "endMs": 88740
+    },
+    {
+     "label": "verse",
+     "startMs": 88740,
+     "endMs": 103510
+    },
+    {
+     "label": "chorus",
+     "startMs": 103510,
+     "endMs": 136740
+    },
+    {
+     "label": "inst",
+     "startMs": 136740,
+     "endMs": 151520
+    },
+    {
+     "label": "verse",
+     "startMs": 151520,
+     "endMs": 166290
+    },
+    {
+     "label": "verse",
+     "startMs": 166290,
+     "endMs": 181050
+    },
+    {
+     "label": "chorus",
+     "startMs": 181050,
+     "endMs": 195810
+    },
+    {
+     "label": "chorus",
+     "startMs": 195810,
+     "endMs": 214280
+    },
+    {
+     "label": "chorus",
+     "startMs": 214280,
+     "endMs": 232740
+    },
+    {
+     "label": "chorus",
+     "startMs": 232740,
+     "endMs": 254900
+    },
+    {
+     "label": "inst",
+     "startMs": 254900,
+     "endMs": 277050
+    },
+    {
+     "label": "inst",
+     "startMs": 277050,
+     "endMs": 291810
+    },
+    {
+     "label": "inst",
+     "startMs": 291810,
+     "endMs": 306590
+    },
+    {
+     "label": "outro",
+     "startMs": 306590,
+     "endMs": 336120
+    },
+    {
+     "label": "end",
+     "startMs": 336120,
+     "endMs": 336800
+    }
+   ],
+   "camelot": "6A",
+   "key": "Gm"
+  },
+  {
+   "sourceFile": "Dom Dolla, Daya - Dreamin feat. Daya (Extended Mix).mp3",
+   "title": "Dreamin feat. Daya - Extended Mix (Original Mix)",
+   "artist": "Dom Dolla, Daya",
+   "durationMs": 292247,
+   "bpm": 133,
+   "markers": [
+    {
+     "type": "drop",
+     "ms": 28730
+    },
+    {
+     "type": "buildup",
+     "ms": 64550
+    },
+    {
+     "type": "loop_start",
+     "ms": 64550
+    },
+    {
+     "type": "drop",
+     "ms": 93210
+    },
+    {
+     "type": "loop_end",
+     "ms": 93210
+    },
+    {
+     "type": "buildup",
+     "ms": 121870
+    },
+    {
+     "type": "drop",
+     "ms": 136190
+    }
+   ],
+   "segments": [
+    {
+     "label": "start",
+     "startMs": 0,
+     "endMs": 60
+    },
+    {
+     "label": "intro",
+     "startMs": 60,
+     "endMs": 14390
+    },
+    {
+     "label": "intro",
+     "startMs": 14390,
+     "endMs": 28730
+    },
+    {
+     "label": "chorus",
+     "startMs": 28730,
+     "endMs": 43050
+    },
+    {
+     "label": "chorus",
+     "startMs": 43050,
+     "endMs": 64540
+    },
+    {
+     "label": "verse",
+     "startMs": 64540,
+     "endMs": 93210
+    },
+    {
+     "label": "chorus",
+     "startMs": 93210,
+     "endMs": 107540
+    },
+    {
+     "label": "chorus",
+     "startMs": 107540,
+     "endMs": 121870
+    },
+    {
+     "label": "verse",
+     "startMs": 121870,
+     "endMs": 136190
+    },
+    {
+     "label": "chorus",
+     "startMs": 136190,
+     "endMs": 150520
+    },
+    {
+     "label": "chorus",
+     "startMs": 150520,
+     "endMs": 164850
+    },
+    {
+     "label": "chorus",
+     "startMs": 164850,
+     "endMs": 179180
+    },
+    {
+     "label": "chorus",
+     "startMs": 179180,
+     "endMs": 200670
+    },
+    {
+     "label": "chorus",
+     "startMs": 200670,
+     "endMs": 222160
+    },
+    {
+     "label": "chorus",
+     "startMs": 222160,
+     "endMs": 243650
+    },
+    {
+     "label": "chorus",
+     "startMs": 243650,
+     "endMs": 257980
+    },
+    {
+     "label": "chorus",
+     "startMs": 257980,
+     "endMs": 272310
+    },
+    {
+     "label": "outro",
+     "startMs": 272310,
+     "endMs": 286640
+    },
+    {
+     "label": "end",
+     "startMs": 286640,
+     "endMs": 292290
+    }
+   ],
+   "camelot": "1A",
+   "key": "G#m"
+  },
+  {
+   "sourceFile": "FISHER (OZ) - Stay (Extended Mix).mp3",
+   "title": "Stay (Extended Mix)",
+   "artist": "FISHER (OZ)",
+   "durationMs": 285962,
+   "bpm": 128,
+   "markers": [
+    {
+     "type": "buildup",
+     "ms": 15040
+    },
+    {
+     "type": "drop",
+     "ms": 30050
+    },
+    {
+     "type": "loop_start",
+     "ms": 60050
+    },
+    {
+     "type": "buildup",
+     "ms": 82550
+    },
+    {
+     "type": "loop_end",
+     "ms": 82550
+    },
+    {
+     "type": "drop",
+     "ms": 97550
+    },
+    {
+     "type": "buildup",
+     "ms": 150050
+    },
+    {
+     "type": "drop",
+     "ms": 172550
+    }
+   ],
+   "segments": [
+    {
+     "label": "intro",
+     "startMs": 0,
+     "endMs": 40
+    },
+    {
+     "label": "intro",
+     "startMs": 40,
+     "endMs": 15040
+    },
+    {
+     "label": "verse",
+     "startMs": 15040,
+     "endMs": 30040
+    },
+    {
+     "label": "chorus",
+     "startMs": 30040,
+     "endMs": 45050
+    },
+    {
+     "label": "chorus",
+     "startMs": 45050,
+     "endMs": 60040
+    },
+    {
+     "label": "inst",
+     "startMs": 60040,
+     "endMs": 82550
+    },
+    {
+     "label": "bridge",
+     "startMs": 82550,
+     "endMs": 97540
+    },
+    {
+     "label": "chorus",
+     "startMs": 97540,
+     "endMs": 120040
+    },
+    {
+     "label": "chorus",
+     "startMs": 120040,
+     "endMs": 135050
+    },
+    {
+     "label": "chorus",
+     "startMs": 135050,
+     "endMs": 150040
+    },
+    {
+     "label": "inst",
+     "startMs": 150040,
+     "endMs": 172540
+    },
+    {
+     "label": "chorus",
+     "startMs": 172540,
+     "endMs": 187550
+    },
+    {
+     "label": "chorus",
+     "startMs": 187550,
+     "endMs": 210040
+    },
+    {
+     "label": "chorus",
+     "startMs": 210040,
+     "endMs": 225050
+    },
+    {
+     "label": "chorus",
+     "startMs": 225050,
+     "endMs": 240050
+    },
+    {
+     "label": "chorus",
+     "startMs": 240050,
+     "endMs": 255040
+    },
+    {
+     "label": "outro",
+     "startMs": 255040,
+     "endMs": 270050
+    },
+    {
+     "label": "outro",
+     "startMs": 270050,
+     "endMs": 285050
+    },
+    {
+     "label": "end",
+     "startMs": 285050,
+     "endMs": 285990
+    }
+   ],
+   "camelot": "5B",
+   "key": "D#"
+  },
+  {
+   "sourceFile": "Future, Swedish House Mafia, Fred again.. - Turn On The Lights again.. (feat. Future & Fred again..) (feat. Future & Fred again..).mp3",
+   "title": "Turn On The Lights again.. (feat. Future & Fred again..) (feat. Future & Fred again..)",
+   "artist": "Future, Swedish House Mafia, Fred again..",
+   "durationMs": 301052,
+   "bpm": 125,
+   "markers": [
+    {
+     "type": "buildup",
+     "ms": 15350
+    },
+    {
+     "type": "loop_start",
+     "ms": 15350
+    },
+    {
+     "type": "drop",
+     "ms": 30600
+    },
+    {
+     "type": "loop_end",
+     "ms": 30600
+    },
+    {
+     "type": "buildup",
+     "ms": 106790
+    },
+    {
+     "type": "drop",
+     "ms": 123940
+    },
+    {
+     "type": "buildup",
+     "ms": 171550
+    },
+    {
+     "type": "drop",
+     "ms": 186790
+    }
+   ],
+   "segments": [
+    {
+     "label": "start",
+     "startMs": 0,
+     "endMs": 120
+    },
+    {
+     "label": "intro",
+     "startMs": 120,
+     "endMs": 14400
+    },
+    {
+     "label": "verse",
+     "startMs": 14400,
+     "endMs": 30600
+    },
+    {
+     "label": "chorus",
+     "startMs": 30600,
+     "endMs": 45830
+    },
+    {
+     "label": "chorus",
+     "startMs": 45830,
+     "endMs": 60120
+    },
+    {
+     "label": "chorus",
+     "startMs": 60120,
+     "endMs": 76310
+    },
+    {
+     "label": "chorus",
+     "startMs": 76310,
+     "endMs": 91540
+    },
+    {
+     "label": "break",
+     "startMs": 91540,
+     "endMs": 106790
+    },
+    {
+     "label": "break",
+     "startMs": 106790,
+     "endMs": 123930
+    },
+    {
+     "label": "chorus",
+     "startMs": 123930,
+     "endMs": 137260
+    },
+    {
+     "label": "chorus",
+     "startMs": 137260,
+     "endMs": 156310
+    },
+    {
+     "label": "inst",
+     "startMs": 156310,
+     "endMs": 171550
+    },
+    {
+     "label": "verse",
+     "startMs": 171550,
+     "endMs": 186780
+    },
+    {
+     "label": "chorus",
+     "startMs": 186780,
+     "endMs": 202020
+    },
+    {
+     "label": "chorus",
+     "startMs": 202020,
+     "endMs": 217260
+    },
+    {
+     "label": "chorus",
+     "startMs": 217260,
+     "endMs": 232500
+    },
+    {
+     "label": "chorus",
+     "startMs": 232500,
+     "endMs": 254400
+    },
+    {
+     "label": "outro",
+     "startMs": 254400,
+     "endMs": 293450
+    },
+    {
+     "label": "end",
+     "startMs": 293450,
+     "endMs": 301090
+    }
+   ],
+   "camelot": "11A",
+   "key": "F#m"
+  },
+  {
+   "sourceFile": "Interplanetary Criminal, Original Koffee - Slow Burner (Extended).mp3",
+   "title": "Slow Burner (Extended)",
+   "artist": "Interplanetary Criminal, Original Koffee",
+   "durationMs": 320849,
+   "bpm": 136,
+   "markers": [
+    {
+     "type": "drop",
+     "ms": 28440
+    },
+    {
+     "type": "loop_start",
+     "ms": 56690
+    },
+    {
+     "type": "loop_end",
+     "ms": 84910
+    },
+    {
+     "type": "buildup",
+     "ms": 99030
+    },
+    {
+     "type": "drop",
+     "ms": 113150
+    },
+    {
+     "type": "buildup",
+     "ms": 155510
+    },
+    {
+     "type": "drop",
+     "ms": 169630
+    },
+    {
+     "type": "buildup",
+     "ms": 243740
+    },
+    {
+     "type": "drop",
+     "ms": 257860
+    }
+   ],
+   "segments": [
+    {
+     "label": "intro",
+     "startMs": 0,
+     "endMs": 200
+    },
+    {
+     "label": "intro",
+     "startMs": 200,
+     "endMs": 14320
+    },
+    {
+     "label": "intro",
+     "startMs": 14320,
+     "endMs": 28440
+    },
+    {
+     "label": "chorus",
+     "startMs": 28440,
+     "endMs": 42550
+    },
+    {
+     "label": "chorus",
+     "startMs": 42550,
+     "endMs": 56680
+    },
+    {
+     "label": "verse",
+     "startMs": 56680,
+     "endMs": 84910
+    },
+    {
+     "label": "verse",
+     "startMs": 84910,
+     "endMs": 99030
+    },
+    {
+     "label": "verse",
+     "startMs": 99030,
+     "endMs": 113150
+    },
+    {
+     "label": "chorus",
+     "startMs": 113150,
+     "endMs": 126390
+    },
+    {
+     "label": "chorus",
+     "startMs": 126390,
+     "endMs": 141380
+    },
+    {
+     "label": "bridge",
+     "startMs": 141380,
+     "endMs": 155930
+    },
+    {
+     "label": "bridge",
+     "startMs": 155930,
+     "endMs": 169630
+    },
+    {
+     "label": "chorus",
+     "startMs": 169630,
+     "endMs": 183750
+    },
+    {
+     "label": "chorus",
+     "startMs": 183750,
+     "endMs": 201380
+    },
+    {
+     "label": "chorus",
+     "startMs": 201380,
+     "endMs": 215500
+    },
+    {
+     "label": "chorus",
+     "startMs": 215500,
+     "endMs": 229620
+    },
+    {
+     "label": "verse",
+     "startMs": 229620,
+     "endMs": 243720
+    },
+    {
+     "label": "verse",
+     "startMs": 243720,
+     "endMs": 257860
+    },
+    {
+     "label": "chorus",
+     "startMs": 257860,
+     "endMs": 271970
+    },
+    {
+     "label": "chorus",
+     "startMs": 271970,
+     "endMs": 284330
+    },
+    {
+     "label": "chorus",
+     "startMs": 284330,
+     "endMs": 300210
+    },
+    {
+     "label": "outro",
+     "startMs": 300210,
+     "endMs": 313670
+    },
+    {
+     "label": "end",
+     "startMs": 313670,
+     "endMs": 320890
+    }
+   ],
+   "camelot": "9A",
+   "key": "Em"
+  },
+  {
+   "sourceFile": "Interplanetary Criminal, Sammy Virji - Damager (Original Mix).mp3",
+   "title": "Damager (Original Mix)",
+   "artist": "Interplanetary Criminal, Sammy Virji",
+   "durationMs": 224591,
+   "bpm": 140,
+   "markers": [
+    {
+     "type": "buildup",
+     "ms": 111320
+    },
+    {
+     "type": "drop",
+     "ms": 125240
+    },
+    {
+     "type": "loop_start",
+     "ms": 166980
+    },
+    {
+     "type": "loop_end",
+     "ms": 189370
+    }
+   ],
+   "segments": [
+    {
+     "label": "intro",
+     "startMs": 0,
+     "endMs": 20
+    },
+    {
+     "label": "intro",
+     "startMs": 20,
+     "endMs": 13930
+    },
+    {
+     "label": "verse",
+     "startMs": 13930,
+     "endMs": 27620
+    },
+    {
+     "label": "verse",
+     "startMs": 27620,
+     "endMs": 41760
+    },
+    {
+     "label": "verse",
+     "startMs": 41760,
+     "endMs": 55660
+    },
+    {
+     "label": "verse",
+     "startMs": 55660,
+     "endMs": 69580
+    },
+    {
+     "label": "inst",
+     "startMs": 69580,
+     "endMs": 90450
+    },
+    {
+     "label": "verse",
+     "startMs": 90450,
+     "endMs": 111310
+    },
+    {
+     "label": "verse",
+     "startMs": 111310,
+     "endMs": 125230
+    },
+    {
+     "label": "chorus",
+     "startMs": 125230,
+     "endMs": 139150
+    },
+    {
+     "label": "verse",
+     "startMs": 139150,
+     "endMs": 153050
+    },
+    {
+     "label": "verse",
+     "startMs": 153050,
+     "endMs": 166970
+    },
+    {
+     "label": "inst",
+     "startMs": 166970,
+     "endMs": 189370
+    },
+    {
+     "label": "verse",
+     "startMs": 189370,
+     "endMs": 208700
+    },
+    {
+     "label": "verse",
+     "startMs": 208700,
+     "endMs": 222820
+    },
+    {
+     "label": "end",
+     "startMs": 222820,
+     "endMs": 224630
+    }
+   ],
+   "camelot": "2B",
+   "key": "F#"
+  },
+  {
+   "sourceFile": "John Summit - LIGHTS GO OUT (Extended Mix).mp3",
+   "title": "LIGHTS GO OUT (Extended Mix)",
+   "artist": "John Summit",
+   "durationMs": 241302,
+   "bpm": 143,
+   "markers": [
+    {
+     "type": "drop",
+     "ms": 40080
+    },
+    {
+     "type": "loop_start",
+     "ms": 100080
+    },
+    {
+     "type": "loop_end",
+     "ms": 126770
+    },
+    {
+     "type": "buildup",
+     "ms": 153410
+    },
+    {
+     "type": "drop",
+     "ms": 166740
+    }
+   ],
+   "segments": [
+    {
+     "label": "intro",
+     "startMs": 0,
+     "endMs": 70
+    },
+    {
+     "label": "intro",
+     "startMs": 70,
+     "endMs": 13400
+    },
+    {
+     "label": "intro",
+     "startMs": 13400,
+     "endMs": 26730
+    },
+    {
+     "label": "intro",
+     "startMs": 26730,
+     "endMs": 40080
+    },
+    {
+     "label": "chorus",
+     "startMs": 40080,
+     "endMs": 53400
+    },
+    {
+     "label": "chorus",
+     "startMs": 53400,
+     "endMs": 66720
+    },
+    {
+     "label": "chorus",
+     "startMs": 66720,
+     "endMs": 86730
+    },
+    {
+     "label": "chorus",
+     "startMs": 86730,
+     "endMs": 100070
+    },
+    {
+     "label": "inst",
+     "startMs": 100070,
+     "endMs": 126770
+    },
+    {
+     "label": "bridge",
+     "startMs": 126770,
+     "endMs": 140100
+    },
+    {
+     "label": "bridge",
+     "startMs": 140100,
+     "endMs": 153400
+    },
+    {
+     "label": "inst",
+     "startMs": 153400,
+     "endMs": 166730
+    },
+    {
+     "label": "chorus",
+     "startMs": 166730,
+     "endMs": 193400
+    },
+    {
+     "label": "chorus",
+     "startMs": 193400,
+     "endMs": 206720
+    },
+    {
+     "label": "chorus",
+     "startMs": 206720,
+     "endMs": 220070
+    },
+    {
+     "label": "outro",
+     "startMs": 220070,
+     "endMs": 233410
+    },
+    {
+     "label": "end",
+     "startMs": 233410,
+     "endMs": 241350
+    }
+   ],
+   "camelot": "5B",
+   "key": "D#"
+  },
+  {
+   "sourceFile": "Jozzy, Fred again.. - ten (Original Mix).mp3",
+   "title": "ten (Original Mix)",
+   "artist": "Jozzy, Fred again.., Jim Legxacy",
+   "durationMs": 181545,
+   "bpm": 128,
+   "markers": [
+    {
+     "type": "drop",
+     "ms": 15470
+    },
+    {
+     "type": "buildup",
+     "ms": 30440
+    },
+    {
+     "type": "loop_start",
+     "ms": 30440
+    },
+    {
+     "type": "drop",
+     "ms": 52910
+    },
+    {
+     "type": "loop_end",
+     "ms": 52910
+    },
+    {
+     "type": "buildup",
+     "ms": 86600
+    },
+    {
+     "type": "drop",
+     "ms": 101590
+    }
+   ],
+   "segments": [
+    {
+     "label": "start",
+     "startMs": 0,
+     "endMs": 20
+    },
+    {
+     "label": "intro",
+     "startMs": 20,
+     "endMs": 15460
+    },
+    {
+     "label": "chorus",
+     "startMs": 15460,
+     "endMs": 30440
+    },
+    {
+     "label": "verse",
+     "startMs": 30440,
+     "endMs": 52910
+    },
+    {
+     "label": "chorus",
+     "startMs": 52910,
+     "endMs": 71150
+    },
+    {
+     "label": "chorus",
+     "startMs": 71150,
+     "endMs": 86600
+    },
+    {
+     "label": "verse",
+     "startMs": 86600,
+     "endMs": 101580
+    },
+    {
+     "label": "chorus",
+     "startMs": 101580,
+     "endMs": 131020
+    },
+    {
+     "label": "chorus",
+     "startMs": 131020,
+     "endMs": 149740
+    },
+    {
+     "label": "chorus",
+     "startMs": 149740,
+     "endMs": 164730
+    },
+    {
+     "label": "outro",
+     "startMs": 164730,
+     "endMs": 179790
+    },
+    {
+     "label": "end",
+     "startMs": 179790,
+     "endMs": 181580
+    }
+   ],
+   "camelot": "10B",
+   "key": "D"
+  },
+  {
+   "sourceFile": "Kettama - Pretty Green Eyes  (Sunset Ibiza Mix).mp3",
+   "title": "Pretty Green Eyes  (Sunset Ibiza Mix)",
+   "artist": "Kettama",
+   "durationMs": 258682,
+   "bpm": 143,
+   "markers": [
+    {
+     "type": "buildup",
+     "ms": 30220
+    },
+    {
+     "type": "drop",
+     "ms": 46990
+    },
+    {
+     "type": "buildup",
+     "ms": 62310
+    },
+    {
+     "type": "drop",
+     "ms": 77190
+    },
+    {
+     "type": "buildup",
+     "ms": 174770
+    },
+    {
+     "type": "loop_start",
+     "ms": 174770
+    },
+    {
+     "type": "drop",
+     "ms": 198070
+    },
+    {
+     "type": "loop_end",
+     "ms": 198070
+    }
+   ],
+   "segments": [
+    {
+     "label": "intro",
+     "startMs": 0,
+     "endMs": 10
+    },
+    {
+     "label": "intro",
+     "startMs": 10,
+     "endMs": 16800
+    },
+    {
+     "label": "inst",
+     "startMs": 16800,
+     "endMs": 30220
+    },
+    {
+     "label": "inst",
+     "startMs": 30220,
+     "endMs": 46990
+    },
+    {
+     "label": "chorus",
+     "startMs": 46990,
+     "endMs": 62700
+    },
+    {
+     "label": "verse",
+     "startMs": 62700,
+     "endMs": 77190
+    },
+    {
+     "label": "chorus",
+     "startMs": 77190,
+     "endMs": 104270
+    },
+    {
+     "label": "inst",
+     "startMs": 104270,
+     "endMs": 117460
+    },
+    {
+     "label": "inst",
+     "startMs": 117460,
+     "endMs": 137630
+    },
+    {
+     "label": "solo",
+     "startMs": 137630,
+     "endMs": 151280
+    },
+    {
+     "label": "break",
+     "startMs": 151280,
+     "endMs": 174370
+    },
+    {
+     "label": "verse",
+     "startMs": 174370,
+     "endMs": 198070
+    },
+    {
+     "label": "chorus",
+     "startMs": 198070,
+     "endMs": 226600
+    },
+    {
+     "label": "chorus",
+     "startMs": 226600,
+     "endMs": 251780
+    },
+    {
+     "label": "chorus",
+     "startMs": 251780,
+     "endMs": 258720
+    }
+   ],
+   "camelot": "4B",
+   "key": "G#"
+  },
+  {
+   "sourceFile": "Kettama, Fred again.., SICARIA, Shady Nasty, Lou Nour - HARDSTYLE 2 (Lou Nour remix).mp3",
+   "title": "HARDSTYLE 2 (Lou Nour remix)",
+   "artist": "Kettama, Fred again.., SICARIA, Shady Nasty, Lou Nour",
+   "durationMs": 192000,
+   "bpm": 140,
+   "markers": [
+    {
+     "type": "buildup",
+     "ms": 25740
+    },
+    {
+     "type": "loop_start",
+     "ms": 25740
+    },
+    {
+     "type": "drop",
+     "ms": 54880
+    },
+    {
+     "type": "loop_end",
+     "ms": 54880
+    },
+    {
+     "type": "buildup",
+     "ms": 82300
+    },
+    {
+     "type": "drop",
+     "ms": 109730
+    },
+    {
+     "type": "buildup",
+     "ms": 165450
+    },
+    {
+     "type": "drop",
+     "ms": 177450
+    }
+   ],
+   "segments": [
+    {
+     "label": "intro",
+     "startMs": 0,
+     "endMs": 20
+    },
+    {
+     "label": "intro",
+     "startMs": 20,
+     "endMs": 13720
+    },
+    {
+     "label": "intro",
+     "startMs": 13720,
+     "endMs": 26160
+    },
+    {
+     "label": "verse",
+     "startMs": 26160,
+     "endMs": 54870
+    },
+    {
+     "label": "chorus",
+     "startMs": 54870,
+     "endMs": 67290
+    },
+    {
+     "label": "chorus",
+     "startMs": 67290,
+     "endMs": 82300
+    },
+    {
+     "label": "verse",
+     "startMs": 82300,
+     "endMs": 109730
+    },
+    {
+     "label": "chorus",
+     "startMs": 109730,
+     "endMs": 138020
+    },
+    {
+     "label": "inst",
+     "startMs": 138020,
+     "endMs": 151730
+    },
+    {
+     "label": "inst",
+     "startMs": 151730,
+     "endMs": 165440
+    },
+    {
+     "label": "inst",
+     "startMs": 165440,
+     "endMs": 177450
+    },
+    {
+     "label": "chorus",
+     "startMs": 177450,
+     "endMs": 191140
+    },
+    {
+     "label": "chorus",
+     "startMs": 191140,
+     "endMs": 192030
+    }
+   ],
+   "camelot": "8A",
+   "key": "Am"
+  },
+  {
+   "sourceFile": "Naomi Sharon - Another Life (Marten Lou Remix) (Original Mix).mp3",
+   "title": "Another Life (Marten Lou Remix) (Original Mix)",
+   "artist": "Naomi Sharon",
+   "durationMs": 303068,
+   "bpm": 120,
+   "markers": [
+    {
+     "type": "loop_start",
+     "ms": 63580
+    },
+    {
+     "type": "buildup",
+     "ms": 79690
+    },
+    {
+     "type": "loop_end",
+     "ms": 79690
+    },
+    {
+     "type": "drop",
+     "ms": 95320
+    },
+    {
+     "type": "buildup",
+     "ms": 174650
+    },
+    {
+     "type": "drop",
+     "ms": 190530
+    }
+   ],
+   "segments": [
+    {
+     "label": "start",
+     "startMs": 0,
+     "endMs": 110
+    },
+    {
+     "label": "intro",
+     "startMs": 110,
+     "endMs": 15470
+    },
+    {
+     "label": "intro",
+     "startMs": 15470,
+     "endMs": 47710
+    },
+    {
+     "label": "verse",
+     "startMs": 47710,
+     "endMs": 63570
+    },
+    {
+     "label": "verse",
+     "startMs": 63570,
+     "endMs": 79450
+    },
+    {
+     "label": "verse",
+     "startMs": 79450,
+     "endMs": 95320
+    },
+    {
+     "label": "chorus",
+     "startMs": 95320,
+     "endMs": 114660
+    },
+    {
+     "label": "chorus",
+     "startMs": 114660,
+     "endMs": 127050
+    },
+    {
+     "label": "chorus",
+     "startMs": 127050,
+     "endMs": 158790
+    },
+    {
+     "label": "break",
+     "startMs": 158790,
+     "endMs": 175020
+    },
+    {
+     "label": "verse",
+     "startMs": 175020,
+     "endMs": 190530
+    },
+    {
+     "label": "chorus",
+     "startMs": 190530,
+     "endMs": 222260
+    },
+    {
+     "label": "chorus",
+     "startMs": 222260,
+     "endMs": 238130
+    },
+    {
+     "label": "chorus",
+     "startMs": 238130,
+     "endMs": 254000
+    },
+    {
+     "label": "outro",
+     "startMs": 254000,
+     "endMs": 285720
+    },
+    {
+     "label": "outro",
+     "startMs": 285720,
+     "endMs": 303090
+    },
+    {
+     "label": "end",
+     "startMs": 303090,
+     "endMs": 303100
+    }
+   ],
+   "camelot": "1B",
+   "key": "B"
+  },
+  {
+   "sourceFile": "nimino - I Only Smoke When I Drink (Club Edit).mp3",
+   "title": "I Only Smoke When I Drink (Club Edit)",
+   "artist": "Nimino",
+   "durationMs": 241890,
+   "bpm": 128,
+   "markers": [
+    {
+     "type": "drop",
+     "ms": 60510
+    },
+    {
+     "type": "buildup",
+     "ms": 119080
+    },
+    {
+     "type": "loop_start",
+     "ms": 119080
+    },
+    {
+     "type": "drop",
+     "ms": 147440
+    },
+    {
+     "type": "loop_end",
+     "ms": 147440
+    },
+    {
+     "type": "buildup",
+     "ms": 196560
+    },
+    {
+     "type": "drop",
+     "ms": 211670
+    }
+   ],
+   "segments": [
+    {
+     "label": "intro",
+     "startMs": 0,
+     "endMs": 20
+    },
+    {
+     "label": "intro",
+     "startMs": 20,
+     "endMs": 15130
+    },
+    {
+     "label": "intro",
+     "startMs": 15130,
+     "endMs": 35920
+    },
+    {
+     "label": "intro",
+     "startMs": 35920,
+     "endMs": 60500
+    },
+    {
+     "label": "chorus",
+     "startMs": 60500,
+     "endMs": 89780
+    },
+    {
+     "label": "chorus",
+     "startMs": 89780,
+     "endMs": 105840
+    },
+    {
+     "label": "chorus",
+     "startMs": 105840,
+     "endMs": 120020
+    },
+    {
+     "label": "verse",
+     "startMs": 120020,
+     "endMs": 147430
+    },
+    {
+     "label": "chorus",
+     "startMs": 147430,
+     "endMs": 162550
+    },
+    {
+     "label": "chorus",
+     "startMs": 162550,
+     "endMs": 181440
+    },
+    {
+     "label": "verse",
+     "startMs": 181440,
+     "endMs": 196550
+    },
+    {
+     "label": "verse",
+     "startMs": 196550,
+     "endMs": 211670
+    },
+    {
+     "label": "chorus",
+     "startMs": 211670,
+     "endMs": 224900
+    },
+    {
+     "label": "outro",
+     "startMs": 224900,
+     "endMs": 241910
+    },
+    {
+     "label": "end",
+     "startMs": 241910,
+     "endMs": 241920
+    }
+   ],
+   "camelot": "11A",
+   "key": "F#m"
+  },
+  {
+   "sourceFile": "NOTION, Chrystal - The Days (NOTION Remix).mp3",
+   "title": "The Days (NOTION Remix)",
+   "artist": "NOTION, Chrystal",
+   "durationMs": 233229,
+   "bpm": 140,
+   "markers": [
+    {
+     "type": "buildup",
+     "ms": 31330
+    },
+    {
+     "type": "drop",
+     "ms": 45250
+    },
+    {
+     "type": "loop_start",
+     "ms": 80020
+    },
+    {
+     "type": "buildup",
+     "ms": 100890
+    },
+    {
+     "type": "loop_end",
+     "ms": 100890
+    },
+    {
+     "type": "drop",
+     "ms": 113070
+    },
+    {
+     "type": "buildup",
+     "ms": 142640
+    },
+    {
+     "type": "drop",
+     "ms": 158070
+    }
+   ],
+   "segments": [
+    {
+     "label": "start",
+     "startMs": 0,
+     "endMs": 3490
+    },
+    {
+     "label": "intro",
+     "startMs": 3490,
+     "endMs": 15670
+    },
+    {
+     "label": "verse",
+     "startMs": 15670,
+     "endMs": 31320
+    },
+    {
+     "label": "verse",
+     "startMs": 31320,
+     "endMs": 45240
+    },
+    {
+     "label": "chorus",
+     "startMs": 45240,
+     "endMs": 59360
+    },
+    {
+     "label": "chorus",
+     "startMs": 59360,
+     "endMs": 80020
+    },
+    {
+     "label": "verse",
+     "startMs": 80020,
+     "endMs": 100890
+    },
+    {
+     "label": "verse",
+     "startMs": 100890,
+     "endMs": 113060
+    },
+    {
+     "label": "chorus",
+     "startMs": 113060,
+     "endMs": 128720
+    },
+    {
+     "label": "bridge",
+     "startMs": 128720,
+     "endMs": 142630
+    },
+    {
+     "label": "bridge",
+     "startMs": 142630,
+     "endMs": 158280
+    },
+    {
+     "label": "chorus",
+     "startMs": 158280,
+     "endMs": 177410
+    },
+    {
+     "label": "chorus",
+     "startMs": 177410,
+     "endMs": 198280
+    },
+    {
+     "label": "chorus",
+     "startMs": 198280,
+     "endMs": 210450
+    },
+    {
+     "label": "chorus",
+     "startMs": 210450,
+     "endMs": 226110
+    },
+    {
+     "label": "end",
+     "startMs": 226110,
+     "endMs": 233280
+    }
+   ],
+   "camelot": "9A",
+   "key": "Em"
+  },
+  {
+   "sourceFile": "NOTION, Unknown T, D38 - TENTEN (Extended Mix).mp3",
+   "title": "TENTEN (Extended Mix)",
+   "artist": "NOTION, Unknown T, D38",
+   "durationMs": 237788,
+   "bpm": 140,
+   "markers": [
+    {
+     "type": "loop_start",
+     "ms": 27860
+    },
+    {
+     "type": "buildup",
+     "ms": 57420
+    },
+    {
+     "type": "loop_end",
+     "ms": 57420
+    },
+    {
+     "type": "drop",
+     "ms": 69520
+    },
+    {
+     "type": "buildup",
+     "ms": 153070
+    },
+    {
+     "type": "drop",
+     "ms": 167000
+    }
+   ],
+   "segments": [
+    {
+     "label": "intro",
+     "startMs": 0,
+     "endMs": 10
+    },
+    {
+     "label": "intro",
+     "startMs": 10,
+     "endMs": 14360
+    },
+    {
+     "label": "intro",
+     "startMs": 14360,
+     "endMs": 27400
+    },
+    {
+     "label": "verse",
+     "startMs": 27400,
+     "endMs": 56970
+    },
+    {
+     "label": "verse",
+     "startMs": 56970,
+     "endMs": 69510
+    },
+    {
+     "label": "chorus",
+     "startMs": 69510,
+     "endMs": 97410
+    },
+    {
+     "label": "verse",
+     "startMs": 97410,
+     "endMs": 111320
+    },
+    {
+     "label": "verse",
+     "startMs": 111320,
+     "endMs": 125230
+    },
+    {
+     "label": "verse",
+     "startMs": 125230,
+     "endMs": 139140
+    },
+    {
+     "label": "verse",
+     "startMs": 139140,
+     "endMs": 153060
+    },
+    {
+     "label": "verse",
+     "startMs": 153060,
+     "endMs": 166990
+    },
+    {
+     "label": "chorus",
+     "startMs": 166990,
+     "endMs": 180890
+    },
+    {
+     "label": "chorus",
+     "startMs": 180890,
+     "endMs": 194790
+    },
+    {
+     "label": "chorus",
+     "startMs": 194790,
+     "endMs": 208710
+    },
+    {
+     "label": "outro",
+     "startMs": 208710,
+     "endMs": 222630
+    },
+    {
+     "label": "outro",
+     "startMs": 222630,
+     "endMs": 235680
+    },
+    {
+     "label": "end",
+     "startMs": 235680,
+     "endMs": 237820
+    }
+   ],
+   "camelot": "9A",
+   "key": "Em"
+  },
+  {
+   "sourceFile": "Puretone, Dom Dolla - Addicted To Bass (Dom Dolla Relapse) (Dom Dolla Relapse).mp3",
+   "title": "Addicted To Bass ((Dom Dolla Relapse))",
+   "artist": "Puretone, Dom Dolla",
+   "durationMs": 300896,
+   "bpm": 133,
+   "markers": [
+    {
+     "type": "drop",
+     "ms": 28680
+    },
+    {
+     "type": "buildup",
+     "ms": 57330
+    },
+    {
+     "type": "drop",
+     "ms": 71660
+    },
+    {
+     "type": "buildup",
+     "ms": 128980
+    },
+    {
+     "type": "drop",
+     "ms": 143310
+    },
+    {
+     "type": "buildup",
+     "ms": 214950
+    },
+    {
+     "type": "drop",
+     "ms": 229280
+    }
+   ],
+   "segments": [
+    {
+     "label": "intro",
+     "startMs": 0,
+     "endMs": 10
+    },
+    {
+     "label": "intro",
+     "startMs": 10,
+     "endMs": 14350
+    },
+    {
+     "label": "intro",
+     "startMs": 14350,
+     "endMs": 28670
+    },
+    {
+     "label": "chorus",
+     "startMs": 28670,
+     "endMs": 43000
+    },
+    {
+     "label": "chorus",
+     "startMs": 43000,
+     "endMs": 57330
+    },
+    {
+     "label": "verse",
+     "startMs": 57330,
+     "endMs": 71660
+    },
+    {
+     "label": "chorus",
+     "startMs": 71660,
+     "endMs": 85990
+    },
+    {
+     "label": "chorus",
+     "startMs": 85990,
+     "endMs": 100320
+    },
+    {
+     "label": "chorus",
+     "startMs": 100320,
+     "endMs": 114650
+    },
+    {
+     "label": "verse",
+     "startMs": 114650,
+     "endMs": 128980
+    },
+    {
+     "label": "verse",
+     "startMs": 128980,
+     "endMs": 143310
+    },
+    {
+     "label": "chorus",
+     "startMs": 143310,
+     "endMs": 157630
+    },
+    {
+     "label": "chorus",
+     "startMs": 157630,
+     "endMs": 171960
+    },
+    {
+     "label": "inst",
+     "startMs": 171960,
+     "endMs": 186290
+    },
+    {
+     "label": "inst",
+     "startMs": 186290,
+     "endMs": 200620
+    },
+    {
+     "label": "verse",
+     "startMs": 200620,
+     "endMs": 214950
+    },
+    {
+     "label": "verse",
+     "startMs": 214950,
+     "endMs": 229270
+    },
+    {
+     "label": "chorus",
+     "startMs": 229270,
+     "endMs": 243610
+    },
+    {
+     "label": "chorus",
+     "startMs": 243610,
+     "endMs": 257930
+    },
+    {
+     "label": "chorus",
+     "startMs": 257930,
+     "endMs": 272260
+    },
+    {
+     "label": "outro",
+     "startMs": 272260,
+     "endMs": 286580
+    },
+    {
+     "label": "outro",
+     "startMs": 286580,
+     "endMs": 300930
+    },
+    {
+     "label": "end",
+     "startMs": 300930,
+     "endMs": 300940
+    }
+   ],
+   "camelot": "11B",
+   "key": "A"
+  },
+  {
+   "sourceFile": "Sammy Virji - If U Need It (Extended Mix).mp3",
+   "title": "If U Need It (Extended Mix)",
+   "artist": "Sammy Virji",
+   "durationMs": 237030,
+   "bpm": 133,
+   "markers": [
+    {
+     "type": "buildup",
+     "ms": 29100
+    },
+    {
+     "type": "drop",
+     "ms": 43650
+    },
+    {
+     "type": "buildup",
+     "ms": 101840
+    },
+    {
+     "type": "drop",
+     "ms": 116390
+    },
+    {
+     "type": "buildup",
+     "ms": 145470
+    },
+    {
+     "type": "loop_start",
+     "ms": 145470
+    },
+    {
+     "type": "drop",
+     "ms": 174570
+    },
+    {
+     "type": "loop_end",
+     "ms": 174570
+    }
+   ],
+   "segments": [
+    {
+     "label": "intro",
+     "startMs": 0,
+     "endMs": 10
+    },
+    {
+     "label": "intro",
+     "startMs": 10,
+     "endMs": 12740
+    },
+    {
+     "label": "intro",
+     "startMs": 12740,
+     "endMs": 29100
+    },
+    {
+     "label": "verse",
+     "startMs": 29100,
+     "endMs": 43650
+    },
+    {
+     "label": "chorus",
+     "startMs": 43650,
+     "endMs": 58200
+    },
+    {
+     "label": "chorus",
+     "startMs": 58200,
+     "endMs": 72740
+    },
+    {
+     "label": "verse",
+     "startMs": 72740,
+     "endMs": 87290
+    },
+    {
+     "label": "verse",
+     "startMs": 87290,
+     "endMs": 101840
+    },
+    {
+     "label": "verse",
+     "startMs": 101840,
+     "endMs": 116390
+    },
+    {
+     "label": "chorus",
+     "startMs": 116390,
+     "endMs": 130910
+    },
+    {
+     "label": "chorus",
+     "startMs": 130910,
+     "endMs": 145470
+    },
+    {
+     "label": "verse",
+     "startMs": 145470,
+     "endMs": 174560
+    },
+    {
+     "label": "chorus",
+     "startMs": 174560,
+     "endMs": 189110
+    },
+    {
+     "label": "chorus",
+     "startMs": 189110,
+     "endMs": 203660
+    },
+    {
+     "label": "outro",
+     "startMs": 203660,
+     "endMs": 218190
+    },
+    {
+     "label": "outro",
+     "startMs": 218190,
+     "endMs": 232770
+    },
+    {
+     "label": "end",
+     "startMs": 232770,
+     "endMs": 237070
+    }
+   ],
+   "camelot": "2A",
+   "key": "D#m"
+  },
+  {
+   "sourceFile": "Sammy Virji, Fred again.., Reggie - Talk of the Town (Original Mix).mp3",
+   "title": "Talk Of The Town (Original Mix)",
+   "artist": "Sammy Virji, Fred again.., Reggie",
+   "durationMs": 193846,
+   "bpm": 130,
+   "markers": [
+    {
+     "type": "drop",
+     "ms": 20
+    },
+    {
+     "type": "buildup",
+     "ms": 129250
+    },
+    {
+     "type": "drop",
+     "ms": 144020
+    }
+   ],
+   "segments": [
+    {
+     "label": "start",
+     "startMs": 0,
+     "endMs": 20
+    },
+    {
+     "label": "chorus",
+     "startMs": 20,
+     "endMs": 25860
+    },
+    {
+     "label": "verse",
+     "startMs": 25860,
+     "endMs": 40630
+    },
+    {
+     "label": "verse",
+     "startMs": 40630,
+     "endMs": 55400
+    },
+    {
+     "label": "verse",
+     "startMs": 55400,
+     "endMs": 70170
+    },
+    {
+     "label": "verse",
+     "startMs": 70170,
+     "endMs": 84960
+    },
+    {
+     "label": "inst",
+     "startMs": 84960,
+     "endMs": 99720
+    },
+    {
+     "label": "verse",
+     "startMs": 99720,
+     "endMs": 114480
+    },
+    {
+     "label": "verse",
+     "startMs": 114480,
+     "endMs": 129250
+    },
+    {
+     "label": "verse",
+     "startMs": 129250,
+     "endMs": 143100
+    },
+    {
+     "label": "chorus",
+     "startMs": 143100,
+     "endMs": 158790
+    },
+    {
+     "label": "chorus",
+     "startMs": 158790,
+     "endMs": 173560
+    },
+    {
+     "label": "outro",
+     "startMs": 173560,
+     "endMs": 192940
+    },
+    {
+     "label": "end",
+     "startMs": 192940,
+     "endMs": 193890
+    }
+   ],
+   "camelot": "11A",
+   "key": "F#m"
+  },
+  {
+   "sourceFile": "Skepta, Sammy Virji - Cops & Robbers (Extended Mix).mp3",
+   "title": "Cops & Robbers (Extended Mix)",
+   "artist": "Skepta, Sammy Virji",
+   "durationMs": 212559,
+   "bpm": 136,
+   "markers": [
+    {
+     "type": "buildup",
+     "ms": 56520
+    },
+    {
+     "type": "drop",
+     "ms": 70630
+    },
+    {
+     "type": "buildup",
+     "ms": 98870
+    },
+    {
+     "type": "drop",
+     "ms": 113000
+    },
+    {
+     "type": "buildup",
+     "ms": 141220
+    },
+    {
+     "type": "drop",
+     "ms": 155340
+    }
+   ],
+   "segments": [
+    {
+     "label": "intro",
+     "startMs": 0,
+     "endMs": 40
+    },
+    {
+     "label": "intro",
+     "startMs": 40,
+     "endMs": 14150
+    },
+    {
+     "label": "intro",
+     "startMs": 14150,
+     "endMs": 28270
+    },
+    {
+     "label": "intro",
+     "startMs": 28270,
+     "endMs": 42400
+    },
+    {
+     "label": "verse",
+     "startMs": 42400,
+     "endMs": 56510
+    },
+    {
+     "label": "verse",
+     "startMs": 56510,
+     "endMs": 70620
+    },
+    {
+     "label": "chorus",
+     "startMs": 70620,
+     "endMs": 84750
+    },
+    {
+     "label": "verse",
+     "startMs": 84750,
+     "endMs": 98860
+    },
+    {
+     "label": "verse",
+     "startMs": 98860,
+     "endMs": 113430
+    },
+    {
+     "label": "chorus",
+     "startMs": 113430,
+     "endMs": 128860
+    },
+    {
+     "label": "verse",
+     "startMs": 128860,
+     "endMs": 141220
+    },
+    {
+     "label": "verse",
+     "startMs": 141220,
+     "endMs": 155330
+    },
+    {
+     "label": "chorus",
+     "startMs": 155330,
+     "endMs": 169450
+    },
+    {
+     "label": "outro",
+     "startMs": 169450,
+     "endMs": 183570
+    },
+    {
+     "label": "outro",
+     "startMs": 183570,
+     "endMs": 212610
+    },
+    {
+     "label": "end",
+     "startMs": 212610,
+     "endMs": 212620
+    }
+   ],
+   "camelot": "12A",
+   "key": "C#m"
+  },
+  {
+   "sourceFile": "The Blessed Madonna, Fred again.. - Marea (we_ve lost dancing) (we_ve lost dancing).mp3",
+   "title": "Marea (we've lost dancing) (we've lost dancing)",
+   "artist": "The Blessed Madonna, Fred again..",
+   "durationMs": 285375,
+   "bpm": 122,
+   "markers": [
+    {
+     "type": "drop",
+     "ms": 47800
+    },
+    {
+     "type": "loop_start",
+     "ms": 110240
+    },
+    {
+     "type": "buildup",
+     "ms": 141470
+    },
+    {
+     "type": "loop_end",
+     "ms": 141470
+    },
+    {
+     "type": "drop",
+     "ms": 172680
+    },
+    {
+     "type": "buildup",
+     "ms": 219510
+    },
+    {
+     "type": "drop",
+     "ms": 235130
+    }
+   ],
+   "segments": [
+    {
+     "label": "start",
+     "startMs": 0,
+     "endMs": 240
+    },
+    {
+     "label": "verse",
+     "startMs": 240,
+     "endMs": 16600
+    },
+    {
+     "label": "verse",
+     "startMs": 16600,
+     "endMs": 32200
+    },
+    {
+     "label": "intro",
+     "startMs": 32200,
+     "endMs": 47800
+    },
+    {
+     "label": "chorus",
+     "startMs": 47800,
+     "endMs": 63410
+    },
+    {
+     "label": "chorus",
+     "startMs": 63410,
+     "endMs": 79020
+    },
+    {
+     "label": "chorus",
+     "startMs": 79020,
+     "endMs": 94640
+    },
+    {
+     "label": "chorus",
+     "startMs": 94640,
+     "endMs": 110240
+    },
+    {
+     "label": "verse",
+     "startMs": 110240,
+     "endMs": 141460
+    },
+    {
+     "label": "verse",
+     "startMs": 141460,
+     "endMs": 172680
+    },
+    {
+     "label": "chorus",
+     "startMs": 172680,
+     "endMs": 188290
+    },
+    {
+     "label": "chorus",
+     "startMs": 188290,
+     "endMs": 203900
+    },
+    {
+     "label": "chorus",
+     "startMs": 203900,
+     "endMs": 219510
+    },
+    {
+     "label": "inst",
+     "startMs": 219510,
+     "endMs": 236090
+    },
+    {
+     "label": "chorus",
+     "startMs": 236090,
+     "endMs": 250730
+    },
+    {
+     "label": "chorus",
+     "startMs": 250730,
+     "endMs": 266340
+    },
+    {
+     "label": "outro",
+     "startMs": 266340,
+     "endMs": 281460
+    },
+    {
+     "label": "end",
+     "startMs": 281460,
+     "endMs": 285420
+    }
+   ],
+   "camelot": "4A",
+   "key": "Fm"
+  },
+  {
+   "sourceFile": "Tinashe, Disco Lines - No Broke Boys (Extended).mp3",
+   "title": "No Broke Boys (Extended)",
+   "artist": "Tinashe, Disco Lines",
+   "durationMs": 206130,
+   "bpm": 130,
+   "markers": [
+    {
+     "type": "buildup",
+     "ms": 27530
+    },
+    {
+     "type": "loop_start",
+     "ms": 27530
+    },
+    {
+     "type": "drop",
+     "ms": 58670
+    },
+    {
+     "type": "loop_end",
+     "ms": 58670
+    },
+    {
+     "type": "buildup",
+     "ms": 117440
+    },
+    {
+     "type": "drop",
+     "ms": 131960
+    }
+   ],
+   "segments": [
+    {
+     "label": "intro",
+     "startMs": 0,
+     "endMs": 40
+    },
+    {
+     "label": "intro",
+     "startMs": 40,
+     "endMs": 27520
+    },
+    {
+     "label": "verse",
+     "startMs": 27520,
+     "endMs": 58670
+    },
+    {
+     "label": "chorus",
+     "startMs": 58670,
+     "endMs": 73320
+    },
+    {
+     "label": "chorus",
+     "startMs": 73320,
+     "endMs": 87980
+    },
+    {
+     "label": "chorus",
+     "startMs": 87980,
+     "endMs": 102650
+    },
+    {
+     "label": "bridge",
+     "startMs": 102650,
+     "endMs": 117290
+    },
+    {
+     "label": "verse",
+     "startMs": 117290,
+     "endMs": 131950
+    },
+    {
+     "label": "chorus",
+     "startMs": 131950,
+     "endMs": 144780
+    },
+    {
+     "label": "chorus",
+     "startMs": 144780,
+     "endMs": 161270
+    },
+    {
+     "label": "chorus",
+     "startMs": 161270,
+     "endMs": 175930
+    },
+    {
+     "label": "inst",
+     "startMs": 175930,
+     "endMs": 190570
+    },
+    {
+     "label": "outro",
+     "startMs": 190570,
+     "endMs": 205250
+    },
+    {
+     "label": "end",
+     "startMs": 205250,
+     "endMs": 206160
+    }
+   ],
+   "camelot": "1A",
+   "key": "G#m"
+  },
+  {
+   "sourceFile": "Absolutely, John Summit - DON_T BELIEVE IT (Extended Mix).mp3",
+   "title": "DON'T BELIEVE IT (Extended Mix)",
+   "artist": "Absolutely, John Summit",
+   "durationMs": 243867,
+   "bpm": 128,
+   "markers": [
+    {
+     "type": "buildup",
+     "ms": 45140
+    },
+    {
+     "type": "drop",
+     "ms": 60140
+    },
+    {
+     "type": "loop_start",
+     "ms": 90140
+    },
+    {
+     "type": "loop_end",
+     "ms": 105150
+    },
+    {
+     "type": "buildup",
+     "ms": 120140
+    },
+    {
+     "type": "drop",
+     "ms": 135140
+    }
+   ],
+   "segments": [
+    {
+     "label": "intro",
+     "startMs": 0,
+     "endMs": 130
+    },
+    {
+     "label": "intro",
+     "startMs": 130,
+     "endMs": 15130
+    },
+    {
+     "label": "intro",
+     "startMs": 15130,
+     "endMs": 30140
+    },
+    {
+     "label": "verse",
+     "startMs": 30140,
+     "endMs": 45140
+    },
+    {
+     "label": "verse",
+     "startMs": 45140,
+     "endMs": 60140
+    },
+    {
+     "label": "chorus",
+     "startMs": 60140,
+     "endMs": 75140
+    },
+    {
+     "label": "chorus",
+     "startMs": 75140,
+     "endMs": 90140
+    },
+    {
+     "label": "inst",
+     "startMs": 90140,
+     "endMs": 105150
+    },
+    {
+     "label": "bridge",
+     "startMs": 105150,
+     "endMs": 120140
+    },
+    {
+     "label": "verse",
+     "startMs": 120140,
+     "endMs": 135140
+    },
+    {
+     "label": "chorus",
+     "startMs": 135140,
+     "endMs": 164670
+    },
+    {
+     "label": "chorus",
+     "startMs": 164670,
+     "endMs": 191390
+    },
+    {
+     "label": "chorus",
+     "startMs": 191390,
+     "endMs": 210140
+    },
+    {
+     "label": "outro",
+     "startMs": 210140,
+     "endMs": 225130
+    },
+    {
+     "label": "outro",
+     "startMs": 225130,
+     "endMs": 240140
+    },
+    {
+     "label": "end",
+     "startMs": 240140,
+     "endMs": 243910
+    }
+   ]
+  },
+  {
+   "sourceFile": "Delerium, Sarah McLachlan, John Summit - Silence feat. Sarah McLachlan (John Summit Extended Remix).mp3",
+   "title": "Silence feat. Sarah McLachlan (John Summit Extended Remix)",
+   "artist": "Delerium, Sarah McLachlan, John Summit",
+   "durationMs": 328441,
+   "bpm": 133,
+   "markers": [
+    {
+     "type": "buildup",
+     "ms": 57790
+    },
+    {
+     "type": "drop",
+     "ms": 72220
+    },
+    {
+     "type": "buildup",
+     "ms": 144410
+    },
+    {
+     "type": "drop",
+     "ms": 158840
+    },
+    {
+     "type": "loop_start",
+     "ms": 193360
+    },
+    {
+     "type": "buildup",
+     "ms": 209370
+    },
+    {
+     "type": "loop_end",
+     "ms": 209370
+    },
+    {
+     "type": "drop",
+     "ms": 223810
+    }
+   ],
+   "segments": [
+    {
+     "label": "intro",
+     "startMs": 0,
+     "endMs": 40
+    },
+    {
+     "label": "intro",
+     "startMs": 40,
+     "endMs": 14480
+    },
+    {
+     "label": "intro",
+     "startMs": 14480,
+     "endMs": 28920
+    },
+    {
+     "label": "verse",
+     "startMs": 28920,
+     "endMs": 43350
+    },
+    {
+     "label": "verse",
+     "startMs": 43350,
+     "endMs": 57790
+    },
+    {
+     "label": "verse",
+     "startMs": 57790,
+     "endMs": 72560
+    },
+    {
+     "label": "chorus",
+     "startMs": 72560,
+     "endMs": 85720
+    },
+    {
+     "label": "chorus",
+     "startMs": 85720,
+     "endMs": 115540
+    },
+    {
+     "label": "inst",
+     "startMs": 115540,
+     "endMs": 129970
+    },
+    {
+     "label": "verse",
+     "startMs": 129970,
+     "endMs": 144410
+    },
+    {
+     "label": "verse",
+     "startMs": 144410,
+     "endMs": 158840
+    },
+    {
+     "label": "chorus",
+     "startMs": 158840,
+     "endMs": 180490
+    },
+    {
+     "label": "chorus",
+     "startMs": 180490,
+     "endMs": 194210
+    },
+    {
+     "label": "bridge",
+     "startMs": 194210,
+     "endMs": 209370
+    },
+    {
+     "label": "inst",
+     "startMs": 209370,
+     "endMs": 222910
+    },
+    {
+     "label": "chorus",
+     "startMs": 222910,
+     "endMs": 237340
+    },
+    {
+     "label": "chorus",
+     "startMs": 237340,
+     "endMs": 252680
+    },
+    {
+     "label": "chorus",
+     "startMs": 252680,
+     "endMs": 266210
+    },
+    {
+     "label": "chorus",
+     "startMs": 266210,
+     "endMs": 281550
+    },
+    {
+     "label": "outro",
+     "startMs": 281550,
+     "endMs": 295980
+    },
+    {
+     "label": "outro",
+     "startMs": 295980,
+     "endMs": 310420
+    },
+    {
+     "label": "outro",
+     "startMs": 310420,
+     "endMs": 324880
+    },
+    {
+     "label": "end",
+     "startMs": 324880,
+     "endMs": 328490
+    }
+   ]
+  },
+  {
+   "sourceFile": "Dom Dolla - Saving Up (Extended).mp3",
+   "title": "Saving Up (Extended)",
+   "artist": "Dom Dolla",
+   "durationMs": 347557,
+   "bpm": 130,
+   "markers": [
+    {
+     "type": "loop_start",
+     "ms": 44380
+    },
+    {
+     "type": "loop_end",
+     "ms": 73920
+    },
+    {
+     "type": "buildup",
+     "ms": 88690
+    },
+    {
+     "type": "drop",
+     "ms": 103460
+    },
+    {
+     "type": "buildup",
+     "ms": 192070
+    },
+    {
+     "type": "drop",
+     "ms": 206840
+    }
+   ],
+   "segments": [
+    {
+     "label": "intro",
+     "startMs": 0,
+     "endMs": 70
+    },
+    {
+     "label": "intro",
+     "startMs": 70,
+     "endMs": 14830
+    },
+    {
+     "label": "intro",
+     "startMs": 14830,
+     "endMs": 29600
+    },
+    {
+     "label": "intro",
+     "startMs": 29600,
+     "endMs": 44370
+    },
+    {
+     "label": "verse",
+     "startMs": 44370,
+     "endMs": 73910
+    },
+    {
+     "label": "verse",
+     "startMs": 73910,
+     "endMs": 88680
+    },
+    {
+     "label": "verse",
+     "startMs": 88680,
+     "endMs": 103450
+    },
+    {
+     "label": "chorus",
+     "startMs": 103450,
+     "endMs": 118220
+    },
+    {
+     "label": "chorus",
+     "startMs": 118220,
+     "endMs": 132990
+    },
+    {
+     "label": "chorus",
+     "startMs": 132990,
+     "endMs": 147760
+    },
+    {
+     "label": "chorus",
+     "startMs": 147760,
+     "endMs": 162530
+    },
+    {
+     "label": "inst",
+     "startMs": 162530,
+     "endMs": 177300
+    },
+    {
+     "label": "verse",
+     "startMs": 177300,
+     "endMs": 192070
+    },
+    {
+     "label": "verse",
+     "startMs": 192070,
+     "endMs": 206840
+    },
+    {
+     "label": "chorus",
+     "startMs": 206840,
+     "endMs": 221610
+    },
+    {
+     "label": "chorus",
+     "startMs": 221610,
+     "endMs": 236380
+    },
+    {
+     "label": "chorus",
+     "startMs": 236380,
+     "endMs": 251150
+    },
+    {
+     "label": "chorus",
+     "startMs": 251150,
+     "endMs": 265920
+    },
+    {
+     "label": "chorus",
+     "startMs": 265920,
+     "endMs": 280680
+    },
+    {
+     "label": "chorus",
+     "startMs": 280680,
+     "endMs": 295450
+    },
+    {
+     "label": "outro",
+     "startMs": 295450,
+     "endMs": 310220
+    },
+    {
+     "label": "outro",
+     "startMs": 310220,
+     "endMs": 324990
+    },
+    {
+     "label": "outro",
+     "startMs": 324990,
+     "endMs": 339760
+    },
+    {
+     "label": "end",
+     "startMs": 339760,
+     "endMs": 347590
+    }
+   ]
+  },
+  {
+   "sourceFile": "Dom Dolla, Clementine Douglas - Miracle Maker (Extended Mix).mp3",
+   "title": "Miracle Maker (Extended Mix)",
+   "artist": "Dom Dolla, Clementine Douglas",
+   "durationMs": 364732,
+   "bpm": 128,
+   "markers": [
+    {
+     "type": "drop",
+     "ms": 15080
+    },
+    {
+     "type": "loop_start",
+     "ms": 67580
+    },
+    {
+     "type": "loop_end",
+     "ms": 97580
+    },
+    {
+     "type": "buildup",
+     "ms": 127580
+    },
+    {
+     "type": "drop",
+     "ms": 142580
+    },
+    {
+     "type": "buildup",
+     "ms": 228830
+    },
+    {
+     "type": "drop",
+     "ms": 243830
+    },
+    {
+     "type": "buildup",
+     "ms": 258830
+    },
+    {
+     "type": "drop",
+     "ms": 273830
+    }
+   ],
+   "segments": [
+    {
+     "label": "start",
+     "startMs": 0,
+     "endMs": 70
+    },
+    {
+     "label": "intro",
+     "startMs": 70,
+     "endMs": 15070
+    },
+    {
+     "label": "chorus",
+     "startMs": 15070,
+     "endMs": 30070
+    },
+    {
+     "label": "chorus",
+     "startMs": 30070,
+     "endMs": 45070
+    },
+    {
+     "label": "chorus",
+     "startMs": 45070,
+     "endMs": 67580
+    },
+    {
+     "label": "inst",
+     "startMs": 67580,
+     "endMs": 97570
+    },
+    {
+     "label": "inst",
+     "startMs": 97570,
+     "endMs": 112570
+    },
+    {
+     "label": "inst",
+     "startMs": 112570,
+     "endMs": 127570
+    },
+    {
+     "label": "verse",
+     "startMs": 127570,
+     "endMs": 142570
+    },
+    {
+     "label": "chorus",
+     "startMs": 142570,
+     "endMs": 157580
+    },
+    {
+     "label": "inst",
+     "startMs": 157580,
+     "endMs": 172580
+    },
+    {
+     "label": "bridge",
+     "startMs": 172580,
+     "endMs": 198820
+    },
+    {
+     "label": "inst",
+     "startMs": 198820,
+     "endMs": 213820
+    },
+    {
+     "label": "verse",
+     "startMs": 213820,
+     "endMs": 228820
+    },
+    {
+     "label": "verse",
+     "startMs": 228820,
+     "endMs": 243830
+    },
+    {
+     "label": "chorus",
+     "startMs": 243830,
+     "endMs": 258820
+    },
+    {
+     "label": "inst",
+     "startMs": 258820,
+     "endMs": 273820
+    },
+    {
+     "label": "chorus",
+     "startMs": 273820,
+     "endMs": 303820
+    },
+    {
+     "label": "chorus",
+     "startMs": 303820,
+     "endMs": 318820
+    },
+    {
+     "label": "chorus",
+     "startMs": 318820,
+     "endMs": 341320
+    },
+    {
+     "label": "outro",
+     "startMs": 341320,
+     "endMs": 363830
+    },
+    {
+     "label": "end",
+     "startMs": 363830,
+     "endMs": 364780
+    }
+   ]
+  },
+  {
+   "sourceFile": "Go Freek, Dom Dolla - Define (Club Mix).mp3",
+   "title": "Define (Club Mix)",
+   "artist": "Go Freek, Dom Dolla",
+   "durationMs": 297134,
+   "bpm": 122,
+   "markers": [
+    {
+     "type": "buildup",
+     "ms": 63130
+    },
+    {
+     "type": "drop",
+     "ms": 78860
+    },
+    {
+     "type": "buildup",
+     "ms": 110340
+    },
+    {
+     "type": "loop_start",
+     "ms": 110340
+    },
+    {
+     "type": "drop",
+     "ms": 141810
+    },
+    {
+     "type": "loop_end",
+     "ms": 141810
+    },
+    {
+     "type": "buildup",
+     "ms": 157550
+    },
+    {
+     "type": "drop",
+     "ms": 173300
+    },
+    {
+     "type": "buildup",
+     "ms": 212630
+    },
+    {
+     "type": "drop",
+     "ms": 226400
+    }
+   ],
+   "segments": [
+    {
+     "label": "start",
+     "startMs": 0,
+     "endMs": 170
+    },
+    {
+     "label": "intro",
+     "startMs": 170,
+     "endMs": 15900
+    },
+    {
+     "label": "intro",
+     "startMs": 15900,
+     "endMs": 31640
+    },
+    {
+     "label": "intro",
+     "startMs": 31640,
+     "endMs": 47390
+    },
+    {
+     "label": "verse",
+     "startMs": 47390,
+     "endMs": 63130
+    },
+    {
+     "label": "verse",
+     "startMs": 63130,
+     "endMs": 78860
+    },
+    {
+     "label": "chorus",
+     "startMs": 78860,
+     "endMs": 94590
+    },
+    {
+     "label": "inst",
+     "startMs": 94590,
+     "endMs": 110340
+    },
+    {
+     "label": "verse",
+     "startMs": 110340,
+     "endMs": 141810
+    },
+    {
+     "label": "chorus",
+     "startMs": 141810,
+     "endMs": 157550
+    },
+    {
+     "label": "verse",
+     "startMs": 157550,
+     "endMs": 173290
+    },
+    {
+     "label": "chorus",
+     "startMs": 173290,
+     "endMs": 189020
+    },
+    {
+     "label": "chorus",
+     "startMs": 189020,
+     "endMs": 212620
+    },
+    {
+     "label": "inst",
+     "startMs": 212620,
+     "endMs": 226400
+    },
+    {
+     "label": "chorus",
+     "startMs": 226400,
+     "endMs": 259840
+    },
+    {
+     "label": "chorus",
+     "startMs": 259840,
+     "endMs": 275570
+    },
+    {
+     "label": "outro",
+     "startMs": 275570,
+     "endMs": 291300
+    },
+    {
+     "label": "end",
+     "startMs": 291300,
+     "endMs": 297170
+    }
+   ]
+  },
+  {
+   "sourceFile": "HILLS (US) - Lift Me Up (Extended Mix).mp3",
+   "title": "Lift Me Up (Extended Mix)",
+   "artist": "HILLS (US)",
+   "durationMs": 251275,
+   "bpm": 140,
+   "markers": [
+    {
+     "type": "drop",
+     "ms": 41190
+    },
+    {
+     "type": "buildup",
+     "ms": 82330
+    },
+    {
+     "type": "drop",
+     "ms": 96060
+    },
+    {
+     "type": "buildup",
+     "ms": 109770
+    },
+    {
+     "type": "drop",
+     "ms": 123480
+    },
+    {
+     "type": "buildup",
+     "ms": 150910
+    },
+    {
+     "type": "drop",
+     "ms": 164630
+    }
+   ],
+   "segments": [
+    {
+     "label": "intro",
+     "startMs": 0,
+     "endMs": 40
+    },
+    {
+     "label": "intro",
+     "startMs": 40,
+     "endMs": 13760
+    },
+    {
+     "label": "intro",
+     "startMs": 13760,
+     "endMs": 27480
+    },
+    {
+     "label": "intro",
+     "startMs": 27480,
+     "endMs": 41190
+    },
+    {
+     "label": "chorus",
+     "startMs": 41190,
+     "endMs": 54900
+    },
+    {
+     "label": "intro",
+     "startMs": 54900,
+     "endMs": 68610
+    },
+    {
+     "label": "inst",
+     "startMs": 68610,
+     "endMs": 82330
+    },
+    {
+     "label": "verse",
+     "startMs": 82330,
+     "endMs": 96050
+    },
+    {
+     "label": "chorus",
+     "startMs": 96050,
+     "endMs": 109760
+    },
+    {
+     "label": "inst",
+     "startMs": 109760,
+     "endMs": 123480
+    },
+    {
+     "label": "chorus",
+     "startMs": 123480,
+     "endMs": 150930
+    },
+    {
+     "label": "inst",
+     "startMs": 150930,
+     "endMs": 164620
+    },
+    {
+     "label": "chorus",
+     "startMs": 164620,
+     "endMs": 178330
+    },
+    {
+     "label": "chorus",
+     "startMs": 178330,
+     "endMs": 192050
+    },
+    {
+     "label": "chorus",
+     "startMs": 192050,
+     "endMs": 205770
+    },
+    {
+     "label": "chorus",
+     "startMs": 205770,
+     "endMs": 219470
+    },
+    {
+     "label": "outro",
+     "startMs": 219470,
+     "endMs": 233190
+    },
+    {
+     "label": "outro",
+     "startMs": 233190,
+     "endMs": 246900
+    },
+    {
+     "label": "outro",
+     "startMs": 246900,
+     "endMs": 251330
+    }
+   ]
+  },
+  {
+   "sourceFile": "John Summit, HAYLA - Shiver (Extended Mix).mp3",
+   "title": "Shiver (Extended Mix)",
+   "artist": "John Summit, HAYLA",
+   "durationMs": 292972,
+   "bpm": 128,
+   "markers": [
+    {
+     "type": "buildup",
+     "ms": 30320
+    },
+    {
+     "type": "drop",
+     "ms": 43530
+    },
+    {
+     "type": "buildup",
+     "ms": 149380
+    },
+    {
+     "type": "drop",
+     "ms": 164490
+    },
+    {
+     "type": "buildup",
+     "ms": 226860
+    },
+    {
+     "type": "loop_start",
+     "ms": 226860
+    },
+    {
+     "type": "drop",
+     "ms": 241970
+    },
+    {
+     "type": "loop_end",
+     "ms": 241970
+    }
+   ],
+   "segments": [
+    {
+     "label": "intro",
+     "startMs": 0,
+     "endMs": 70
+    },
+    {
+     "label": "intro",
+     "startMs": 70,
+     "endMs": 15190
+    },
+    {
+     "label": "verse",
+     "startMs": 15190,
+     "endMs": 29830
+    },
+    {
+     "label": "verse",
+     "startMs": 29830,
+     "endMs": 44000
+    },
+    {
+     "label": "chorus",
+     "startMs": 44000,
+     "endMs": 60550
+    },
+    {
+     "label": "chorus",
+     "startMs": 60550,
+     "endMs": 75670
+    },
+    {
+     "label": "chorus",
+     "startMs": 75670,
+     "endMs": 89370
+    },
+    {
+     "label": "chorus",
+     "startMs": 89370,
+     "endMs": 105910
+    },
+    {
+     "label": "chorus",
+     "startMs": 105910,
+     "endMs": 121020
+    },
+    {
+     "label": "inst",
+     "startMs": 121020,
+     "endMs": 136140
+    },
+    {
+     "label": "verse",
+     "startMs": 136140,
+     "endMs": 149850
+    },
+    {
+     "label": "verse",
+     "startMs": 149850,
+     "endMs": 164960
+    },
+    {
+     "label": "chorus",
+     "startMs": 164960,
+     "endMs": 181500
+    },
+    {
+     "label": "chorus",
+     "startMs": 181500,
+     "endMs": 196620
+    },
+    {
+     "label": "chorus",
+     "startMs": 196620,
+     "endMs": 211730
+    },
+    {
+     "label": "chorus",
+     "startMs": 211730,
+     "endMs": 226850
+    },
+    {
+     "label": "inst",
+     "startMs": 226850,
+     "endMs": 241970
+    },
+    {
+     "label": "chorus",
+     "startMs": 241970,
+     "endMs": 257090
+    },
+    {
+     "label": "outro",
+     "startMs": 257090,
+     "endMs": 272200
+    },
+    {
+     "label": "outro",
+     "startMs": 272200,
+     "endMs": 287320
+    },
+    {
+     "label": "outro",
+     "startMs": 287320,
+     "endMs": 293020
+    }
+   ]
+  },
+  {
+   "sourceFile": "John Summit, HAYLA - Where You Are (Extended Mix).mp3",
+   "title": "Where You Are (Extended Mix)",
+   "artist": "John Summit, HAYLA",
+   "durationMs": 310496,
+   "bpm": 125,
+   "markers": [
+    {
+     "type": "drop",
+     "ms": 45760
+    },
+    {
+     "type": "buildup",
+     "ms": 76230
+    },
+    {
+     "type": "drop",
+     "ms": 91470
+    },
+    {
+     "type": "buildup",
+     "ms": 152430
+    },
+    {
+     "type": "drop",
+     "ms": 167670
+    },
+    {
+     "type": "buildup",
+     "ms": 194330
+    },
+    {
+     "type": "loop_start",
+     "ms": 194330
+    },
+    {
+     "type": "drop",
+     "ms": 228620
+    },
+    {
+     "type": "loop_end",
+     "ms": 228620
+    }
+   ],
+   "segments": [
+    {
+     "label": "intro",
+     "startMs": 0,
+     "endMs": 30
+    },
+    {
+     "label": "intro",
+     "startMs": 30,
+     "endMs": 15270
+    },
+    {
+     "label": "intro",
+     "startMs": 15270,
+     "endMs": 30510
+    },
+    {
+     "label": "intro",
+     "startMs": 30510,
+     "endMs": 45760
+    },
+    {
+     "label": "chorus",
+     "startMs": 45760,
+     "endMs": 60040
+    },
+    {
+     "label": "verse",
+     "startMs": 60040,
+     "endMs": 76230
+    },
+    {
+     "label": "verse",
+     "startMs": 76230,
+     "endMs": 91470
+    },
+    {
+     "label": "chorus",
+     "startMs": 91470,
+     "endMs": 106710
+    },
+    {
+     "label": "chorus",
+     "startMs": 106710,
+     "endMs": 121950
+    },
+    {
+     "label": "inst",
+     "startMs": 121950,
+     "endMs": 137180
+    },
+    {
+     "label": "verse",
+     "startMs": 137180,
+     "endMs": 152420
+    },
+    {
+     "label": "verse",
+     "startMs": 152420,
+     "endMs": 167660
+    },
+    {
+     "label": "chorus",
+     "startMs": 167660,
+     "endMs": 194320
+    },
+    {
+     "label": "bridge",
+     "startMs": 194320,
+     "endMs": 228610
+    },
+    {
+     "label": "chorus",
+     "startMs": 228610,
+     "endMs": 243850
+    },
+    {
+     "label": "chorus",
+     "startMs": 243850,
+     "endMs": 259090
+    },
+    {
+     "label": "chorus",
+     "startMs": 259090,
+     "endMs": 274330
+    },
+    {
+     "label": "outro",
+     "startMs": 274330,
+     "endMs": 289560
+    },
+    {
+     "label": "outro",
+     "startMs": 289560,
+     "endMs": 303850
+    },
+    {
+     "label": "end",
+     "startMs": 303850,
+     "endMs": 310550
+    }
+   ]
+  },
+  {
+   "sourceFile": "John Summit, In\u00e9z (DE) - crystallized feat. In\u00e9z (Extended Mix).mp3",
+   "title": "crystallized feat. In\u00e9z (Extended Mix)",
+   "artist": "Inez, John Summit",
+   "durationMs": 262734,
+   "bpm": 128,
+   "markers": [
+    {
+     "type": "buildup",
+     "ms": 45170
+    },
+    {
+     "type": "drop",
+     "ms": 60140
+    },
+    {
+     "type": "buildup",
+     "ms": 73270
+    },
+    {
+     "type": "drop",
+     "ms": 90140
+    },
+    {
+     "type": "buildup",
+     "ms": 135140
+    },
+    {
+     "type": "drop",
+     "ms": 150140
+    },
+    {
+     "type": "buildup",
+     "ms": 180150
+    },
+    {
+     "type": "loop_start",
+     "ms": 180150
+    },
+    {
+     "type": "drop",
+     "ms": 200770
+    },
+    {
+     "type": "loop_end",
+     "ms": 200770
+    }
+   ],
+   "segments": [
+    {
+     "label": "start",
+     "startMs": 0,
+     "endMs": 130
+    },
+    {
+     "label": "intro",
+     "startMs": 130,
+     "endMs": 15130
+    },
+    {
+     "label": "intro",
+     "startMs": 15130,
+     "endMs": 30140
+    },
+    {
+     "label": "intro",
+     "startMs": 30140,
+     "endMs": 45180
+    },
+    {
+     "label": "verse",
+     "startMs": 45180,
+     "endMs": 60130
+    },
+    {
+     "label": "chorus",
+     "startMs": 60130,
+     "endMs": 74200
+    },
+    {
+     "label": "verse",
+     "startMs": 74200,
+     "endMs": 89210
+    },
+    {
+     "label": "chorus",
+     "startMs": 89210,
+     "endMs": 105140
+    },
+    {
+     "label": "chorus",
+     "startMs": 105140,
+     "endMs": 120140
+    },
+    {
+     "label": "bridge",
+     "startMs": 120140,
+     "endMs": 135140
+    },
+    {
+     "label": "bridge",
+     "startMs": 135140,
+     "endMs": 150130
+    },
+    {
+     "label": "chorus",
+     "startMs": 150130,
+     "endMs": 165140
+    },
+    {
+     "label": "bridge",
+     "startMs": 165140,
+     "endMs": 180140
+    },
+    {
+     "label": "bridge",
+     "startMs": 180140,
+     "endMs": 200760
+    },
+    {
+     "label": "chorus",
+     "startMs": 200760,
+     "endMs": 227020
+    },
+    {
+     "label": "chorus",
+     "startMs": 227020,
+     "endMs": 242020
+    },
+    {
+     "label": "outro",
+     "startMs": 242020,
+     "endMs": 257020
+    },
+    {
+     "label": "end",
+     "startMs": 257020,
+     "endMs": 262770
+    }
+   ]
+  },
+  {
+   "sourceFile": "Keane - Somewhere Only We Know (Original Mix).mp3",
+   "title": "Somewhere Only We Know (Original Mix)",
+   "artist": "Keane",
+   "durationMs": 235880,
+   "bpm": 86,
+   "markers": [
+    {
+     "type": "loop_start",
+     "ms": 22540
+    },
+    {
+     "type": "loop_end",
+     "ms": 50460
+    },
+    {
+     "type": "buildup",
+     "ms": 89530
+    },
+    {
+     "type": "drop",
+     "ms": 111840
+    },
+    {
+     "type": "buildup",
+     "ms": 145340
+    },
+    {
+     "type": "drop",
+     "ms": 167650
+    }
+   ],
+   "segments": [
+    {
+     "label": "start",
+     "startMs": 0,
+     "endMs": 220
+    },
+    {
+     "label": "intro",
+     "startMs": 220,
+     "endMs": 22540
+    },
+    {
+     "label": "verse",
+     "startMs": 22540,
+     "endMs": 50460
+    },
+    {
+     "label": "verse",
+     "startMs": 50460,
+     "endMs": 67190
+    },
+    {
+     "label": "verse",
+     "startMs": 67190,
+     "endMs": 89520
+    },
+    {
+     "label": "verse",
+     "startMs": 89520,
+     "endMs": 111840
+    },
+    {
+     "label": "chorus",
+     "startMs": 111840,
+     "endMs": 145340
+    },
+    {
+     "label": "verse",
+     "startMs": 145340,
+     "endMs": 167650
+    },
+    {
+     "label": "chorus",
+     "startMs": 167650,
+     "endMs": 189980
+    },
+    {
+     "label": "chorus",
+     "startMs": 189980,
+     "endMs": 212310
+    },
+    {
+     "label": "outro",
+     "startMs": 212310,
+     "endMs": 224470
+    },
+    {
+     "label": "outro",
+     "startMs": 224470,
+     "endMs": 235920
+    }
+   ]
+  },
+  {
+   "sourceFile": "Lavinia, John Summit - SHADOWS (Extended Mix).mp3",
+   "title": "SHADOWS (Extended Mix)",
+   "artist": "Lavinia, John Summit",
+   "durationMs": 254253,
+   "bpm": 140,
+   "markers": [
+    {
+     "type": "buildup",
+     "ms": 41760
+    },
+    {
+     "type": "drop",
+     "ms": 55680
+    },
+    {
+     "type": "buildup",
+     "ms": 111330
+    },
+    {
+     "type": "drop",
+     "ms": 123720
+    }
+   ],
+   "segments": [
+    {
+     "label": "intro",
+     "startMs": 0,
+     "endMs": 20
+    },
+    {
+     "label": "intro",
+     "startMs": 20,
+     "endMs": 13930
+    },
+    {
+     "label": "intro",
+     "startMs": 13930,
+     "endMs": 27850
+    },
+    {
+     "label": "verse",
+     "startMs": 27850,
+     "endMs": 41760
+    },
+    {
+     "label": "verse",
+     "startMs": 41760,
+     "endMs": 54810
+    },
+    {
+     "label": "chorus",
+     "startMs": 54810,
+     "endMs": 68710
+    },
+    {
+     "label": "chorus",
+     "startMs": 68710,
+     "endMs": 83490
+    },
+    {
+     "label": "bridge",
+     "startMs": 83490,
+     "endMs": 97400
+    },
+    {
+     "label": "verse",
+     "startMs": 97400,
+     "endMs": 111320
+    },
+    {
+     "label": "verse",
+     "startMs": 111320,
+     "endMs": 124370
+    },
+    {
+     "label": "chorus",
+     "startMs": 124370,
+     "endMs": 139150
+    },
+    {
+     "label": "chorus",
+     "startMs": 139150,
+     "endMs": 153070
+    },
+    {
+     "label": "chorus",
+     "startMs": 153070,
+     "endMs": 166980
+    },
+    {
+     "label": "chorus",
+     "startMs": 166980,
+     "endMs": 180890
+    },
+    {
+     "label": "chorus",
+     "startMs": 180890,
+     "endMs": 194800
+    },
+    {
+     "label": "chorus",
+     "startMs": 194800,
+     "endMs": 208720
+    },
+    {
+     "label": "outro",
+     "startMs": 208720,
+     "endMs": 222630
+    },
+    {
+     "label": "outro",
+     "startMs": 222630,
+     "endMs": 236530
+    },
+    {
+     "label": "outro",
+     "startMs": 236530,
+     "endMs": 252610
+    },
+    {
+     "label": "end",
+     "startMs": 252610,
+     "endMs": 254310
+    }
+   ]
+  },
+  {
+   "sourceFile": "MK, Dom Dolla - Rhyme Dust (Extended).mp3",
+   "title": "Rhyme Dust (Extended)",
+   "artist": "MK, Dom Dolla",
+   "durationMs": 330114,
+   "bpm": 128,
+   "markers": [
+    {
+     "type": "drop",
+     "ms": 30060
+    },
+    {
+     "type": "buildup",
+     "ms": 60060
+    },
+    {
+     "type": "drop",
+     "ms": 75060
+    },
+    {
+     "type": "buildup",
+     "ms": 120060
+    },
+    {
+     "type": "drop",
+     "ms": 135060
+    },
+    {
+     "type": "buildup",
+     "ms": 195060
+    },
+    {
+     "type": "loop_start",
+     "ms": 195060
+    },
+    {
+     "type": "drop",
+     "ms": 211930
+    },
+    {
+     "type": "loop_end",
+     "ms": 211930
+    },
+    {
+     "type": "buildup",
+     "ms": 255060
+    },
+    {
+     "type": "drop",
+     "ms": 270060
+    }
+   ],
+   "segments": [
+    {
+     "label": "start",
+     "startMs": 0,
+     "endMs": 60
+    },
+    {
+     "label": "intro",
+     "startMs": 60,
+     "endMs": 14590
+    },
+    {
+     "label": "intro",
+     "startMs": 14590,
+     "endMs": 30050
+    },
+    {
+     "label": "chorus",
+     "startMs": 30050,
+     "endMs": 45050
+    },
+    {
+     "label": "chorus",
+     "startMs": 45050,
+     "endMs": 60060
+    },
+    {
+     "label": "inst",
+     "startMs": 60060,
+     "endMs": 75060
+    },
+    {
+     "label": "chorus",
+     "startMs": 75060,
+     "endMs": 90050
+    },
+    {
+     "label": "verse",
+     "startMs": 90050,
+     "endMs": 104580
+    },
+    {
+     "label": "verse",
+     "startMs": 104580,
+     "endMs": 119580
+    },
+    {
+     "label": "verse",
+     "startMs": 119580,
+     "endMs": 135060
+    },
+    {
+     "label": "chorus",
+     "startMs": 135060,
+     "endMs": 149590
+    },
+    {
+     "label": "chorus",
+     "startMs": 149590,
+     "endMs": 164590
+    },
+    {
+     "label": "chorus",
+     "startMs": 164590,
+     "endMs": 179590
+    },
+    {
+     "label": "verse",
+     "startMs": 179590,
+     "endMs": 195060
+    },
+    {
+     "label": "inst",
+     "startMs": 195060,
+     "endMs": 211460
+    },
+    {
+     "label": "chorus",
+     "startMs": 211460,
+     "endMs": 225050
+    },
+    {
+     "label": "chorus",
+     "startMs": 225050,
+     "endMs": 254580
+    },
+    {
+     "label": "verse",
+     "startMs": 254580,
+     "endMs": 270050
+    },
+    {
+     "label": "chorus",
+     "startMs": 270050,
+     "endMs": 284590
+    },
+    {
+     "label": "chorus",
+     "startMs": 284590,
+     "endMs": 299580
+    },
+    {
+     "label": "inst",
+     "startMs": 299580,
+     "endMs": 315050
+    },
+    {
+     "label": "outro",
+     "startMs": 315050,
+     "endMs": 330050
+    },
+    {
+     "label": "end",
+     "startMs": 330050,
+     "endMs": 330170
+    }
+   ]
+  },
+  {
+   "sourceFile": "MisterWives - Reflections (Original Mix).mp3",
+   "title": "Reflections (Original Mix)",
+   "artist": "MisterWives",
+   "durationMs": 186440,
+   "bpm": 111,
+   "markers": [
+    {
+     "type": "buildup",
+     "ms": 17560
+    },
+    {
+     "type": "drop",
+     "ms": 43510
+    },
+    {
+     "type": "buildup",
+     "ms": 69450
+    },
+    {
+     "type": "loop_start",
+     "ms": 69450
+    },
+    {
+     "type": "drop",
+     "ms": 104040
+    },
+    {
+     "type": "loop_end",
+     "ms": 104040
+    }
+   ],
+   "segments": [
+    {
+     "label": "start",
+     "startMs": 0,
+     "endMs": 250
+    },
+    {
+     "label": "intro",
+     "startMs": 250,
+     "endMs": 17560
+    },
+    {
+     "label": "verse",
+     "startMs": 17560,
+     "endMs": 43510
+    },
+    {
+     "label": "chorus",
+     "startMs": 43510,
+     "endMs": 69450
+    },
+    {
+     "label": "verse",
+     "startMs": 69450,
+     "endMs": 104040
+    },
+    {
+     "label": "chorus",
+     "startMs": 104040,
+     "endMs": 121330
+    },
+    {
+     "label": "chorus",
+     "startMs": 121330,
+     "endMs": 138600
+    },
+    {
+     "label": "chorus",
+     "startMs": 138600,
+     "endMs": 155930
+    },
+    {
+     "label": "outro",
+     "startMs": 155930,
+     "endMs": 179160
+    },
+    {
+     "label": "outro",
+     "startMs": 179160,
+     "endMs": 186490
+    }
+   ]
+  },
+  {
+   "sourceFile": "Pharrell Williams - Freedom (Original Mix).mp3",
+   "title": "Freedom (Original Mix)",
+   "artist": "Pharrell Williams",
+   "durationMs": 162467,
+   "bpm": 95,
+   "markers": [
+    {
+     "type": "buildup",
+     "ms": 10200
+    },
+    {
+     "type": "loop_start",
+     "ms": 10200
+    },
+    {
+     "type": "drop",
+     "ms": 40540
+    },
+    {
+     "type": "loop_end",
+     "ms": 40540
+    },
+    {
+     "type": "buildup",
+     "ms": 73360
+    },
+    {
+     "type": "drop",
+     "ms": 91070
+    }
+   ],
+   "segments": [
+    {
+     "label": "intro",
+     "startMs": 0,
+     "endMs": 10200
+    },
+    {
+     "label": "verse",
+     "startMs": 10200,
+     "endMs": 41180
+    },
+    {
+     "label": "chorus",
+     "startMs": 41180,
+     "endMs": 72650
+    },
+    {
+     "label": "verse",
+     "startMs": 72650,
+     "endMs": 91700
+    },
+    {
+     "label": "chorus",
+     "startMs": 91700,
+     "endMs": 111280
+    },
+    {
+     "label": "chorus",
+     "startMs": 111280,
+     "endMs": 142230
+    },
+    {
+     "label": "chorus",
+     "startMs": 142230,
+     "endMs": 161030
+    },
+    {
+     "label": "outro",
+     "startMs": 161030,
+     "endMs": 162510
+    }
+   ]
+  },
+  {
+   "sourceFile": "Pixies - Where Is My Mind_ (2007 Remaster).mp3",
+   "title": "Where Is My Mind? (2007 Remaster)",
+   "artist": "Pixies",
+   "durationMs": 234973,
+   "bpm": 81,
+   "markers": [
+    {
+     "type": "drop",
+     "ms": 27950
+    },
+    {
+     "type": "buildup",
+     "ms": 45810
+    },
+    {
+     "type": "loop_start",
+     "ms": 45810
+    },
+    {
+     "type": "drop",
+     "ms": 75110
+    },
+    {
+     "type": "loop_end",
+     "ms": 75110
+    },
+    {
+     "type": "buildup",
+     "ms": 116460
+    },
+    {
+     "type": "drop",
+     "ms": 130470
+    },
+    {
+     "type": "buildup",
+     "ms": 148190
+    },
+    {
+     "type": "drop",
+     "ms": 174550
+    }
+   ],
+   "segments": [
+    {
+     "label": "start",
+     "startMs": 0,
+     "endMs": 230
+    },
+    {
+     "label": "intro",
+     "startMs": 230,
+     "endMs": 27180
+    },
+    {
+     "label": "chorus",
+     "startMs": 27180,
+     "endMs": 45800
+    },
+    {
+     "label": "verse",
+     "startMs": 45800,
+     "endMs": 75110
+    },
+    {
+     "label": "chorus",
+     "startMs": 75110,
+     "endMs": 92850
+    },
+    {
+     "label": "verse",
+     "startMs": 92850,
+     "endMs": 116450
+    },
+    {
+     "label": "inst",
+     "startMs": 116450,
+     "endMs": 130470
+    },
+    {
+     "label": "chorus",
+     "startMs": 130470,
+     "endMs": 148190
+    },
+    {
+     "label": "bridge",
+     "startMs": 148190,
+     "endMs": 174550
+    },
+    {
+     "label": "chorus",
+     "startMs": 174550,
+     "endMs": 201080
+    },
+    {
+     "label": "outro",
+     "startMs": 201080,
+     "endMs": 216520
+    },
+    {
+     "label": "outro",
+     "startMs": 216520,
+     "endMs": 235030
+    }
+   ]
+  },
+  {
+   "sourceFile": "Stevie Appleton, John Summit, GUZ (NL) - What A Life feat. Stevie Appleton (Extended Mix).mp3",
+   "title": "What A Life feat. Stevie Appleton (Extended Mix)",
+   "artist": "Stevie Appleton, John Summit, GUZ (NL)",
+   "durationMs": 353353,
+   "bpm": 125,
+   "markers": [
+    {
+     "type": "drop",
+     "ms": 30520
+    },
+    {
+     "type": "loop_start",
+     "ms": 76240
+    },
+    {
+     "type": "buildup",
+     "ms": 91480
+    },
+    {
+     "type": "loop_end",
+     "ms": 91480
+    },
+    {
+     "type": "drop",
+     "ms": 106710
+    },
+    {
+     "type": "buildup",
+     "ms": 137190
+    },
+    {
+     "type": "drop",
+     "ms": 152430
+    },
+    {
+     "type": "buildup",
+     "ms": 167660
+    },
+    {
+     "type": "drop",
+     "ms": 182900
+    },
+    {
+     "type": "buildup",
+     "ms": 228620
+    },
+    {
+     "type": "drop",
+     "ms": 241950
+    }
+   ],
+   "segments": [
+    {
+     "label": "start",
+     "startMs": 0,
+     "endMs": 30
+    },
+    {
+     "label": "intro",
+     "startMs": 30,
+     "endMs": 15270
+    },
+    {
+     "label": "intro",
+     "startMs": 15270,
+     "endMs": 30510
+    },
+    {
+     "label": "chorus",
+     "startMs": 30510,
+     "endMs": 45750
+    },
+    {
+     "label": "chorus",
+     "startMs": 45750,
+     "endMs": 60990
+    },
+    {
+     "label": "chorus",
+     "startMs": 60990,
+     "endMs": 76230
+    },
+    {
+     "label": "inst",
+     "startMs": 76230,
+     "endMs": 91480
+    },
+    {
+     "label": "inst",
+     "startMs": 91480,
+     "endMs": 106710
+    },
+    {
+     "label": "chorus",
+     "startMs": 106710,
+     "endMs": 121940
+    },
+    {
+     "label": "chorus",
+     "startMs": 121940,
+     "endMs": 137190
+    },
+    {
+     "label": "inst",
+     "startMs": 137190,
+     "endMs": 152430
+    },
+    {
+     "label": "chorus",
+     "startMs": 152430,
+     "endMs": 167660
+    },
+    {
+     "label": "inst",
+     "startMs": 167660,
+     "endMs": 182900
+    },
+    {
+     "label": "chorus",
+     "startMs": 182900,
+     "endMs": 199090
+    },
+    {
+     "label": "chorus",
+     "startMs": 199090,
+     "endMs": 213380
+    },
+    {
+     "label": "chorus",
+     "startMs": 213380,
+     "endMs": 228610
+    },
+    {
+     "label": "inst",
+     "startMs": 228610,
+     "endMs": 242900
+    },
+    {
+     "label": "chorus",
+     "startMs": 242900,
+     "endMs": 259100
+    },
+    {
+     "label": "chorus",
+     "startMs": 259100,
+     "endMs": 289570
+    },
+    {
+     "label": "outro",
+     "startMs": 289570,
+     "endMs": 304800
+    },
+    {
+     "label": "outro",
+     "startMs": 304800,
+     "endMs": 320040
+    },
+    {
+     "label": "outro",
+     "startMs": 320040,
+     "endMs": 335270
+    },
+    {
+     "label": "outro",
+     "startMs": 335270,
+     "endMs": 350520
+    },
+    {
+     "label": "end",
+     "startMs": 350520,
+     "endMs": 353390
+    }
+   ]
+  },
+  {
+   "sourceFile": "Walker & Royce, Dom Dolla, Nathan Nicholson - No Room For A Saint (feat. Nathan Nicholson) [From F1\u00ae The Movie] (feat. Nathan Nicholson).mp3",
+   "title": "No Room For A Saint (feat. Nathan Nicholson) [From F1\u00ae The Movie] (feat. Nathan Nicholson)",
+   "artist": "Walker & Royce, Dom Dolla, Nathan Nicholson",
+   "durationMs": 272841,
+   "bpm": 133,
+   "markers": [
+    {
+     "type": "drop",
+     "ms": 43770
+    },
+    {
+     "type": "buildup",
+     "ms": 105590
+    },
+    {
+     "type": "drop",
+     "ms": 120140
+    },
+    {
+     "type": "buildup",
+     "ms": 178320
+    },
+    {
+     "type": "drop",
+     "ms": 192860
+    }
+   ],
+   "segments": [
+    {
+     "label": "start",
+     "startMs": 0,
+     "endMs": 130
+    },
+    {
+     "label": "intro",
+     "startMs": 130,
+     "endMs": 14680
+    },
+    {
+     "label": "intro",
+     "startMs": 14680,
+     "endMs": 29220
+    },
+    {
+     "label": "intro",
+     "startMs": 29220,
+     "endMs": 43310
+    },
+    {
+     "label": "chorus",
+     "startMs": 43310,
+     "endMs": 58320
+    },
+    {
+     "label": "chorus",
+     "startMs": 58320,
+     "endMs": 76500
+    },
+    {
+     "label": "inst",
+     "startMs": 76500,
+     "endMs": 91040
+    },
+    {
+     "label": "inst",
+     "startMs": 91040,
+     "endMs": 105590
+    },
+    {
+     "label": "verse",
+     "startMs": 105590,
+     "endMs": 120130
+    },
+    {
+     "label": "chorus",
+     "startMs": 120130,
+     "endMs": 134680
+    },
+    {
+     "label": "chorus",
+     "startMs": 134680,
+     "endMs": 149220
+    },
+    {
+     "label": "chorus",
+     "startMs": 149220,
+     "endMs": 163770
+    },
+    {
+     "label": "chorus",
+     "startMs": 163770,
+     "endMs": 178320
+    },
+    {
+     "label": "inst",
+     "startMs": 178320,
+     "endMs": 192850
+    },
+    {
+     "label": "chorus",
+     "startMs": 192850,
+     "endMs": 207410
+    },
+    {
+     "label": "chorus",
+     "startMs": 207410,
+     "endMs": 221950
+    },
+    {
+     "label": "chorus",
+     "startMs": 221950,
+     "endMs": 236500
+    },
+    {
+     "label": "chorus",
+     "startMs": 236500,
+     "endMs": 251050
+    },
+    {
+     "label": "chorus",
+     "startMs": 251050,
+     "endMs": 265600
+    },
+    {
+     "label": "end",
+     "startMs": 265600,
+     "endMs": 272880
+    }
+   ]
+  },
+  {
+   "sourceFile": "Walker & Royce, FENIK - Utopia (Extended Mix).mp3",
+   "title": "Utopia (Extended Mix)",
+   "artist": "Walker & Royce, FENIK",
+   "durationMs": 288481,
+   "bpm": 133,
+   "markers": [
+    {
+     "type": "drop",
+     "ms": 120
+    },
+    {
+     "type": "buildup",
+     "ms": 157740
+    },
+    {
+     "type": "drop",
+     "ms": 172070
+    }
+   ],
+   "segments": [
+    {
+     "label": "intro",
+     "startMs": 0,
+     "endMs": 110
+    },
+    {
+     "label": "chorus",
+     "startMs": 110,
+     "endMs": 14450
+    },
+    {
+     "label": "chorus",
+     "startMs": 14450,
+     "endMs": 28780
+    },
+    {
+     "label": "chorus",
+     "startMs": 28780,
+     "endMs": 43110
+    },
+    {
+     "label": "chorus",
+     "startMs": 43110,
+     "endMs": 71760
+    },
+    {
+     "label": "chorus",
+     "startMs": 71760,
+     "endMs": 86990
+    },
+    {
+     "label": "chorus",
+     "startMs": 86990,
+     "endMs": 100430
+    },
+    {
+     "label": "chorus",
+     "startMs": 100430,
+     "endMs": 114750
+    },
+    {
+     "label": "chorus",
+     "startMs": 114750,
+     "endMs": 136240
+    },
+    {
+     "label": "break",
+     "startMs": 136240,
+     "endMs": 157730
+    },
+    {
+     "label": "break",
+     "startMs": 157730,
+     "endMs": 172070
+    },
+    {
+     "label": "chorus",
+     "startMs": 172070,
+     "endMs": 186390
+    },
+    {
+     "label": "chorus",
+     "startMs": 186390,
+     "endMs": 215050
+    },
+    {
+     "label": "chorus",
+     "startMs": 215050,
+     "endMs": 229380
+    },
+    {
+     "label": "chorus",
+     "startMs": 229380,
+     "endMs": 243720
+    },
+    {
+     "label": "chorus",
+     "startMs": 243720,
+     "endMs": 258040
+    },
+    {
+     "label": "outro",
+     "startMs": 258040,
+     "endMs": 286720
+    },
+    {
+     "label": "end",
+     "startMs": 286720,
+     "endMs": 288530
+    }
+   ]
+  },
+  {
+   "sourceFile": "Zach Bryan - Pink Skies (Original Mix).mp3",
+   "title": "Pink Skies (Original Mix)",
+   "artist": "Zach Bryan",
+   "durationMs": 194920,
+   "bpm": 85,
+   "markers": [
+    {
+     "type": "loop_start",
+     "ms": 250
+    },
+    {
+     "type": "buildup",
+     "ms": 39050
+    },
+    {
+     "type": "loop_end",
+     "ms": 39050
+    },
+    {
+     "type": "drop",
+     "ms": 64130
+    },
+    {
+     "type": "buildup",
+     "ms": 86970
+    },
+    {
+     "type": "drop",
+     "ms": 111470
+    }
+   ],
+   "segments": [
+    {
+     "label": "start",
+     "startMs": 0,
+     "endMs": 240
+    },
+    {
+     "label": "verse",
+     "startMs": 240,
+     "endMs": 39050
+    },
+    {
+     "label": "verse",
+     "startMs": 39050,
+     "endMs": 64120
+    },
+    {
+     "label": "chorus",
+     "startMs": 64120,
+     "endMs": 86970
+    },
+    {
+     "label": "verse",
+     "startMs": 86970,
+     "endMs": 111460
+    },
+    {
+     "label": "chorus",
+     "startMs": 111460,
+     "endMs": 134050
+    },
+    {
+     "label": "chorus",
+     "startMs": 134050,
+     "endMs": 156570
+    },
+    {
+     "label": "outro",
+     "startMs": 156570,
+     "endMs": 179780
+    },
+    {
+     "label": "outro",
+     "startMs": 179780,
+     "endMs": 194960
+    }
+   ]
+  }
+ ]
+}
