@@ -9,6 +9,7 @@ import { listDevices, pausePlayback, playTrack, transferTo, type ConnectDevice }
 import { loadAllTags } from '../tags/store'
 import { LiveEngine, type PlayCommand } from '../live/live-engine'
 import { getHrMax, setHrMax } from '../profile'
+import { loadPairWeights } from '../weights'
 import { parsePlan } from './plan-parse'
 import { SessionClock, dueCues } from './runner'
 
@@ -464,7 +465,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
     }
     engineRef.current = allLocal ? 'local' : 'spotify'
     setEngine(engineRef.current)
-    liveRef.current = new LiveEngine(plan, lib, { hrMax: getHrMax() })
+    liveRef.current = new LiveEngine(plan, lib, { hrMax: getHrMax(), pairBonus: await loadPairWeights() })
     planRef.current = plan
     setLog([])
     hrLogRef.current = []
@@ -532,7 +533,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
   }
 
   /** Everything the iPhone app needs to run this session natively. */
-  function exportBundle() {
+  async function exportBundle() {
     const lib = loadAllTags()
     const involved = [...new Set(setlist.cues.map((c) => c.trackId))]
       .map((id) => lib[id])
@@ -560,6 +561,8 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
       // Calibrated zone anchor rides along so the phone conducts with the
       // same effort model (Swift HR rules pending — see ios/PARITY.md).
       hrMax: getHrMax(),
+      // Learned pairings ride to the phone too — same selection brain.
+      pairBonus: await loadPairWeights(),
     }
     const a = document.createElement('a')
     a.href = URL.createObjectURL(new Blob([JSON.stringify(bundle, null, 2)], { type: 'application/json' }))
@@ -601,7 +604,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
         ))}
         <p className="muted">
           {songs.length} tagged song(s) available · plan {Math.round(totalDurationMs(plan) / 60_000)}min{' '}
-          <button onClick={exportBundle} disabled={setlist.cues.length === 0}>Export session bundle (for iPhone app)</button>
+          <button onClick={() => void exportBundle()} disabled={setlist.cues.length === 0}>Export session bundle (for iPhone app)</button>
         </p>
       </div>
 

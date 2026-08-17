@@ -100,7 +100,21 @@ function corpusServer(): Plugin {
 
 // host:true = listen on all interfaces so the watch/phone can reach us over LAN.
 // The browser keeps using http://127.0.0.1:5173 (Spotify's registered redirect).
+/** Learned selection weights (analysis/selection_weights.py output). */
+function weightsServer(): Plugin {
+  return {
+    name: 'weights-server',
+    configureServer(server) {
+      server.middlewares.use('/api/weights', (_req, res) => {
+        res.setHeader('Content-Type', 'application/json')
+        const p = path.resolve(process.cwd(), 'analysis', 'selection-weights.json')
+        res.end(fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : '{"pairs":{}}')
+      })
+    },
+  }
+}
+
 export default defineConfig({
-  plugins: [react(), garminReceiver(), corpusServer()],
+  plugins: [react(), garminReceiver(), corpusServer(), weightsServer()],
   server: { host: true, port: 5173, strictPort: true },
 })

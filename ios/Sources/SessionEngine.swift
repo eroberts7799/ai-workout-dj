@@ -374,7 +374,7 @@ final class SessionEngine: ObservableObject {
       return
     }
     deck.stop()
-    live = LiveEngine(plan: plan, songs: tags)
+    live = LiveEngine(plan: plan, songs: tags, pairBonus: b.pairBonus ?? [:])
     firedCount = 0
     landingCount = 0
     lastCommand = ""

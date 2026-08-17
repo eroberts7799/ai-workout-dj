@@ -167,7 +167,7 @@ export function simulate(
   plan: WorkoutPlan,
   songs: SongTags[],
   samples: SimSample[],
-  opts: { paceSecPerKm?: number; hrMax?: number } = {},
+  opts: { paceSecPerKm?: number; hrMax?: number; pairBonus?: Record<string, number> } = {},
 ): SimResult {
   const engine = new LiveEngine(plan, songs, opts)
   const trace: TracePoint[] = []

@@ -60,7 +60,10 @@ const samples = syntheticSamples(plan, {
   hilly: false,
   withHr: true,
 })
-const result = simulate(plan, songs, samples, { hrMax: 197 })
+// Learned pairings (real-set adjacency) steer selection like they will live.
+const weightsPath = join(import.meta.dir, '..', 'analysis', 'selection-weights.json')
+const pairBonus = existsSync(weightsPath) ? JSON.parse(readFileSync(weightsPath, 'utf8')).pairs : {}
+const result = simulate(plan, songs, samples, { hrMax: 197, pairBonus })
 
 let prevBpm: number | null = null
 const commands = result.commands.map((c) => {

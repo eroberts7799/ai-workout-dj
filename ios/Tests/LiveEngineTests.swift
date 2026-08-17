@@ -63,6 +63,16 @@ final class LiveEngineTests: XCTestCase {
     XCTAssertLessThanOrEqual(abs(engine.landings[0].errorMs), 4000)
   }
 
+  func testLearnedPairWeightsSteerSelection() {
+    let easyPlan = [WorkoutStep(kind: "easy", seconds: 600, meters: nil)]
+    let engine = LiveEngine(plan: easyPlan, songs: songs, pairBonus: ["test song aaa>test song ccc": 5])
+    for i in 1...400 { engine.advance(LiveSample(tMs: Double(i) * 1000, distanceM: nil)) }
+    let fills = engine.commands.filter { $0.reason.hasPrefix("groove fill") }
+    XCTAssertGreaterThanOrEqual(fills.count, 2)
+    XCTAssertEqual(fills[0].trackId, "aaa")
+    XCTAssertEqual(fills[1].trackId, "ccc")
+  }
+
   func testChainPointLandsAtSegmentBoundary() {
     // Mirrors TS: chorus ends at 160s inside the [entry+120s, entry+240s]
     // window (entry 30s) → chain there, not at the 180s timer.

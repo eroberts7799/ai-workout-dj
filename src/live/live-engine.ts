@@ -114,10 +114,25 @@ export class LiveEngine {
   readonly landings: LandingReport[] = []
   readonly warnings: string[] = []
 
-  constructor(plan: WorkoutPlan, songs: SongTags[], opts: { paceSecPerKm?: number; hrMax?: number } = {}) {
+  /** Learned pairing weights ("<norm from>><norm to>" → observed count) —
+   *  mined from real DJ sets by analysis/selection_weights.py. */
+  private readonly pairBonus: Record<string, number>
+  /** trackId → normalized "artist title" key (mirrors the miner's norm()). */
+  private readonly normKey = new Map<string, string>()
+
+  constructor(
+    plan: WorkoutPlan,
+    songs: SongTags[],
+    opts: { paceSecPerKm?: number; hrMax?: number; pairBonus?: Record<string, number> } = {},
+  ) {
     this.steps = plan.steps
     this.paceSecPerKm = opts.paceSecPerKm ?? DEFAULT_PACE_SEC_PER_KM
     this.hrTracker = new HrTracker(opts.hrMax)
+    this.pairBonus = opts.pairBonus ?? {}
+    for (const song of songs) {
+      const words = `${song.artists} ${song.name}`.toLowerCase().match(/[a-z0-9]+/g) ?? []
+      this.normKey.set(song.trackId, words.join(' '))
+    }
     for (const song of songs) {
       for (const d of song.markers.filter((m) => m.type === 'drop')) {
         const buildups = song.markers
@@ -345,7 +360,13 @@ export class LiveEngine {
     for (let i = 0; i < choices.length; i++) {
       const c = choices[(startIdx + i) % choices.length]
       if (c.song.trackId === this.playing?.song.trackId) continue
-      const score = (from ? mixScore(from, c.song) : 0) - (recent.has(c.song.trackId) ? 1 : 0)
+      // Learned edge: real DJs played this pair adjacently/layered in the
+      // harvested sets. Capped at +2 so ground truth outweighs a heuristic
+      // point but can't override gross tempo/key mismatch + freshness.
+      const learned = from
+        ? Math.min(2, this.pairBonus[`${this.normKey.get(from.trackId)}>${this.normKey.get(c.song.trackId)}`] ?? 0)
+        : 0
+      const score = (from ? mixScore(from, c.song) : 0) + learned - (recent.has(c.song.trackId) ? 1 : 0)
       if (!best || score > best.score) best = { choice: c, advance: i + 1, score }
     }
     if (best) return best

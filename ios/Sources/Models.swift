@@ -65,6 +65,9 @@ struct SessionBundle: Codable {
   /// Calibrated max HR from the athlete's history (bundles from 2026-08-16
   /// on) — the zone anchor for the HR rules port. See ios/PARITY.md.
   let hrMax: Double?
+  /// Learned pairing weights mined from real DJ sets ("<norm>><norm>" →
+  /// count; bundles from 2026-08-17 on).
+  var pairBonus: [String: Double]? = nil
   /// Built-in demo bundles: trackId → bundled audio resource filename.
   let files: [String: String]?
 }

@@ -91,9 +91,32 @@ final class LiveEngine {
   private(set) var landings: [LandingReport] = []
   private(set) var warnings: [String] = []
 
-  init(plan: [WorkoutStep], songs: [TaggedSong], paceSecPerKm: Double = defaultPaceSecPerKm) {
+  /// Learned pairing weights ("<norm from>><norm to>" → count) — mined from
+  /// real DJ sets; arrives via the session bundle. Mirrors TS.
+  private let pairBonus: [String: Double]
+  private var normKey: [String: String] = [:]
+
+  init(plan: [WorkoutStep], songs: [TaggedSong], paceSecPerKm: Double = defaultPaceSecPerKm, pairBonus: [String: Double] = [:]) {
     steps = plan
     self.paceSecPerKm = paceSecPerKm
+    self.pairBonus = pairBonus
+    for song in songs {
+      // ASCII [a-z0-9] words only — must match the miner's and TS's regex
+      // exactly (CharacterSet.alphanumerics would keep accents and diverge).
+      let lower = "\(song.artists) \(song.name)".lowercased()
+      var words: [String] = []
+      var cur = ""
+      for ch in lower.unicodeScalars {
+        if (ch >= "a" && ch <= "z") || (ch >= "0" && ch <= "9") {
+          cur.unicodeScalars.append(ch)
+        } else if !cur.isEmpty {
+          words.append(cur)
+          cur = ""
+        }
+      }
+      if !cur.isEmpty { words.append(cur) }
+      normKey[song.trackId] = words.joined(separator: " ")
+    }
     for song in songs {
       for d in song.markers.filter({ $0.type == "drop" }) {
         let buildups = song.markers
@@ -272,6 +295,13 @@ final class LiveEngine {
 
   /// Peek the best drop candidate WITHOUT consuming rotation — the ride-mode
   /// commit needs to inspect the candidate's buildup length before deciding.
+  /// Learned edge for from→to, capped at +2 (mirrors TS: ground truth
+  /// outweighs a heuristic point, never gross mismatch + freshness).
+  private func learnedBonus(from: TaggedSong?, to: TaggedSong) -> Int {
+    guard let from, let a = normKey[from.trackId], let b = normKey[to.trackId] else { return 0 }
+    return Int(min(2, pairBonus["\(a)>\(b)"] ?? 0))
+  }
+
   private func bestDrop() -> (c: DropChoice, advance: Int)? {
     guard !droppable.isEmpty else { return nil }
     let from = playing?.song
@@ -281,6 +311,7 @@ final class LiveEngine {
       let c = droppable[(dropIdx + i) % droppable.count]
       if c.song.trackId == playing?.song.trackId { continue }
       var score = from != nil ? BeatMath.mixScore(fromBpm: from!.bpm, fromKey: from!.camelot, toBpm: c.song.bpm, toKey: c.song.camelot) : 0
+      score += learnedBonus(from: from, to: c.song)
       if recent.contains(c.song.trackId) { score -= 1 }
       if best == nil || score > best!.score { best = (c, i + 1, score) }
     }
@@ -303,6 +334,7 @@ final class LiveEngine {
       let c = loopable[(loopIdx + i) % loopable.count]
       if c.song.trackId == playing?.song.trackId { continue }
       var score = from != nil ? BeatMath.mixScore(fromBpm: from!.bpm, fromKey: from!.camelot, toBpm: c.song.bpm, toKey: c.song.camelot) : 0
+      score += learnedBonus(from: from, to: c.song)
       if recent.contains(c.song.trackId) { score -= 1 }
       if best == nil || score > best!.score { best = (c, i + 1, score) }
     }

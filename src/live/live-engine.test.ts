@@ -87,6 +87,20 @@ describe('LiveEngine', () => {
     expect(engine.commands.filter((c) => c.reason.startsWith('groove fill')).length).toBeGreaterThanOrEqual(2)
   })
 
+  test('learned pair weights steer selection: real-set adjacency wins ties', () => {
+    // aaa→ccc observed in real DJ sets (pairBonus); with tempo/key equal,
+    // the learned edge beats rotation order (which would pick bbb).
+    const easyPlan: WorkoutPlan = { name: 'e', steps: [{ kind: 'easy', seconds: 600 }] }
+    const engine = new LiveEngine(easyPlan, songs, {
+      pairBonus: { 'test song aaa>test song ccc': 5 },
+    })
+    for (let i = 1; i <= 400; i++) engine.advance({ tMs: i * 1000 })
+    const fills = engine.commands.filter((c) => c.reason.startsWith('groove fill'))
+    expect(fills.length).toBeGreaterThanOrEqual(2)
+    expect(fills[0].trackId).toBe('aaa')
+    expect(fills[1].trackId).toBe('ccc')
+  })
+
   test('chain point lands at a segment boundary — leave on top, not on a timer', () => {
     // Song with structure: chorus ends at 160s (inside the [entry+120s,
     // entry+240s] window from entry 30s) → the chain happens THERE, not at

@@ -10,6 +10,7 @@ import { beatAnchorMs } from '../conductor/beat'
 import { parsePlan } from '../conduct/plan-parse'
 import { RELAY_BASE, RELAY_KEY } from '../conduct/ConductPanel'
 import { loadAllTags } from '../tags/store'
+import { loadPairWeights } from '../weights'
 import {
   importTcx,
   loadSessionLog,
@@ -146,8 +147,9 @@ export default function ReplayPanel() {
     ...(hard == null ? ['hard pace: use mm:ss per km (e.g. 4:45)'] : []),
   ]
 
-  function runSim() {
+  async function runSim() {
     stopReplay()
+    const pairBonus = await loadPairWeights()
     let samples = loaded
       ? loaded.samples
       : syntheticSamples(activePlan, {
@@ -165,7 +167,7 @@ export default function ReplayPanel() {
       setStatus('no samples to replay')
       return
     }
-    setResult(simulate(activePlan, engineSongs, samples, loaded?.hrMax != null ? { hrMax: loaded.hrMax } : {}))
+    setResult(simulate(activePlan, engineSongs, samples, { pairBonus, ...(loaded?.hrMax != null ? { hrMax: loaded.hrMax } : {}) }))
     setStatus('')
   }
 
@@ -192,7 +194,7 @@ export default function ReplayPanel() {
       stopReplay()
       const samples = useWkStep ? log.samples : log.samples.map(({ wkStepSeq: _s, ...rest }) => rest)
       if (log.plan && samples.length > 0) {
-        setResult(simulate(log.plan, engineSongs, samples, log.hrMax != null ? { hrMax: log.hrMax } : {}))
+        setResult(simulate(log.plan, engineSongs, samples, { pairBonus: await loadPairWeights(), ...(log.hrMax != null ? { hrMax: log.hrMax } : {}) }))
       }
     } catch (e) {
       setStatus(`corpus fetch failed: ${String(e)}`)
@@ -212,7 +214,7 @@ export default function ReplayPanel() {
         const raw = await (await fetch(`/api/corpus/${encodeURIComponent(corpus[i].file)}`)).json()
         let log = loadStructuredRun(raw)
         if (!useWkStep) log = { ...log, samples: log.samples.map(({ wkStepSeq: _s, ...rest }) => rest) }
-        const res = simulate(log.plan!, engineSongs, log.samples, log.hrMax != null ? { hrMax: log.hrMax } : {})
+        const res = simulate(log.plan!, engineSongs, log.samples, { pairBonus: await loadPairWeights(), ...(log.hrMax != null ? { hrMax: log.hrMax } : {}) })
         const errs = res.landings.map((l) => Math.abs(l.errorMs))
         rows.push({
           file: corpus[i].file,
@@ -468,7 +470,7 @@ export default function ReplayPanel() {
         )}
 
         <div style={{ marginTop: 12, display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-          <button onClick={runSim} disabled={!loaded && (errors.length > 0 || paceErrors.length > 0)}>
+          <button onClick={() => void runSim()} disabled={!loaded && (errors.length > 0 || paceErrors.length > 0)}>
             {loaded ? 'Replay recorded session' : 'Simulate run'}
           </button>
           <label className="muted" style={{ cursor: 'pointer' }}>
