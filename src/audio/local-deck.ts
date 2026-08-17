@@ -21,7 +21,7 @@ export function deckOptsFor(reason: string): { onBeat?: boolean; grid?: 'beat' |
   if (reason.startsWith('drop lands')) return { onBeat: false }
   if (reason.startsWith('loop back')) return { onBeat: true, grid: 'beat' }
   if (reason.startsWith('buildup')) return { onBeat: true, grid: 'beat' }
-  return { radio: true } // groove fills & chains
+  return { radio: true } // groove fills, chains & fresh rep changes
 }
 
 /** Song-change crossfade: Spotify's shape — outgoing fades down while the

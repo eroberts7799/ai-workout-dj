@@ -53,7 +53,10 @@ final class LiveEngineTests: XCTestCase {
     for s in stream([(700, 3)]) { engine.advance(s) }
     XCTAssertEqual(engine.landings.count, 1)
     XCTAssertLessThanOrEqual(abs(engine.landings[0].errorMs), 1500)
-    XCTAssertTrue(engine.commands.contains { $0.reason.hasPrefix("buildup") })
+    // Fresh mode (default): the moment is a NEW song from 0:00.
+    let change = engine.commands.first { $0.reason.hasPrefix("rep change") }
+    XCTAssertNotNil(change)
+    XCTAssertEqual(change?.positionMs, 0)
   }
 
   func testSlowingRunnerStillLandsWithin4s() {
@@ -115,10 +118,10 @@ final class LiveEngineTests: XCTestCase {
     XCTAssertEqual(engine.landings.count, 2)
     let firstLandingT = engine.landings[0].targetTMs
     let cmds = engine.commands
-    guard let secondBuildIdx = cmds.firstIndex(where: { $0.tMs > firstLandingT && $0.reason.hasPrefix("buildup") }) else {
-      return XCTFail("no second buildup")
+    guard let secondChangeIdx = cmds.firstIndex(where: { $0.tMs > firstLandingT && $0.reason.hasPrefix("rep change") }) else {
+      return XCTFail("no second rep change")
     }
-    let between = cmds.enumerated().filter { $0.offset < secondBuildIdx && $0.element.tMs > firstLandingT && $0.element.reason.hasPrefix("groove fill") }
+    let between = cmds.enumerated().filter { $0.offset < secondChangeIdx && $0.element.tMs > firstLandingT && $0.element.reason.hasPrefix("groove fill") }
     XCTAssertEqual(between.count, 0)
   }
 
@@ -193,7 +196,8 @@ final class LiveEngineTests: XCTestCase {
     ]
     let engine = LiveEngine(plan: p, songs: songs, paceSecPerKm: 340)
     for s in stream([(30, 3)]) { engine.advance(s) }
-    XCTAssertTrue(engine.commands.first?.reason.hasPrefix("drop lands (opening)") ?? false)
+    XCTAssertTrue(engine.commands.first?.reason.hasPrefix("rep change (opening)") ?? false)
+    XCTAssertEqual(engine.commands.first?.positionMs, 0)
     XCTAssertEqual(engine.landings.count, 1)
   }
 
@@ -209,7 +213,9 @@ final class LiveEngineTests: XCTestCase {
     for s in stream([(700, 3)]) { engine.advance(s) }
     XCTAssertEqual(engine.landings.count, 3)
     for l in engine.landings { XCTAssertLessThanOrEqual(abs(l.errorMs), 1500) }
-    XCTAssertGreaterThanOrEqual(engine.commands.filter { $0.reason.hasPrefix("buildup toward next rep") }.count, 2)
+    let changes = engine.commands.filter { $0.reason.hasPrefix("rep change") }
+    XCTAssertGreaterThanOrEqual(changes.count, 3)
+    for c in changes { XCTAssertEqual(c.positionMs, 0) }
     XCTAssertFalse(engine.commands.contains { $0.reason.contains("truncated") })
   }
 

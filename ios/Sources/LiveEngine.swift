@@ -66,6 +66,13 @@ final class LiveEngine {
   /// Skip the rep-end release when the next buildup would cut in before this
   /// much listening — one song change per rep, not two. Mirrors TS.
   private static let releaseMinListenMs: Double = 60_000
+  /// Fresh-mode rep changes: crossfade starts this far before the boundary
+  /// so the incoming song peaks as the effort begins. Mirrors TS.
+  private static let freshChangeLeadMs: Double = 4_000
+
+  /// 'fresh' (default): rep starts = NEW song from 0:00 crossfaded onto the
+  /// boundary. 'anticipated': the parked buildup/drop machinery. Mirrors TS.
+  enum DropStyle { case fresh, anticipated }
 
   private let steps: [WorkoutStep]
   private var droppable: [DropChoice] = []
@@ -99,7 +106,10 @@ final class LiveEngine {
   private let pairBonus: [String: Double]
   private var normKey: [String: String] = [:]
 
-  init(plan: [WorkoutStep], songs: [TaggedSong], paceSecPerKm: Double = defaultPaceSecPerKm, pairBonus: [String: Double] = [:]) {
+  private let dropStyle: DropStyle
+
+  init(plan: [WorkoutStep], songs: [TaggedSong], paceSecPerKm: Double = defaultPaceSecPerKm, pairBonus: [String: Double] = [:], dropStyle: DropStyle = .fresh) {
+    self.dropStyle = dropStyle
     steps = plan
     self.paceSecPerKm = paceSecPerKm
     self.pairBonus = pairBonus
@@ -131,7 +141,7 @@ final class LiveEngine {
       // Cruise plays from 0:00 — EVERY song is cruise-capable. Mirrors TS.
       loopable.append(LoopChoice(song: song, startMs: 0, endMs: 0))
     }
-    if droppable.isEmpty { warnings.append("no drop-tagged songs") }
+    if dropStyle == .anticipated && droppable.isEmpty { warnings.append("no drop-tagged songs") }
     if loopable.isEmpty { warnings.append("no songs") }
   }
 
@@ -399,6 +409,12 @@ final class LiveEngine {
       if step.kind == "hard" {
         if mode == .build, let target = buildTargetT {
           landings.append(LandingReport(targetTMs: target, actualTMs: t, errorMs: t - target))
+        } else if dropStyle == .fresh {
+          // ETA collapsed before the commit — change songs NOW, from the top.
+          if let pick = pickLoop() {
+            emit(t: t, song: pick.song, positionMs: 0, fadeSec: 0.3, reason: "rep change (truncated) (\(pick.song.name))")
+            landings.append(LandingReport(targetTMs: t, actualTMs: t, errorMs: 0))
+          }
         } else {
           // ETA collapsed before any commit — cut straight to a drop, truncated.
           if let pick = pickDrop() {
@@ -411,21 +427,29 @@ final class LiveEngine {
         buildDropMs = nil
       } else if mode == .ride {
         // Hard step over — back to the groove, unless the next effort's
-        // buildup would cut in moments later: then ride this song through
+        // change would cut in moments later: then ride this song through
         // the rest (one change per rep, not two). Mirrors TS.
         let eta = etaToNextHardMs(t: t, dist: dist)
-        let buildLen = bestDrop().map { $0.c.dropMs - $0.c.entryMs } ?? 0
-        if eta == nil || eta! > buildLen + Self.releaseMinListenMs { startFill(t) }
+        let lead = dropStyle == .fresh ? Self.freshChangeLeadMs : (bestDrop().map { $0.c.dropMs - $0.c.entryMs } ?? 0)
+        if eta == nil || eta! > lead + Self.releaseMinListenMs { startFill(t) }
       }
     }
 
     // First sample: a plan that OPENS on a hard step opens on a drop —
     // mirrors TS (backtest: every progressive long run's first effort missed).
     if mode == nil {
-      if currentStep()?.kind == "hard", let pick = pickDrop() {
-        emit(t: t, song: pick.song, positionMs: pick.dropMs, fadeSec: 0.3, reason: "drop lands (opening) (\(pick.song.name))")
-        landings.append(LandingReport(targetTMs: t, actualTMs: t, errorMs: 0))
-        mode = .ride
+      if currentStep()?.kind == "hard" {
+        if dropStyle == .fresh, let pick = pickLoop() {
+          emit(t: t, song: pick.song, positionMs: 0, fadeSec: 0.3, reason: "rep change (opening) (\(pick.song.name))")
+          landings.append(LandingReport(targetTMs: t, actualTMs: t, errorMs: 0))
+          mode = .ride
+        } else if dropStyle == .anticipated, let pick = pickDrop() {
+          emit(t: t, song: pick.song, positionMs: pick.dropMs, fadeSec: 0.3, reason: "drop lands (opening) (\(pick.song.name))")
+          landings.append(LandingReport(targetTMs: t, actualTMs: t, errorMs: 0))
+          mode = .ride
+        } else {
+          startFill(t)
+        }
       } else {
         startFill(t)
       }
@@ -435,7 +459,16 @@ final class LiveEngine {
     // every tick and leaves the current song exactly buildup-length before
     // the effort — no loop boundary to wait for. Mirrors TS.
     if mode == .ride || mode == .fill {
-      if let eta = etaToNextHardMs(t: t, dist: dist), let r = bestDrop() {
+      if dropStyle == .fresh {
+        // Fresh mode: a NEW song from 0:00, crossfade timed so the swap
+        // peaks right as the rep begins. Prediction owns the WHEN. Mirrors TS.
+        if let eta = etaToNextHardMs(t: t, dist: dist), eta <= Self.freshChangeLeadMs, let pick = pickLoop() {
+          emit(t: t, song: pick.song, positionMs: 0, fadeSec: 0.45, reason: "rep change (\(pick.song.name))")
+          mode = .build
+          buildTargetT = t + eta
+          buildDropMs = nil // no re-aim needed inside a 4s window
+        }
+      } else if let eta = etaToNextHardMs(t: t, dist: dist), let r = bestDrop() {
         let buildLen = r.c.dropMs - r.c.entryMs
         if eta <= buildLen {
           dropIdx += r.advance

@@ -60,8 +60,11 @@ describe('LiveEngine', () => {
     run(engine, stream([{ seconds: 700, mps: 3 }]))
     expect(engine.landings.length).toBe(1)
     expect(Math.abs(engine.landings[0].errorMs)).toBeLessThanOrEqual(1500)
-    const build = engine.commands.find((c) => c.reason.startsWith('buildup'))
-    expect(build).toBeDefined()
+    // Fresh mode (default): the moment is a NEW song from 0:00, committed
+    // just before the boundary so the crossfade peaks on arrival.
+    const change = engine.commands.find((c) => c.reason.startsWith('rep change'))!
+    expect(change).toBeDefined()
+    expect(change.positionMs).toBe(0)
   })
 
   test('slowing runner: commit happens later, landing still within 4s', () => {
@@ -153,9 +156,10 @@ describe('LiveEngine', () => {
     expect(engine.landings.length).toBe(2)
     const cmds = engine.commands
     const firstLandingT = engine.landings[0].targetTMs
-    const secondBuildIdx = cmds.findIndex((c) => c.tMs > firstLandingT && c.reason.startsWith('buildup'))
-    const between = cmds.filter((c, i) => c.tMs > firstLandingT && i < secondBuildIdx && c.reason.startsWith('groove fill'))
-    expect(between.length).toBe(0) // no throwaway release between rep 1 and rep 2's buildup
+    const secondChangeIdx = cmds.findIndex((c) => c.tMs > firstLandingT && c.reason.startsWith('rep change'))
+    expect(secondChangeIdx).toBeGreaterThanOrEqual(0) // rep 2 got its moment
+    const between = cmds.filter((c, i) => c.tMs > firstLandingT && i < secondChangeIdx && c.reason.startsWith('groove fill'))
+    expect(between.length).toBe(0) // no throwaway release between rep 1 and rep 2's change
   })
 
   test('slower runner: landing still exact, listening still unbroken', () => {
@@ -184,8 +188,9 @@ describe('LiveEngine', () => {
     }
   })
 
-  test('buildup entry is snapped to the incoming song beat grid', () => {
-    const engine = new LiveEngine(plan, songs, { paceSecPerKm: 340 })
+  test('anticipated mode: buildup entry is snapped to the incoming song beat grid', () => {
+    // The parked drop machinery — kept tested for the day mixing earns it back.
+    const engine = new LiveEngine(plan, songs, { paceSecPerKm: 340, dropStyle: 'anticipated' })
     run(engine, stream([{ seconds: 700, mps: 3 }]))
     const build = engine.commands.find((c) => c.reason.startsWith('buildup'))!
     // 128bpm → 468.75ms beats anchored at the 95s drop: offset must be integral beats.
@@ -209,8 +214,8 @@ describe('LiveEngine', () => {
     }
     const crests = engine.commands.filter((c) => c.reason.includes('crest reward'))
     expect(crests.length).toBe(1)
-    // Fires near the top of the hill (1200m ≈ t=400s), enters at the drop itself.
-    expect(crests[0].positionMs).toBe(95_000)
+    // Fresh mode: the crest reward is a fresh song from the top.
+    expect(crests[0].positionMs).toBe(0)
     expect(crests[0].tMs).toBeGreaterThanOrEqual(560_000)
     expect(crests[0].tMs).toBeLessThanOrEqual(600_000)
     // And the groove returns afterwards (crest ride is time-boxed).
@@ -321,12 +326,13 @@ describe('LiveEngine', () => {
     const p: WorkoutPlan = { name: 'prog', steps: [{ kind: 'hard', meters: 1000 }, { kind: 'easy', meters: 500 }] }
     const engine = new LiveEngine(p, songs, { paceSecPerKm: 340 })
     run(engine, stream([{ seconds: 30, mps: 3 }]))
-    expect(engine.commands[0].reason).toStartWith('drop lands (opening)')
+    expect(engine.commands[0].reason).toStartWith('rep change (opening)')
+    expect(engine.commands[0].positionMs).toBe(0)
     expect(engine.landings.length).toBe(1)
   })
 
-  test('consecutive hard reps: every rep start gets a buildup, none truncated', () => {
-    // Rolling-800s shape — the baseline truncated 8/8 of these.
+  test('consecutive hard reps: every rep start gets its moment, none truncated', () => {
+    // Rolling-800s shape — the old baseline truncated 8/8 of these.
     const p: WorkoutPlan = {
       name: 'rolling',
       steps: [
@@ -341,7 +347,9 @@ describe('LiveEngine', () => {
     run(engine, stream([{ seconds: 700, mps: 3 }]))
     expect(engine.landings.length).toBe(3)
     for (const l of engine.landings) expect(Math.abs(l.errorMs)).toBeLessThanOrEqual(1500)
-    expect(engine.commands.filter((c) => c.reason.startsWith('buildup toward next rep')).length).toBeGreaterThanOrEqual(2)
+    const changes = engine.commands.filter((c) => c.reason.startsWith('rep change'))
+    expect(changes.length).toBeGreaterThanOrEqual(3)
+    for (const c of changes) expect(c.positionMs).toBe(0) // always from the top
     expect(engine.commands.some((c) => c.reason.includes('truncated'))).toBe(false)
   })
 

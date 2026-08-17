@@ -93,7 +93,7 @@ function fmtPace(secPerKm: number): string {
 function cmdColor(reason: string): string {
   if (reason.startsWith('loop back')) return '#199e70'
   if (reason.startsWith('buildup')) return '#9085e9'
-  if (reason.startsWith('drop lands')) return '#d55181'
+  if (reason.startsWith('drop lands') || reason.startsWith('rep change')) return '#d55181'
   return '#3987e5' // groove fill
 }
 
@@ -759,7 +759,9 @@ function CourseView({ result, playheadMs, songs }: { result: SimResult; playhead
   // command (the audio simply arrives at the drop), so commands alone miss
   // most drops. Crest rewards are commands-only (never landings) — ⛰ pins.
   const crests = result.commands.filter((c) => c.reason.includes('crest reward'))
-  const others = result.commands.filter((c) => !c.reason.startsWith('drop lands') && !c.reason.startsWith('loop back'))
+  const others = result.commands.filter(
+    (c) => !c.reason.startsWith('drop lands') && !c.reason.startsWith('rep change') && !c.reason.startsWith('loop back'),
+  )
   const runnerV = playheadMs != null ? atT(Math.min(playheadMs, durationMs)) : null
   const nowCmd = playheadMs != null ? [...result.commands].reverse().find((c) => c.tMs <= playheadMs) : null
   const nowSong = nowCmd ? songs.find((s) => s.trackId === nowCmd.trackId) : null

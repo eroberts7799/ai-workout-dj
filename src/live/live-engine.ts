@@ -83,6 +83,18 @@ const HIGH_ENERGY_LABELS = new Set(['chorus', 'inst', 'solo'])
  *  much listening — ride the current song through the rest instead. One song
  *  change per rep, not two. (Chosen, not measured: pending listen feedback.) */
 const RELEASE_MIN_LISTEN_MS = 60_000
+/** Fresh-mode rep changes: start the Spotify-style crossfade this far before
+ *  the boundary so the incoming song peaks right as the effort begins. */
+const FRESH_CHANGE_LEAD_MS = 4_000
+
+/** How a rep start is marked musically:
+ *  - 'fresh': a NEW song from 0:00, crossfaded to land on the boundary —
+ *    "songs start from the beginning until we can create sick drops" (Ethan,
+ *    2026-08-17). The DEFAULT.
+ *  - 'anticipated': the original moat mechanics — cut into the incoming
+ *    song's buildup exactly buildup-length out so its drop detonates on
+ *    arrival. Parked (like the blends) until the mixing earns it back. */
+export type DropStyle = 'fresh' | 'anticipated'
 
 export class LiveEngine {
   private steps: WorkoutStep[]
@@ -124,15 +136,18 @@ export class LiveEngine {
   /** trackId → normalized "artist title" key (mirrors the miner's norm()). */
   private readonly normKey = new Map<string, string>()
 
+  private readonly dropStyle: DropStyle
+
   constructor(
     plan: WorkoutPlan,
     songs: SongTags[],
-    opts: { paceSecPerKm?: number; hrMax?: number; pairBonus?: Record<string, number> } = {},
+    opts: { paceSecPerKm?: number; hrMax?: number; pairBonus?: Record<string, number>; dropStyle?: DropStyle } = {},
   ) {
     this.steps = plan.steps
     this.paceSecPerKm = opts.paceSecPerKm ?? DEFAULT_PACE_SEC_PER_KM
     this.hrTracker = new HrTracker(opts.hrMax)
     this.pairBonus = opts.pairBonus ?? {}
+    this.dropStyle = opts.dropStyle ?? 'fresh'
     for (const song of songs) {
       const words = `${song.artists} ${song.name}`.toLowerCase().match(/[a-z0-9]+/g) ?? []
       this.normKey.set(song.trackId, words.join(' '))
@@ -151,7 +166,7 @@ export class LiveEngine {
       // outside EDM.)
       this.loopable.push({ song, startMs: 0, endMs: 0 })
     }
-    if (this.droppable.length === 0) this.warnings.push('no drop-tagged songs')
+    if (this.dropStyle === 'anticipated' && this.droppable.length === 0) this.warnings.push('no drop-tagged songs')
     if (this.loopable.length === 0) this.warnings.push('no songs')
   }
 
@@ -448,11 +463,18 @@ export class LiveEngine {
     this.lastT = t
     this.lastDist = dist
 
-    // Actual hard-step arrival: score the landing, ensure we're riding a drop.
+    // Actual hard-step arrival: score the landing, ensure the moment is marked.
     for (const step of entered) {
       if (step.kind === 'hard') {
         if (this.mode === 'build' && this.buildTargetT != null) {
           this.landings.push({ targetTMs: this.buildTargetT, actualTMs: t, errorMs: t - this.buildTargetT })
+        } else if (this.dropStyle === 'fresh') {
+          // ETA collapsed before the commit — change songs NOW, from the top.
+          const pick = this.pickLoop()
+          if (pick) {
+            this.emit(t, pick.song, 0, 0.3, `rep change (truncated) (${pick.song.name})`)
+            this.landings.push({ targetTMs: t, actualTMs: t, errorMs: 0 })
+          }
         } else {
           // ETA collapsed before any commit — cut straight to a drop, truncated.
           const pick = this.pickDrop()
@@ -471,9 +493,9 @@ export class LiveEngine {
         // songs twice in quick succession is worse than riding this one
         // straight through the rest into the buildup.
         const eta = this.etaToNextHardMs(t, dist)
-        const peek = this.pickBest(this.droppable, this.dropIdx)
-        const buildLen = peek ? peek.choice.dropMs - peek.choice.entryMs : 0
-        if (eta == null || eta > buildLen + RELEASE_MIN_LISTEN_MS) this.startFill(t)
+        const peek = this.dropStyle === 'anticipated' ? this.pickBest(this.droppable, this.dropIdx) : null
+        const lead = this.dropStyle === 'fresh' ? FRESH_CHANGE_LEAD_MS : peek ? peek.choice.dropMs - peek.choice.entryMs : 0
+        if (eta == null || eta > lead + RELEASE_MIN_LISTEN_MS) this.startFill(t)
         this.crestRideUntil = null
       }
     }
@@ -483,9 +505,11 @@ export class LiveEngine {
     // was missed — step 0 is never "entered", so nothing choreographed it).
     if (this.mode === null) {
       if (this.currentStep()?.kind === 'hard') {
-        const pick = this.pickDrop()
+        const pick = this.dropStyle === 'fresh' ? this.pickLoop() : this.pickDrop()
         if (pick) {
-          this.emit(t, pick.song, pick.dropMs, 0.3, `drop lands (opening) (${pick.song.name})`)
+          const pos = this.dropStyle === 'fresh' ? 0 : (pick as DropChoice).dropMs
+          const reason = this.dropStyle === 'fresh' ? 'rep change (opening)' : 'drop lands (opening)'
+          this.emit(t, pick.song, pos, 0.3, `${reason} (${pick.song.name})`)
           this.landings.push({ targetTMs: t, actualTMs: t, errorMs: 0 })
           this.mode = 'ride'
         } else {
@@ -504,11 +528,20 @@ export class LiveEngine {
       const eta = this.etaToNextHardMs(t, dist)
       const earned = this.hrState.hr == null || this.hrState.zone >= 3
       if ((eta == null || eta > CREST_MIN_ETA_MS) && earned) {
-        const pick = this.pickDrop()
-        if (pick) {
-          this.emit(t, pick.song, pick.dropMs, 0.45, `drop lands (crest reward) (${pick.song.name})`)
-          this.mode = 'ride'
-          this.crestRideUntil = t + CREST_RIDE_MS
+        if (this.dropStyle === 'fresh') {
+          const pick = this.pickLoop()
+          if (pick) {
+            this.emit(t, pick.song, 0, 0.45, `rep change (crest reward) (${pick.song.name})`)
+            this.mode = 'ride'
+            this.crestRideUntil = t + CREST_RIDE_MS
+          }
+        } else {
+          const pick = this.pickDrop()
+          if (pick) {
+            this.emit(t, pick.song, pick.dropMs, 0.45, `drop lands (crest reward) (${pick.song.name})`)
+            this.mode = 'ride'
+            this.crestRideUntil = t + CREST_RIDE_MS
+          }
         }
       }
     }
@@ -529,7 +562,20 @@ export class LiveEngine {
     // effort — no loop boundary to wait for, no holding pattern.
     if ((this.mode === 'ride' || this.mode === 'fill') && this.crestRideUntil == null) {
       const eta = this.etaToNextHardMs(t, dist)
-      if (eta != null) {
+      if (eta != null && this.dropStyle === 'fresh') {
+        // Fresh mode: a NEW song from 0:00, crossfade timed so the swap
+        // peaks right as the rep begins. The prediction machinery still owns
+        // the WHEN; only the WHAT changed.
+        if (eta <= FRESH_CHANGE_LEAD_MS) {
+          const pick = this.pickLoop()
+          if (pick) {
+            this.emit(t, pick.song, 0, 0.45, `rep change (${pick.song.name})`)
+            this.mode = 'build'
+            this.buildTargetT = t + eta
+            this.buildDropMs = null // no re-aim: the window is 4s, drift can't matter
+          }
+        }
+      } else if (eta != null) {
         const r = this.pickBest(this.droppable, this.dropIdx)
         if (r) {
           const buildLen = r.choice.dropMs - r.choice.entryMs
