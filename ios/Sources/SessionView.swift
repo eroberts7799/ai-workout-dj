@@ -15,6 +15,10 @@ struct SessionView: View {
   @State private var showProfile = false
 
   var body: some View {
+    // ScrollView, not bare VStack: a 44-track crate's readiness list overflows
+    // any screen — without scrolling, the import buttons become unreachable
+    // (build 7 froze exactly this way the first time a real bundle landed).
+    ScrollView {
     VStack(spacing: 20) {
       VStack(spacing: 4) {
         Text(profileName.isEmpty ? "AWDJ · FIELD UNIT" : "AWDJ · FIELD UNIT · \(profileName.uppercased())")
@@ -36,12 +40,22 @@ struct SessionView: View {
           Text("\(b.name) · \(Int(b.planEndMs / 60000))min · \(b.cues.count) cues")
             .fieldSubhead()
             .textCase(.uppercase)
-          ForEach(b.songs) { s in
-            HStack(spacing: 8) {
-              Text(engine.audioReady[s.trackId] == true ? "✓" : "!")
-                .fieldMono(12, weight: .bold)
-                .foregroundColor(engine.audioReady[s.trackId] == true ? Theme.olive : Theme.fail)
-              Text(s.name).fieldMono(12)
+          // Compact readiness: problems get named, the healthy majority is a
+          // count — 44 tracks must never bury the controls again.
+          let missing = b.songs.filter { engine.audioReady[$0.trackId] != true }
+          if missing.isEmpty {
+            Text("✓ all \(b.songs.count) songs ready")
+              .fieldMono(12, weight: .bold)
+              .foregroundColor(Theme.olive)
+          } else {
+            Text("✓ \(b.songs.count - missing.count) ready · \(missing.count) missing audio:")
+              .fieldMono(12, weight: .bold)
+              .foregroundColor(Theme.fail)
+            ForEach(missing) { s in
+              HStack(spacing: 8) {
+                Text("!").fieldMono(12, weight: .bold).foregroundColor(Theme.fail)
+                Text(s.name).fieldMono(12)
+              }
             }
           }
         }
@@ -122,6 +136,7 @@ struct SessionView: View {
       }
     }
     .padding()
+    }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .background(Theme.paper.ignoresSafeArea())
     .foregroundColor(Theme.ink)
