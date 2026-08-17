@@ -439,7 +439,7 @@ export default function ReplayPanel() {
           onChange={(e) => setPlanText(e.target.value)}
           rows={5}
           disabled={loaded?.plan != null}
-          style={{ width: '100%', boxSizing: 'border-box', background: '#161b22', color: '#e6edf3', border: '1px solid #30363d', borderRadius: 6, padding: 8, font: 'inherit' }}
+          style={{ width: '100%', boxSizing: 'border-box', background: 'var(--olive-wash)', color: 'var(--ink)', border: 0, borderRadius: 0, padding: 10, fontFamily: 'var(--mono)', fontSize: 12, lineHeight: 1.6 }}
         />
         {!loaded && errors.map((e) => <p key={e} className="bad">{e}</p>)}
         {!loaded && paceErrors.map((e) => <p key={e} className="bad">{e}</p>)}
@@ -765,7 +765,7 @@ function CourseView({ result, playheadMs, songs }: { result: SimResult; playhead
   const nowSong = nowCmd ? songs.find((s) => s.trackId === nowCmd.trackId) : null
 
   return (
-    <svg viewBox={`0 0 ${W} ${CV_H}`} style={{ width: '100%', display: 'block', background: '#0d1117', border: '1px solid #30363d', borderRadius: 6, marginBottom: 8 }}>
+    <svg viewBox={`0 0 ${W} ${CV_H}`} style={{ width: '100%', display: 'block', background: '#171711', border: 0, borderRadius: 0, marginBottom: 8 }}>
       {/* course profile */}
       <path d={profile} fill="#2b4a8f" opacity={0.9} />
       {/* hard-interval climb columns */}
@@ -1070,7 +1070,7 @@ function Timeline({
       </div>
       <svg
         viewBox={`0 0 ${W} ${H}`}
-        style={{ width: '100%', display: 'block', background: '#0d1117', border: '1px solid #30363d', borderRadius: 6 }}
+        style={{ width: '100%', display: 'block', background: '#171711', border: 0, borderRadius: 0 }}
         onMouseMove={onMove}
         onMouseLeave={() => setHover(null)}
       >

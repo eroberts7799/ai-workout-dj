@@ -59,7 +59,10 @@ export default function App() {
 
   return (
     <div>
-      <h1>AI Workout DJ</h1>
+      <p className="muted" style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase', margin: 0 }}>
+        AWDJ · Field Unit 01
+      </p>
+      <h1>The music moves first.</h1>
 
       <div className="card">
         <h2 style={{ marginTop: 0 }}>Spotify</h2>
@@ -101,7 +104,7 @@ export default function App() {
       </div>
 
       {/* Replay Lab is pure simulation — no Spotify needed, so it lives outside the auth gate. */}
-      <div style={{ marginTop: 16 }}>
+      <div className="tabs">
         {authed && (
           <>
             <button onClick={() => setTab('tagger')} disabled={tab === 'tagger'}>Song Tagger</button>
