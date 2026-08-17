@@ -43,15 +43,17 @@ enum BeatMath {
     let onBeat: Bool
     let barGrid: Bool
     let tempoLock: Bool
+    /// Song chains end like songs: long fade-out, then the next one enters.
+    var radio: Bool = false
   }
 
-  /// Mirrors deckOptsFor in local-deck.ts: fills mix like a DJ, loop-backs
-  /// and buildups cut on the beat, drops fire exact-time.
+  /// Mirrors deckOptsFor in local-deck.ts: song chains use the radio
+  /// handoff; buildups cut on the beat; drops fire exact-time.
   static func deckOpts(for reason: String) -> DeckOpts {
     if reason.hasPrefix("drop lands") { return DeckOpts(onBeat: false, barGrid: false, tempoLock: false) }
     if reason.hasPrefix("loop back") { return DeckOpts(onBeat: true, barGrid: false, tempoLock: false) }
     if reason.hasPrefix("buildup") { return DeckOpts(onBeat: true, barGrid: false, tempoLock: false) }
-    return DeckOpts(onBeat: true, barGrid: true, tempoLock: true)
+    return DeckOpts(onBeat: false, barGrid: false, tempoLock: false, radio: true)
   }
 
   /// Camelot-wheel harmony (mirrors camelotCompatible in beat.ts): same

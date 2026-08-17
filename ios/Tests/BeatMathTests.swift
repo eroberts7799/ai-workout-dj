@@ -39,10 +39,13 @@ final class BeatMathTests: XCTestCase {
     let loop = BeatMath.deckOpts(for: "loop back (X)")
     XCTAssertTrue(loop.onBeat)
     XCTAssertFalse(loop.barGrid)
+    // Song chains use the radio handoff — the song ENDS, then the next
+    // begins (DJ blend machinery parked until the craft earns it back).
     let fill = BeatMath.deckOpts(for: "groove fill (X)")
-    XCTAssertTrue(fill.onBeat)
-    XCTAssertTrue(fill.barGrid)
-    XCTAssertTrue(fill.tempoLock)
+    XCTAssertTrue(fill.radio)
+    XCTAssertFalse(fill.tempoLock)
+    XCTAssertFalse(BeatMath.deckOpts(for: "buildup toward next rep (X)").radio)
+    XCTAssertFalse(BeatMath.deckOpts(for: "drop lands (opening) (X)").radio)
     XCTAssertFalse(BeatMath.deckOpts(for: "buildup toward the effort (X)").barGrid)
   }
 

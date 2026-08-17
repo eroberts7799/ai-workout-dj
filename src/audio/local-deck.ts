@@ -11,15 +11,24 @@ import { blendPlan, nextGridDelayMs, tempoLockRate } from '../conductor/beat'
 const BASS_HZ = 180
 const BASS_CUT_DB = -15
 
-/** How each cue intent cuts: fills mix like a DJ (bar-aligned, tempo-locked
- *  blend); loop-backs and buildups cut on the beat (timing-critical, 1×);
- *  drops fire exact-time. */
-export function deckOptsFor(reason: string): { onBeat?: boolean; grid?: 'beat' | 'bar'; tempoLock?: boolean } {
+/** How each cue intent cuts. Song chains (groove fills) use a RADIO handoff:
+ *  the outgoing song fades out long enough to sound like it's ending, then
+ *  the next one enters — no blend, no bass swap, no tempo lock. ("The
+ *  transitions are not good enough yet for DJ-like transitions" — Ethan,
+ *  2026-08-16; the blend machinery stays for when the craft earns it back.)
+ *  Buildups cut on the beat (timing-critical); drops fire exact-time. */
+export function deckOptsFor(reason: string): { onBeat?: boolean; grid?: 'beat' | 'bar'; tempoLock?: boolean; radio?: boolean } {
   if (reason.startsWith('drop lands')) return { onBeat: false }
   if (reason.startsWith('loop back')) return { onBeat: true, grid: 'beat' }
   if (reason.startsWith('buildup')) return { onBeat: true, grid: 'beat' }
-  return { onBeat: true, grid: 'bar', tempoLock: true } // groove fills & chains
+  return { radio: true } // groove fills & chains
 }
+
+/** Radio handoff shape: outgoing fades over OUT_S (long enough to read as
+ *  "the song is ending"), incoming enters for the last OVERLAP_S of it. */
+const RADIO_OUT_S = 6
+const RADIO_OVERLAP_S = 1.5
+const RADIO_IN_S = 2
 
 export interface DeckTrackMeta {
   bpm: number | null
@@ -75,12 +84,44 @@ export class LocalDeck {
     trackId: string,
     positionMs: number,
     fadeSec = 0.8,
-    opts: { onBeat?: boolean; grid?: 'beat' | 'bar'; tempoLock?: boolean } = {},
+    opts: { onBeat?: boolean; grid?: 'beat' | 'bar'; tempoLock?: boolean; radio?: boolean } = {},
   ): void {
     const ctx = this.ensureCtx()
     void ctx.resume()
     const buf = this.buffers.get(trackId)
     if (!buf) throw new Error(`no local audio for ${trackId}`)
+
+    // Radio handoff (song chains): the outgoing song ENDS — a long fade to
+    // silence — and the incoming one starts as its tail disappears. The
+    // incoming position is advanced by the wait so the engine's model of
+    // "what's playing where" stays true at the moment you actually hear it.
+    if (opts.radio && this.current) {
+      const now = ctx.currentTime
+      const old = this.current
+      const held = Math.max(old.gain.gain.value, 0.0001)
+      old.gain.gain.cancelScheduledValues(now)
+      old.gain.gain.setValueAtTime(held, now)
+      old.gain.gain.exponentialRampToValueAtTime(0.0001, now + RADIO_OUT_S)
+      old.src.stop(now + RADIO_OUT_S + 0.1)
+
+      const tIn = now + RADIO_OUT_S - RADIO_OVERLAP_S
+      const startPosMs = Math.max(0, positionMs + (RADIO_OUT_S - RADIO_OVERLAP_S) * 1000)
+      const src = ctx.createBufferSource()
+      src.buffer = buf
+      const bass = ctx.createBiquadFilter()
+      bass.type = 'lowshelf'
+      bass.frequency.value = BASS_HZ
+      bass.gain.value = 0
+      const gain = ctx.createGain()
+      src.connect(bass)
+      bass.connect(gain)
+      gain.connect(ctx.destination)
+      gain.gain.setValueAtTime(0.0001, tIn)
+      gain.gain.exponentialRampToValueAtTime(1, tIn + RADIO_IN_S)
+      src.start(tIn, startPosMs / 1000)
+      this.current = { src, gain, bass, trackId, positionAtMs: startPosMs, startedAtCtx: tIn, rate: 1 }
+      return
+    }
 
     const outMeta = this.current ? this.meta.get(this.current.trackId) : undefined
     const inMeta = this.meta.get(trackId)
