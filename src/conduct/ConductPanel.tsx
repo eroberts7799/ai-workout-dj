@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { LocalDeck, deckOptsFor } from '../audio/local-deck'
 import { loadAudio } from '../audio/local-store'
 import { beatAnchorMs } from '../conductor/beat'
-import { planSetlist, totalDurationMs } from '../conductor/conductor'
+import { totalDurationMs } from '../conductor/conductor'
+import { simulate, syntheticSamples } from '../replay/simulate'
 import type { Cue, WorkoutPlan } from '../conductor/types'
 import type { SdkHandle } from '../spike/sdk-path'
 import { listDevices, pausePlayback, playTrack, transferTo, type ConnectDevice } from '../spike/webapi-path'
@@ -207,7 +208,29 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
 
   const songs = Object.values(loadAllTags())
   const { plan, errors } = parsePlan('session', planText)
-  const setlist = planSetlist(plan, songs)
+  // ONE brain: the setlist is the LiveEngine dry-run at an assumed pace —
+  // the same engine that conducts live, so the preview (and the bundle's
+  // static cues) show exactly the current listening model, never a stale
+  // second scheduler. Memoized: a full engine sim per keystroke is too heavy.
+  const setlist = useMemo(() => {
+    if (errors.length > 0 || plan.steps.length === 0 || songs.length === 0) {
+      return { cues: [] as Cue[], warnings: [] as string[] }
+    }
+    const samples = syntheticSamples(plan, {
+      easyPaceSecPerKm: 360,
+      hardPaceSecPerKm: 270,
+      fatiguePct: 0,
+      noisePct: 0,
+      hilly: false,
+      withHr: false,
+    })
+    const res = simulate(plan, songs, samples)
+    return {
+      cues: res.commands.map((c) => ({ atMs: c.tMs, trackId: c.trackId, uri: c.uri, positionMs: c.positionMs, reason: c.reason })),
+      warnings: res.warnings,
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [planText, songs.length])
 
   const logRef = useRef<LogEntry[]>([])
   logRef.current = log
