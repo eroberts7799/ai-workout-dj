@@ -25,6 +25,13 @@ struct Marker: Codable {
   let ms: Double
 }
 
+/// Analyzer structure segment (allin1): intro/verse/chorus/break/outro…
+struct SongSegment: Codable {
+  let label: String
+  let startMs: Double
+  let endMs: Double
+}
+
 /// Full tags for one song — what the LiveEngine picks loops and drops from.
 struct TaggedSong: Codable, Identifiable {
   let trackId: String
@@ -35,6 +42,8 @@ struct TaggedSong: Codable, Identifiable {
   let bpm: Double?
   let camelot: String?
   let markers: [Marker]
+  /// Optional structure — energy-aware chain points (bundles from 2026-08-17).
+  var segments: [SongSegment]? = nil
   var id: String { trackId }
 }
 

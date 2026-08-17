@@ -71,8 +71,14 @@ const CREST_MIN_ETA_MS = 45_000
 const CREST_RIDE_MS = 25_000
 /** Corpus-learned freshness: across 653 measured rides in 65 real DJ sets
  *  (Fred again.., Virji, Summit…) the median time-on-one-track is ~190s
- *  (Fred: 140s). Past this, a fill trades its loop for a fresh groove. */
+ *  (Fred: 140s). Past this, a cruise chains to a fresh groove. */
 const MAX_FILL_RIDE_MS = 180_000
+/** Energy-aware chain window brackets that median: never change before MIN,
+ *  force a change by CAP; between them, leave at a segment boundary where a
+ *  strong section (chorus/inst/solo) just ended — on top, not mid-breakdown. */
+const MIN_FILL_RIDE_MS = 120_000
+const FILL_RIDE_CAP_MS = 240_000
+const HIGH_ENERGY_LABELS = new Set(['chorus', 'inst', 'solo'])
 
 export class LiveEngine {
   private steps: WorkoutStep[]
@@ -92,7 +98,8 @@ export class LiveEngine {
 
   private mode: Mode | null = null
   private playing: { song: SongTags; positionAtMs: number; atTMs: number } | null = null
-  private fillStartedT: number | null = null
+  /** Track position (ms) where this cruise should chain to the next song. */
+  private fillExitPosMs: number | null = null
   private buildTargetT: number | null = null
   private buildDropMs: number | null = null
   private lastReaimT = -Infinity
@@ -364,11 +371,31 @@ export class LiveEngine {
    *  ~3min freshness mark, or when a rep demands a buildup. (Loop-backs as
    *  default texture were "the UX sucks when it loops every 30 seconds" —
    *  Ethan, 2026-08-16. The loop markers stay as groove ENTRY points.) */
+  /** Where should this cruise END, in track time? With segment structure:
+   *  the first boundary in [entry+MIN, entry+CAP] where a strong section
+   *  just finished (leave on top); any boundary in-window beats the timer;
+   *  no structure → the corpus timer. */
+  private chainExitPosMs(song: SongTags, entryMs: number): number {
+    const segs = song.segments
+    if (segs && segs.length > 0) {
+      const minExit = entryMs + MIN_FILL_RIDE_MS
+      const cap = entryMs + FILL_RIDE_CAP_MS
+      let fallback: number | null = null
+      for (const s of segs) {
+        if (s.endMs < minExit || s.endMs > cap) continue
+        if (HIGH_ENERGY_LABELS.has(s.label)) return s.endMs
+        fallback ??= s.endMs
+      }
+      if (fallback != null) return fallback
+    }
+    return entryMs + MAX_FILL_RIDE_MS
+  }
+
   private startFill(t: number) {
     const fill = this.pickLoop()
     if (!fill) return
     this.mode = 'fill'
-    this.fillStartedT = t
+    this.fillExitPosMs = this.chainExitPosMs(fill.song, fill.startMs)
     this.emit(t, fill.song, fill.startMs, 1.2, `groove fill (${fill.song.name})`)
   }
 
@@ -513,12 +540,11 @@ export class LiveEngine {
       }
     }
 
-    // Cruise freshness (corpus-learned): real DJs move on after ~3 minutes.
-    // A stale cruise chains to a fresh groove on a bar boundary (the deck
-    // handles the bar-aligned, tempo-locked blend) — but never when a commit
-    // could be imminent within the next chain's ride.
-    if (this.mode === 'fill' && this.fillStartedT != null && t - this.fillStartedT >= MAX_FILL_RIDE_MS && this.loopable.length > 1) {
-      this.startFill(t)
+    // Cruise chain point: change songs where the MUSIC says to — at the
+    // planned segment boundary (strong section just ended), or the corpus
+    // timer when the song carries no structure.
+    if (this.mode === 'fill' && this.playing && this.fillExitPosMs != null && this.loopable.length > 1) {
+      if (this.playheadMs(t) >= this.fillExitPosMs) this.startFill(t)
     }
 
     // Never-silence: chain a fresh groove if the current track would end.

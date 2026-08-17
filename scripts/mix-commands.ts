@@ -38,6 +38,7 @@ const songs: SongTags[] = analysis.analysis.map((a: any, i: number) => {
     camelot: keys[a.sourceFile]?.camelot ?? null,
     updatedAt: '',
     markers: a.markers.map((m: any, j: number) => ({ id: `m${j}`, type: m.type, ms: m.ms })),
+    segments: a.segments,
   }
 })
 

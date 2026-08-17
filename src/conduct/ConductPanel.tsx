@@ -555,6 +555,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
         bpm: s.bpm,
         camelot: s.camelot ?? null,
         markers: s.markers.map((m) => ({ type: m.type, ms: m.ms })),
+        segments: s.segments,
       })),
       // Calibrated zone anchor rides along so the phone conducts with the
       // same effort model (Swift HR rules pending — see ios/PARITY.md).

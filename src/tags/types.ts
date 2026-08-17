@@ -19,6 +19,10 @@ export interface SongTags {
    *  Harmonic compatibility drives DJ-crate song selection. */
   camelot?: string | null
   markers: Marker[]
+  /** Structural segments from the analyzer (allin1): intro/verse/chorus/
+   *  break/outro… Energy-aware chain points pick song CHANGES at these
+   *  boundaries — leave as a strong section ends, never mid-breakdown. */
+  segments?: { label: string; startMs: number; endMs: number }[]
   updatedAt: string
 }
 

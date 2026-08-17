@@ -57,6 +57,12 @@ final class LiveEngine {
   /// Corpus-learned freshness (65 real DJ sets, median ride ~190s):
   /// past this, a fill trades its loop for a fresh groove. Mirrors TS.
   private static let maxFillRideMs: Double = 180_000
+  /// Energy-aware chain window bracketing the ~190s corpus median: never
+  /// change before MIN, force by CAP; between them leave where a strong
+  /// section (chorus/inst/solo) just ended. Mirrors TS.
+  private static let minFillRideMs: Double = 120_000
+  private static let fillRideCapMs: Double = 240_000
+  private static let highEnergyLabels: Set<String> = ["chorus", "inst", "solo"]
 
   private let steps: [WorkoutStep]
   private var droppable: [DropChoice] = []
@@ -75,7 +81,8 @@ final class LiveEngine {
 
   private var mode: Mode?
   private var playing: (song: TaggedSong, positionAtMs: Double, atTMs: Double)?
-  private var fillStartedT: Double?
+  /// Track position (ms) where this cruise should chain to the next song.
+  private var fillExitPosMs: Double?
   private var buildTargetT: Double?
   private var buildDropMs: Double?
   private var lastReaimT: Double = -.infinity
@@ -308,12 +315,30 @@ final class LiveEngine {
     return c
   }
 
+  /// Where should this cruise END, in track time? Mirrors TS chainExitPosMs:
+  /// first boundary in [entry+MIN, entry+CAP] where a strong section just
+  /// finished; any in-window boundary beats the timer; no structure → timer.
+  private func chainExitPosMs(song: TaggedSong, entryMs: Double) -> Double {
+    if let segs = song.segments, !segs.isEmpty {
+      let minExit = entryMs + Self.minFillRideMs
+      let cap = entryMs + Self.fillRideCapMs
+      var fallback: Double?
+      for s in segs {
+        if s.endMs < minExit || s.endMs > cap { continue }
+        if Self.highEnergyLabels.contains(s.label) { return s.endMs }
+        if fallback == nil { fallback = s.endMs }
+      }
+      if let f = fallback { return f }
+    }
+    return entryMs + Self.maxFillRideMs
+  }
+
   /// Cruise: enter the next song at its groove and let it PLAY — no loops.
   /// The loop markers remain the entry anchors. Mirrors TS.
   private func startFill(_ t: Double) {
     guard let fill = pickLoop() else { return }
     mode = .fill
-    fillStartedT = t
+    fillExitPosMs = chainExitPosMs(song: fill.song, entryMs: fill.startMs)
     emit(t: t, song: fill.song, positionMs: fill.startMs, fadeSec: 1.2, reason: "groove fill (\(fill.song.name))")
   }
 
@@ -409,12 +434,11 @@ final class LiveEngine {
       }
     }
 
-    // Cruise freshness (corpus-learned): real DJs move on after ~3 minutes —
-    // a stale cruise chains to a fresh groove. No loop-backs, ever: songs
-    // play through; changes happen at song ends, the freshness mark, or a
-    // rep's buildup. Mirrors TS (Ethan's 2026-08-16 verdict on loop texture).
-    if mode == .fill, let started = fillStartedT, t - started >= Self.maxFillRideMs, loopable.count > 1 {
-      startFill(t)
+    // Cruise chain point: change songs where the MUSIC says to — the planned
+    // segment boundary (strong section just ended), or the corpus timer for
+    // structureless songs. Mirrors TS.
+    if mode == .fill, playing != nil, let exit = fillExitPosMs, loopable.count > 1 {
+      if playheadMs(t) >= exit { startFill(t) }
     }
 
     // Never-silence: chain a fresh groove if the current track would end.

@@ -87,6 +87,37 @@ describe('LiveEngine', () => {
     expect(engine.commands.filter((c) => c.reason.startsWith('groove fill')).length).toBeGreaterThanOrEqual(2)
   })
 
+  test('chain point lands at a segment boundary — leave on top, not on a timer', () => {
+    // Song with structure: chorus ends at 160s (inside the [entry+120s,
+    // entry+240s] window from entry 30s) → the chain happens THERE, not at
+    // the 180s timer. A structureless song still uses the timer.
+    const structured: SongTags = {
+      ...song('seg'),
+      segments: [
+        { label: 'intro', startMs: 0, endMs: 30_000 },
+        { label: 'chorus', startMs: 30_000, endMs: 160_000 },
+        { label: 'break', startMs: 160_000, endMs: 200_000 },
+        { label: 'chorus', startMs: 200_000, endMs: 240_000 },
+      ],
+    }
+    const lib = [structured, song('bbb'), song('ccc')]
+    const easyPlan: WorkoutPlan = { name: 'e', steps: [{ kind: 'easy', seconds: 1200 }] }
+    const engine = new LiveEngine(easyPlan, lib)
+    for (let i = 1; i <= 400; i++) engine.advance({ tMs: i * 1000 })
+    const fills = engine.commands.filter((c) => c.reason.startsWith('groove fill'))
+    expect(fills.length).toBeGreaterThanOrEqual(2)
+    const first = fills[0]
+    const second = fills[1]
+    const exitPos = first.positionMs + (second.tMs - first.tMs)
+    if (first.trackId === 'seg') {
+      // left exactly as the chorus ended
+      expect(Math.abs(exitPos - 160_000)).toBeLessThanOrEqual(1500)
+    } else {
+      // structureless song: corpus timer (entry 30s + 180s = 210s position)
+      expect(Math.abs(exitPos - 210_000)).toBeLessThanOrEqual(1500)
+    }
+  })
+
   test('slower runner: landing still exact, listening still unbroken', () => {
     const fast = new LiveEngine(plan, songs, { paceSecPerKm: 340 })
     run(fast, stream([{ seconds: 600, mps: 3.4 }]))

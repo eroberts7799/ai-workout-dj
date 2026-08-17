@@ -63,6 +63,30 @@ final class LiveEngineTests: XCTestCase {
     XCTAssertLessThanOrEqual(abs(engine.landings[0].errorMs), 4000)
   }
 
+  func testChainPointLandsAtSegmentBoundary() {
+    // Mirrors TS: chorus ends at 160s inside the [entry+120s, entry+240s]
+    // window (entry 30s) → chain there, not at the 180s timer.
+    var structured = song("seg")
+    structured.segments = [
+      SongSegment(label: "intro", startMs: 0, endMs: 30_000),
+      SongSegment(label: "chorus", startMs: 30_000, endMs: 160_000),
+      SongSegment(label: "break", startMs: 160_000, endMs: 200_000),
+      SongSegment(label: "chorus", startMs: 200_000, endMs: 240_000),
+    ]
+    let lib = [structured, song("bbb"), song("ccc")]
+    let easyPlan = [WorkoutStep(kind: "easy", seconds: 1200, meters: nil)]
+    let engine = LiveEngine(plan: easyPlan, songs: lib)
+    for i in 1...400 { engine.advance(LiveSample(tMs: Double(i) * 1000, distanceM: nil)) }
+    let fills = engine.commands.filter { $0.reason.hasPrefix("groove fill") }
+    XCTAssertGreaterThanOrEqual(fills.count, 2)
+    let exitPos = fills[0].positionMs + (fills[1].tMs - fills[0].tMs)
+    if fills[0].trackId == "seg" {
+      XCTAssertLessThanOrEqual(abs(exitPos - 160_000), 1500)
+    } else {
+      XCTAssertLessThanOrEqual(abs(exitPos - 210_000), 1500)
+    }
+  }
+
   func testCruiseNeverLoopsAndStaysUnderTransitionBudget() {
     let engine = LiveEngine(plan: plan, songs: songs, paceSecPerKm: 340)
     for s in stream([(900, 2.2)]) { engine.advance(s) }

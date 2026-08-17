@@ -23,6 +23,7 @@ interface AnalysisEntry {
   bpm: number | null
   camelot?: string | null
   markers: { type: MarkerType; ms: number }[]
+  segments?: { label: string; startMs: number; endMs: number }[]
 }
 
 // Keypress markers are placed REACTION_OFFSET early to compensate human reaction
@@ -306,6 +307,11 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
           bpm: e.bpm ? Math.round(e.bpm * 10) / 10 : null,
           camelot: e.camelot ?? null,
           markers: e.markers.map((m) => ({ id: crypto.randomUUID(), type: m.type, ms: m.ms })),
+          // Structure ride-along: chain points use these to change songs at
+          // section boundaries instead of a wall-clock timer.
+          segments: Array.isArray(e.segments)
+            ? e.segments.map((s: { label: string; startMs: number; endMs: number }) => ({ label: s.label, startMs: s.startMs, endMs: s.endMs }))
+            : undefined,
           updatedAt: new Date().toISOString(),
         })
         notes.push(
