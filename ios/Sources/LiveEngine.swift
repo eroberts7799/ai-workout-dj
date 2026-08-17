@@ -17,6 +17,12 @@ struct LiveSample {
   /// HERE (drift-free); our own tracking powers anticipation only. Mirrors
   /// the TS engine's trigger-doctrine split (2026-08-16).
   var wkStepSeq: Double? = nil
+  /// Streamed shape of the CURRENT step + kind of the NEXT — follow mode
+  /// conducts with no plan loaded at all. Mirrors TS.
+  var wkKind: String? = nil
+  var wkDurationType: Double? = nil
+  var wkDurationValue: Double? = nil
+  var wkNextKind: String? = nil
 }
 
 struct LivePlayCommand {
@@ -107,9 +113,15 @@ final class LiveEngine {
   private var normKey: [String: String] = [:]
 
   private let dropStyle: DropStyle
+  /// FOLLOW MODE (empty plan): conduct straight from the watch's stream —
+  /// the workout lives in Runna/Garmin, nobody retypes it. Mirrors TS.
+  private let followMode: Bool
+  private var followStep: WorkoutStep?
+  private var followNextKind: String?
 
   init(plan: [WorkoutStep], songs: [TaggedSong], paceSecPerKm: Double = defaultPaceSecPerKm, pairBonus: [String: Double] = [:], dropStyle: DropStyle = .fresh) {
     self.dropStyle = dropStyle
+    self.followMode = plan.isEmpty
     steps = plan
     self.paceSecPerKm = paceSecPerKm
     self.pairBonus = pairBonus
@@ -168,7 +180,18 @@ final class LiveEngine {
   }
 
   private func currentStep() -> WorkoutStep? {
-    stepIdx < steps.count ? steps[stepIdx] : nil
+    if followMode { return followStep }
+    return stepIdx < steps.count ? steps[stepIdx] : nil
+  }
+
+  /// The current step as the watch streams it (follow mode). Mirrors TS.
+  private func stepFromSample(_ s: LiveSample) -> WorkoutStep? {
+    guard let raw = s.wkKind else { return nil }
+    let kinds: Set<String> = ["warmup", "easy", "hard", "rest", "cooldown"]
+    let kind = kinds.contains(raw) ? raw : "easy"
+    if s.wkDurationType == 0, let v = s.wkDurationValue { return WorkoutStep(kind: kind, seconds: v, meters: nil) }
+    if s.wkDurationType == 1, let v = s.wkDurationValue { return WorkoutStep(kind: kind, seconds: nil, meters: v) }
+    return WorkoutStep(kind: kind, seconds: nil, meters: nil)
   }
 
   /// Where inside the last sample window did the current step's boundary
@@ -202,10 +225,61 @@ final class LiveEngine {
   /// boundary — drift-free truth for WHICH step; the model refines WHEN.
   /// Estimated regime: our own time/distance, with the prescribed-meters
   /// advance so sampling overshoot never compounds (34.8s field drift class).
-  private func trackSteps(t: Double, dist: Double?, wkStepSeq: Double?) -> [WorkoutStep] {
+  private func trackSteps(t: Double, dist: Double?, sample: LiveSample) -> [WorkoutStep] {
+    let wkStepSeq = sample.wkStepSeq
     var entered: [WorkoutStep] = []
     let prevT = lastT
     let prevDist = lastDist
+
+    if followMode {
+      let streamed = stepFromSample(sample)
+      followNextKind = sample.wkNextKind ?? followNextKind
+      if let seq = wkStepSeq, wkSeq == nil {
+        wkSeq = seq
+        followStep = streamed
+        stepStartT = t
+        stepStartDist = dist ?? 0
+        return entered
+      }
+      if let seq = wkStepSeq, let known = wkSeq, seq > known {
+        let bT: Double
+        let bD: Double?
+        if let prev = followStep {
+          (bT, bD) = boundaryEstimate(step: prev, prevT: prevT, prevDist: prevDist, t: t, dist: dist)
+        } else {
+          (bT, bD) = (t, dist)
+        }
+        wkSeq = seq
+        stepIdx += 1
+        stepStartT = bT
+        stepStartDist = bD ?? stepStartDist
+        followStep = streamed ?? followStep
+        if let f = followStep { entered.append(f) }
+        return entered
+      }
+      if let cur = followStep {
+        var overdue = false
+        if let seconds = cur.seconds {
+          overdue = t - stepStartT - seconds * 1000 > max(12_000, seconds * 250)
+        } else if let dist, let meters = cur.meters {
+          overdue = dist - stepStartDist - meters > max(50, meters * 0.25)
+        }
+        if overdue {
+          if let seconds = cur.seconds {
+            stepStartT += seconds * 1000
+          } else {
+            stepStartDist += cur.meters ?? 0
+            stepStartT = t
+          }
+          stepIdx += 1
+          followStep = streamed ?? cur
+          warnings.append("watch step stream stalled — advanced step \(stepIdx) by odometer")
+          if let f = followStep { entered.append(f) }
+        }
+      }
+      return entered
+    }
+
     if let seq = wkStepSeq, wkSeq == nil { wkSeq = seq } // align: current seq ↔ current step
     if let known = wkSeq {
       if let seq = wkStepSeq, seq > known {
@@ -276,6 +350,9 @@ final class LiveEngine {
   /// hard step lies ahead.
   private func etaToNextHardMs(t: Double, dist: Double?) -> Double? {
     guard let cur = currentStep() else { return nil }
+    if followMode {
+      return followNextKind == "hard" ? remainingMs(step: cur, t: t, dist: dist) : nil
+    }
     var eta = remainingMs(step: cur, t: t, dist: dist)
     for i in (stepIdx + 1)..<steps.count {
       let s = steps[i]
@@ -400,7 +477,7 @@ final class LiveEngine {
     }
     // trackSteps reads lastT/lastDist as the PREVIOUS sample (boundary
     // interpolation window) — update them only after.
-    let entered = trackSteps(t: t, dist: dist, wkStepSeq: sample.wkStepSeq)
+    let entered = trackSteps(t: t, dist: dist, sample: sample)
     lastT = t
     lastDist = dist
 

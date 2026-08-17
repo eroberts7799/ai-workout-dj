@@ -31,6 +31,14 @@ export interface LiveSample {
    *  34.8s late by rep 4). Internal time/distance tracking then powers
    *  anticipation only — the trigger doctrine's deterministic skeleton. */
   wkStepSeq?: number
+  /** Streamed shape of the CURRENT watch step (follow mode): engine kind
+   *  ('warmup'|'hard'|'rest'|…), duration type (0 = time s, 1 = distance m),
+   *  and the prescribed amount. */
+  wkKind?: string
+  wkDurationType?: number
+  wkDurationValue?: number
+  /** Kind of the NEXT step — what anticipation aims at with no plan loaded. */
+  wkNextKind?: string
 }
 
 export interface PlayCommand {
@@ -137,6 +145,13 @@ export class LiveEngine {
   private readonly normKey = new Map<string, string>()
 
   private readonly dropStyle: DropStyle
+  /** FOLLOW MODE: constructed with an empty plan, the engine conducts
+   *  straight from the watch's stream — the workout lives in Runna/Garmin,
+   *  nobody should retype it. Current step shape + next-step kind arrive on
+   *  every sample; boundaries on seq bumps, exactly as in plan mode. */
+  private readonly followMode: boolean
+  private followStep: WorkoutStep | null = null
+  private followNextKind: string | null = null
 
   constructor(
     plan: WorkoutPlan,
@@ -148,6 +163,7 @@ export class LiveEngine {
     this.hrTracker = new HrTracker(opts.hrMax)
     this.pairBonus = opts.pairBonus ?? {}
     this.dropStyle = opts.dropStyle ?? 'fresh'
+    this.followMode = plan.steps.length === 0
     for (const song of songs) {
       const words = `${song.artists} ${song.name}`.toLowerCase().match(/[a-z0-9]+/g) ?? []
       this.normKey.set(song.trackId, words.join(' '))
@@ -205,7 +221,18 @@ export class LiveEngine {
   }
 
   private currentStep(): WorkoutStep | null {
+    if (this.followMode) return this.followStep
     return this.steps[this.stepIdx] ?? null
+  }
+
+  /** The current step as the watch streams it (follow mode). */
+  private stepFromSample(s: LiveSample): WorkoutStep | null {
+    if (!s.wkKind) return null
+    const KINDS = new Set(['warmup', 'easy', 'hard', 'rest', 'cooldown'])
+    const kind = (KINDS.has(s.wkKind) ? s.wkKind : 'easy') as WorkoutStep['kind']
+    if (s.wkDurationType === 0 && s.wkDurationValue != null) return { kind, seconds: s.wkDurationValue }
+    if (s.wkDurationType === 1 && s.wkDurationValue != null) return { kind, meters: s.wkDurationValue }
+    return { kind }
   }
 
   /** Progress current step; advance through completed steps. Returns kinds entered.
@@ -249,10 +276,62 @@ export class LiveEngine {
     return { bT: t, bD: dist }
   }
 
-  private trackSteps(t: number, dist: number | null, wkSeq?: number): WorkoutStep[] {
+  private trackSteps(t: number, dist: number | null, sample: LiveSample): WorkoutStep[] {
+    const wkSeq = sample.wkStepSeq
     const entered: WorkoutStep[] = []
     const prevT = this.lastT
     const prevDist = this.lastDist
+
+    if (this.followMode) {
+      const streamed = this.stepFromSample(sample)
+      this.followNextKind = sample.wkNextKind ?? this.followNextKind
+      if (wkSeq != null && this.wkSeq == null) {
+        // Joined the workout mid-step: start the clock here.
+        this.wkSeq = wkSeq
+        this.followStep = streamed
+        this.stepStartT = t
+        this.stepStartDist = dist ?? 0
+        return entered
+      }
+      if (wkSeq != null && this.wkSeq != null && wkSeq > this.wkSeq) {
+        // Watch boundary — refine WHEN via the OLD step's prescription.
+        const prev = this.followStep
+        const { bT, bD } = prev ? this.boundaryEstimate(prev, prevT, prevDist, t, dist) : { bT: t, bD: dist }
+        this.wkSeq = wkSeq
+        this.stepIdx++
+        this.stepStartT = bT
+        this.stepStartDist = bD ?? this.stepStartDist
+        this.followStep = streamed ?? this.followStep
+        if (this.followStep) entered.push(this.followStep)
+        return entered
+      }
+      // Overdue fallback: identical adjacent steps never bump the sig — if
+      // the current step is far past its prescription, advance by odometer
+      // (the streamed shape still describes the step we're now in).
+      const cur = this.followStep
+      if (cur) {
+        const overdue =
+          cur.seconds != null
+            ? t - this.stepStartT - cur.seconds * 1000 > Math.max(12_000, cur.seconds * 250)
+            : dist != null && cur.meters != null
+              ? dist - this.stepStartDist - cur.meters > Math.max(50, cur.meters * 0.25)
+              : false
+        if (overdue) {
+          if (cur.seconds != null) {
+            this.stepStartT = this.stepStartT + cur.seconds * 1000
+          } else {
+            this.stepStartDist = this.stepStartDist + (cur.meters ?? 0)
+            this.stepStartT = t
+          }
+          this.stepIdx++
+          this.followStep = streamed ?? cur
+          this.warnings.push(`watch step stream stalled — advanced step ${this.stepIdx} by odometer`)
+          if (this.followStep) entered.push(this.followStep)
+        }
+      }
+      return entered
+    }
+
     if (wkSeq != null && this.wkSeq == null) this.wkSeq = wkSeq // align: current seq ↔ current step
     if (this.wkSeq != null) {
       // Watch-driven: the seq increment IS the boundary (which step —
@@ -336,6 +415,11 @@ export class LiveEngine {
   private etaToNextHardMs(t: number, dist: number | null): number | null {
     const cur = this.currentStep()
     if (!cur) return null
+    if (this.followMode) {
+      // The watch shows one step ahead — enough: anticipate when the NEXT
+      // step is the effort, whatever the current one is.
+      return this.followNextKind === 'hard' ? this.remainingMs(cur, t, dist) : null
+    }
     let eta = this.remainingMs(cur, t, dist)
     for (let i = this.stepIdx + 1; i < this.steps.length; i++) {
       const s = this.steps[i]
@@ -459,7 +543,7 @@ export class LiveEngine {
 
     // trackSteps reads lastT/lastDist as the PREVIOUS sample (boundary
     // interpolation window) — update them only after.
-    const entered = this.trackSteps(t, dist, sample.wkStepSeq)
+    const entered = this.trackSteps(t, dist, sample)
     this.lastT = t
     this.lastDist = dist
 

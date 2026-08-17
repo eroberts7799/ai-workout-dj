@@ -379,6 +379,41 @@ describe('LiveEngine', () => {
     expect(Math.abs(engine.landings[0].actualTMs - 300_000)).toBeLessThanOrEqual(2000)
   })
 
+  test('FOLLOW MODE: no plan at all — the watch stream is the workout', () => {
+    // The workout lives in Runna/Garmin; nobody retypes it. Empty plan +
+    // streamed step shapes = full conducting: boundaries, anticipation,
+    // landings.
+    const engine = new LiveEngine({ name: 'follow', steps: [] }, songs, { paceSecPerKm: 340 })
+    const phase = (t: number) =>
+      t <= 60_000
+        ? { seq: 1, kind: 'warmup', dt: 0, dv: 60, next: 'hard' }
+        : t <= 160_000
+          ? { seq: 2, kind: 'hard', dt: 1, dv: 300, next: 'rest' }
+          : t <= 220_000
+            ? { seq: 3, kind: 'rest', dt: 0, dv: 60, next: 'hard' }
+            : t <= 320_000
+              ? { seq: 4, kind: 'hard', dt: 1, dv: 300, next: 'cooldown' }
+              : { seq: 5, kind: 'cooldown', dt: 0, dv: 60, next: undefined }
+    for (let i = 1; i <= 380; i++) {
+      const t = i * 1000
+      const p = phase(t)
+      engine.advance({
+        tMs: t,
+        distanceM: i * 3,
+        wkStepSeq: p.seq,
+        wkKind: p.kind,
+        wkDurationType: p.dt,
+        wkDurationValue: p.dv,
+        wkNextKind: p.next,
+      })
+    }
+    expect(engine.landings.length).toBe(2)
+    for (const l of engine.landings) expect(Math.abs(l.errorMs)).toBeLessThanOrEqual(1500)
+    const changes = engine.commands.filter((c) => c.reason.startsWith('rep change'))
+    expect(changes.length).toBeGreaterThanOrEqual(2)
+    for (const c of changes) expect(c.positionMs).toBe(0)
+  })
+
   test('stalled watch seq (identical adjacent steps) — overdue fallback advances by odometer', () => {
     // The CIQ field detects step changes by signature; two identical adjacent
     // steps produce no bump, ever. The engine must not freeze, and later

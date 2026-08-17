@@ -141,6 +141,10 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
               hr: sample.hr,
               altitudeM: sample.altitude,
               wkStepSeq: sample.wkStepSeq,
+              wkKind: sample.wkStep?.kind,
+              wkDurationType: sample.wkStep?.durationType,
+              wkDurationValue: sample.wkStep?.durationValue,
+              wkNextKind: sample.wkNext?.kind,
             }) ?? []
           for (const c of cmds) void handlersRef.current?.executeLive(c)
         }

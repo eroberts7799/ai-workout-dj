@@ -76,10 +76,12 @@ final class SessionEngine: ObservableObject {
     matchAudioFiles()
   }
 
-  /// LIVE mode needs the plan + tag library (newer bundle exports).
+  /// LIVE mode needs the tag library; a plan is OPTIONAL — with none, the
+  /// engine FOLLOWS the watch's structured-workout stream (the workout lives
+  /// in Runna/Garmin; nobody retypes it).
   var supportsLive: Bool {
     guard let b = bundle else { return false }
-    return !(b.plan ?? []).isEmpty && !(b.tags ?? []).isEmpty
+    return !(b.tags ?? []).isEmpty
   }
 
   private var docs: URL {
@@ -369,12 +371,13 @@ final class SessionEngine: ObservableObject {
 
   func startLive() {
     guard phase == .idle || phase == .done else { return }
-    guard let b = bundle, let plan = b.plan, let tags = b.tags, supportsLive else {
+    guard let b = bundle, let tags = b.tags, supportsLive else {
       status = "this bundle has no LIVE payload — re-export from the web app"
       return
     }
     deck.stop()
-    live = LiveEngine(plan: plan, songs: tags, pairBonus: b.pairBonus ?? [:])
+    // Empty plan → follow mode: the watch's step stream IS the workout.
+    live = LiveEngine(plan: b.plan ?? [], songs: tags, pairBonus: b.pairBonus ?? [:])
     firedCount = 0
     landingCount = 0
     lastCommand = ""
@@ -402,10 +405,23 @@ final class SessionEngine: ObservableObject {
 
   // NOTE: capture happens in recordSample (all modes, full fidelity) — the
   // simulator appends its own samples. advanceLive only conducts.
-  func advanceLive(timerMs: Double, distanceM: Double?, hr: Double? = nil, wkStepSeq: Double? = nil) {
+  func advanceLive(
+    timerMs: Double,
+    distanceM: Double?,
+    hr: Double? = nil,
+    wkStepSeq: Double? = nil,
+    wkKind: String? = nil,
+    wkDurationType: Double? = nil,
+    wkDurationValue: Double? = nil,
+    wkNextKind: String? = nil
+  ) {
     guard phase == .running, let live else { return }
     clockMs = timerMs
-    for c in live.advance(LiveSample(tMs: timerMs, distanceM: distanceM, wkStepSeq: wkStepSeq)) {
+    let s = LiveSample(
+      tMs: timerMs, distanceM: distanceM, wkStepSeq: wkStepSeq,
+      wkKind: wkKind, wkDurationType: wkDurationType, wkDurationValue: wkDurationValue, wkNextKind: wkNextKind
+    )
+    for c in live.advance(s) {
       if suppressLoopbacks && c.reason.hasPrefix("loop back") { continue }
       // Never interrupt the run: a missing file leaves current audio playing.
       try? deck.play(id: c.trackId, positionMs: c.positionMs, fadeSec: c.fadeSec, opts: BeatMath.deckOpts(for: c.reason))

@@ -237,6 +237,31 @@ final class LiveEngineTests: XCTestCase {
     XCTAssertLessThanOrEqual(abs(engine.landings[0].actualTMs - 300_000), 2000)
   }
 
+  func testFollowModeConductsWithNoPlanAtAll() {
+    // Mirrors TS: empty plan + streamed step shapes = full conducting.
+    let engine = LiveEngine(plan: [], songs: songs, paceSecPerKm: 340)
+    func phase(_ t: Double) -> (seq: Double, kind: String, dt: Double, dv: Double, next: String?) {
+      if t <= 60_000 { return (1, "warmup", 0, 60, "hard") }
+      if t <= 160_000 { return (2, "hard", 1, 300, "rest") }
+      if t <= 220_000 { return (3, "rest", 0, 60, "hard") }
+      if t <= 320_000 { return (4, "hard", 1, 300, "cooldown") }
+      return (5, "cooldown", 0, 60, nil)
+    }
+    for i in 1...380 {
+      let t = Double(i) * 1000
+      let p = phase(t)
+      engine.advance(LiveSample(
+        tMs: t, distanceM: Double(i) * 3, wkStepSeq: p.seq,
+        wkKind: p.kind, wkDurationType: p.dt, wkDurationValue: p.dv, wkNextKind: p.next
+      ))
+    }
+    XCTAssertEqual(engine.landings.count, 2)
+    for l in engine.landings { XCTAssertLessThanOrEqual(abs(l.errorMs), 1500) }
+    let changes = engine.commands.filter { $0.reason.hasPrefix("rep change") }
+    XCTAssertGreaterThanOrEqual(changes.count, 2)
+    for c in changes { XCTAssertEqual(c.positionMs, 0) }
+  }
+
   func testStalledWatchSeqOverdueFallbackAdvances() {
     let p: [WorkoutStep] = [
       WorkoutStep(kind: "hard", seconds: nil, meters: 600),
