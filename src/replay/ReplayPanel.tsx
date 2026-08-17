@@ -91,15 +91,15 @@ function fmtPace(secPerKm: number): string {
 }
 
 function cmdColor(reason: string): string {
-  if (reason.startsWith('loop back')) return '#199e70'
-  if (reason.startsWith('buildup')) return '#9085e9'
-  if (reason.startsWith('drop lands')) return '#d55181'
-  return '#3987e5' // groove fill
+  if (reason.startsWith('loop back')) return '#8C8C7A'
+  if (reason.startsWith('buildup')) return '#EDEDE4'
+  if (reason.startsWith('drop lands')) return '#A8B36A'
+  return '#5C5C50' // groove fill
 }
 
 function landingColor(errorMs: number): string {
   const e = Math.abs(errorMs)
-  return e <= 2000 ? '#199e70' : e <= 5000 ? '#c98500' : '#e66767'
+  return e <= 2000 ? '#A8B36A' : e <= 5000 ? '#8C8C7A' : '#E05B41'
 }
 
 export default function ReplayPanel() {
@@ -282,7 +282,7 @@ export default function ReplayPanel() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: loaded.name, source: 'import', samples: loaded.samples, plan: loaded.plan ?? undefined }),
       })
-      setStatus(r.ok ? `☁️ "${loaded.name}" archived to the cloud` : 'cloud save failed')
+      setStatus(r.ok ? `"${loaded.name}" archived to the cloud` : 'cloud save failed')
     } catch (e) {
       setStatus(`cloud save failed: ${String(e)}`)
     }
@@ -429,7 +429,7 @@ export default function ReplayPanel() {
   return (
     <>
       <div className="card">
-        <h2 style={{ marginTop: 0 }}>Replay Lab 🧪</h2>
+        <h2 style={{ marginTop: 0 }}>Replay Lab</h2>
         <p className="muted">
           Dry-run LIVE mode: a simulated runner (or a recorded session log) drives the exact engine that will conduct
           your real run. See where every drop would land before you lace up.
@@ -461,10 +461,10 @@ export default function ReplayPanel() {
               <input type="range" min={0} max={12} value={noisePct} onChange={(e) => setNoisePct(Number(e.target.value))} style={{ width: 100, verticalAlign: 'middle' }} />
             </label>
             <label title="two 4% climbs on the route — crest rewards fire at the top">
-              <input type="checkbox" checked={hilly} onChange={(e) => setHilly(e.target.checked)} style={{ width: 'auto' }} /> ⛰ hills
+              <input type="checkbox" checked={hilly} onChange={(e) => setHilly(e.target.checked)} style={{ width: 'auto' }} /> hills
             </label>
             <label title="synthetic heart rate chasing each step's effort">
-              <input type="checkbox" checked={withHr} onChange={(e) => setWithHr(e.target.checked)} style={{ width: 'auto' }} /> ❤️ HR
+              <input type="checkbox" checked={withHr} onChange={(e) => setWithHr(e.target.checked)} style={{ width: 'auto' }} /> HR
             </label>
           </div>
         )}
@@ -474,7 +474,7 @@ export default function ReplayPanel() {
             {loaded ? 'Replay recorded session' : 'Simulate run'}
           </button>
           <label className="muted" style={{ cursor: 'pointer' }}>
-            📄 Load session log / Garmin TCX…
+            Load session log / Garmin TCX…
             <input
               type="file"
               accept="application/json,.json,.tcx,.txt,text/plain"
@@ -486,15 +486,15 @@ export default function ReplayPanel() {
               }}
             />
           </label>
-          <button onClick={() => void loadCloudList()}>☁️ Cloud sessions</button>
-          <button onClick={() => void loadCorpusList()}>🏃 Real runs</button>
+          <button onClick={() => void loadCloudList()}>Cloud sessions</button>
+          <button onClick={() => void loadCorpusList()}>Real runs</button>
           <label title="Feed the engine the watch's step-change stream (exact boundaries) or make it estimate from time/distance alone">
             <input type="checkbox" checked={useWkStep} onChange={(e) => setUseWkStep(e.target.checked)} style={{ width: 'auto' }} />{' '}
-            ⌚ watch step stream
+            watch step stream
           </label>
           {loaded && (
             <>
-              <button onClick={() => void saveLoadedToCloud()}>☁️ archive this</button>
+              <button onClick={() => void saveLoadedToCloud()}>archive this</button>
               <button onClick={() => { setLoaded(null); setResult(null); setStatus('') }}>✕ back to simulated runner</button>
             </>
           )}
@@ -507,7 +507,7 @@ export default function ReplayPanel() {
               </button>
               {batchBusy && <span className="muted" style={{ fontSize: 12 }}>{batchBusy}</span>}
             </div>
-            <div style={{ marginTop: 6, maxHeight: 200, overflowY: 'auto', border: '1px solid #30363d', borderRadius: 6, padding: 6 }}>
+            <div style={{ marginTop: 6, maxHeight: 200, overflowY: 'auto', border: '1px solid var(--seam)', borderRadius: 0, padding: 6 }}>
               {corpus.map((c) => (
                 <div key={c.file} style={{ display: 'flex', gap: 8, alignItems: 'center', padding: '2px 0' }}>
                   <button onClick={() => void openCorpusRun(c.file)} style={{ fontSize: 12 }}>replay</button>
@@ -520,7 +520,7 @@ export default function ReplayPanel() {
           </div>
         )}
         {cloud && (
-          <div style={{ marginTop: 8, maxHeight: 180, overflowY: 'auto', border: '1px solid #30363d', borderRadius: 6, padding: 6 }}>
+          <div style={{ marginTop: 8, maxHeight: 180, overflowY: 'auto', border: '1px solid var(--seam)', borderRadius: 0, padding: 6 }}>
             {cloud.length === 0 && <p className="muted" style={{ margin: 4 }}>no sessions in the cloud yet</p>}
             {cloud.map((c) => (
               <div key={c.pathname} style={{ display: 'flex', gap: 8, alignItems: 'center', padding: '2px 0' }}>
@@ -560,9 +560,9 @@ export default function ReplayPanel() {
               <tbody>
                 {batch.map((r) => (
                   <tr key={r.file}>
-                    <td style={{ textAlign: 'left' }} title={r.file}>{r.name.slice(0, 34)}{r.warnings > 0 ? ' ⚠️' : ''}</td>
+                    <td style={{ textAlign: 'left' }} title={r.file}>{r.name.slice(0, 34)}{r.warnings > 0 ? ' !' : ''}</td>
                     <td>{r.hard}</td>
-                    <td style={{ color: r.onTime === r.landings && r.landings > 0 ? '#199e70' : undefined }}>
+                    <td style={{ color: r.onTime === r.landings && r.landings > 0 ? 'var(--olive)' : undefined }}>
                       {r.onTime}/{r.landings}
                     </td>
                     <td style={{ color: landingColor(r.worstMs) }}>{(r.worstMs / 1000).toFixed(1)}s</td>
@@ -599,7 +599,7 @@ export default function ReplayPanel() {
               {playMode === 'idle' ? (
                 <>
                   <button onClick={() => void play(false)}>▶ Watch</button>
-                  <button onClick={() => void play(true)}>🎧 Listen</button>
+                  <button onClick={() => void play(true)}>Listen</button>
                 </>
               ) : (
                 <button onClick={pausePlayback}>⏸ Pause</button>
@@ -767,15 +767,15 @@ function CourseView({ result, playheadMs, songs }: { result: SimResult; playhead
   return (
     <svg viewBox={`0 0 ${W} ${CV_H}`} style={{ width: '100%', display: 'block', background: '#171711', border: 0, borderRadius: 0, marginBottom: 8 }}>
       {/* course profile */}
-      <path d={profile} fill="#2b4a8f" opacity={0.9} />
+      <path d={profile} fill="#3A3E2C" opacity={0.9} />
       {/* hard-interval climb columns */}
       {hardCols.map((c, i) => {
         const w = x(c.b) - x(c.a)
         return (
           <g key={i}>
-            <rect x={x(c.a)} y={CV_PROFILE_TOP - 14} width={Math.max(1, w)} height={CV_PROFILE_BOT - CV_PROFILE_TOP + 14} fill="#8a4a6d" opacity={0.38} />
+            <rect x={x(c.a)} y={CV_PROFILE_TOP - 14} width={Math.max(1, w)} height={CV_PROFILE_BOT - CV_PROFILE_TOP + 14} fill="#6B7245" opacity={0.38} />
             {w > 30 && (
-              <text x={x(c.a) + w / 2} y={CV_PROFILE_BOT - 6} textAnchor="middle" fontSize={10} fill="#e6edf3" opacity={0.9}>
+              <text x={x(c.a) + w / 2} y={CV_PROFILE_BOT - 6} textAnchor="middle" fontSize={10} fill="#EDEDE4" opacity={0.9}>
                 {Math.abs(c.avgGrade) >= 1 ? `${c.avgGrade > 0 ? '+' : ''}${c.avgGrade.toFixed(1)}%` : 'hard'}
               </text>
             )}
@@ -816,18 +816,18 @@ function CourseView({ result, playheadMs, songs }: { result: SimResult; playhead
         const sy = surface(v)
         return (
           <text key={`c${i}`} x={x(v)} y={sy - 24} textAnchor="middle" fontSize={13}>
-            ⛰<title>{`${fmtCourse(v)} · ${fmtClock(c.tMs)} — ${c.reason}`}</title>
+            ▲<title>{`${fmtCourse(v)} · ${fmtClock(c.tMs)} — ${c.reason}`}</title>
           </text>
         )
       })}
       {/* start / finish */}
-      <circle cx={X0 + 4} cy={surface(0) - 10} r={8} fill="#199e70" />
+      <circle cx={X0 + 4} cy={surface(0) - 10} r={8} fill="#A8B36A" />
       <text x={X0 + 4} y={surface(0) - 6.5} textAnchor="middle" fontSize={10} fontWeight={700} fill="#fff">S</text>
       <text x={X0 + XW - 4} y={surface(total) - 12} textAnchor="middle" fontSize={13}>🏁</text>
       {/* the runner */}
       {runnerV != null && (
         <g>
-          <line x1={x(runnerV)} y1={surface(runnerV)} x2={x(runnerV)} y2={CV_PROFILE_BOT} stroke="#e6edf3" opacity={0.5} />
+          <line x1={x(runnerV)} y1={surface(runnerV)} x2={x(runnerV)} y2={CV_PROFILE_BOT} stroke="#EDEDE4" opacity={0.5} />
           <text
             x={x(runnerV)}
             y={surface(runnerV) - 8}
@@ -835,11 +835,11 @@ function CourseView({ result, playheadMs, songs }: { result: SimResult; playhead
             fontSize={16}
             transform={`translate(${x(runnerV) * 2}, 0) scale(-1, 1)`}
           >
-            🏃
+            ►
           </text>
           {nowSong && (
-            <text x={Math.min(Math.max(x(runnerV), 60), W - 60)} y={CV_PROFILE_TOP - 28} textAnchor="middle" fontSize={11} fill="#8b949e" fontStyle="italic">
-              🎧 {nowSong.name}
+            <text x={Math.min(Math.max(x(runnerV), 60), W - 60)} y={CV_PROFILE_TOP - 28} textAnchor="middle" fontSize={11} fill="#8C8C7A" fontStyle="italic">
+              ♪ {nowSong.name}
             </text>
           )}
         </g>
@@ -847,11 +847,11 @@ function CourseView({ result, playheadMs, songs }: { result: SimResult; playhead
       {/* course axis */}
       {ticks.map((v) => (
         <g key={v}>
-          <line x1={x(v)} y1={CV_PROFILE_BOT} x2={x(v)} y2={CV_PROFILE_BOT + 4} stroke="#8b949e" />
-          <text x={x(v)} y={CV_H - 8} textAnchor="middle" fontSize={10} fill="#8b949e">{fmtCourse(v)}</text>
+          <line x1={x(v)} y1={CV_PROFILE_BOT} x2={x(v)} y2={CV_PROFILE_BOT + 4} stroke="#8C8C7A" />
+          <text x={x(v)} y={CV_H - 8} textAnchor="middle" fontSize={10} fill="#8C8C7A">{fmtCourse(v)}</text>
         </g>
       ))}
-      <text x={X0} y={CV_H - 8} fontSize={10} fill="#8b949e">{hasDist ? 'course' : 'time'}</text>
+      <text x={X0} y={CV_H - 8} fontSize={10} fill="#8C8C7A">{hasDist ? 'course' : 'time'}</text>
     </svg>
   )
 }
@@ -887,7 +887,7 @@ function LiveStatus({ result, tMs, songs }: { result: SimResult; tMs: number; so
       </span>
       {song && (
         <span className="muted" style={{ fontStyle: 'italic' }}>
-          🎧 {song.name} · {fmtClock(songPos)}
+          ♪ {song.name} · {fmtClock(songPos)}
         </span>
       )}
     </div>
@@ -903,9 +903,9 @@ const X0 = 8
 const XW = W - 16
 
 function stepFill(kind: WorkoutStep['kind']): string {
-  if (kind === 'hard') return 'rgba(217, 89, 38, 0.35)'
-  if (kind === 'easy' || kind === 'rest') return 'rgba(139, 148, 158, 0.12)'
-  return 'rgba(139, 148, 158, 0.05)' // warmup / cooldown
+  if (kind === 'hard') return 'rgba(168, 179, 106, 0.22)'
+  if (kind === 'easy' || kind === 'rest') return 'rgba(140, 140, 122, 0.12)'
+  return 'rgba(140, 140, 122, 0.05)' // warmup / cooldown
 }
 
 function Timeline({
@@ -968,7 +968,7 @@ function Timeline({
             <g key={i}>
               <rect x={x(s.startMs)} y={6} width={Math.max(0, w - 1)} height={28} rx={3} fill={stepFill(s.step.kind)} />
               {w > 46 && (
-                <text x={x(s.startMs) + w / 2} y={24} textAnchor="middle" fontSize={11} fill={s.step.kind === 'hard' ? '#e6edf3' : '#8b949e'}>
+                <text x={x(s.startMs) + w / 2} y={24} textAnchor="middle" fontSize={11} fill={s.step.kind === 'hard' ? '#EDEDE4' : '#8C8C7A'}>
                   {s.step.kind}
                   {s.step.meters != null ? ` ${s.step.meters}m` : ''}
                 </text>
@@ -979,7 +979,7 @@ function Timeline({
 
         {/* ground truth: the watch's actual step boundaries (▾ above the bands) */}
         {truth?.filter((b) => !b.end && b.tMs > 0 && b.tMs < durationMs).map((b, i) => (
-          <path key={`tb${i}`} d={`M${x(b.tMs) - 4},1 L${x(b.tMs) + 4},1 L${x(b.tMs)},7 Z`} fill="#e6edf3" opacity={0.8}>
+          <path key={`tb${i}`} d={`M${x(b.tMs) - 4},1 L${x(b.tMs) + 4},1 L${x(b.tMs)},7 Z`} fill="#EDEDE4" opacity={0.8}>
             <title>{`true step ${b.stepIdx + 1} start — ${fmtClock(b.tMs)}`}</title>
           </path>
         ))}
@@ -1001,7 +1001,7 @@ function Timeline({
               <title>{`${fmtClock(c.tMs)} — ${c.reason} @ ${fmtClock(c.positionMs)}`}</title>
             </line>
             {c.reason.includes('crest reward') && (
-              <text x={x(c.tMs)} y={58} textAnchor="middle" fontSize={11}>⛰</text>
+              <text x={x(c.tMs)} y={58} textAnchor="middle" fontSize={11}>▲</text>
             )}
           </g>
         ))}
@@ -1009,41 +1009,41 @@ function Timeline({
         {/* pace strip (engine's EMA — what decisions were made from) */}
         {hasPace && (
           <g>
-            <line x1={X0} y1={paceTop} x2={X0 + XW} y2={paceTop} stroke="#21262d" />
-            <line x1={X0} y1={paceTop + 60} x2={X0 + XW} y2={paceTop + 60} stroke="#21262d" />
-            <path d={pacePath} fill="none" stroke="#3987e5" strokeWidth={2} />
-            <text x={X0 + 2} y={paceTop + 10} fontSize={10} fill="#8b949e">{fmtPace(pLo)} — engine pace</text>
-            <text x={X0 + 2} y={paceTop + 57} fontSize={10} fill="#8b949e">{fmtPace(pHi)}</text>
+            <line x1={X0} y1={paceTop} x2={X0 + XW} y2={paceTop} stroke="#2C2E24" />
+            <line x1={X0} y1={paceTop + 60} x2={X0 + XW} y2={paceTop + 60} stroke="#2C2E24" />
+            <path d={pacePath} fill="none" stroke="#EDEDE4" strokeWidth={2} />
+            <text x={X0 + 2} y={paceTop + 10} fontSize={10} fill="#8C8C7A">{fmtPace(pLo)} — engine pace</text>
+            <text x={X0 + 2} y={paceTop + 57} fontSize={10} fill="#8C8C7A">{fmtPace(pHi)}</text>
           </g>
         )}
 
         {/* HR strip */}
         {hasHr && (
           <g>
-            <line x1={X0} y1={hrTop} x2={X0 + XW} y2={hrTop} stroke="#21262d" />
-            <line x1={X0} y1={hrTop + 60} x2={X0 + XW} y2={hrTop + 60} stroke="#21262d" />
-            <path d={hrPath} fill="none" stroke="#e66767" strokeWidth={2} />
-            <text x={X0 + 2} y={hrTop + 10} fontSize={10} fill="#8b949e">{Math.round(hHi)} bpm</text>
-            <text x={X0 + 2} y={hrTop + 57} fontSize={10} fill="#8b949e">{Math.round(hLo)}</text>
+            <line x1={X0} y1={hrTop} x2={X0 + XW} y2={hrTop} stroke="#2C2E24" />
+            <line x1={X0} y1={hrTop + 60} x2={X0 + XW} y2={hrTop + 60} stroke="#2C2E24" />
+            <path d={hrPath} fill="none" stroke="#8C8C7A" strokeWidth={2} />
+            <text x={X0 + 2} y={hrTop + 10} fontSize={10} fill="#8C8C7A">{Math.round(hHi)} bpm</text>
+            <text x={X0 + 2} y={hrTop + 57} fontSize={10} fill="#8C8C7A">{Math.round(hLo)}</text>
           </g>
         )}
 
         {/* altitude strip */}
         {hasAlt && (
           <g>
-            <line x1={X0} y1={altTop} x2={X0 + XW} y2={altTop} stroke="#21262d" />
-            <line x1={X0} y1={altTop + 60} x2={X0 + XW} y2={altTop + 60} stroke="#21262d" />
-            <path d={altPath} fill="none" stroke="#8b949e" strokeWidth={2} />
-            <text x={X0 + 2} y={altTop + 10} fontSize={10} fill="#8b949e">{Math.round(aHi)}m — elevation</text>
-            <text x={X0 + 2} y={altTop + 57} fontSize={10} fill="#8b949e">{Math.round(aLo)}m</text>
+            <line x1={X0} y1={altTop} x2={X0 + XW} y2={altTop} stroke="#2C2E24" />
+            <line x1={X0} y1={altTop + 60} x2={X0 + XW} y2={altTop + 60} stroke="#2C2E24" />
+            <path d={altPath} fill="none" stroke="#8C8C7A" strokeWidth={2} />
+            <text x={X0 + 2} y={altTop + 10} fontSize={10} fill="#8C8C7A">{Math.round(aHi)}m — elevation</text>
+            <text x={X0 + 2} y={altTop + 57} fontSize={10} fill="#8C8C7A">{Math.round(aLo)}m</text>
           </g>
         )}
 
         {/* time axis */}
         {ticks.map((t) => (
           <g key={t}>
-            <line x1={x(t)} y1={6} x2={x(t)} y2={axisY - 16} stroke="#21262d" strokeDasharray="2 4" />
-            <text x={x(t)} y={axisY - 2} textAnchor="middle" fontSize={10} fill="#8b949e">{fmtClock(t)}</text>
+            <line x1={x(t)} y1={6} x2={x(t)} y2={axisY - 16} stroke="#2C2E24" strokeDasharray="2 4" />
+            <text x={x(t)} y={axisY - 2} textAnchor="middle" fontSize={10} fill="#8C8C7A">{fmtClock(t)}</text>
           </g>
         ))}
       </>
@@ -1064,7 +1064,7 @@ function Timeline({
         {hover
           ? `${fmtClock(hover.tMs)} · ${hover.distanceM != null ? `${(hover.distanceM / 1000).toFixed(2)}km · ` : ''}` +
             `engine pace ${fmtPace(hover.paceSecPerKm)}${hover.hr != null ? ` · ${hover.hr} bpm z${hover.hrZone}` : ''}` +
-            `${hover.altitude != null ? ` · ${hover.gradePct >= 0 ? '+' : ''}${hover.gradePct.toFixed(1)}%${hover.climbing ? ' ⛰ climbing' : ''}` : ''} · ` +
+            `${hover.altitude != null ? ` · ${hover.gradePct >= 0 ? '+' : ''}${hover.gradePct.toFixed(1)}%${hover.climbing ? ' climbing' : ''}` : ''} · ` +
             `${hover.mode ?? '—'}${hover.etaToHardMs != null ? ` · hard in ${Math.round(hover.etaToHardMs / 1000)}s` : ''}`
           : 'hover the timeline to inspect the engine’s mind at any moment'}
       </div>
@@ -1077,16 +1077,16 @@ function Timeline({
         {layers}
 
         {/* hover crosshair + replay playhead */}
-        {hover && <line x1={x(hover.tMs)} y1={6} x2={x(hover.tMs)} y2={axisY - 16} stroke="#8b949e" strokeDasharray="3 3" />}
-        {playheadMs != null && <line x1={x(playheadMs)} y1={6} x2={x(playheadMs)} y2={axisY - 16} stroke="#e6edf3" strokeWidth={1.5} />}
+        {hover && <line x1={x(hover.tMs)} y1={6} x2={x(hover.tMs)} y2={axisY - 16} stroke="#8C8C7A" strokeDasharray="3 3" />}
+        {playheadMs != null && <line x1={x(playheadMs)} y1={6} x2={x(playheadMs)} y2={axisY - 16} stroke="#EDEDE4" strokeWidth={1.5} />}
       </svg>
       <div className="muted" style={{ display: 'flex', gap: 14, flexWrap: 'wrap', fontSize: 12, marginTop: 6 }}>
-        <span><span style={{ color: '#3987e5' }}>▍</span> song change</span>
-        <span><span style={{ color: '#9085e9' }}>▍</span> buildup</span>
-        <span><span style={{ color: '#d55181' }}>▍</span> drop</span>
-        <span><span style={{ color: '#199e70' }}>●</span> landing ≤2s</span>
-        <span><span style={{ color: '#c98500' }}>●</span> ≤5s</span>
-        <span><span style={{ color: '#e66767' }}>●</span> &gt;5s</span>
+        <span><span style={{ color: '#7C7C6D' }}>▍</span> song change</span>
+        <span><span style={{ color: '#171711' }}>▍</span> buildup</span>
+        <span><span style={{ color: '#4B5320' }}>▍</span> drop</span>
+        <span><span style={{ color: '#4B5320' }}>●</span> landing ≤2s</span>
+        <span><span style={{ color: '#7C7C6D' }}>●</span> ≤5s</span>
+        <span><span style={{ color: '#B3402A' }}>●</span> &gt;5s</span>
       </div>
     </>
   )

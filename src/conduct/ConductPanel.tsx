@@ -286,7 +286,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
   function uploadRecovery() {
     const raw = localStorage.getItem('awdj-recovery')
     if (!raw) return setRecovery(null)
-    setStatus('☁️ uploading recovered session…')
+    setStatus('uploading recovered session…')
     fetch(`${RELAY_BASE}/api/sessions?k=${RELAY_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -296,7 +296,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
         if (r.ok) {
           localStorage.removeItem('awdj-recovery')
           setRecovery(null)
-          setStatus('☁️ recovered session uploaded — see the Replay Lab')
+          setStatus('recovered session uploaded — see the Replay Lab')
         } else setStatus('recovery upload failed — try again')
       })
       .catch(() => setStatus('recovery upload failed — try again'))
@@ -597,7 +597,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
           value={planText}
           onChange={(e) => setPlanText(e.target.value)}
           rows={6}
-          style={{ width: '100%', boxSizing: 'border-box', background: '#161b22', color: '#e6edf3', border: '1px solid #30363d', borderRadius: 6, padding: 8, font: 'inherit' }}
+          style={{ width: '100%', boxSizing: 'border-box', background: 'var(--olive-wash)', color: 'var(--ink)', border: 0, borderRadius: 0, padding: 10, fontFamily: 'var(--mono)', fontSize: 12, lineHeight: 1.6 }}
         />
         {errors.map((e) => (
           <p key={e} className="bad">{e}</p>
@@ -653,7 +653,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
             </label>
             <label style={{ marginLeft: 12 }} title="The watch's live distance/timer drives the DJ — drops land when you arrive, not when a clock guesses">
               <input type="checkbox" checked={liveMode} onChange={(e) => setLiveMode(e.target.checked)} style={{ width: 'auto' }} />{' '}
-              🛰 LIVE mode (body-driven)
+              LIVE mode (body-driven)
             </label>
             <label style={{ marginLeft: 12 }} title="Calibrated max HR — anchors effort zones (crest rewards fire only on real efforts). Get yours: python3 analysis/hr_calibration.py">
               max HR{' '}
@@ -680,7 +680,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
                 }}
                 style={{ width: 'auto' }}
               >
-                <option value="browser">This browser (🎧 crossfades)</option>
+                <option value="browser">This browser (crossfades)</option>
                 {outputs
                   .filter((d) => !d.name.includes('spike'))
                   .map((d) => (
@@ -696,20 +696,26 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
         {status && <p className="muted">{status}</p>}
         <p className="muted">
           {garmin && Date.now() - garmin.receivedAt < 10_000
-            ? `⌚ Garmin live: ${garmin.hr ?? '—'} bpm · timer ${garmin.timerMs != null ? fmtClock(garmin.timerMs) : '—'}${garmin.altitude != null ? ` · ${Math.round(garmin.altitude)}m` : ''}`
+            ? `Garmin live: ${garmin.hr ?? '—'} bpm · timer ${garmin.timerMs != null ? fmtClock(garmin.timerMs) : '—'}${garmin.altitude != null ? ` · ${Math.round(garmin.altitude)}m` : ''}`
             : armed
-              ? '⌚ Waiting for the watch… (Connect IQ field must be installed and posting)'
+              ? 'Waiting for the watch… (Connect IQ field must be installed and posting)'
               : ''}
         </p>
-        {countdown !== null && <span style={{ fontSize: 40, marginLeft: 12 }}>{countdown}</span>}
+        {countdown !== null && (
+          <span style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: 64, marginLeft: 12, color: 'var(--olive)' }}>
+            {countdown}
+          </span>
+        )}
         {(phase === 'running' || phase === 'paused') && (
           <>
             <p className={engine === 'local' ? 'ok' : 'warn'}>
               {engine === 'local'
-                ? '🎧 Local DJ engine — real crossfades'
+                ? 'Local DJ engine — real crossfades'
                 : 'Spotify engine — jump cuts (attach owned audio files in the Tagger for crossfades)'}
             </p>
-            <div style={{ fontSize: 40 }}>{fmtClock(clockMs)}</div>
+            <div style={{ fontSize: 40, fontFamily: 'var(--mono)', fontWeight: 800, fontVariantNumeric: 'tabular-nums' }}>
+              {fmtClock(clockMs)}
+            </div>
             {!liveMode && (
               <input
                 type="range"
@@ -722,9 +728,17 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
               />
             )}
             {nextCue && (
-              <p className="muted">
-                next: {fmtClock(nextCue.atMs)} — {nextCue.reason}
-              </p>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: 8, margin: '10px 0' }}>
+                <span style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 26, textTransform: 'uppercase' }}>
+                  Next cut{' '}
+                  <span style={{ fontFamily: 'var(--cond)', fontSize: 16, letterSpacing: '.08em', color: 'var(--olive)' }}>
+                    {nextCue.reason}
+                  </span>
+                </span>
+                <span style={{ fontFamily: 'var(--mono)', fontWeight: 800, fontSize: 26, color: 'var(--olive)', fontVariantNumeric: 'tabular-nums' }}>
+                  T−{fmtClock(Math.max(0, nextCue.atMs - clockMs))}
+                </span>
+              </div>
             )}
             <button onClick={togglePause}>{phase === 'paused' ? 'Resume' : 'Pause'}</button>
             <button onClick={stopSession}>Stop choreography</button>
@@ -735,9 +749,9 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
             <p className="ok">Session complete — {log.filter((l) => l.ok).length}/{log.length} cues fired cleanly.</p>
             {cloudState && (
               <p className={cloudState === 'failed' ? 'warn' : 'muted'}>
-                {cloudState === 'uploading' && '☁️ uploading session log…'}
-                {cloudState === 'uploaded' && '☁️ session log in the cloud — replayable from the Replay Lab anywhere'}
-                {cloudState === 'failed' && '☁️ upload failed — use Download to keep the log'}
+                {cloudState === 'uploading' && 'uploading session log…'}
+                {cloudState === 'uploaded' && 'session log in the cloud — replayable from the Replay Lab anywhere'}
+                {cloudState === 'failed' && 'upload failed — use Download to keep the log'}
               </p>
             )}
             <button onClick={downloadSessionLog}>Download session log</button>
