@@ -26,6 +26,32 @@ interface AnalysisEntry {
   segments?: { label: string; startMs: number; endMs: number }[]
 }
 
+/** Best library song for a normalized filename — the shared matcher used by
+ *  bulk attach AND sync-from-disk. Word-boundary or nothing; title variants
+ *  drop trailing edition suffixes ("(Original Mix)") that filenames lack. */
+function bestSongForFilename(fname: string, lib: SongTags[]): SongTags | null {
+  let hit: SongTags | null = null
+  let bestScore = 0
+  for (const s of lib) {
+    const variants = [s.name, s.name.replace(/\s*\([^)]*\)\s*$/, '')]
+      .map(normalizeTitle)
+      .filter((t, i, a) => t && a.indexOf(t) === i)
+    for (const title of variants) {
+      const boundary = new RegExp(`(^| )${title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}( |$)`)
+      const score = boundary.test(fname)
+        ? 2 + title.length / 1000
+        : fname.length >= 8 && title.includes(fname)
+          ? 1 + title.length / 1000
+          : 0
+      if (score > bestScore) {
+        bestScore = score
+        hit = s
+      }
+    }
+  }
+  return hit
+}
+
 // Keypress markers are placed REACTION_OFFSET early to compensate human reaction
 // time; the ±nudge + audition loop is the real accuracy mechanism (design doc).
 const REACTION_OFFSET_MS = 200
@@ -61,6 +87,81 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
     void listAudioTrackIds().then((ids) => setLocalIds(new Set(ids)))
   }, [])
 
+  /** One-button crate sync (dev server): rebuild every song from the merged
+   *  analysis on disk AND pull its audio file — no pickers, no attach step,
+   *  no prune. Existing identities are preserved (sourceFile first, then the
+   *  shared name matcher), so Spotify-matched tracks keep their ids. */
+  async function syncFromDisk() {
+    let entries: (AnalysisEntry & { hasFile: boolean })[]
+    let musicDir = ''
+    try {
+      const r = await fetch('/api/library')
+      const body = (await r.json()) as { musicDir: string; entries: (AnalysisEntry & { hasFile: boolean })[] }
+      entries = body.entries
+      musicDir = body.musicDir
+    } catch (e) {
+      setStatus(`sync needs the dev server: ${String(e)}`)
+      return
+    }
+    if (!entries || entries.length === 0) {
+      setStatus('sync: no analysis entries found (analysis/crate-analysis.json)')
+      return
+    }
+    const audioIds = new Set(await listAudioTrackIds())
+    let updated = 0
+    let created = 0
+    let fetched = 0
+    const problems: string[] = []
+    for (const [i, e] of entries.entries()) {
+      setStatus(`⟳ sync ${i + 1}/${entries.length}: ${e.title} …`)
+      const lib = Object.values(loadAllTags())
+      const existing =
+        lib.find((s) => s.sourceFile === e.sourceFile) ?? bestSongForFilename(normalizeTitle(e.sourceFile), lib)
+      const slug = `${e.title} ${e.artist}`.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40)
+      const trackId = existing?.trackId ?? `local-${slug}`
+      saveTags({
+        trackId,
+        uri: existing?.uri ?? `local:${slug}`,
+        name: existing?.name ?? e.title,
+        artists: existing?.artists ?? e.artist,
+        durationMs: e.durationMs, // file truth, always
+        bpm: e.bpm ? Math.round(e.bpm * 10) / 10 : null,
+        camelot: e.camelot ?? null,
+        markers: e.markers.map((m) => ({ id: crypto.randomUUID(), type: m.type, ms: m.ms })),
+        segments: e.segments,
+        sourceFile: e.sourceFile,
+        updatedAt: new Date().toISOString(),
+      })
+      existing ? updated++ : created++
+      if (!e.hasFile) {
+        problems.push(`✗ ${e.title} — ${e.sourceFile} not in ${musicDir}`)
+        continue
+      }
+      if (!audioIds.has(trackId)) {
+        try {
+          const audio = await fetch(`/api/library/audio/${encodeURIComponent(e.sourceFile)}`)
+          if (!audio.ok) throw new Error(`HTTP ${audio.status}`)
+          await saveAudio(trackId, await audio.blob())
+          fetched++
+        } catch (err) {
+          problems.push(`✗ ${e.title} — audio fetch failed: ${String(err)}`)
+        }
+      }
+    }
+    setLibrary(loadAllTags())
+    setLocalIds(new Set(await listAudioTrackIds()))
+    const strays = Object.values(loadAllTags()).filter((s) => s.sourceFile && !entries.some((e) => e.sourceFile === s.sourceFile))
+    setStatus(
+      [
+        `⟳ sync done: ${updated} updated, ${created} created, ${fetched} audio file(s) pulled`,
+        strays.length > 0 ? `${strays.length} song(s) no longer on disk (left in place — ✕ them if unwanted)` : '',
+        ...problems,
+      ]
+        .filter(Boolean)
+        .join(' · '),
+    )
+  }
+
   /** Attach owned audio files: match by filename against library titles.
    *  Word-boundary matches outrank substrings (so "ten" can't steal
    *  TENTEN's file), and the longest matching title wins ties. */
@@ -70,31 +171,7 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
     const all = Array.from(files)
     for (const [i, file] of all.entries()) {
       setStatus(`💾 attaching ${i + 1}/${all.length}: ${file.name} …`)
-      const fname = normalizeTitle(file.name)
-      let hit: SongTags | null = null
-      let bestScore = 0
-      for (const s of lib) {
-        // Titles carry junk edition suffixes ("… - Extended Mix (Original
-        // Mix)") that filenames don't — try the full title first, then with
-        // trailing parentheticals stripped. Word-boundary or nothing: bare
-        // substrings let "ten" claim every file containing "exTENded";
-        // fname-inside-title allowed only for meaningfully long filenames.
-        const variants = [s.name, s.name.replace(/\s*\([^)]*\)\s*$/, '')]
-          .map(normalizeTitle)
-          .filter((t, i, a) => t && a.indexOf(t) === i)
-        for (const title of variants) {
-          const boundary = new RegExp(`(^| )${title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}( |$)`)
-          const score = boundary.test(fname)
-            ? 2 + title.length / 1000
-            : fname.length >= 8 && title.includes(fname)
-              ? 1 + title.length / 1000
-              : 0
-          if (score > bestScore) {
-            bestScore = score
-            hit = s
-          }
-        }
-      }
+      const hit = bestSongForFilename(normalizeTitle(file.name), lib)
       if (!hit) {
         notes.push(`✗ ${file.name} — no matching song in the library`)
         continue
@@ -471,6 +548,13 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
             }}
           >
             🗑 Reset library
+          </button>
+          <button
+            style={{ marginRight: 12 }}
+            title="One button, whole crate: reads analysis + keys + audio files straight from disk (dev server), updates every song IN PLACE (identities preserved), and attaches all audio. Replaces import → attach → prune."
+            onClick={() => void syncFromDisk()}
+          >
+            ⟳ Sync crate from disk
           </button>
           <button
             style={{ marginRight: 12 }}

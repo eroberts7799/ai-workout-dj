@@ -23,6 +23,8 @@ export interface SongTags {
    *  break/outro… Energy-aware chain points pick song CHANGES at these
    *  boundaries — leave as a strong section ends, never mid-breakdown. */
   segments?: { label: string; startMs: number; endMs: number }[]
+  /** The owned file this song came from — sync-from-disk matches by this. */
+  sourceFile?: string
   updatedAt: string
 }
 
