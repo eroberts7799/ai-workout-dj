@@ -18,11 +18,9 @@ final class DualDeck {
 
   private static let bassHz: Float = 180
   private static let bassCutDb: Float = -15
-  /// Radio handoff shape — mirrors local-deck.ts: the outgoing song fades
-  /// long enough to sound like it's ENDING; the incoming enters on its tail.
-  private static let radioOutS = 6.0
-  private static let radioOverlapS = 1.5
-  private static let radioInS = 2.0
+  /// Song-change crossfade — mirrors local-deck.ts: Spotify's shape, both
+  /// sides ramping over the same 5s window.
+  private static let xfadeS = 5.0
 
   private let engine = AVAudioEngine()
   private let sides = [Side(), Side()]
@@ -99,17 +97,18 @@ final class DualDeck {
       incoming.player.stop()
       incoming.timePitch.rate = 1
       incoming.eq.bands[0].gain = 0
-      let startPosMs = max(0, positionMs + (Self.radioOutS - Self.radioOverlapS) * 1000)
+      // Spotify-style crossfade: both sides ramp over the same window,
+      // incoming from wherever the engine asked (usually 0:00).
+      let startPosMs = max(0, positionMs)
       let sampleRate = file.processingFormat.sampleRate
       let startFrame = AVAudioFramePosition(startPosMs / 1000.0 * sampleRate)
       let frames = AVAudioFrameCount(max(0, file.length - startFrame))
       guard frames > 0 else { return }
       incoming.player.scheduleSegment(file, startingFrame: startFrame, frameCount: frames, at: nil)
       incoming.player.volume = 0
-      let startHost = hostSeconds() + (Self.radioOutS - Self.radioOverlapS)
-      incoming.player.play(at: AVAudioTime(hostTime: AVAudioTime.hostTime(forSeconds: startHost)))
-      radioHandoff(from: outgoing, to: incoming)
-      current = (trackId: id, positionAtMs: startPosMs, startedAtHost: startHost, rate: 1)
+      incoming.player.play()
+      crossfade(from: outgoing, to: incoming, seconds: Self.xfadeS, afterDelay: 0, bassSwap: false)
+      current = (trackId: id, positionAtMs: startPosMs, startedAtHost: hostSeconds(), rate: 1)
       return
     }
 
@@ -150,32 +149,6 @@ final class DualDeck {
 
     crossfade(from: outgoing, to: incoming, seconds: blendSec, afterDelay: delayMs / 1000, bassSwap: plan.bassSwap && current != nil)
     current = (trackId: id, positionAtMs: startPosMs, startedAtHost: startHost, rate: rate)
-  }
-
-  /// Asymmetric radio fade: outgoing decays exponentially over radioOutS
-  /// (reads as the song ending), incoming rises over radioInS starting at
-  /// the overlap point.
-  private func radioHandoff(from: Side, to: Side) {
-    fadeTimer?.invalidate()
-    let total = Self.radioOutS - Self.radioOverlapS + Self.radioInS
-    let steps = max(1, Int(total * 60))
-    var step = 0
-    let fromStart = from.player.volume
-    let inStartsAt = Self.radioOutS - Self.radioOverlapS
-    let timer = Timer(timeInterval: total / Double(steps), repeats: true) { t in
-      step += 1
-      let s = Double(step) / Double(steps) * total
-      from.player.volume = s >= Self.radioOutS ? 0 : fromStart * Float(pow(0.001, s / Self.radioOutS))
-      to.player.volume = s <= inStartsAt ? 0 : Float(min(1, (s - inStartsAt) / Self.radioInS))
-      if step >= steps {
-        t.invalidate()
-        from.player.stop()
-        from.player.volume = 0
-        from.eq.bands[0].gain = 0
-      }
-    }
-    RunLoop.main.add(timer, forMode: .common)
-    fadeTimer = timer
   }
 
   private func crossfade(from: Side, to: Side, seconds: Double, afterDelay: Double, bassSwap: Bool) {

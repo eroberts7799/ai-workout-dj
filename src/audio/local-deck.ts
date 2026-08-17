@@ -24,11 +24,10 @@ export function deckOptsFor(reason: string): { onBeat?: boolean; grid?: 'beat' |
   return { radio: true } // groove fills & chains
 }
 
-/** Radio handoff shape: outgoing fades over OUT_S (long enough to read as
- *  "the song is ending"), incoming enters for the last OVERLAP_S of it. */
-const RADIO_OUT_S = 6
-const RADIO_OVERLAP_S = 1.5
-const RADIO_IN_S = 2
+/** Song-change crossfade: Spotify's shape — outgoing fades down while the
+ *  incoming fades up over the SAME window (Spotify's crossfade setting
+ *  default is 5s). Simple, familiar, never clever. */
+const XFADE_S = 5
 
 export interface DeckTrackMeta {
   bpm: number | null
@@ -91,21 +90,20 @@ export class LocalDeck {
     const buf = this.buffers.get(trackId)
     if (!buf) throw new Error(`no local audio for ${trackId}`)
 
-    // Radio handoff (song chains): the outgoing song ENDS — a long fade to
-    // silence — and the incoming one starts as its tail disappears. The
-    // incoming position is advanced by the wait so the engine's model of
-    // "what's playing where" stays true at the moment you actually hear it.
+    // Song change (cruise chains): a plain Spotify-style crossfade — the
+    // outgoing song fades down while the incoming fades up over the same 5s
+    // window, incoming from wherever the engine asked (usually 0:00). No
+    // blend, no bass swap, no tempo lock — good song changes before great
+    // transitions.
     if (opts.radio && this.current) {
       const now = ctx.currentTime
       const old = this.current
       const held = Math.max(old.gain.gain.value, 0.0001)
       old.gain.gain.cancelScheduledValues(now)
       old.gain.gain.setValueAtTime(held, now)
-      old.gain.gain.exponentialRampToValueAtTime(0.0001, now + RADIO_OUT_S)
-      old.src.stop(now + RADIO_OUT_S + 0.1)
+      old.gain.gain.exponentialRampToValueAtTime(0.0001, now + XFADE_S)
+      old.src.stop(now + XFADE_S + 0.1)
 
-      const tIn = now + RADIO_OUT_S - RADIO_OVERLAP_S
-      const startPosMs = Math.max(0, positionMs + (RADIO_OUT_S - RADIO_OVERLAP_S) * 1000)
       const src = ctx.createBufferSource()
       src.buffer = buf
       const bass = ctx.createBiquadFilter()
@@ -116,10 +114,10 @@ export class LocalDeck {
       src.connect(bass)
       bass.connect(gain)
       gain.connect(ctx.destination)
-      gain.gain.setValueAtTime(0.0001, tIn)
-      gain.gain.exponentialRampToValueAtTime(1, tIn + RADIO_IN_S)
-      src.start(tIn, startPosMs / 1000)
-      this.current = { src, gain, bass, trackId, positionAtMs: startPosMs, startedAtCtx: tIn, rate: 1 }
+      gain.gain.setValueAtTime(0.0001, now)
+      gain.gain.exponentialRampToValueAtTime(1, now + XFADE_S)
+      src.start(now, Math.max(0, positionMs) / 1000)
+      this.current = { src, gain, bass, trackId, positionAtMs: Math.max(0, positionMs), startedAtCtx: now, rate: 1 }
       return
     }
 

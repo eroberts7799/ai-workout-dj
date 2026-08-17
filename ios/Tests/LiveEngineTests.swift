@@ -93,8 +93,33 @@ final class LiveEngineTests: XCTestCase {
     if fills[0].trackId == "seg" {
       XCTAssertLessThanOrEqual(abs(exitPos - 160_000), 1500)
     } else {
-      XCTAssertLessThanOrEqual(abs(exitPos - 210_000), 1500)
+      XCTAssertLessThanOrEqual(abs(exitPos - 180_000), 1500)
     }
+  }
+
+  func testShortRestsOneChangePerRepNotReleasePlusBuildup() {
+    let p: [WorkoutStep] = [
+      WorkoutStep(kind: "warmup", seconds: 60, meters: nil),
+      WorkoutStep(kind: "hard", seconds: nil, meters: 400),
+      WorkoutStep(kind: "rest", seconds: 60, meters: nil),
+      WorkoutStep(kind: "hard", seconds: nil, meters: 400),
+      WorkoutStep(kind: "cooldown", seconds: 60, meters: nil),
+    ]
+    let longSongs = songs.map { s -> TaggedSong in
+      var c = s
+      c = TaggedSong(trackId: s.trackId, uri: s.uri, name: s.name, artists: s.artists, durationMs: 360_000, bpm: s.bpm, camelot: s.camelot, markers: s.markers)
+      return c
+    }
+    let engine = LiveEngine(plan: p, songs: longSongs, paceSecPerKm: 340)
+    for s in stream([(500, 3)]) { engine.advance(s) }
+    XCTAssertEqual(engine.landings.count, 2)
+    let firstLandingT = engine.landings[0].targetTMs
+    let cmds = engine.commands
+    guard let secondBuildIdx = cmds.firstIndex(where: { $0.tMs > firstLandingT && $0.reason.hasPrefix("buildup") }) else {
+      return XCTFail("no second buildup")
+    }
+    let between = cmds.enumerated().filter { $0.offset < secondBuildIdx && $0.element.tMs > firstLandingT && $0.element.reason.hasPrefix("groove fill") }
+    XCTAssertEqual(between.count, 0)
   }
 
   func testCruiseNeverLoopsAndStaysUnderTransitionBudget() {

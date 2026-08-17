@@ -63,6 +63,9 @@ final class LiveEngine {
   private static let minFillRideMs: Double = 120_000
   private static let fillRideCapMs: Double = 240_000
   private static let highEnergyLabels: Set<String> = ["chorus", "inst", "solo"]
+  /// Skip the rep-end release when the next buildup would cut in before this
+  /// much listening — one song change per rep, not two. Mirrors TS.
+  private static let releaseMinListenMs: Double = 60_000
 
   private let steps: [WorkoutStep]
   private var droppable: [DropChoice] = []
@@ -365,13 +368,13 @@ final class LiveEngine {
     return entryMs + Self.maxFillRideMs
   }
 
-  /// Cruise: enter the next song at its groove and let it PLAY — no loops.
-  /// The loop markers remain the entry anchors. Mirrors TS.
+  /// Cruise: songs start at the BEGINNING and play through — Spotify-style
+  /// listening. Mirrors TS.
   private func startFill(_ t: Double) {
     guard let fill = pickLoop() else { return }
     mode = .fill
-    fillExitPosMs = chainExitPosMs(song: fill.song, entryMs: fill.startMs)
-    emit(t: t, song: fill.song, positionMs: fill.startMs, fadeSec: 1.2, reason: "groove fill (\(fill.song.name))")
+    fillExitPosMs = chainExitPosMs(song: fill.song, entryMs: 0)
+    emit(t: t, song: fill.song, positionMs: 0, fadeSec: 1.2, reason: "groove fill (\(fill.song.name))")
   }
 
   /// Advance the engine with a fresh sample; returns commands issued this tick.
@@ -412,8 +415,12 @@ final class LiveEngine {
         buildTargetT = nil
         buildDropMs = nil
       } else if mode == .ride {
-        // Hard step over — back to groove.
-        startFill(t)
+        // Hard step over — back to the groove, unless the next effort's
+        // buildup would cut in moments later: then ride this song through
+        // the rest (one change per rep, not two). Mirrors TS.
+        let eta = etaToNextHardMs(t: t, dist: dist)
+        let buildLen = bestDrop().map { $0.c.dropMs - $0.c.entryMs } ?? 0
+        if eta == nil || eta! > buildLen + Self.releaseMinListenMs { startFill(t) }
       }
     }
 

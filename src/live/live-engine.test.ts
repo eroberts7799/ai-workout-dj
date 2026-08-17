@@ -127,9 +127,35 @@ describe('LiveEngine', () => {
       // left exactly as the chorus ended
       expect(Math.abs(exitPos - 160_000)).toBeLessThanOrEqual(1500)
     } else {
-      // structureless song: corpus timer (entry 30s + 180s = 210s position)
-      expect(Math.abs(exitPos - 210_000)).toBeLessThanOrEqual(1500)
+      // structureless song: corpus timer from the top of the song
+      expect(Math.abs(exitPos - 180_000)).toBeLessThanOrEqual(1500)
     }
+  })
+
+  test('short rests: one song change per rep, not a release + instant buildup', () => {
+    // 60s rest, ~20s buildup: the release would play seconds before the next
+    // cut. The engine rides the drop song straight through the rest instead.
+    const p: WorkoutPlan = {
+      name: 'short rests',
+      steps: [
+        { kind: 'warmup', seconds: 60 },
+        { kind: 'hard', meters: 400 },
+        { kind: 'rest', seconds: 60 },
+        { kind: 'hard', meters: 400 },
+        { kind: 'cooldown', seconds: 60 },
+      ],
+    }
+    // Long songs, so the ride can actually survive the rest (a song running
+    // out mid-rest forces a never-silence chain — that one is legitimate).
+    const longSongs = songs.map((s) => ({ ...s, durationMs: 360_000 }))
+    const engine = new LiveEngine(p, longSongs, { paceSecPerKm: 340 })
+    run(engine, stream([{ seconds: 500, mps: 3 }]))
+    expect(engine.landings.length).toBe(2)
+    const cmds = engine.commands
+    const firstLandingT = engine.landings[0].targetTMs
+    const secondBuildIdx = cmds.findIndex((c) => c.tMs > firstLandingT && c.reason.startsWith('buildup'))
+    const between = cmds.filter((c, i) => c.tMs > firstLandingT && i < secondBuildIdx && c.reason.startsWith('groove fill'))
+    expect(between.length).toBe(0) // no throwaway release between rep 1 and rep 2's buildup
   })
 
   test('slower runner: landing still exact, listening still unbroken', () => {

@@ -70,9 +70,8 @@ const commands = result.commands.map((c) => {
   const song = songs.find((s) => s.trackId === c.trackId)!
   const opts = deckOptsFor(c.reason)
   const isDrop = c.reason.startsWith('drop lands')
-  // Radio handoff (song chains): long fade-out, no blend — approximate the
-  // deck's 6s ending fade for the renderer.
-  const bp = opts.radio ? { fadeSec: 6, bassSwap: false } : blendPlan(c.fadeSec, prevBpm, song.bpm, { isDrop })
+  // Song-change crossfade (Spotify shape): both sides over the same 5s.
+  const bp = opts.radio ? { fadeSec: 5, bassSwap: false } : blendPlan(c.fadeSec, prevBpm, song.bpm, { isDrop })
   const rate = opts.tempoLock ? tempoLockRate(prevBpm, song.bpm) : 1
   prevBpm = song.bpm ?? prevBpm
   const file = fileByTrack.get(c.trackId)!

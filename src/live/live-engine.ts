@@ -79,6 +79,10 @@ const MAX_FILL_RIDE_MS = 180_000
 const MIN_FILL_RIDE_MS = 120_000
 const FILL_RIDE_CAP_MS = 240_000
 const HIGH_ENERGY_LABELS = new Set(['chorus', 'inst', 'solo'])
+/** Skip the rep-end release when the NEXT buildup would cut in before this
+ *  much listening — ride the current song through the rest instead. One song
+ *  change per rep, not two. (Chosen, not measured: pending listen feedback.) */
+const RELEASE_MIN_LISTEN_MS = 60_000
 
 export class LiveEngine {
   private steps: WorkoutStep[]
@@ -416,8 +420,10 @@ export class LiveEngine {
     const fill = this.pickLoop()
     if (!fill) return
     this.mode = 'fill'
-    this.fillExitPosMs = this.chainExitPosMs(fill.song, fill.startMs)
-    this.emit(t, fill.song, fill.startMs, 1.2, `groove fill (${fill.song.name})`)
+    // Songs start at the BEGINNING — Spotify-style listening ("until we get
+    // really great mixing, songs should just play from the beginning").
+    this.fillExitPosMs = this.chainExitPosMs(fill.song, 0)
+    this.emit(t, fill.song, 0, 1.2, `groove fill (${fill.song.name})`)
   }
 
   /** Advance the engine with a fresh sample; returns commands issued this tick. */
@@ -463,8 +469,14 @@ export class LiveEngine {
         this.buildDropMs = null
         this.crestRideUntil = null
       } else if (this.mode === 'ride') {
-        // Hard step over — back to groove.
-        this.startFill(t)
+        // Hard step over — back to the groove... unless the NEXT effort's
+        // buildup would cut in moments later (short rests): then changing
+        // songs twice in quick succession is worse than riding this one
+        // straight through the rest into the buildup.
+        const eta = this.etaToNextHardMs(t, dist)
+        const peek = this.pickBest(this.droppable, this.dropIdx)
+        const buildLen = peek ? peek.choice.dropMs - peek.choice.entryMs : 0
+        if (eta == null || eta > buildLen + RELEASE_MIN_LISTEN_MS) this.startFill(t)
         this.crestRideUntil = null
       }
     }
