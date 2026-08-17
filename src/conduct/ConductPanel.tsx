@@ -640,6 +640,7 @@ export default function ConductPanel({ sdk }: { sdk: SdkHandle }) {
         {phase === 'idle' && (
           <>
             <button
+              className="arm"
               onClick={() => void startSession()}
               disabled={errors.length > 0 || setlist.cues.length === 0 || liveMode}
               title={liveMode ? 'LIVE mode starts from the watch — press START on your Garmin' : ''}

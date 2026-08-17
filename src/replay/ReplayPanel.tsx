@@ -470,7 +470,7 @@ export default function ReplayPanel() {
         )}
 
         <div style={{ marginTop: 12, display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-          <button onClick={() => void runSim()} disabled={!loaded && (errors.length > 0 || paceErrors.length > 0)}>
+          <button className="arm" onClick={() => void runSim()} disabled={!loaded && (errors.length > 0 || paceErrors.length > 0)}>
             {loaded ? 'Replay recorded session' : 'Simulate run'}
           </button>
           <label className="muted" style={{ cursor: 'pointer' }}>
@@ -874,14 +874,14 @@ function LiveStatus({ result, tMs, songs }: { result: SimResult; tMs: number; so
     <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', alignItems: 'baseline', padding: '6px 0 10px' }}>
       <span style={{ fontSize: 26, fontVariantNumeric: 'tabular-nums' }}>{fmtClock(tMs)}</span>
       {step && (
-        <span style={{ fontSize: 17, color: step.step.kind === 'hard' ? '#d55181' : '#e6edf3' }}>
+        <span style={{ fontSize: 17, fontFamily: 'var(--cond)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '.08em', color: step.step.kind === 'hard' ? 'var(--olive)' : 'var(--ink)' }}>
           {step.step.kind}
           {step.step.meters != null ? ` ${Math.round(step.step.meters)}m` : ''} · {stepPct}%
         </span>
       )}
       {p?.distanceM != null && <span className="muted">{(p.distanceM / 1000).toFixed(2)}km · {fmtPace(p.paceSecPerKm)}</span>}
-      {p?.hr != null && <span style={{ color: '#e66767' }}>♥ {Math.round(p.hr)} z{p.hrZone}</span>}
-      <span style={{ color: cmd ? cmdColor(cmd.reason) : '#8b949e' }}>
+      {p?.hr != null && <span style={{ color: 'var(--ink)', fontWeight: 600 }}>♥ {Math.round(p.hr)} z{p.hrZone}</span>}
+      <span style={{ color: cmd ? cmdColor(cmd.reason) : 'var(--faded)' }}>
         {p?.mode ?? '—'}
         {eta != null && eta < 120_000 && p?.mode !== 'ride' && ` · drop in ${Math.max(0, Math.round(eta / 1000))}s`}
       </span>
