@@ -51,6 +51,26 @@ agent's memory dir.
 - Analysis venv is FRAGILE (`analysis/setup.sh` recipe) — never upgrade its
   pins; use a separate venv for new Python deps.
 
+## Two-session coordination (main + design terminals)
+
+Two Claude Code sessions work this repo in parallel: **main** (engine, at
+`~/ai-workout-dj`) and **design** (styling, at `~/ai-workout-dj-design`
+worktree). Layer partition: design owns styling/markup (classNames, style
+props, CSS, DESIGN.md, fonts); main owns logic/engine (handlers, state,
+`src/live/`, `src/conductor/`, `src/audio/`, `analysis/`, `ios/`). Don't
+cross the line without flagging it in the mailbox first.
+
+Mailbox: `~/.awdj-coord/{main,design}.md`. A UserPromptSubmit hook
+(`.claude/scripts/coord-inject.sh`) injects the other session's recent notes
+into every prompt automatically. **Post a note** (`bash
+.claude/scripts/coord-post.sh "msg"`) whenever you: land to main, start work
+in a shared file, want something from the other session, or finish something
+it's waiting on. One line, concrete: "landed crate-sync to main, pull" not
+"did some work".
+
+Landing ritual: rebase onto origin/main → `bun test` + `bunx tsc --noEmit` →
+verify in the running app → fast-forward push → post a mailbox note.
+
 ## Design System
 Always read DESIGN.md before making any visual or UI decisions.
 All font choices, colors, spacing, and aesthetic direction are defined there.
