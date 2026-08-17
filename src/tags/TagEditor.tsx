@@ -74,20 +74,25 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
       let hit: SongTags | null = null
       let bestScore = 0
       for (const s of lib) {
-        const title = normalizeTitle(s.name)
-        if (!title) continue
-        // Word-boundary or nothing: bare substrings let "ten" claim every
-        // file containing "exTENded". fname-inside-title allowed only for
-        // meaningfully long filenames.
-        const boundary = new RegExp(`(^| )${title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}( |$)`)
-        const score = boundary.test(fname)
-          ? 2 + title.length / 1000
-          : fname.length >= 8 && title.includes(fname)
-            ? 1 + title.length / 1000
-            : 0
-        if (score > bestScore) {
-          bestScore = score
-          hit = s
+        // Titles carry junk edition suffixes ("… - Extended Mix (Original
+        // Mix)") that filenames don't — try the full title first, then with
+        // trailing parentheticals stripped. Word-boundary or nothing: bare
+        // substrings let "ten" claim every file containing "exTENded";
+        // fname-inside-title allowed only for meaningfully long filenames.
+        const variants = [s.name, s.name.replace(/\s*\([^)]*\)\s*$/, '')]
+          .map(normalizeTitle)
+          .filter((t, i, a) => t && a.indexOf(t) === i)
+        for (const title of variants) {
+          const boundary = new RegExp(`(^| )${title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}( |$)`)
+          const score = boundary.test(fname)
+            ? 2 + title.length / 1000
+            : fname.length >= 8 && title.includes(fname)
+              ? 1 + title.length / 1000
+              : 0
+          if (score > bestScore) {
+            bestScore = score
+            hit = s
+          }
         }
       }
       if (!hit) {
