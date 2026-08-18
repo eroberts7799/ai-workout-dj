@@ -379,6 +379,28 @@ describe('LiveEngine', () => {
     expect(Math.abs(engine.landings[0].actualTMs - 300_000)).toBeLessThanOrEqual(2000)
   })
 
+  test('streaming tier: a markerless (Spotify playlist) library fully conducts', () => {
+    // No markers, no segments, no bpm — cruise from 0:00, timer chains,
+    // fresh rep changes. Every song you love, same brain.
+    const streaming: SongTags[] = ['s1', 's2', 's3'].map((id) => ({
+      trackId: id,
+      uri: `spotify:track:${id}`,
+      name: `Stream ${id}`,
+      artists: 'Playlist',
+      durationMs: 210_000,
+      bpm: null,
+      updatedAt: '',
+      markers: [],
+    }))
+    const engine = new LiveEngine(plan, streaming, { paceSecPerKm: 340 })
+    run(engine, stream([{ seconds: 700, mps: 3 }]))
+    expect(engine.warnings).toEqual([])
+    expect(engine.landings.length).toBe(1)
+    expect(Math.abs(engine.landings[0].errorMs)).toBeLessThanOrEqual(1500)
+    for (const c of engine.commands) expect(c.positionMs).toBe(0) // streaming can always honor these
+    expect(engine.commands.some((c) => c.reason.startsWith('rep change'))).toBe(true)
+  })
+
   test('FOLLOW MODE: no plan at all — the watch stream is the workout', () => {
     // The workout lives in Runna/Garmin; nobody retypes it. Empty plan +
     // streamed step shapes = full conducting: boundaries, anticipation,

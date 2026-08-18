@@ -162,6 +162,50 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
     )
   }
 
+  /** Streaming tier: a designated Spotify playlist becomes library. Tracks
+   *  arrive markerless (no analysis available) — fresh mode plays them from
+   *  0:00 with timer-based chains; learned pairings still steer selection. */
+  async function importPlaylist(input: string) {
+    const id = input.match(/playlist[/:]([A-Za-z0-9]+)/)?.[1] ?? input.trim()
+    let added = 0
+    let updated = 0
+    try {
+      for (let offset = 0; ; offset += 100) {
+        setStatus(`♫ importing playlist… ${added + updated} tracks so far`)
+        const res = await api(`/playlists/${id}/tracks?limit=100&offset=${offset}&fields=items(track(id,uri,name,duration_ms,artists(name))),total`)
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        const body = (await res.json()) as {
+          items: { track: { id: string; uri: string; name: string; duration_ms: number; artists: { name: string }[] } | null }[]
+          total: number
+        }
+        for (const it of body.items) {
+          const t = it.track
+          if (!t?.id) continue
+          const existing = loadAllTags()[t.id]
+          saveTags({
+            trackId: t.id,
+            uri: t.uri,
+            name: t.name,
+            artists: t.artists.map((a) => a.name).join(', '),
+            durationMs: t.duration_ms,
+            bpm: existing?.bpm ?? null,
+            camelot: existing?.camelot ?? null,
+            markers: existing?.markers ?? [],
+            segments: existing?.segments,
+            sourceFile: existing?.sourceFile,
+            updatedAt: new Date().toISOString(),
+          })
+          existing ? updated++ : added++
+        }
+        if (offset + 100 >= body.total) break
+      }
+      setLibrary(loadAllTags())
+      setStatus(`♫ playlist imported: ${added} added, ${updated} already known (kept their tags)`)
+    } catch (e) {
+      setStatus(`playlist import failed: ${String(e)}`)
+    }
+  }
+
   /** Attach owned audio files: match by filename against library titles.
    *  Word-boundary matches outrank substrings (so "ten" can't steal
    *  TENTEN's file), and the longest matching title wins ties. */
@@ -555,6 +599,16 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
             onClick={() => void syncFromDisk()}
           >
             ⟳ Sync crate from disk
+          </button>
+          <button
+            style={{ marginRight: 12 }}
+            title="Streaming tier: pull a Spotify playlist into the library. No markers/segments (Spotify killed audio analysis) — the engine cruises these from 0:00 with timer chains and learned pairings. Every song you love, selected by the same brain."
+            onClick={() => {
+              const input = prompt('Spotify playlist URL or ID:')
+              if (input) void importPlaylist(input)
+            }}
+          >
+            ♫ Import Spotify playlist
           </button>
           <button
             style={{ marginRight: 12 }}
