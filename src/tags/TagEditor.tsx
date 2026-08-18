@@ -221,7 +221,7 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
         continue
       }
       await saveAudio(hit.trackId, file)
-      notes.push(`🎧 ${hit.name} — local audio attached`)
+      notes.push(`♪ ${hit.name} — local audio attached`)
     }
     setLocalIds(new Set(await listAudioTrackIds()))
     setStatus(notes.join(' · '))
@@ -542,7 +542,7 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
         {taggedSongs.map((s) => (
           <div key={s.trackId} style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 6 }}>
             <span style={{ flex: 1 }}>
-              {localIds.has(s.trackId) ? '🎧 ' : ''}{s.name}{' '}
+              {localIds.has(s.trackId) ? '♪ ' : ''}{s.name}{' '}
               <span className="muted">— {s.artists} · {s.markers.length} markers{s.bpm ? ` · ${s.bpm} BPM` : ''}</span>
             </span>
             <button onClick={() => { setUriInput(s.uri); void loadTrack(s.uri) }}>Open</button>
@@ -588,10 +588,10 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
               if (!confirm(`Delete ALL ${lib.length} songs from the library? (Use before a clean re-import.)`)) return
               for (const s of lib) deleteTags(s.trackId)
               setLibrary(loadAllTags())
-              setStatus(`🗑 library reset — ${lib.length} song(s) removed`)
+              setStatus(`library reset — ${lib.length} song(s) removed`)
             }}
           >
-            🗑 Reset library
+            Reset library
           </button>
           <button
             style={{ marginRight: 12 }}
@@ -626,7 +626,7 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
             🧹 Prune songs without audio
           </button>
           <label style={{ display: 'inline-block' }}>
-            <span className="muted" style={{ cursor: 'pointer', textDecoration: 'underline' }}>Attach owned audio files (🎧 = real DJ crossfades)</span>
+            <span className="muted" style={{ cursor: 'pointer', textDecoration: 'underline' }}>Attach owned audio files (♪ = real DJ crossfades)</span>
             <input
               type="file"
               accept="audio/*,.m4a"
