@@ -166,13 +166,21 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
    *  arrive markerless (no analysis available) — fresh mode plays them from
    *  0:00 with timer-based chains; learned pairings still steer selection. */
   async function importPlaylist(input: string) {
+    // "liked" (or the collection URL) = your Liked Songs — not a playlist,
+    // a different endpoint (needs the user-library-read scope; re-login once).
+    const liked = /^liked$|collection\/tracks/i.test(input.trim())
     const id = input.match(/playlist[/:]([A-Za-z0-9]+)/)?.[1] ?? input.trim()
     let added = 0
     let updated = 0
     try {
-      for (let offset = 0; ; offset += 100) {
-        setStatus(`♫ importing playlist… ${added + updated} tracks so far`)
-        const res = await api(`/playlists/${id}/tracks?limit=100&offset=${offset}&fields=items(track(id,uri,name,duration_ms,artists(name))),total`)
+      const pageSize = liked ? 50 : 100
+      for (let offset = 0; ; offset += pageSize) {
+        setStatus(`♫ importing ${liked ? 'Liked Songs' : 'playlist'}… ${added + updated} tracks so far`)
+        const res = await api(
+          liked
+            ? `/me/tracks?limit=50&offset=${offset}`
+            : `/playlists/${id}/tracks?limit=100&offset=${offset}&fields=items(track(id,uri,name,duration_ms,artists(name))),total`,
+        )
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
         const body = (await res.json()) as {
           items: { track: { id: string; uri: string; name: string; duration_ms: number; artists: { name: string }[] } | null }[]
