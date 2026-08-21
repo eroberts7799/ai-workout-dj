@@ -13,6 +13,8 @@ export const SCOPES = [
   'user-read-email',
   'user-read-private',
   'user-library-read', // Liked Songs as a crate source
+  'playlist-read-private', // own playlists are private by default
+  'playlist-read-collaborative',
 ].join(' ')
 
 interface StoredTokens {
