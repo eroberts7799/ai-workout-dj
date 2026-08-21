@@ -21,6 +21,8 @@ interface StoredTokens {
   access_token: string
   refresh_token: string
   expires_at: number
+  /** Space-separated scopes this token actually carries (debugging truth). */
+  scope?: string
 }
 
 function b64url(bytes: Uint8Array): string {
@@ -88,13 +90,14 @@ async function doHandleCallback(): Promise<boolean> {
   return true
 }
 
-function storeTokenResponse(json: { access_token: string; refresh_token?: string; expires_in: number }): void {
+function storeTokenResponse(json: { access_token: string; refresh_token?: string; expires_in: number; scope?: string }): void {
   const prev = readTokens()
   // Spotify may omit refresh_token on refresh responses — keep the existing one.
   const tokens: StoredTokens = {
     access_token: json.access_token,
     refresh_token: json.refresh_token ?? prev?.refresh_token ?? '',
     expires_at: Date.now() + json.expires_in * 1000,
+    scope: json.scope ?? (prev as { scope?: string } | null)?.scope,
   }
   localStorage.setItem(TOKEN_KEY, JSON.stringify(tokens))
 }

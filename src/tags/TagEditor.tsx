@@ -181,7 +181,12 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
             ? `/me/tracks?limit=50&offset=${offset}`
             : `/playlists/${id}/tracks?limit=100&offset=${offset}&fields=items(track(id,uri,name,duration_ms,artists(name))),total`,
         )
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        if (!res.ok) {
+          // Spotify says WHY in the body — surface it instead of guessing.
+          const detail = await res.text().catch(() => '')
+          const scopes = (JSON.parse(localStorage.getItem('awdj.tokens') ?? '{}') as { scope?: string }).scope ?? 'unknown'
+          throw new Error(`HTTP ${res.status} · ${detail.slice(0, 200)} · token scopes: ${scopes}`)
+        }
         const body = (await res.json()) as {
           items: { track: { id: string; uri: string; name: string; duration_ms: number; artists: { name: string }[] } | null }[]
           total: number
