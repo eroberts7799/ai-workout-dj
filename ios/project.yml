@@ -25,6 +25,9 @@ targets:
           NSAllowsArbitraryLoads: false
         NSLocationWhenInUseUsageDescription: Trail mode conducts your music from your position and elevation — the drop hits as you crest the hill, no signal needed.
         NSMotionUsageDescription: The barometer detects climbs and crests so the music can reward them.
+        CFBundleURLTypes:
+          - CFBundleURLName: spotify-auth
+            CFBundleURLSchemes: [awdj]
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.ethanroberts.awdjplayer
@@ -34,7 +37,7 @@ targets:
         SWIFT_VERSION: "5.9"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         MARKETING_VERSION: "1.0"
-        CURRENT_PROJECT_VERSION: "9"
+        CURRENT_PROJECT_VERSION: "10"
         GENERATE_INFOPLIST_FILE: NO
   AwdjPlayerTests:
     type: bundle.unit-test

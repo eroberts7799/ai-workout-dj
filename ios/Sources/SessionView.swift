@@ -13,6 +13,9 @@ struct SessionView: View {
   @AppStorage("awdj.profileName") private var profileName = ""
   @AppStorage("awdj.profilePhone") private var profilePhone = ""
   @State private var showProfile = false
+  @ObservedObject private var spotify = SpotifyAuth.shared
+  @State private var showClientIdPrompt = false
+  @State private var clientIdText = ""
 
   var body: some View {
     // ScrollView, not bare VStack: a 44-track crate's readiness list overflows
@@ -81,9 +84,27 @@ struct SessionView: View {
         .buttonStyle(ArmButtonStyle())
         .disabled(!engine.allAudioReady)
         if engine.supportsLive {
-          Button("Trail run — phone sensors, no signal needed") { engine.startTrailRun() }
+          Picker("music", selection: $engine.musicSource) {
+            Text("Owned files").tag(SessionEngine.MusicSource.ownedFiles)
+            Text("Spotify").tag(SessionEngine.MusicSource.spotify)
+          }
+          .pickerStyle(.segmented)
+          .frame(maxWidth: 300)
+          if engine.musicSource == .spotify && !spotify.connected {
+            Button("Connect Spotify") {
+              if (spotify.clientId ?? "").isEmpty {
+                showClientIdPrompt = true
+              } else {
+                spotify.login { err in if let err { engine.status = err } }
+              }
+            }
             .buttonStyle(FieldButtonStyle())
-            .disabled(!engine.allAudioReady)
+          }
+          Button(engine.musicSource == .spotify
+                 ? "Trail run — Spotify (downloaded playlist)"
+                 : "Trail run — phone sensors, no signal needed") { engine.startTrailRun() }
+            .buttonStyle(FieldButtonStyle())
+            .disabled(engine.musicSource == .ownedFiles ? !engine.allAudioReady : !spotify.connected)
           HStack(spacing: 8) {
             Button("Simulate run (no watch)") { engine.startSimulatedRun(speed: simSpeed) }
               .buttonStyle(FieldButtonStyle())
@@ -149,6 +170,16 @@ struct SessionView: View {
     .background(Theme.paper.ignoresSafeArea())
     .foregroundColor(Theme.ink)
     .tint(Theme.olive)
+    .alert("Spotify Client ID", isPresented: $showClientIdPrompt) {
+      TextField("Client ID (from developer dashboard)", text: $clientIdText)
+      Button("Save & Connect") {
+        spotify.clientId = clientIdText.trimmingCharacters(in: .whitespaces)
+        spotify.login { err in if let err { engine.status = err } }
+      }
+      Button("Cancel", role: .cancel) {}
+    } message: {
+      Text("Same Client ID you use in the web app — one-time setup.")
+    }
     .sheet(isPresented: $showProfile) {
       VStack(spacing: 16) {
         Text("Who's working out?").fieldDisplay(24).textCase(.uppercase)

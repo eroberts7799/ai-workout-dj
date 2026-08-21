@@ -124,6 +124,7 @@ final class SessionEngine: ObservableObject {
   /// First launch with nothing imported: the built-in demo set loads itself —
   /// a new tester hears the DJ in minute one, zero setup.
   func restore() {
+    retryPendingUploads()
     if bundle == nil,
        let data = try? Data(contentsOf: docs.appendingPathComponent("session-bundle.json")),
        let b = try? JSONDecoder().decode(SessionBundle.self, from: data) {
@@ -292,6 +293,7 @@ final class SessionEngine: ObservableObject {
     if trailMode {
       phoneSensors.stop()
       deck.stop() // trail sessions end SILENT — no orphan DJ haunting the car ride home
+      if musicSource == .spotify { Task { await SpotifyRemote.shared.pause() } }
     }
     phase = .done
     status = trailMode ? "trail session ended" : "stopped — music left playing"
@@ -345,18 +347,34 @@ final class SessionEngine: ObservableObject {
       payload["landings"] = live.landings.map { ["targetTMs": $0.targetTMs, "actualTMs": $0.actualTMs, "errorMs": $0.errorMs] }
       payload["commands"] = live.commands.map { ["tMs": $0.tMs, "trackId": $0.trackId, "positionMs": $0.positionMs, "reason": $0.reason] }
     }
-    guard let data = try? JSONSerialization.data(withJSONObject: payload),
-          let url = URL(string: "https://awdj-relay.vercel.app/api/sessions?k=awdj-7g2k9x")
-    else { return }
+    guard let data = try? JSONSerialization.data(withJSONObject: payload) else { return }
+    // DURABLE FIRST: a trail run may end in a dead zone — the log lands on
+    // disk before any network is attempted, and retries on future launches.
+    let pending = docs.appendingPathComponent("pending-log-\(Int(Date().timeIntervalSince1970)).json")
+    try? data.write(to: pending)
+    Task { await self.tryUpload(file: pending) }
+  }
+
+  /// POST one persisted log; delete only on confirmed 201.
+  private func tryUpload(file: URL) async {
+    guard let data = try? Data(contentsOf: file),
+          let url = URL(string: "https://awdj-relay.vercel.app/api/sessions?k=awdj-7g2k9x") else { return }
     var req = URLRequest(url: url)
     req.httpMethod = "POST"
     req.setValue("application/json", forHTTPHeaderField: "Content-Type")
     req.httpBody = data
-    Task {
-      if let (_, res) = try? await URLSession.shared.data(for: req),
-         (res as? HTTPURLResponse)?.statusCode == 201 {
-        status += " · ☁️ log uploaded"
-      }
+    if let (_, res) = try? await URLSession.shared.data(for: req),
+       (res as? HTTPURLResponse)?.statusCode == 201 {
+      try? FileManager.default.removeItem(at: file)
+      await MainActor.run { status += " · ☁️ log uploaded" }
+    }
+  }
+
+  /// Called from restore(): push any logs that never made it out.
+  func retryPendingUploads() {
+    let files = (try? FileManager.default.contentsOfDirectory(at: docs, includingPropertiesForKeys: nil)) ?? []
+    for f in files where f.lastPathComponent.hasPrefix("pending-log-") {
+      Task { await self.tryUpload(file: f) }
     }
   }
 
@@ -402,12 +420,23 @@ final class SessionEngine: ObservableObject {
   let phoneSensors = PhoneSensors()
   @Published var trailMode = false
 
+  /// What plays the music on a trail run: the on-device deck (owned files,
+  /// fully offline) or the phone's own Spotify app (downloaded playlist;
+  /// commands need signal — airplane mode = music pauses at song end while
+  /// RECORDING continues untouched).
+  enum MusicSource: String { case ownedFiles, spotify }
+  @Published var musicSource: MusicSource = .ownedFiles
+
   /// No watch, no relay, no signal: the phone's own sensors drive the engine.
   /// Empty plan → pure cruise + crest rewards — free-run choreography.
   func startTrailRun() {
     guard phase == .idle || phase == .done else { return }
     guard let b = bundle, let tags = b.tags, !tags.isEmpty else {
       status = "trail mode needs a music bundle first"
+      return
+    }
+    if musicSource == .spotify && !SpotifyAuth.shared.connected {
+      status = "connect Spotify first (or switch music source to owned files)"
       return
     }
     deck.stop()
@@ -466,10 +495,22 @@ final class SessionEngine: ObservableObject {
     )
     for c in live.advance(s) {
       if suppressLoopbacks && c.reason.hasPrefix("loop back") { continue }
-      // Never interrupt the run: a missing file leaves current audio playing.
-      try? deck.play(id: c.trackId, positionMs: c.positionMs, fadeSec: c.fadeSec, opts: BeatMath.deckOpts(for: c.reason))
-      firedCount += 1
-      lastCommand = c.reason
+      if trailMode && musicSource == .spotify {
+        // Phone conducts its own Spotify app. Soft-fail: offline = the
+        // downloaded track plays out, next command lands when signal returns.
+        firedCount += 1
+        lastCommand = c.reason
+        Task { [weak self] in
+          if let err = await SpotifyRemote.shared.play(uri: c.uri, positionMs: c.positionMs) {
+            await MainActor.run { self?.lastCommand = "\(c.reason) · \(err)" }
+          }
+        }
+      } else {
+        // Never interrupt the run: a missing file leaves current audio playing.
+        try? deck.play(id: c.trackId, positionMs: c.positionMs, fadeSec: c.fadeSec, opts: BeatMath.deckOpts(for: c.reason))
+        firedCount += 1
+        lastCommand = c.reason
+      }
     }
     landingCount = live.landings.count
   }
