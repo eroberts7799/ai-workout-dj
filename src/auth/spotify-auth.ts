@@ -12,6 +12,7 @@ export const SCOPES = [
   'user-modify-playback-state',
   'user-read-email',
   'user-read-private',
+  'user-library-read', // Liked Songs as a crate source
 ].join(' ')
 
 interface StoredTokens {
