@@ -237,6 +237,40 @@ final class LiveEngineTests: XCTestCase {
     XCTAssertLessThanOrEqual(abs(engine.landings[0].actualTMs - 300_000), 2000)
   }
 
+  func testCrestRewardFiresOnceOnARealHillFreshFromTheTop() {
+    // Mirrors TS: all-easy plan, 4% climb from 800m→1700m (36m gain ≥ the
+    // 30m data-tuned bar) → exactly one crest change, from 0:00, groove after.
+    let easyPlan = [WorkoutStep(kind: "easy", seconds: nil, meters: 3000)]
+    let engine = LiveEngine(plan: easyPlan, songs: songs, paceSecPerKm: 340)
+    var d = 0.0
+    var alt = 100.0
+    for i in 1...900 {
+      d += 3
+      if d > 800 && d <= 1700 { alt += 3 * 0.04 }
+      engine.advance(LiveSample(tMs: Double(i) * 1000, distanceM: d, altitudeM: alt, hr: 160))
+    }
+    let crests = engine.commands.filter { $0.reason.contains("crest reward") }
+    XCTAssertEqual(crests.count, 1)
+    XCTAssertEqual(crests[0].positionMs, 0)
+    XCTAssertGreaterThanOrEqual(crests[0].tMs, 560_000)
+    XCTAssertLessThanOrEqual(crests[0].tMs, 600_000)
+    XCTAssertNotNil(engine.commands.first { $0.tMs > crests[0].tMs && $0.reason.hasPrefix("groove fill") })
+  }
+
+  func testLazyHeartRateEarnsNoCrest() {
+    // Same hill, HR present but zone < 3 → no reward. Mirrors TS.
+    let easyPlan = [WorkoutStep(kind: "easy", seconds: nil, meters: 3000)]
+    let engine = LiveEngine(plan: easyPlan, songs: songs, paceSecPerKm: 340, hrMax: 190)
+    var d = 0.0
+    var alt = 100.0
+    for i in 1...900 {
+      d += 3
+      if d > 800 && d <= 1700 { alt += 3 * 0.04 }
+      engine.advance(LiveSample(tMs: Double(i) * 1000, distanceM: d, altitudeM: alt, hr: 95))
+    }
+    XCTAssertTrue(engine.commands.filter { $0.reason.contains("crest reward") }.isEmpty)
+  }
+
   func testFollowModeConductsWithNoPlanAtAll() {
     // Mirrors TS: empty plan + streamed step shapes = full conducting.
     let engine = LiveEngine(plan: [], songs: songs, paceSecPerKm: 340)

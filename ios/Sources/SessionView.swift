@@ -81,6 +81,9 @@ struct SessionView: View {
         .buttonStyle(ArmButtonStyle())
         .disabled(!engine.allAudioReady)
         if engine.supportsLive {
+          Button("Trail run — phone sensors, no signal needed") { engine.startTrailRun() }
+            .buttonStyle(FieldButtonStyle())
+            .disabled(!engine.allAudioReady)
           HStack(spacing: 8) {
             Button("Simulate run (no watch)") { engine.startSimulatedRun(speed: simSpeed) }
               .buttonStyle(FieldButtonStyle())
@@ -97,6 +100,11 @@ struct SessionView: View {
         }
       case .running, .paused:
         Text(RelayPoller.clock(engine.clockMs)).fieldMono(48, weight: .heavy)
+        if engine.trailMode {
+          Text(String(format: "%.2f km · phone sensors", engine.phoneSensors.distanceM / 1000))
+            .fieldMono(12)
+            .foregroundColor(Theme.olive)
+        }
         if engine.liveMode || !engine.lastCommand.isEmpty {
           Text("\(engine.landingCount) landings · \(engine.lastCommand)")
             .fieldMono(12)
@@ -176,7 +184,8 @@ struct SessionView: View {
         if let t = s.timerMs, !engine.simulating {
           if engine.liveMode {
             engine.advanceLive(
-              timerMs: t, distanceM: s.distanceM, hr: s.hr, wkStepSeq: s.wkStepSeq,
+              timerMs: t, distanceM: s.distanceM, hr: s.hr, altitudeM: s.altitude,
+              wkStepSeq: s.wkStepSeq,
               wkKind: s.wkStep?.kind, wkDurationType: s.wkStep?.durationType,
               wkDurationValue: s.wkStep?.durationValue, wkNextKind: s.wkNext?.kind
             )

@@ -27,9 +27,14 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<false/>
 	</dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Trail mode conducts your music from your position and elevation — the drop hits as you crest the hill, no signal needed.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>The barometer detects climbs and crests so the music can reward them.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
+		<string>location</string>
 	</array>
 	<key>UILaunchScreen</key>
 	<dict/>

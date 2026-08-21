@@ -12,6 +12,10 @@ import Foundation
 struct LiveSample {
   let tMs: Double
   let distanceM: Double?
+  /// Body signals (watch relay OR phone sensors): barometric/GPS altitude
+  /// for the crest rules, HR for effort gating.
+  var altitudeM: Double? = nil
+  var hr: Double? = nil
   /// Watch workout-step sequence counter — increments exactly when the watch
   /// advances to the next plan step. When present, step boundaries come from
   /// HERE (drift-free); our own tracking powers anticipation only. Mirrors
@@ -72,6 +76,10 @@ final class LiveEngine {
   /// Skip the rep-end release when the next buildup would cut in before this
   /// much listening — one song change per rep, not two. Mirrors TS.
   private static let releaseMinListenMs: Double = 60_000
+  /// Crest rewards stay clear of an imminent hard step — its moment owns it.
+  private static let crestMinEtaMs: Double = 45_000
+  /// How long a crest-reward song rides before returning to the groove.
+  private static let crestRideMs: Double = 25_000
   /// Fresh-mode rep changes: crossfade starts this far before the boundary
   /// so the incoming song peaks as the effort begins. Mirrors TS.
   private static let freshChangeLeadMs: Double = 4_000
@@ -119,9 +127,17 @@ final class LiveEngine {
   private var followStep: WorkoutStep?
   private var followNextKind: String?
 
-  init(plan: [WorkoutStep], songs: [TaggedSong], paceSecPerKm: Double = defaultPaceSecPerKm, pairBonus: [String: Double] = [:], dropStyle: DropStyle = .fresh) {
+  // Body-signal rules (crest rewards, effort gating) — mirrors TS.
+  private let gradeTracker = GradeTracker()
+  private let hrTracker: HrTracker
+  private var gradeState = GradeState()
+  private var hrState = HrState()
+  private var crestRideUntil: Double?
+
+  init(plan: [WorkoutStep], songs: [TaggedSong], paceSecPerKm: Double = defaultPaceSecPerKm, pairBonus: [String: Double] = [:], dropStyle: DropStyle = .fresh, hrMax: Double? = nil) {
     self.dropStyle = dropStyle
     self.followMode = plan.isEmpty
+    self.hrTracker = HrTracker(hrMax: hrMax)
     steps = plan
     self.paceSecPerKm = paceSecPerKm
     self.pairBonus = pairBonus
@@ -475,6 +491,10 @@ final class LiveEngine {
         paceSecPerKm = paceSecPerKm * (1 - Self.paceAlpha) + instPace * Self.paceAlpha
       }
     }
+    // Body-signal trackers: grade/climb/crest from altitude, zones from HR.
+    gradeState = gradeTracker.update(distanceM: dist, altitudeM: sample.altitudeM)
+    hrState = hrTracker.update(hr: sample.hr)
+
     // trackSteps reads lastT/lastDist as the PREVIOUS sample (boundary
     // interpolation window) — update them only after.
     let entered = trackSteps(t: t, dist: dist, sample: sample)
@@ -502,6 +522,7 @@ final class LiveEngine {
         mode = .ride
         buildTargetT = nil
         buildDropMs = nil
+        crestRideUntil = nil
       } else if mode == .ride {
         // Hard step over — back to the groove, unless the next effort's
         // change would cut in moments later: then ride this song through
@@ -509,6 +530,7 @@ final class LiveEngine {
         let eta = etaToNextHardMs(t: t, dist: dist)
         let lead = dropStyle == .fresh ? Self.freshChangeLeadMs : (bestDrop().map { $0.c.dropMs - $0.c.entryMs } ?? 0)
         if eta == nil || eta! > lead + Self.releaseMinListenMs { startFill(t) }
+        crestRideUntil = nil
       }
     }
 
@@ -532,10 +554,35 @@ final class LiveEngine {
       }
     }
 
+    // Crest reward: a real hill just topped out — the moment hits NOW.
+    // Only from the groove, only when no hard step is imminent, and only if
+    // the body actually worked for it (zone ≥ 3 when HR data exists).
+    if gradeState.crest, mode == .fill {
+      let eta = etaToNextHardMs(t: t, dist: dist)
+      let earned = hrState.hr == nil || hrState.zone >= 3
+      if (eta == nil || eta! > Self.crestMinEtaMs), earned {
+        if dropStyle == .fresh, let pick = pickLoop() {
+          emit(t: t, song: pick.song, positionMs: 0, fadeSec: 0.45, reason: "rep change (crest reward) (\(pick.song.name))")
+          mode = .ride
+          crestRideUntil = t + Self.crestRideMs
+        } else if dropStyle == .anticipated, let pick = pickDrop() {
+          emit(t: t, song: pick.song, positionMs: pick.dropMs, fadeSec: 0.45, reason: "drop lands (crest reward) (\(pick.song.name))")
+          mode = .ride
+          crestRideUntil = t + Self.crestRideMs
+        }
+      }
+    }
+
+    // Crest rides are time-boxed — drift back into the groove afterwards.
+    if mode == .ride, let until = crestRideUntil, t >= until {
+      crestRideUntil = nil
+      startFill(t)
+    }
+
     // Effort anticipation from ride OR cruise: the engine watches the ETA
     // every tick and leaves the current song exactly buildup-length before
     // the effort — no loop boundary to wait for. Mirrors TS.
-    if mode == .ride || mode == .fill {
+    if (mode == .ride || mode == .fill) && crestRideUntil == nil {
       if dropStyle == .fresh {
         // Fresh mode: a NEW song from 0:00, crossfade timed so the swap
         // peaks right as the rep begins. Prediction owns the WHEN. Mirrors TS.

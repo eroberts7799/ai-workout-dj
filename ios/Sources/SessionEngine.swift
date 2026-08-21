@@ -289,9 +289,14 @@ final class SessionEngine: ObservableObject {
   func stopSession() {
     tick?.invalidate()
     simTask?.cancel()
+    if trailMode {
+      phoneSensors.stop()
+      deck.stop() // trail sessions end SILENT — no orphan DJ haunting the car ride home
+    }
     phase = .done
-    status = "stopped — music left playing"
-    uploadSessionLog(source: simulating ? "ios-sim" : "ios")
+    status = trailMode ? "trail session ended" : "stopped — music left playing"
+    uploadSessionLog(source: trailMode ? "ios-trail" : simulating ? "ios-sim" : "ios")
+    trailMode = false
   }
 
   /// Anonymous per-install identity — multi-user flywheel data needs to
@@ -377,7 +382,9 @@ final class SessionEngine: ObservableObject {
     }
     deck.stop()
     // Empty plan → follow mode: the watch's step stream IS the workout.
-    live = LiveEngine(plan: b.plan ?? [], songs: tags, pairBonus: b.pairBonus ?? [:])
+    // hrMax: calibrated per-athlete anchor delivered by the bundle import.
+    let hrMax = UserDefaults.standard.object(forKey: "awdj.hrMax") as? Double
+    live = LiveEngine(plan: b.plan ?? [], songs: tags, pairBonus: b.pairBonus ?? [:], hrMax: hrMax)
     firedCount = 0
     landingCount = 0
     lastCommand = ""
@@ -390,10 +397,45 @@ final class SessionEngine: ObservableObject {
     for w in live?.warnings ?? [] { status += " · ⚠️ \(w)" }
   }
 
+  // MARK: - TRAIL mode (the phone conducts itself: GPS + barometer, offline)
+
+  let phoneSensors = PhoneSensors()
+  @Published var trailMode = false
+
+  /// No watch, no relay, no signal: the phone's own sensors drive the engine.
+  /// Empty plan → pure cruise + crest rewards — free-run choreography.
+  func startTrailRun() {
+    guard phase == .idle || phase == .done else { return }
+    guard let b = bundle, let tags = b.tags, !tags.isEmpty else {
+      status = "trail mode needs a music bundle first"
+      return
+    }
+    deck.stop()
+    let hrMax = UserDefaults.standard.object(forKey: "awdj.hrMax") as? Double
+    live = LiveEngine(plan: [], songs: tags, pairBonus: b.pairBonus ?? [:], hrMax: hrMax)
+    firedCount = 0
+    landingCount = 0
+    lastCommand = ""
+    recorded = []
+    uploaded = false
+    suppressLoopbacks = false
+    prevMs = 0
+    trailMode = true
+    phase = .running
+    status = "TRAIL — phone sensors conducting (offline-ready)"
+    phoneSensors.onTick = { [weak self] t, d, alt in
+      guard let self, self.phase == .running else { return }
+      self.advanceLive(timerMs: t, distanceM: d, altitudeM: alt)
+      self.recorded.append(RecordedSample(t: t, d: d, hr: nil, altitude: alt))
+    }
+    phoneSensors.start()
+  }
+
   /// Every fresh watch sample advances the engine — the watch's own timer and
   /// distance ARE the session clock, so pauses come free.
   /// Record a watch sample regardless of mode — every session feeds the flywheel.
   func recordSample(_ s: GarminSample) {
+    if trailMode { return } // trail sessions record from phone sensors
     guard phase == .running, let t = s.timerMs else { return }
     recorded.append(RecordedSample(
       t: t, d: s.distanceM, hr: s.hr, altitude: s.altitude,
@@ -409,6 +451,7 @@ final class SessionEngine: ObservableObject {
     timerMs: Double,
     distanceM: Double?,
     hr: Double? = nil,
+    altitudeM: Double? = nil,
     wkStepSeq: Double? = nil,
     wkKind: String? = nil,
     wkDurationType: Double? = nil,
@@ -418,7 +461,7 @@ final class SessionEngine: ObservableObject {
     guard phase == .running, let live else { return }
     clockMs = timerMs
     let s = LiveSample(
-      tMs: timerMs, distanceM: distanceM, wkStepSeq: wkStepSeq,
+      tMs: timerMs, distanceM: distanceM, altitudeM: altitudeM, hr: hr, wkStepSeq: wkStepSeq,
       wkKind: wkKind, wkDurationType: wkDurationType, wkDurationValue: wkDurationValue, wkNextKind: wkNextKind
     )
     for c in live.advance(s) {

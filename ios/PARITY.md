@@ -12,13 +12,11 @@ replays every case against `BeatMath`. Regenerate after any `beat.ts` change.
 
 ## Current parity debt (Swift missing vs TS)
 
-- [ ] Crest/HR rules (GradeTracker, HrTracker, crest reward + 30m data-tuned
-      gain bar). Blocker: iOS RelayPoller doesn't parse `altitude` yet.
-      2026-08-16: web HrTracker now runs with a CALIBRATED per-athlete hrMax
-      (analysis/hr_calibration.py — ethan 197, not the invented 190).
-      Delivery to the phone is already wired: bundles carry `hrMax`, import
-      stores it at UserDefaults `awdj.hrMax`. The rules port must read that
-      key (fallback DEFAULT 190), never hardcode.
+- [x] Crest/HR rules PORTED 2026-08-21 (Rules.swift, forced by the 17mi
+      trail run): GradeTracker + HrTracker decision-for-decision, calibrated
+      hrMax from UserDefaults `awdj.hrMax` (fallback 190), crest block in
+      both drop styles, altitude flows from the relay AND the new phone
+      sensors (PhoneSensors.swift — offline trail mode). 2 mirror tests.
 - [ ] Static-conductor path: freshness in `ensureCoverage` (web TODO too —
       an all-easy static schedule still loops one song on both platforms;
       LIVE mode unaffected).
