@@ -666,6 +666,18 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
           </button>
           <button
             style={{ marginRight: 12 }}
+            title="Writes the whole tag library to disk via the dev server (data/library-dump.json) — insurance against localStorage loss, and the taste seed for the virtual-crate builder."
+            onClick={() => {
+              const lib = loadAllTags()
+              void fetch('/api/library', { method: 'POST', body: JSON.stringify(lib) })
+                .then((r) => setStatus(r.ok ? `library backed up to disk (${Object.keys(lib).length} songs)` : `backup failed: HTTP ${r.status}`))
+                .catch((e) => setStatus(`backup failed: ${String(e)} — is the dev server running?`))
+            }}
+          >
+            Back up library
+          </button>
+          <button
+            style={{ marginRight: 12 }}
             title="Deletes every song that has no attached audio file — bad Spotify matches can never receive audio, so this sweeps import junk. Attach your audio FIRST."
             onClick={() => {
               const lib = Object.values(loadAllTags())

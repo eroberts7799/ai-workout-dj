@@ -112,6 +112,27 @@ function libraryServer(): Plugin {
     configureServer(server) {
       server.middlewares.use('/api/library', (req, res) => {
         const sub = decodeURIComponent((req.url ?? '/').replace(/^\//, '').split('?')[0])
+        // POST = library backup: the browser's localStorage tags land on disk
+        // (data/library-dump.json, gitignored). Insurance — a closed tab once
+        // cost a session; a cleared localStorage would cost every tag — and
+        // the seed feed for analysis/virtual_crate.py.
+        if (req.method === 'POST') {
+          let body = ''
+          req.on('data', (c) => (body += c))
+          req.on('end', () => {
+            try {
+              JSON.parse(body) // validate before writing
+              const dir = path.resolve(process.cwd(), 'data')
+              fs.mkdirSync(dir, { recursive: true })
+              fs.writeFileSync(path.join(dir, 'library-dump.json'), body)
+              res.statusCode = 201
+            } catch {
+              res.statusCode = 400
+            }
+            res.end()
+          })
+          return
+        }
         if (sub.startsWith('audio/')) {
           const name = sub.slice('audio/'.length)
           const file = path.resolve(musicDir, name)
