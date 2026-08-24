@@ -151,6 +151,62 @@ function libraryServer(): Plugin {
   }
 }
 
+/**
+ * Playlist scraper: the streaming tier's import path. Spotify's Web API
+ * answers playlist reads from dev-mode apps with a permanent 403 (approvals
+ * frozen), but the public embed page ships its first 100 tracks inside the
+ * __NEXT_DATA__ blob — proven by hand for the 8/22 trail-run bundle. The
+ * dev server fetches it (no CORS in node) and hands the browser a clean
+ * track list. Liked Songs still import via the real API.
+ */
+function playlistScraper(): Plugin {
+  return {
+    name: 'playlist-scraper',
+    configureServer(server) {
+      server.middlewares.use('/api/playlist', (req, res) => {
+        void (async () => {
+          res.setHeader('Content-Type', 'application/json')
+          const id = new URL(req.url ?? '/', 'http://localhost').searchParams.get('id') ?? ''
+          if (!/^[A-Za-z0-9]+$/.test(id)) {
+            res.statusCode = 400
+            res.end(JSON.stringify({ error: 'bad playlist id' }))
+            return
+          }
+          try {
+            const page = await fetch(`https://open.spotify.com/embed/playlist/${id}`, {
+              headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' },
+            })
+            const html = await page.text()
+            const m = html.match(/<script id="__NEXT_DATA__" type="application\/json">(.*?)<\/script>/s)
+            if (!m) throw new Error(`embed page carried no __NEXT_DATA__ (HTTP ${page.status})`)
+            const entity = JSON.parse(m[1])?.props?.pageProps?.state?.data?.entity
+            const list: unknown[] = entity?.trackList
+            if (!Array.isArray(list)) throw new Error('embed data had no trackList — private playlist?')
+            const tracks = list
+              .map((t) => {
+                const { uri, title, subtitle, duration } = t as { uri?: string; title?: string; subtitle?: string; duration?: number }
+                return {
+                  id: (typeof uri === 'string' && uri.split(':')[2]) || null,
+                  uri,
+                  name: title,
+                  // subtitle is the artist list, comma + nbsp separated
+                  artists: String(subtitle ?? '').replace(/\u00a0/g, ' '),
+                  durationMs: duration,
+                }
+              })
+              .filter((t) => t.id)
+            // The embed caps at 100 tracks — say so instead of silently truncating.
+            res.end(JSON.stringify({ name: entity.name ?? 'playlist', tracks, capped: list.length >= 100 }))
+          } catch (err) {
+            res.statusCode = 502
+            res.end(JSON.stringify({ error: String(err) }))
+          }
+        })()
+      })
+    },
+  }
+}
+
 /** Learned selection weights (analysis/selection_weights.py output). */
 function weightsServer(): Plugin {
   return {
@@ -166,6 +222,6 @@ function weightsServer(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), garminReceiver(), corpusServer(), weightsServer(), libraryServer()],
+  plugins: [react(), garminReceiver(), corpusServer(), weightsServer(), libraryServer(), playlistScraper()],
   server: { host: true, port: 5173, strictPort: true },
 })

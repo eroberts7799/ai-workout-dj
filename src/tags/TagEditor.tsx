@@ -164,23 +164,22 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
 
   /** Streaming tier: a designated Spotify playlist becomes library. Tracks
    *  arrive markerless (no analysis available) — fresh mode plays them from
-   *  0:00 with timer-based chains; learned pairings still steer selection. */
+   *  0:00 with timer-based chains; learned pairings still steer selection.
+   *
+   *  Playlists come via the dev server's embed scrape (/api/playlist): the
+   *  Web API 403s playlist reads from dev-mode apps permanently, the public
+   *  embed page doesn't — proven on the 8/22 trail-run bundle. Liked Songs
+   *  have no embed page and still use the API (user-library-read scope). */
   async function importPlaylist(input: string) {
-    // "liked" (or the collection URL) = your Liked Songs — not a playlist,
-    // a different endpoint (needs the user-library-read scope; re-login once).
     const liked = /^liked$|collection\/tracks/i.test(input.trim())
-    const id = input.match(/playlist[/:]([A-Za-z0-9]+)/)?.[1] ?? input.trim()
+    if (!liked) return importScrapedPlaylist(input)
     let added = 0
     let updated = 0
     try {
-      const pageSize = liked ? 50 : 100
+      const pageSize = 50
       for (let offset = 0; ; offset += pageSize) {
-        setStatus(`♫ importing ${liked ? 'Liked Songs' : 'playlist'}… ${added + updated} tracks so far`)
-        const res = await api(
-          liked
-            ? `/me/tracks?limit=50&offset=${offset}`
-            : `/playlists/${id}/tracks?limit=100&offset=${offset}&fields=items(track(id,uri,name,duration_ms,artists(name))),total`,
-        )
+        setStatus(`♫ importing Liked Songs… ${added + updated} tracks so far`)
+        const res = await api(`/me/tracks?limit=50&offset=${offset}`)
         if (!res.ok) {
           // Spotify says WHY in the body — surface it instead of guessing.
           const detail = await res.text().catch(() => '')
@@ -210,12 +209,54 @@ export default function TagEditor({ sdk }: { sdk: SdkHandle }) {
           })
           existing ? updated++ : added++
         }
-        if (offset + 100 >= body.total) break
+        // pageSize, not 100 — the old break skipped the last page of a
+        // >100-song Liked library.
+        if (offset + pageSize >= body.total) break
       }
       setLibrary(loadAllTags())
-      setStatus(`♫ playlist imported: ${added} added, ${updated} already known (kept their tags)`)
+      setStatus(`♫ Liked Songs imported: ${added} added, ${updated} already known (kept their tags)`)
     } catch (e) {
       setStatus(`playlist import failed: ${String(e)}`)
+    }
+  }
+
+  /** Playlist import via the dev server's embed scrape — no auth, no 403. */
+  async function importScrapedPlaylist(input: string) {
+    const id = input.match(/playlist[/:]([A-Za-z0-9]+)/)?.[1] ?? input.trim()
+    setStatus('♫ importing playlist via embed scrape…')
+    try {
+      const res = await fetch(`/api/playlist?id=${encodeURIComponent(id)}`)
+      const body = (await res.json()) as {
+        error?: string
+        name?: string
+        capped?: boolean
+        tracks?: { id: string; uri: string; name: string; artists: string; durationMs: number }[]
+      }
+      if (!res.ok || body.error || !body.tracks) throw new Error(body.error ?? `HTTP ${res.status}`)
+      let added = 0
+      let updated = 0
+      for (const t of body.tracks) {
+        const existing = loadAllTags()[t.id]
+        saveTags({
+          trackId: t.id,
+          uri: t.uri,
+          name: t.name,
+          artists: t.artists,
+          durationMs: t.durationMs,
+          bpm: existing?.bpm ?? null,
+          camelot: existing?.camelot ?? null,
+          markers: existing?.markers ?? [],
+          segments: existing?.segments,
+          sourceFile: existing?.sourceFile,
+          updatedAt: new Date().toISOString(),
+        })
+        existing ? updated++ : added++
+      }
+      setLibrary(loadAllTags())
+      const cap = body.capped ? ' — embed caps at 100 tracks; longer playlists arrive truncated' : ''
+      setStatus(`♫ ${body.name ?? 'playlist'} imported: ${added} added, ${updated} already known (kept their tags)${cap}`)
+    } catch (e) {
+      setStatus(`playlist import failed: ${String(e)} — is the dev server running?`)
     }
   }
 
