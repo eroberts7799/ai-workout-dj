@@ -292,6 +292,7 @@ final class SessionEngine: ObservableObject {
     simTask?.cancel()
     if trailMode {
       phoneSensors.stop()
+      BleHeartRate.shared.stop()
       deck.stop() // trail sessions end SILENT — no orphan DJ haunting the car ride home
       if musicSource == .spotify {
         spotifyGen += 1 // orphan any in-flight retry — it must not resurrect music
@@ -498,9 +499,13 @@ final class SessionEngine: ObservableObject {
     status = "TRAIL — phone sensors conducting (offline-ready)"
     phoneSensors.onTick = { [weak self] t, d, alt in
       guard let self, self.phase == .running else { return }
-      self.advanceLive(timerMs: t, distanceM: d, altitudeM: alt)
-      self.recorded.append(RecordedSample(t: t, d: d, hr: nil, altitude: alt))
+      // Watch BLE broadcast fills the trail log's HR hole (8/22 run had
+      // none) — and activates the crest "earned" gate (zone ≥ 3).
+      let hr = BleHeartRate.shared.currentBpm
+      self.advanceLive(timerMs: t, distanceM: d, hr: hr, altitudeM: alt)
+      self.recorded.append(RecordedSample(t: t, d: d, hr: hr, altitude: alt))
     }
+    BleHeartRate.shared.start()
     phoneSensors.start()
   }
 

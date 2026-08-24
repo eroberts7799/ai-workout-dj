@@ -14,6 +14,7 @@ struct SessionView: View {
   @AppStorage("awdj.profilePhone") private var profilePhone = ""
   @State private var showProfile = false
   @ObservedObject private var spotify = SpotifyAuth.shared
+  @ObservedObject private var bleHr = BleHeartRate.shared
   @State private var showClientIdPrompt = false
   @State private var clientIdText = ""
 
@@ -122,7 +123,8 @@ struct SessionView: View {
       case .running, .paused:
         Text(RelayPoller.clock(engine.clockMs)).fieldMono(48, weight: .heavy)
         if engine.trailMode {
-          Text(String(format: "%.2f km · phone sensors", engine.phoneSensors.distanceM / 1000))
+          let hr = bleHr.bpm != nil ? String(format: "%.0f bpm", bleHr.bpm!) : bleHr.state
+          Text(String(format: "%.2f km · phone sensors · ", engine.phoneSensors.distanceM / 1000) + hr)
             .fieldMono(12)
             .foregroundColor(Theme.olive)
         }

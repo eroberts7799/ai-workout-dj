@@ -18,13 +18,15 @@ targets:
       properties:
         CFBundleDisplayName: AI Workout DJ
         UILaunchScreen: {}
-        # 'location' keeps trail mode's GPS alive with the screen off.
-        UIBackgroundModes: [audio, location]
+        # 'location' keeps trail mode's GPS alive with the screen off;
+        # 'bluetooth-central' keeps the watch's HR broadcast flowing there too.
+        UIBackgroundModes: [audio, location, bluetooth-central]
         ITSAppUsesNonExemptEncryption: false
         NSAppTransportSecurity:
           NSAllowsArbitraryLoads: false
         NSLocationWhenInUseUsageDescription: Trail mode conducts your music from your position and elevation — the drop hits as you crest the hill, no signal needed.
         NSMotionUsageDescription: The barometer detects climbs and crests so the music can reward them.
+        NSBluetoothAlwaysUsageDescription: Your watch can broadcast heart rate over Bluetooth — the music rewards real effort, even with no signal on the trail.
         CFBundleURLTypes:
           - CFBundleURLName: spotify-auth
             CFBundleURLSchemes: [awdj]
