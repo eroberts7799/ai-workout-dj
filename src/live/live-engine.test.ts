@@ -404,6 +404,30 @@ describe('LiveEngine', () => {
     expect(engine.commands.some((c) => c.reason.startsWith('rep change'))).toBe(true)
   })
 
+  test('structureless songs ride to their natural end, not the 3:00 timer', () => {
+    // 8/22 trail run: every fill cut at exactly entry+180s because scraped
+    // tracks carry no segments — even songs with 30s left to give. Duration
+    // IS known: a song whose end is within timer+slack plays out (the change
+    // lands at the natural end); only genuinely long tracks get the timer.
+    const mk = (id: string, durationMs: number): SongTags => ({
+      trackId: id, uri: `spotify:track:${id}`, name: `Stream ${id}`,
+      artists: 'Playlist', durationMs, bpm: null, updatedAt: '', markers: [],
+    })
+    const cruise: WorkoutPlan = { name: 'cruise', steps: [{ kind: 'easy', seconds: 900 }] }
+
+    // 3:30 songs (end within 3:00 + 90s slack) → chains at ~3:30, not 3:00.
+    const short = new LiveEngine(cruise, [mk('s1', 210_000), mk('s2', 210_000), mk('s3', 210_000)], { paceSecPerKm: 340 })
+    run(short, stream([{ seconds: 900, mps: 3 }]))
+    const gaps = short.commands.slice(1).map((c, i) => c.tMs - short.commands[i].tMs)
+    for (const g of gaps) expect(g).toBeGreaterThanOrEqual(205_000) // never the 180s timer
+
+    // 6:00 extended mixes → the freshness timer still rules at 3:00.
+    const long = new LiveEngine(cruise, [mk('l1', 360_000), mk('l2', 360_000), mk('l3', 360_000)], { paceSecPerKm: 340 })
+    run(long, stream([{ seconds: 900, mps: 3 }]))
+    const lgaps = long.commands.slice(1).map((c, i) => c.tMs - long.commands[i].tMs)
+    for (const g of lgaps) expect(g).toBeLessThanOrEqual(182_000)
+  })
+
   test('FOLLOW MODE: no plan at all — the watch stream is the workout', () => {
     // The workout lives in Runna/Garmin; nobody retypes it. Empty plan +
     // streamed step shapes = full conducting: boundaries, anticipation,

@@ -318,6 +318,26 @@ final class LiveEngineTests: XCTestCase {
     XCTAssertLessThanOrEqual(abs(engine.landings.last!.actualTMs - 460_000), 5000)
   }
 
+  func testStructurelessSongsRideToNaturalEndNotTheTimer() {
+    // Mirrors TS: scraped tracks (no segments) whose end is within
+    // timer+slack play out; long extended mixes still get the 3:00 timer.
+    func mk(_ id: String, _ durationMs: Double) -> TaggedSong {
+      TaggedSong(trackId: id, uri: "spotify:track:\(id)", name: "Stream \(id)",
+                 artists: "Playlist", durationMs: durationMs, bpm: nil, camelot: nil, markers: [])
+    }
+    let cruise = [WorkoutStep(kind: "easy", seconds: 900, meters: nil)]
+
+    let short = LiveEngine(plan: cruise, songs: [mk("s1", 210_000), mk("s2", 210_000), mk("s3", 210_000)], paceSecPerKm: 340)
+    for s in stream([(seconds: 900, mps: 3)]) { short.advance(s) }
+    let gaps = zip(short.commands.dropFirst(), short.commands).map { $0.tMs - $1.tMs }
+    for g in gaps { XCTAssertGreaterThanOrEqual(g, 205_000) }
+
+    let long = LiveEngine(plan: cruise, songs: [mk("l1", 360_000), mk("l2", 360_000), mk("l3", 360_000)], paceSecPerKm: 340)
+    for s in stream([(seconds: 900, mps: 3)]) { long.advance(s) }
+    let lgaps = zip(long.commands.dropFirst(), long.commands).map { $0.tMs - $1.tMs }
+    for g in lgaps { XCTAssertLessThanOrEqual(g, 182_000) }
+  }
+
   func testMidBuildSlowdownReaimsAndLandsTight() {
     let engine = LiveEngine(plan: plan, songs: songs, paceSecPerKm: 340)
     for s in stream([(370, 3), (200, 1.8)]) { engine.advance(s) }

@@ -81,6 +81,12 @@ const CREST_RIDE_MS = 25_000
  *  (Fred again.., Virji, Summit…) the median time-on-one-track is ~190s
  *  (Fred: 140s). Past this, a cruise chains to a fresh groove. */
 const MAX_FILL_RIDE_MS = 180_000
+/** How far past the freshness timer a structureless song may run to reach
+ *  its natural end. 90s: covers the 3:00–4:30 band where most pop/dance
+ *  radio edits end (44-track crate median ~3:20), without letting extended
+ *  mixes monopolize a fill. Judgment call, not data-tuned — revisit when the
+ *  HR-response reward can price long rides. */
+const NATURAL_END_SLACK_MS = 90_000
 /** Energy-aware chain window brackets that median: never change before MIN,
  *  force a change by CAP; between them, leave at a segment boundary where a
  *  strong section (chorus/inst/solo) just ended — on top, not mid-breakdown. */
@@ -508,6 +514,14 @@ export class LiveEngine {
         fallback ??= s.endMs
       }
       if (fallback != null) return fallback
+    }
+    // No structure to consult (streaming-tier scrapes carry no segments) —
+    // but duration IS known. If the song's end is within reach of the timer,
+    // ride to it: never-silence fires the change at the natural end. The 8/22
+    // trail run cut all 99 fills at exactly 3:00 regardless of the song —
+    // arbitrary mid-song exits for tracks that had ≤90s left to give.
+    if (song.durationMs - entryMs <= MAX_FILL_RIDE_MS + NATURAL_END_SLACK_MS) {
+      return song.durationMs
     }
     return entryMs + MAX_FILL_RIDE_MS
   }

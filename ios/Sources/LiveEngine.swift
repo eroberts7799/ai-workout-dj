@@ -67,6 +67,9 @@ final class LiveEngine {
   /// Corpus-learned freshness (65 real DJ sets, median ride ~190s):
   /// past this, a fill trades its loop for a fresh groove. Mirrors TS.
   private static let maxFillRideMs: Double = 180_000
+  /// How far past the freshness timer a structureless song may run to reach
+  /// its natural end. Mirrors TS NATURAL_END_SLACK_MS (judgment call).
+  private static let naturalEndSlackMs: Double = 90_000
   /// Energy-aware chain window bracketing the ~190s corpus median: never
   /// change before MIN, force by CAP; between them leave where a strong
   /// section (chorus/inst/solo) just ended. Mirrors TS.
@@ -462,6 +465,12 @@ final class LiveEngine {
         if fallback == nil { fallback = s.endMs }
       }
       if let f = fallback { return f }
+    }
+    // No structure to consult — but duration IS known. If the song's end is
+    // within reach of the timer, ride to it (never-silence chains there).
+    // Mirrors TS: the 8/22 trail run cut all 99 fills at exactly 3:00.
+    if song.durationMs - entryMs <= Self.maxFillRideMs + Self.naturalEndSlackMs {
+      return song.durationMs
     }
     return entryMs + Self.maxFillRideMs
   }
