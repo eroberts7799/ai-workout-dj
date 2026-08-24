@@ -293,7 +293,11 @@ final class SessionEngine: ObservableObject {
     if trailMode {
       phoneSensors.stop()
       deck.stop() // trail sessions end SILENT — no orphan DJ haunting the car ride home
-      if musicSource == .spotify { Task { await SpotifyRemote.shared.pause() } }
+      if musicSource == .spotify {
+        spotifyGen += 1 // orphan any in-flight retry — it must not resurrect music
+        pendingSpotify = nil
+        Task { await SpotifyRemote.shared.pause() }
+      }
     }
     phase = .done
     status = trailMode ? "trail session ended" : "stopped — music left playing"
@@ -427,6 +431,46 @@ final class SessionEngine: ObservableObject {
   enum MusicSource: String { case ownedFiles, spotify }
   @Published var musicSource: MusicSource = .ownedFiles
 
+  // MARK: - Spotify delivery watchdog
+  // Soft-fail is still the doctrine (recording never depends on playback),
+  // but the 8/22 trail run showed the cost of fire-and-forget: one command
+  // lost to a dead zone = SILENCE until the next scheduled change, minutes
+  // away — Ethan DJed by hand at mile 9. An undelivered command is now
+  // retried every 10s at the engine's modeled playhead, so music rejoins
+  // where the model thinks it is the moment signal returns.
+  private struct PendingSpotify { let uri: String; let positionMs: Double; let atTimerMs: Double; let gen: Int; let reason: String }
+  private var pendingSpotify: PendingSpotify?
+  private var spotifyGen = 0
+  private var spotifyRetryAtMs: Double = 0
+  private var spotifyAttemptInFlight = false
+
+  private func deliverSpotify(uri: String, positionMs: Double, timerMs: Double, reason: String) {
+    spotifyGen += 1
+    pendingSpotify = PendingSpotify(uri: uri, positionMs: positionMs, atTimerMs: timerMs, gen: spotifyGen, reason: reason)
+    spotifyRetryAtMs = timerMs + 10_000
+    attemptSpotifyDelivery()
+  }
+
+  private func attemptSpotifyDelivery() {
+    guard !spotifyAttemptInFlight, let p = pendingSpotify else { return }
+    spotifyAttemptInFlight = true
+    // Rejoin at the engine's modeled NOW, not the command's original position
+    // — a cut delivered 40s late should sound 40s in, or every chain point
+    // after it drifts off the model.
+    let position = p.positionMs + max(0, clockMs - p.atTimerMs)
+    Task { [weak self] in
+      let err = await SpotifyRemote.shared.play(uri: p.uri, positionMs: position)
+      guard let self else { return }
+      self.spotifyAttemptInFlight = false
+      guard self.pendingSpotify?.gen == p.gen else { return } // superseded mid-flight
+      if err == nil {
+        self.pendingSpotify = nil
+      } else {
+        self.lastCommand = "\(p.reason) · \(err!) — retrying"
+      }
+    }
+  }
+
   /// No watch, no relay, no signal: the phone's own sensors drive the engine.
   /// Empty plan → pure cruise + crest rewards — free-run choreography.
   func startTrailRun() {
@@ -496,21 +540,22 @@ final class SessionEngine: ObservableObject {
     for c in live.advance(s) {
       if suppressLoopbacks && c.reason.hasPrefix("loop back") { continue }
       if trailMode && musicSource == .spotify {
-        // Phone conducts its own Spotify app. Soft-fail: offline = the
-        // downloaded track plays out, next command lands when signal returns.
+        // Phone conducts its own Spotify app; the watchdog owns delivery.
         firedCount += 1
         lastCommand = c.reason
-        Task { [weak self] in
-          if let err = await SpotifyRemote.shared.play(uri: c.uri, positionMs: c.positionMs) {
-            await MainActor.run { self?.lastCommand = "\(c.reason) · \(err)" }
-          }
-        }
+        deliverSpotify(uri: c.uri, positionMs: c.positionMs, timerMs: timerMs, reason: c.reason)
       } else {
         // Never interrupt the run: a missing file leaves current audio playing.
         try? deck.play(id: c.trackId, positionMs: c.positionMs, fadeSec: c.fadeSec, opts: BeatMath.deckOpts(for: c.reason))
         firedCount += 1
         lastCommand = c.reason
       }
+    }
+    // Watchdog pump: re-offer an undelivered Spotify command when signal
+    // may be back. Rides the 1Hz sensor tick — no extra timer to manage.
+    if pendingSpotify != nil, timerMs >= spotifyRetryAtMs {
+      spotifyRetryAtMs = timerMs + 10_000
+      attemptSpotifyDelivery()
     }
     landingCount = live.landings.count
   }
