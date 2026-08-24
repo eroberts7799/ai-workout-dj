@@ -1,0 +1,589 @@
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 6; @symbol_usingdef<0> = [Toybox,6,6,12]; @symbol_usingdef<1> = [Media,6,13,18]; ]
+using Toybox.Media;
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 8; @symbol_classdef = [SpikeContentDelegate,8,6,26]; @symbol_extends<0> = [Media,8,35,40]; @symbol_extends<1> = [ContentDelegate,8,41,56]; ]
+class SpikeContentDelegate extends Media.ContentDelegate {
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 8; ]
+    <init> {
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 11 16 ]
+        %tmp.1 = newa 10;
+        %tmp.2 = "Start";
+        %tmp.3 = dup %tmp.1;
+        %tmp.4 = aputv %tmp.3 0 %tmp.2;
+        %tmp.5 = "SkipNext";
+        %tmp.6 = dup %tmp.4;
+        %tmp.7 = aputv %tmp.6 1 %tmp.5;
+        %tmp.8 = "SkipPrev";
+        %tmp.9 = dup %tmp.7;
+        %tmp.10 = aputv %tmp.9 2 %tmp.8;
+        %tmp.11 = "Notify";
+        %tmp.12 = dup %tmp.10;
+        %tmp.13 = aputv %tmp.12 3 %tmp.11;
+        %tmp.14 = "Complete";
+        %tmp.15 = dup %tmp.13;
+        %tmp.16 = aputv %tmp.15 4 %tmp.14;
+        %tmp.17 = "Stop";
+        %tmp.18 = dup %tmp.16;
+        %tmp.19 = aputv %tmp.18 5 %tmp.17;
+        %tmp.20 = "Pause";
+        %tmp.21 = dup %tmp.19;
+        %tmp.22 = aputv %tmp.21 6 %tmp.20;
+        %tmp.23 = "Resume";
+        %tmp.24 = dup %tmp.22;
+        %tmp.25 = aputv %tmp.24 7 %tmp.23;
+        %tmp.26 = "SkipFwd";
+        %tmp.27 = dup %tmp.25;
+        %tmp.28 = aputv %tmp.27 8 %tmp.26;
+        %tmp.29 = "SkipBack";
+        %tmp.30 = dup %tmp.28;
+        %tmp.31 = aputv %tmp.30 9 %tmp.29;
+        putv self :mEvents %tmp.31;
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 8; ]
+    static
+    <init> {
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 10; @position = 16; @symbol_vardef = [mIterator,10,16,25]; ]
+    private
+    var mIterator;
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 11; @position = 16; @symbol_vardef = [mEvents,11,16,23]; ]
+    private
+    var mEvents;
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 13; @symbol_functiondef = [initialize,13,13,23]; ]
+    function initialize() as Void {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_13_26_16_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 14 8 ]
+        symbol [ ContentDelegate %tmp.2 14 8 23 ];
+        %tmp.2 = getv ? :ContentDelegate;
+        symbol [ initialize %tmp.3 14 24 34 ];
+        %tmp.3 = getv function %tmp.2 :initialize;
+        invoke %tmp.2 %tmp.3();
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 15 8 ]
+        symbol [ SpikeContentIterator %tmp.7 15 24 44 ];
+        %tmp.7 = getv ? :SpikeContentIterator;
+        %tmp.4 = newc %tmp.7 ();
+        symbol [ mIterator ? 15 8 17 ];
+        putv self :mIterator %tmp.4;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_13_26_16_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 18; @symbol_functiondef = [getContentIterator,18,13,31]; ]
+    function getContentIterator() {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_18_34_21_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 19 8 ]
+        symbol [ SpikeLog %tmp.2 19 8 16 ];
+        %tmp.2 = getv ? :SpikeLog;
+        symbol [ log %tmp.3 19 17 20 ];
+        %tmp.3 = getv function %tmp.2 :log;
+        %tmp.4 = "getContentIterator";
+        %tmp.5 = "-";
+        invoke %tmp.2 %tmp.3(%tmp.4, %tmp.5);
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 20 8 ]
+        symbol [ mIterator %tmp.7 20 15 24 ];
+        %tmp.7 = getv ? :mIterator;
+        ret %tmp.7;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_18_34_21_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 23; @symbol_functiondef = [resetContentIterator,23,13,33]; ]
+    function resetContentIterator() {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_23_36_26_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 24 8 ]
+        symbol [ SpikeContentIterator %tmp.4 24 24 44 ];
+        %tmp.4 = getv ? :SpikeContentIterator;
+        %tmp.1 = newc %tmp.4 ();
+        symbol [ mIterator ? 24 8 17 ];
+        putv self :mIterator %tmp.1;
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 25 8 ]
+        symbol [ mIterator %tmp.6 25 15 24 ];
+        %tmp.6 = getv ? :mIterator;
+        ret %tmp.6;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_23_36_26_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 28; @symbol_functiondef = [onSong,28,13,19]; @symbol_param<0> = [refId,28,20,25]; @symbol_param<1> = [songEvent,28,27,36]; @symbol_param<2> = [playbackPosition,28,38,54]; ]
+    function onSong(refId, songEvent, playbackPosition) {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_28_56_31_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 29 8 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_28_56_31_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_28_56_31_4_stop" ]
+        %name.1 = local;
+        symbol [ name %name.1 29 12 16 ];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_29_19_29_95_begin:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_29_19_29_62_begin:
+        %tmp.1 = lgetv %songEvent;
+        symbol [ songEvent %tmp.1 29 19 28 ];
+        %tmp.2 = 0;
+        %tmp.3 = gte %tmp.1 %tmp.2;
+        bf %tmp.3 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_29_19_29_95_else_false;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_29_37_29_62_true:
+        %tmp.4 = lgetv %songEvent;
+        symbol [ songEvent %tmp.4 29 37 46 ];
+        symbol [ mEvents %tmp.6 29 49 56 ];
+        %tmp.6 = getv ? :mEvents;
+        symbol [ size %tmp.7 29 57 61 ];
+        %tmp.7 = getv function %tmp.6 :size;
+        %tmp.8 = invoke %tmp.6 %tmp.7();
+        %tmp.9 = lt %tmp.4 %tmp.8;
+        push %tmp.9;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_29_37_29_62_end:
+        %tmp.10 = phi [%tmp.3 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_29_19_29_62_begin] [%tmp.9 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_29_37_29_62_true] [%tmp.10 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_29_37_29_62_end];
+        bf %tmp.10 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_29_19_29_95_else_false;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_29_19_29_95_true:
+        symbol [ mEvents %tmp.12 29 66 73 ];
+        %tmp.12 = getv ? :mEvents;
+        %tmp.13 = lgetv %songEvent;
+        symbol [ songEvent %tmp.13 29 74 83 ];
+        %tmp.14 = agetv %tmp.12 %tmp.13;
+        push %tmp.14;
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_29_19_29_95_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_29_19_29_95_else_false:
+        %tmp.15 = "evt";
+        %tmp.16 = lgetv %songEvent;
+        symbol [ songEvent %tmp.16 29 95 104 ];
+        %tmp.17 = add %tmp.15 %tmp.16;
+        push %tmp.17;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_29_19_29_95_end:
+        %tmp.18 = phi [%tmp.10 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_29_19_29_95_begin] [%tmp.14 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_29_19_29_95_true] [%tmp.17 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_29_19_29_95_else_false] [%tmp.18 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_29_19_29_95_end];
+        lputv %name.1 %tmp.18;
+        symbol [ name %name.1 29 12 16 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 30 8 ]
+        symbol [ SpikeLog %tmp.20 30 8 16 ];
+        %tmp.20 = getv ? :SpikeLog;
+        symbol [ log %tmp.21 30 17 20 ];
+        %tmp.21 = getv function %tmp.20 :log;
+        %tmp.22 = "onSong";
+        %tmp.23 = lgetv %name.1;
+        symbol [ name %tmp.23 30 31 35 ];
+        %tmp.24 = " pos=";
+        %tmp.25 = add %tmp.23 %tmp.24;
+        %tmp.26 = lgetv %playbackPosition;
+        symbol [ playbackPosition %tmp.26 30 48 64 ];
+        %tmp.27 = add %tmp.25 %tmp.26;
+        invoke %tmp.20 %tmp.21(%tmp.22, %tmp.27);
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_28_56_31_4_stop:
+    }
+}
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 34; @symbol_classdef = [SpikeContentIterator,34,6,26]; @symbol_extends<0> = [Media,34,35,40]; @symbol_extends<1> = [ContentIterator,34,41,56]; ]
+class SpikeContentIterator extends Media.ContentIterator {
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 34; ]
+    <init> {
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 34; ]
+    static
+    <init> {
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 36; @position = 16; @symbol_vardef = [mIdx,36,16,20]; ]
+    private
+    var mIdx;
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 37; @position = 16; @symbol_vardef = [mRefs,37,16,21]; ]
+    private
+    var mRefs;
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 39; @symbol_functiondef = [initialize,39,13,23]; ]
+    function initialize() as Void {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_39_26_52_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 40 8 ]
+        symbol [ ContentIterator %tmp.2 40 8 23 ];
+        %tmp.2 = getv ? :ContentIterator;
+        symbol [ initialize %tmp.3 40 24 34 ];
+        %tmp.3 = getv function %tmp.2 :initialize;
+        invoke %tmp.2 %tmp.3();
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 41 8 ]
+        %tmp.4 = 0;
+        symbol [ mIdx ? 41 8 12 ];
+        putv self :mIdx %tmp.4;
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 42 8 ]
+        %tmp.5 = newa 0;
+        symbol [ mRefs ? 42 8 13 ];
+        putv self :mRefs %tmp.5;
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 43 8 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_39_26_52_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_39_26_52_4_stop" ]
+        %iter.1 = local;
+        symbol [ iter %iter.1 43 12 16 ];
+        symbol [ Media %tmp.6 43 19 24 ];
+        %tmp.6 = getm $.Toybox.Media;
+        symbol [ getContentRefIter %tmp.7 43 25 42 ];
+        %tmp.7 = getv function %tmp.6 :getContentRefIter;
+        %tmp.8 = newd 1;
+        %tmp.10 = const :contentType;
+        symbol [ contentType %tmp.10 43 45 56 const ];
+        symbol [ Media %tmp.11 43 60 65 ];
+        %tmp.11 = getm $.Toybox.Media;
+        symbol [ CONTENT_TYPE_AUDIO %tmp.12 43 66 84 ];
+        %tmp.12 = getv %tmp.11 :CONTENT_TYPE_AUDIO;
+        %tmp.13 = dup %tmp.8;
+        %tmp.14 = aputv %tmp.13 %tmp.10 %tmp.12;
+        %tmp.15 = invoke %tmp.6 %tmp.7(%tmp.14);
+        lputv %iter.1 %tmp.15;
+        symbol [ iter %iter.1 43 12 16 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 44 8 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_44_8_50_8_if_stmt:
+        %tmp.16 = lgetv %iter.1;
+        symbol [ iter %tmp.16 44 12 16 ];
+        %tmp.17 = null;
+        %tmp.18 = ne %tmp.16 %tmp.17;
+        bf %tmp.18 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_44_8_50_8_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_44_8_50_8_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_44_26_50_8_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 45 12 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_44_26_50_8_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_44_26_50_8_stop" ]
+        %ref.2 = local;
+        symbol [ ref %ref.2 45 16 19 ];
+        %tmp.19 = lgetv %iter.1;
+        symbol [ iter %tmp.19 45 22 26 ];
+        %tmp.20 = as %tmp.19 { (!Null) };
+        symbol [ next %tmp.21 45 27 31 ];
+        %tmp.21 = getv function %tmp.20 :next;
+        %tmp.22 = invoke %tmp.20 %tmp.21();
+        lputv %ref.2 %tmp.22;
+        symbol [ ref %ref.2 45 16 19 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 46 12 ]
+        while @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_46_12_49_12_while_test @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_46_12_49_12_while_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_46_12_49_12_while_test:
+        %tmp.23 = lgetv %ref.2;
+        symbol [ ref %tmp.23 46 19 22 ];
+        %tmp.24 = null;
+        %tmp.25 = ne %tmp.23 %tmp.24;
+        bf %tmp.25 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_46_12_49_12_while_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_46_12_49_12_while_begin:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_46_32_49_12_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 47 16 ]
+        symbol [ mRefs %tmp.27 47 16 21 ];
+        %tmp.27 = getv ? :mRefs;
+        symbol [ add %tmp.28 47 22 25 ];
+        %tmp.28 = getv function %tmp.27 :add;
+        %tmp.29 = lgetv %ref.2;
+        symbol [ ref %tmp.29 47 26 29 ];
+        %tmp.30 = as %tmp.29 { (!Null) };
+        symbol [ getId %tmp.31 47 30 35 ];
+        %tmp.31 = getv function %tmp.30 :getId;
+        %tmp.32 = invoke %tmp.30 %tmp.31();
+        invoke %tmp.27 %tmp.28(%tmp.32);
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 48 16 ]
+        %tmp.33 = lgetv %iter.1;
+        symbol [ iter %tmp.33 48 22 26 ];
+        %tmp.34 = as %tmp.33 { (!Null) };
+        symbol [ next %tmp.35 48 27 31 ];
+        %tmp.35 = getv function %tmp.34 :next;
+        %tmp.36 = invoke %tmp.34 %tmp.35();
+        lputv %ref.2 %tmp.36;
+        symbol [ ref %ref.2 48 16 19 ];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_46_32_49_12_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_46_12_49_12_while_test;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_46_12_49_12_while_end:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_44_26_50_8_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_44_8_50_8_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_44_8_50_8_if_end:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 51 8 ]
+        symbol [ SpikeLog %tmp.38 51 8 16 ];
+        %tmp.38 = getv ? :SpikeLog;
+        symbol [ log %tmp.39 51 17 20 ];
+        %tmp.39 = getv function %tmp.38 :log;
+        %tmp.40 = "iterator.init";
+        %tmp.41 = "songs=";
+        symbol [ mRefs %tmp.43 51 49 54 ];
+        %tmp.43 = getv ? :mRefs;
+        symbol [ size %tmp.44 51 55 59 ];
+        %tmp.44 = getv function %tmp.43 :size;
+        %tmp.45 = invoke %tmp.43 %tmp.44();
+        %tmp.46 = add %tmp.41 %tmp.45;
+        invoke %tmp.38 %tmp.39(%tmp.40, %tmp.46);
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_39_26_52_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 54; @symbol_functiondef = [getPlaybackProfile,54,13,31]; ]
+    function getPlaybackProfile() {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_54_34_63_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 55 8 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_54_34_63_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_54_34_63_4_stop" ]
+        %profile.1 = local;
+        symbol [ profile %profile.1 55 12 19 ];
+        symbol [ Media %tmp.3 55 26 31 ];
+        %tmp.3 = getm $.Toybox.Media;
+        symbol [ PlaybackProfile %tmp.4 55 32 47 ];
+        %tmp.4 = getv function ? %tmp.3 :PlaybackProfile;
+        %tmp.1 = newc %tmp.4 ();
+        lputv %profile.1 %tmp.1;
+        symbol [ profile %profile.1 55 12 19 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 56 8 ]
+        %tmp.5 = lgetv %profile.1;
+        symbol [ profile %tmp.5 56 8 15 ];
+        %tmp.6 = newa 3;
+        symbol [ Media %tmp.7 57 12 17 ];
+        %tmp.7 = getm $.Toybox.Media;
+        symbol [ PLAYBACK_CONTROL_PLAYBACK %tmp.8 57 18 43 ];
+        %tmp.8 = getv %tmp.7 :PLAYBACK_CONTROL_PLAYBACK;
+        %tmp.9 = dup %tmp.6;
+        %tmp.10 = aputv %tmp.9 0 %tmp.8;
+        symbol [ Media %tmp.11 58 12 17 ];
+        %tmp.11 = getm $.Toybox.Media;
+        symbol [ PLAYBACK_CONTROL_PREVIOUS %tmp.12 58 18 43 ];
+        %tmp.12 = getv %tmp.11 :PLAYBACK_CONTROL_PREVIOUS;
+        %tmp.13 = dup %tmp.10;
+        %tmp.14 = aputv %tmp.13 1 %tmp.12;
+        symbol [ Media %tmp.15 59 12 17 ];
+        %tmp.15 = getm $.Toybox.Media;
+        symbol [ PLAYBACK_CONTROL_NEXT %tmp.16 59 18 39 ];
+        %tmp.16 = getv %tmp.15 :PLAYBACK_CONTROL_NEXT;
+        %tmp.17 = dup %tmp.14;
+        %tmp.18 = aputv %tmp.17 2 %tmp.16;
+        symbol [ playbackControls ? 56 16 32 ];
+        putv %tmp.5 :playbackControls %tmp.18;
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 61 8 ]
+        %tmp.19 = lgetv %profile.1;
+        symbol [ profile %tmp.19 61 8 15 ];
+        %tmp.20 = false;
+        symbol [ requirePlaybackNotification ? 61 16 43 ];
+        putv %tmp.19 :requirePlaybackNotification %tmp.20;
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 62 8 ]
+        %tmp.21 = lgetv %profile.1;
+        symbol [ profile %tmp.21 62 15 22 ];
+        ret %tmp.21;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_54_34_63_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 65; @symbol_functiondef = [at,65,21,23]; @symbol_param<0> = [idx,65,24,27]; ]
+    private
+    function at(idx) {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_65_29_70_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 66 8 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_66_8_68_8_if_stmt:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_66_12_66_41_begin:
+        %tmp.1 = lgetv %idx;
+        symbol [ idx %tmp.1 66 12 15 ];
+        %tmp.2 = 0;
+        %tmp.3 = lt %tmp.1 %tmp.2;
+        bt %tmp.3 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_66_8_68_8_if_true;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_66_23_66_41_false:
+        %tmp.4 = lgetv %idx;
+        symbol [ idx %tmp.4 66 23 26 ];
+        symbol [ mRefs %tmp.6 66 30 35 ];
+        %tmp.6 = getv ? :mRefs;
+        symbol [ size %tmp.7 66 36 40 ];
+        %tmp.7 = getv function %tmp.6 :size;
+        %tmp.8 = invoke %tmp.6 %tmp.7();
+        %tmp.9 = gte %tmp.4 %tmp.8;
+        push %tmp.9;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_66_23_66_41_end:
+        %tmp.10 = phi [%tmp.3 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_66_12_66_41_begin] [%tmp.9 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_66_23_66_41_false] [%tmp.10 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_66_23_66_41_end];
+        bf %tmp.10 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_66_8_68_8_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_66_8_68_8_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_66_44_68_8_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 67 12 ]
+        %tmp.11 = null;
+        ret %tmp.11;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_66_44_68_8_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_66_8_68_8_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_66_8_68_8_if_end:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 69 8 ]
+        symbol [ Media %tmp.12 69 15 20 ];
+        %tmp.12 = getm $.Toybox.Media;
+        symbol [ getCachedContentObj %tmp.13 69 21 40 ];
+        %tmp.13 = getv function %tmp.12 :getCachedContentObj;
+        symbol [ Media %tmp.16 69 45 50 ];
+        %tmp.16 = getm $.Toybox.Media;
+        symbol [ ContentRef %tmp.17 69 51 61 ];
+        %tmp.17 = getv function ? %tmp.16 :ContentRef;
+        symbol [ mRefs %tmp.19 69 62 67 ];
+        %tmp.19 = getv ? :mRefs;
+        %tmp.20 = lgetv %idx;
+        symbol [ idx %tmp.20 69 68 71 ];
+        %tmp.21 = agetv %tmp.19 %tmp.20;
+        symbol [ Media %tmp.22 69 74 79 ];
+        %tmp.22 = getm $.Toybox.Media;
+        symbol [ CONTENT_TYPE_AUDIO %tmp.23 69 80 98 ];
+        %tmp.23 = getv %tmp.22 :CONTENT_TYPE_AUDIO;
+        %tmp.14 = newc %tmp.17 (%tmp.21, %tmp.23);
+        %tmp.24 = invoke %tmp.12 %tmp.13(%tmp.14);
+        ret %tmp.24;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_65_29_70_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 74; @symbol_functiondef = [next,74,13,17]; ]
+    function next() {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_74_20_78_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 75 8 ]
+        symbol [ mIdx %tmp.2 75 16 20 ];
+        %tmp.2 = getv ? :mIdx;
+        %tmp.3 = 1;
+        %tmp.4 = add %tmp.2 %tmp.3;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_75_29_75_63_begin:
+        symbol [ mRefs %tmp.6 75 29 34 ];
+        %tmp.6 = getv ? :mRefs;
+        symbol [ size %tmp.7 75 35 39 ];
+        %tmp.7 = getv function %tmp.6 :size;
+        %tmp.8 = invoke %tmp.6 %tmp.7();
+        %tmp.9 = 0;
+        %tmp.10 = gt %tmp.8 %tmp.9;
+        bf %tmp.10 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_75_29_75_63_else_false;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_75_29_75_63_true:
+        symbol [ mRefs %tmp.12 75 48 53 ];
+        %tmp.12 = getv ? :mRefs;
+        symbol [ size %tmp.13 75 54 58 ];
+        %tmp.13 = getv function %tmp.12 :size;
+        %tmp.14 = invoke %tmp.12 %tmp.13();
+        push %tmp.14;
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_75_29_75_63_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_75_29_75_63_else_false:
+        %tmp.15 = 1;
+        push %tmp.15;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_75_29_75_63_end:
+        %tmp.16 = phi [%tmp.10 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_75_29_75_63_begin] [%tmp.14 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_75_29_75_63_true] [%tmp.15 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_75_29_75_63_else_false] [%tmp.16 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_75_29_75_63_end];
+        %tmp.17 = mod %tmp.4 %tmp.16;
+        symbol [ mIdx ? 75 8 12 ];
+        putv self :mIdx %tmp.17;
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 76 8 ]
+        symbol [ SpikeLog %tmp.19 76 8 16 ];
+        %tmp.19 = getv ? :SpikeLog;
+        symbol [ log %tmp.20 76 17 20 ];
+        %tmp.20 = getv function %tmp.19 :log;
+        %tmp.21 = "next";
+        %tmp.22 = "idx=";
+        symbol [ mIdx %tmp.24 76 38 42 ];
+        %tmp.24 = getv ? :mIdx;
+        %tmp.25 = add %tmp.22 %tmp.24;
+        invoke %tmp.19 %tmp.20(%tmp.21, %tmp.25);
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 77 8 ]
+        %tmp.26 = self;
+        symbol [ at %tmp.27 77 15 17 ];
+        %tmp.27 = getv function %tmp.26 :at;
+        symbol [ mIdx %tmp.29 77 18 22 ];
+        %tmp.29 = getv ? :mIdx;
+        %tmp.30 = invoke %tmp.26 %tmp.27(%tmp.29);
+        ret %tmp.30;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_74_20_78_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 80; @symbol_functiondef = [previous,80,13,21]; ]
+    function previous() {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_80_24_84_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 81 8 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_81_15_81_37_begin:
+        symbol [ mIdx %tmp.2 81 15 19 ];
+        %tmp.2 = getv ? :mIdx;
+        %tmp.3 = 0;
+        %tmp.4 = gt %tmp.2 %tmp.3;
+        bf %tmp.4 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_81_15_81_37_else_false;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_81_15_81_37_true:
+        symbol [ mIdx %tmp.6 81 26 30 ];
+        %tmp.6 = getv ? :mIdx;
+        %tmp.7 = 1;
+        %tmp.8 = sub %tmp.6 %tmp.7;
+        push %tmp.8;
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_81_15_81_37_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_81_15_81_37_else_false:
+        %tmp.9 = 0;
+        push %tmp.9;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_81_15_81_37_end:
+        %tmp.10 = phi [%tmp.4 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_81_15_81_37_begin] [%tmp.8 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_81_15_81_37_true] [%tmp.9 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_81_15_81_37_else_false] [%tmp.10 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_81_15_81_37_end];
+        symbol [ mIdx ? 81 8 12 ];
+        putv self :mIdx %tmp.10;
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 82 8 ]
+        symbol [ SpikeLog %tmp.12 82 8 16 ];
+        %tmp.12 = getv ? :SpikeLog;
+        symbol [ log %tmp.13 82 17 20 ];
+        %tmp.13 = getv function %tmp.12 :log;
+        %tmp.14 = "previous";
+        %tmp.15 = "idx=";
+        symbol [ mIdx %tmp.17 82 42 46 ];
+        %tmp.17 = getv ? :mIdx;
+        %tmp.18 = add %tmp.15 %tmp.17;
+        invoke %tmp.12 %tmp.13(%tmp.14, %tmp.18);
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 83 8 ]
+        %tmp.19 = self;
+        symbol [ at %tmp.20 83 15 17 ];
+        %tmp.20 = getv function %tmp.19 :at;
+        symbol [ mIdx %tmp.22 83 18 22 ];
+        %tmp.22 = getv ? :mIdx;
+        %tmp.23 = invoke %tmp.19 %tmp.20(%tmp.22);
+        ret %tmp.23;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_80_24_84_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 86; @symbol_functiondef = [get,86,13,16]; ]
+    function get() {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_86_19_89_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 87 8 ]
+        symbol [ SpikeLog %tmp.2 87 8 16 ];
+        %tmp.2 = getv ? :SpikeLog;
+        symbol [ log %tmp.3 87 17 20 ];
+        %tmp.3 = getv function %tmp.2 :log;
+        %tmp.4 = "get";
+        %tmp.5 = "idx=";
+        symbol [ mIdx %tmp.7 87 37 41 ];
+        %tmp.7 = getv ? :mIdx;
+        %tmp.8 = add %tmp.5 %tmp.7;
+        invoke %tmp.2 %tmp.3(%tmp.4, %tmp.8);
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 88 8 ]
+        %tmp.9 = self;
+        symbol [ at %tmp.10 88 15 17 ];
+        %tmp.10 = getv function %tmp.9 :at;
+        symbol [ mIdx %tmp.12 88 18 22 ];
+        %tmp.12 = getv ? :mIdx;
+        %tmp.13 = invoke %tmp.9 %tmp.10(%tmp.12);
+        ret %tmp.13;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_86_19_89_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 91; @symbol_functiondef = [peekNext,91,13,21]; ]
+    function peekNext() {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_91_24_93_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 92 8 ]
+        %tmp.1 = self;
+        symbol [ at %tmp.2 92 15 17 ];
+        %tmp.2 = getv function %tmp.1 :at;
+        symbol [ mIdx %tmp.4 92 19 23 ];
+        %tmp.4 = getv ? :mIdx;
+        %tmp.5 = 1;
+        %tmp.6 = add %tmp.4 %tmp.5;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_92_32_92_66_begin:
+        symbol [ mRefs %tmp.8 92 32 37 ];
+        %tmp.8 = getv ? :mRefs;
+        symbol [ size %tmp.9 92 38 42 ];
+        %tmp.9 = getv function %tmp.8 :size;
+        %tmp.10 = invoke %tmp.8 %tmp.9();
+        %tmp.11 = 0;
+        %tmp.12 = gt %tmp.10 %tmp.11;
+        bf %tmp.12 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_92_32_92_66_else_false;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_92_32_92_66_true:
+        symbol [ mRefs %tmp.14 92 51 56 ];
+        %tmp.14 = getv ? :mRefs;
+        symbol [ size %tmp.15 92 57 61 ];
+        %tmp.15 = getv function %tmp.14 :size;
+        %tmp.16 = invoke %tmp.14 %tmp.15();
+        push %tmp.16;
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_92_32_92_66_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_92_32_92_66_else_false:
+        %tmp.17 = 1;
+        push %tmp.17;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_92_32_92_66_end:
+        %tmp.18 = phi [%tmp.12 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_92_32_92_66_begin] [%tmp.16 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_92_32_92_66_true] [%tmp.17 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_92_32_92_66_else_false] [%tmp.18 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_92_32_92_66_end];
+        %tmp.19 = mod %tmp.6 %tmp.18;
+        %tmp.20 = invoke %tmp.1 %tmp.2(%tmp.19);
+        ret %tmp.20;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_91_24_93_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 95; @symbol_functiondef = [peekPrevious,95,13,25]; ]
+    function peekPrevious() {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_95_28_97_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 96 8 ]
+        %tmp.1 = self;
+        symbol [ at %tmp.2 96 15 17 ];
+        %tmp.2 = getv function %tmp.1 :at;
+        symbol [ mIdx %tmp.4 96 18 22 ];
+        %tmp.4 = getv ? :mIdx;
+        %tmp.5 = 1;
+        %tmp.6 = sub %tmp.4 %tmp.5;
+        %tmp.7 = invoke %tmp.1 %tmp.2(%tmp.6);
+        ret %tmp.7;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_95_28_97_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 99; @symbol_functiondef = [shuffling,99,13,22]; ]
+    function shuffling() {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_99_25_101_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 100 8 ]
+        %tmp.1 = false;
+        ret %tmp.1;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_99_25_101_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 103; @symbol_functiondef = [canSkip,103,13,20]; ]
+    function canSkip() {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_103_23_105_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" 104 8 ]
+        %tmp.1 = true;
+        ret %tmp.1;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeContent_mc_103_23_105_4_stop:
+    }
+}
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc"; @line = 6; ]
+<init> {
+}
