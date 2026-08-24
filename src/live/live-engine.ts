@@ -613,11 +613,16 @@ export class LiveEngine {
       const earned = this.hrState.hr == null || this.hrState.zone >= 3
       if ((eta == null || eta > CREST_MIN_ETA_MS) && earned) {
         if (this.dropStyle === 'fresh') {
+          // Fresh mode: the crest song is a normal cruise entry — it plays
+          // through like any groove fill (chain point / freshness apply from
+          // its own entry). The 25s ride time-box belongs to the anticipated
+          // style, where the entry IS a drop section; time-boxing a song that
+          // started at 0:00 amputated it mid-intro and gave every summit
+          // three songs in 90s (trail run 2026-08-22, all 6 crests).
           const pick = this.pickLoop()
           if (pick) {
             this.emit(t, pick.song, 0, 0.45, `rep change (crest reward) (${pick.song.name})`)
-            this.mode = 'ride'
-            this.crestRideUntil = t + CREST_RIDE_MS
+            this.fillExitPosMs = this.chainExitPosMs(pick.song, 0)
           }
         } else {
           const pick = this.pickDrop()

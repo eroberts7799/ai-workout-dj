@@ -218,9 +218,12 @@ describe('LiveEngine', () => {
     expect(crests[0].positionMs).toBe(0)
     expect(crests[0].tMs).toBeGreaterThanOrEqual(560_000)
     expect(crests[0].tMs).toBeLessThanOrEqual(600_000)
-    // And the groove returns afterwards (crest ride is time-boxed).
+    // The crest song is a normal cruise entry: it RIDES to its own chain
+    // point, it is not amputated by the old 25s time-box (trail run
+    // 2026-08-22: every summit got three songs in 90s).
     const after = engine.commands.find((c) => c.tMs > crests[0].tMs && c.reason.startsWith('groove fill'))
     expect(after).toBeDefined()
+    expect(after!.tMs - crests[0].tMs).toBeGreaterThanOrEqual(120_000)
   })
 
   test('crest with lazy heart rate earns nothing', () => {

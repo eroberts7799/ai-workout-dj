@@ -562,9 +562,12 @@ final class LiveEngine {
       let earned = hrState.hr == nil || hrState.zone >= 3
       if (eta == nil || eta! > Self.crestMinEtaMs), earned {
         if dropStyle == .fresh, let pick = pickLoop() {
+          // Fresh mode: the crest song is a normal cruise entry — it rides to
+          // its own chain point. The 25s time-box belongs to the anticipated
+          // style; boxing a 0:00 entry amputated it mid-intro (trail run
+          // 2026-08-22, all 6 crests → three songs in 90s per summit).
           emit(t: t, song: pick.song, positionMs: 0, fadeSec: 0.45, reason: "rep change (crest reward) (\(pick.song.name))")
-          mode = .ride
-          crestRideUntil = t + Self.crestRideMs
+          fillExitPosMs = chainExitPosMs(song: pick.song, entryMs: 0)
         } else if dropStyle == .anticipated, let pick = pickDrop() {
           emit(t: t, song: pick.song, positionMs: pick.dropMs, fadeSec: 0.45, reason: "drop lands (crest reward) (\(pick.song.name))")
           mode = .ride

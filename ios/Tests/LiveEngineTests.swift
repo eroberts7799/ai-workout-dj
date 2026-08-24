@@ -254,7 +254,10 @@ final class LiveEngineTests: XCTestCase {
     XCTAssertEqual(crests[0].positionMs, 0)
     XCTAssertGreaterThanOrEqual(crests[0].tMs, 560_000)
     XCTAssertLessThanOrEqual(crests[0].tMs, 600_000)
-    XCTAssertNotNil(engine.commands.first { $0.tMs > crests[0].tMs && $0.reason.hasPrefix("groove fill") })
+    // The crest song rides to its own chain point — not the old 25s time-box.
+    let after = engine.commands.first { $0.tMs > crests[0].tMs && $0.reason.hasPrefix("groove fill") }
+    XCTAssertNotNil(after)
+    XCTAssertGreaterThanOrEqual(after!.tMs - crests[0].tMs, 120_000)
   }
 
   func testLazyHeartRateEarnsNoCrest() {
