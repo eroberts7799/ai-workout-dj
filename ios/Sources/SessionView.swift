@@ -38,91 +38,115 @@ struct SessionView: View {
       }
       .onTapGesture { showProfile = true }
 
-      Text(relay.line)
-        .fieldMono(12)
-        .foregroundColor(relay.fresh ? Theme.olive : Theme.faded)
-
-      if let b = engine.bundle {
-        VStack(alignment: .leading, spacing: 8) {
-          SectionBar()
-          Text("\(b.name) · \(Int(b.planEndMs / 60000))min · \(b.cues.count) cues")
+      switch engine.phase {
+      case .idle:
+        // The launcher, not a control panel (Ethan, 2026-08-25: "too many
+        // words and buttons"). One primary CTA, one picker, one menu.
+        if let b = engine.bundle {
+          Text("\(b.name)\(b.tags != nil ? " · \(b.tags!.count) songs" : "")")
             .fieldSubhead()
             .textCase(.uppercase)
-          // Compact readiness: problems get named, the healthy majority is a
-          // count — 44 tracks must never bury the controls again.
+        }
+        // Problems only — health is silence.
+        if let b = engine.bundle, engine.musicSource == .ownedFiles {
           let missing = b.songs.filter { engine.audioReady[$0.trackId] != true }
-          if missing.isEmpty {
-            Text("✓ all \(b.songs.count) songs ready")
-              .fieldMono(12, weight: .bold)
-              .foregroundColor(Theme.olive)
-          } else {
-            Text("✓ \(b.songs.count - missing.count) ready · \(missing.count) missing audio:")
+          if !missing.isEmpty {
+            Text("\(missing.count) songs missing audio — import audio files")
               .fieldMono(12, weight: .bold)
               .foregroundColor(Theme.fail)
-            ForEach(missing) { s in
-              HStack(spacing: 8) {
-                Text("!").fieldMono(12, weight: .bold).foregroundColor(Theme.fail)
-                Text(s.name).fieldMono(12)
-              }
+          }
+        }
+        if engine.musicSource == .spotify && !spotify.connected {
+          Button("Connect Spotify") {
+            if (spotify.clientId ?? "").isEmpty {
+              showClientIdPrompt = true
+            } else {
+              spotify.login { err in if let err { engine.status = err } }
+            }
+          }
+          .buttonStyle(ArmButtonStyle())
+        } else {
+          Button("START RUN") { engine.startTrailRun() }
+            .buttonStyle(ArmButtonStyle())
+            .disabled(engine.musicSource == .ownedFiles ? !engine.allAudioReady : !spotify.connected)
+        }
+        Button("Select playlist") {
+          engine.status = "loading your playlists…"
+          Task {
+            do {
+              myPlaylists = try await SpotifyLibrary.myPlaylists()
+              showPlaylistSheet = true
+              engine.status = ""
+            } catch {
+              engine.status = "couldn't list playlists — paste a link instead"
+              showPlaylistPrompt = true
             }
           }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-      }
-
-      switch engine.phase {
-      case .idle:
-        Menu("Program ▾") {
-          ForEach(SessionEngine.builtinPrograms, id: \.resource) { p in
-            Button(p.title) { engine.loadBuiltin(p.resource) }
-          }
+        .buttonStyle(FieldButtonStyle())
+        .disabled(!spotify.connected)
+        if armed {
+          Text("armed — watch START launches the session")
+            .fieldMono(12)
+            .foregroundColor(Theme.olive)
         }
-        Toggle("Arm Garmin auto-start", isOn: $armed).frame(maxWidth: 280)
-        if engine.supportsLive {
-          Toggle("LIVE mode (body-driven)", isOn: $engine.liveMode).frame(maxWidth: 280)
+        if relay.fresh {
+          Text(relay.line)
+            .fieldMono(12)
+            .foregroundColor(Theme.olive)
         }
-        Button("Start now (3s)") {
-          DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            if engine.phase == .idle { engine.start(atOffsetMs: 0) }
+        Menu("More ▾") {
+          Section("Music source") {
+            Picker("music", selection: $engine.musicSource) {
+              Text("Spotify").tag(SessionEngine.MusicSource.spotify)
+              Text("Owned files").tag(SessionEngine.MusicSource.ownedFiles)
+            }
           }
-        }
-        .buttonStyle(ArmButtonStyle())
-        .disabled(!engine.allAudioReady)
-        if engine.supportsLive {
-          Picker("music", selection: $engine.musicSource) {
-            Text("Owned files").tag(SessionEngine.MusicSource.ownedFiles)
-            Text("Spotify").tag(SessionEngine.MusicSource.spotify)
+          Section("Library") {
+            Button("Liked Songs") {
+              engine.status = "importing Liked Songs…"
+              Task {
+                do {
+                  let tags = try await SpotifyLibrary.likedSongs()
+                  engine.adoptLibrary(name: "Liked Songs", tags: tags)
+                } catch { engine.status = "Liked Songs failed: \(error.localizedDescription)" }
+              }
+            }
+            Button("Paste a playlist link") { showPlaylistPrompt = true }
+            Button("Import bundle") { showBundlePicker = true }
+            Button("Import audio files") { showAudioPicker = true }
           }
-          .pickerStyle(.segmented)
-          .frame(maxWidth: 300)
-          if engine.musicSource == .spotify && !spotify.connected {
-            Button("Connect Spotify") {
+          Section("Watch & plans") {
+            Toggle("Arm Garmin auto-start", isOn: $armed)
+            if engine.supportsLive {
+              Toggle("LIVE mode (body-driven)", isOn: $engine.liveMode)
+            }
+            Menu("Program") {
+              ForEach(SessionEngine.builtinPrograms, id: \.resource) { p in
+                Button(p.title) { engine.loadBuiltin(p.resource) }
+              }
+            }
+            Button("Start plan in 3s") {
+              DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                if engine.phase == .idle { engine.start(atOffsetMs: 0) }
+              }
+            }
+            .disabled(!engine.allAudioReady)
+          }
+          Section("Testing") {
+            Menu("Simulate run") {
+              ForEach([1.0, 2.0, 4.0, 8.0], id: \.self) { s in
+                Button("×\(Int(s))\(s == 1 ? " (dress rehearsal)" : "")") { engine.startSimulatedRun(speed: s) }
+              }
+            }
+            Button("Reconnect Spotify") {
               if (spotify.clientId ?? "").isEmpty {
                 showClientIdPrompt = true
               } else {
                 spotify.login { err in if let err { engine.status = err } }
               }
             }
-            .buttonStyle(FieldButtonStyle())
           }
-          Button(engine.musicSource == .spotify
-                 ? "Trail run — Spotify (downloaded playlist)"
-                 : "Trail run — phone sensors, no signal needed") { engine.startTrailRun() }
-            .buttonStyle(FieldButtonStyle())
-            .disabled(engine.musicSource == .ownedFiles ? !engine.allAudioReady : !spotify.connected)
-          HStack(spacing: 8) {
-            Button("Simulate run (no watch)") { engine.startSimulatedRun(speed: simSpeed) }
-              .buttonStyle(FieldButtonStyle())
-            Picker("speed", selection: $simSpeed) {
-              ForEach([1.0, 2.0, 4.0, 8.0], id: \.self) { Text("×\(Int($0))").tag($0) }
-            }
-            .pickerStyle(.segmented)
-            .frame(maxWidth: 160)
-          }
-          .font(.footnote)
-          Text(simSpeed == 1 ? "×1 = full dress rehearsal, real loop lengths" : "accelerated: loop-backs muted (time compression artifact)")
-            .font(.caption2)
-            .foregroundColor(.secondary)
         }
       case .running, .paused:
         Text(RelayPoller.clock(engine.clockMs)).fieldMono(48, weight: .heavy)
@@ -155,53 +179,19 @@ struct SessionView: View {
           .buttonStyle(FieldButtonStyle())
       }
 
-      Text(engine.status).fieldMono(11).foregroundColor(Theme.faded)
-
-      HStack(spacing: 24) {
-        Button("Import bundle") { showBundlePicker = true }
-          .buttonStyle(FieldButtonStyle(color: Theme.faded))
-          .fileImporter(isPresented: $showBundlePicker, allowedContentTypes: [.json]) { result in
-            if case .success(let url) = result { engine.importBundle(from: url) }
-          }
-        Button("Import audio files") { showAudioPicker = true }
-          .buttonStyle(FieldButtonStyle(color: Theme.faded))
-          .fileImporter(isPresented: $showAudioPicker, allowedContentTypes: [.audio], allowsMultipleSelection: true) { result in
-            if case .success(let urls) = result { engine.importAudio(from: urls) }
-          }
-      }
-      HStack(spacing: 24) {
-        Button("My playlists") {
-          engine.status = "loading your playlists…"
-          Task {
-            do {
-              myPlaylists = try await SpotifyLibrary.myPlaylists()
-              showPlaylistSheet = true
-              engine.status = ""
-            } catch {
-              // API list unavailable — the paste-a-link path always works.
-              engine.status = "couldn't list playlists (\(error.localizedDescription)) — paste a link instead"
-              showPlaylistPrompt = true
-            }
-          }
-        }
-        .buttonStyle(FieldButtonStyle(color: Theme.faded))
-        .disabled(!spotify.connected)
-        Button("Paste a link") { showPlaylistPrompt = true }
-          .buttonStyle(FieldButtonStyle(color: Theme.faded))
-        Button("Liked Songs") {
-          engine.status = "importing Liked Songs…"
-          Task {
-            do {
-              let tags = try await SpotifyLibrary.likedSongs()
-              engine.adoptLibrary(name: "Liked Songs", tags: tags)
-            } catch { engine.status = "Liked Songs failed: \(error.localizedDescription)" }
-          }
-        }
-        .buttonStyle(FieldButtonStyle(color: Theme.faded))
-        .disabled(!spotify.connected)
+      if !engine.status.isEmpty {
+        Text(engine.status).fieldMono(11).foregroundColor(Theme.faded)
       }
     }
     .padding()
+    // Two .fileImporter on ONE view = only one works (paid for on 8/11) —
+    // bundle importer here, audio importer on the outer ScrollView.
+    .fileImporter(isPresented: $showBundlePicker, allowedContentTypes: [.json]) { result in
+      if case .success(let url) = result { engine.importBundle(from: url) }
+    }
+    }
+    .fileImporter(isPresented: $showAudioPicker, allowedContentTypes: [.audio], allowsMultipleSelection: true) { result in
+      if case .success(let urls) = result { engine.importAudio(from: urls) }
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .background(Theme.paper.ignoresSafeArea())
