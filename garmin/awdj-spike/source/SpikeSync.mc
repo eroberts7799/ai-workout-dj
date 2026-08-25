@@ -8,7 +8,7 @@ using Toybox.Communications;
 using Toybox.Media;
 
 module SpikeSongs {
-    const BASE = "http://172.20.8.192:5173/api/library/audio/";
+    const BASE = "http://192.168.1.179:5173/api/library/audio/";
     const FILES = [
         "Absolutely%2C%20John%20Summit%20-%20DON_T%20BELIEVE%20IT%20(Extended%20Mix).mp3",
         "Beam%2C%20Skin%20On%20Skin%2C%20Fred%20again..%20-%20the%20floor%20(skin%20on%20skin%20remix).mp3",

@@ -22,7 +22,7 @@ module SpikeSongs {
         putv self :FILES %tmp.10;
     }
     [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc"; @line = 11; @position = 10; @symbol_constdef = [BASE,11,10,14]; ]
-    const BASE = "http://172.20.8.192:5173/api/library/audio/";
+    const BASE = "http://192.168.1.179:5173/api/library/audio/";
     [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc"; @line = 12; @position = 10; @symbol_constdef = [FILES,12,10,15]; ]
     const FILES;
 }
