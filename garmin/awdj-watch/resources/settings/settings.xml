@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+  <setting propertyKey="@Properties.manifestUrl" title="@Strings.ManifestTitle">
+    <settingConfig type="alphaNumeric"/>
+  </setting>
+</settings>

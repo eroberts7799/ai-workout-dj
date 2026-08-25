@@ -151,31 +151,47 @@ _Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchContent_mc_27_19
         symbol [ playbackPosition %tmp.26 28 59 75 ];
         %tmp.27 = add %tmp.25 %tmp.26;
         invoke %tmp.19 %tmp.20(%tmp.27);
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" 32 8 ]
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchContent_mc_32_8_34_8_if_stmt:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" 31 8 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchContent_mc_31_8_34_8_if_stmt:
         %tmp.28 = lgetv %songEvent;
-        symbol [ songEvent %tmp.28 32 12 21 ];
-        symbol [ Media %tmp.29 32 25 30 ];
+        symbol [ songEvent %tmp.28 31 12 21 ];
+        symbol [ Media %tmp.29 31 25 30 ];
         %tmp.29 = getm $.Toybox.Media;
-        symbol [ SONG_EVENT_SKIP_NEXT %tmp.30 32 31 51 ];
+        symbol [ SONG_EVENT_SKIP_NEXT %tmp.30 31 31 51 ];
         %tmp.30 = getv %tmp.29 :SONG_EVENT_SKIP_NEXT;
         %tmp.31 = eq %tmp.28 %tmp.30;
-        bf %tmp.31 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchContent_mc_32_8_34_8_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchContent_mc_32_8_34_8_if_true:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchContent_mc_32_53_34_8_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" 33 12 ]
-        symbol [ System %tmp.32 33 12 18 ];
+        bf %tmp.31 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchContent_mc_31_8_34_8_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchContent_mc_31_8_34_8_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchContent_mc_31_53_34_8_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" 32 12 ]
+        symbol [ System %tmp.32 32 12 18 ];
         %tmp.32 = getm $.Toybox.System;
-        symbol [ println %tmp.33 33 19 26 ];
+        symbol [ println %tmp.33 32 19 26 ];
         %tmp.33 = getv function %tmp.32 :println;
         %tmp.34 = "AWDJ skip | user overruled at pos=";
         %tmp.35 = lgetv %playbackPosition;
-        symbol [ playbackPosition %tmp.35 33 66 82 ];
+        symbol [ playbackPosition %tmp.35 32 66 82 ];
         %tmp.36 = add %tmp.34 %tmp.35;
         invoke %tmp.32 %tmp.33(%tmp.36);
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchContent_mc_32_53_34_8_stop:
-        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchContent_mc_32_8_34_8_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchContent_mc_32_8_34_8_if_end:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" 33 12 ]
+        symbol [ Brain %tmp.38 33 12 17 ];
+        %tmp.38 = getv ? :Brain;
+        symbol [ record %tmp.39 33 18 24 ];
+        %tmp.39 = getv function %tmp.38 :record;
+        %tmp.40 = newd 2;
+        %tmp.41 = "e";
+        %tmp.42 = "skip";
+        %tmp.43 = dup %tmp.40;
+        %tmp.44 = aputv %tmp.43 %tmp.41 %tmp.42;
+        %tmp.45 = "pos";
+        %tmp.46 = lgetv %playbackPosition;
+        symbol [ playbackPosition %tmp.46 33 50 66 ];
+        %tmp.47 = dup %tmp.44;
+        %tmp.48 = aputv %tmp.47 %tmp.45 %tmp.46;
+        invoke %tmp.38 %tmp.39(%tmp.48);
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchContent_mc_31_53_34_8_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchContent_mc_31_8_34_8_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchContent_mc_31_8_34_8_if_end:
 _Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchContent_mc_26_56_35_4_stop:
     }
 }

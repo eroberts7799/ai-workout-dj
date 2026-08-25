@@ -26,13 +26,44 @@ class WatchStatusView extends WatchUi.View {
     }
 
     function onShow() {
+        flushDecisionLog();
         var songs = Storage.getValue("songs");
         var n = songs != null ? songs.size() : 0;
         if (n == 0) {
-            mText = "AWDJ\nsyncing crate...\nMac server + wifi required";
-            Media.startSync();
+            if (WatchServer.manifestUrl() == null) {
+                mText = "AWDJ\nset crate manifest URL\nin Garmin Connect settings";
+            } else {
+                mText = "AWDJ\nsyncing crate...";
+                Media.startSync();
+            }
         } else {
             mText = "AWDJ\n" + n + " songs on wrist\npress START to play";
+        }
+    }
+
+    // The flywheel intake: buffered picks/skips POST to the relay via the
+    // phone's connection (few KB — no wifi window needed). Cleared only on
+    // a confirmed 201, so a dead zone just means next time.
+    function flushDecisionLog() {
+        var log = Storage.getValue("declog");
+        var url = Storage.getValue("logUrl");
+        if (log == null || log.size() == 0 || url == null) { return; }
+        Toybox.Communications.makeWebRequest(
+            url,
+            {"name" => "watch-decisions", "source" => "watch", "decisions" => log},
+            {:method => Toybox.Communications.HTTP_REQUEST_METHOD_POST,
+             :headers => {"Content-Type" => Toybox.Communications.REQUEST_CONTENT_TYPE_JSON},
+             :responseType => Toybox.Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON},
+            method(:onLogFlushed)
+        );
+    }
+
+    function onLogFlushed(responseCode, data) {
+        if (responseCode == 201) {
+            Storage.setValue("declog", []);
+            Toybox.System.println("AWDJ log | flushed to relay");
+        } else {
+            Toybox.System.println("AWDJ log | flush failed code=" + responseCode + " (kept)");
         }
     }
 

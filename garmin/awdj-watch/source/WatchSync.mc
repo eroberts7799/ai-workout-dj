@@ -1,20 +1,32 @@
-// Sync: manifest first (which songs + their BPM/key/title), then audio.
-// The dev server's /api/library serves both. Baked LAN IP — rebuild when
-// `ipconfig getifaddr en0` changes (the tax we keep paying knowingly).
+// Sync: one setting rules everything. The manifest URL (editable from
+// Garmin Connect on the phone — no rebuilds, no baked IPs) names the
+// tracks, their audio URLs, their DJ tags, and where to report decisions.
+// Point it at the Mac dev server or at the published cloud crate — the
+// watch can't tell the difference, by design.
 
+using Toybox.Application.Properties;
 using Toybox.Application.Storage;
 using Toybox.Communications;
 using Toybox.Media;
 using Toybox.System;
 
 module WatchServer {
-    const BASE = "http://192.168.1.179:5173/api/library/";
-    const MANIFEST_LIMIT = 15; // ~170MB of audio — keep first syncs sane
+    function manifestUrl() {
+        var v = null;
+        // Properties.getValue throws on unset in some SDK versions — guard.
+        try {
+            v = Properties.getValue("manifestUrl");
+        } catch (e) {
+            v = null;
+        }
+        if (v == null || !(v instanceof Toybox.Lang.String) || v.length() < 8) { return null; }
+        return v;
+    }
 }
 
 class WatchSyncDelegate extends Media.SyncDelegate {
 
-    private var mQueue; // [{ "file" =>, "bpm" =>, "camelot" =>, "title" =>, "durationMs" => }]
+    private var mQueue; // [{ "url" =>, "bpm" =>, "camelot" =>, "title" =>, "durationMs" => }]
     private var mTotal;
 
     function initialize() {
@@ -29,10 +41,16 @@ class WatchSyncDelegate extends Media.SyncDelegate {
     }
 
     function onStartSync() {
-        System.println("AWDJ sync | fetching manifest");
+        var url = WatchServer.manifestUrl();
+        if (url == null) {
+            System.println("AWDJ sync | no manifest URL set");
+            Media.notifySyncComplete("set the crate manifest URL in Garmin Connect app settings");
+            return;
+        }
+        System.println("AWDJ sync | fetching manifest " + url);
         Communications.makeWebRequest(
-            WatchServer.BASE + "watch-manifest",
-            {"limit" => WatchServer.MANIFEST_LIMIT},
+            url,
+            null,
             {:method => Communications.HTTP_REQUEST_METHOD_GET,
              :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON},
             method(:onManifest)
@@ -47,6 +65,7 @@ class WatchSyncDelegate extends Media.SyncDelegate {
         }
         mQueue = data["tracks"];
         mTotal = mQueue.size();
+        if (data["logUrl"] != null) { Storage.setValue("logUrl", data["logUrl"]); }
         System.println("AWDJ sync | manifest ok, " + mTotal + " tracks");
         syncNext();
     }
@@ -60,7 +79,7 @@ class WatchSyncDelegate extends Media.SyncDelegate {
         }
         var t = mQueue[0];
         Communications.makeWebRequest(
-            WatchServer.BASE + "audio/" + t["file"],
+            t["url"],
             null,
             {:method => Communications.HTTP_REQUEST_METHOD_GET,
              :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_AUDIO,
@@ -77,7 +96,6 @@ class WatchSyncDelegate extends Media.SyncDelegate {
         }
         var t = mQueue[0];
         mQueue = mQueue.slice(1, mQueue.size());
-        // The Brain's lookup: refId → [bpm, camelot, title, durationMs]
         var songs = Storage.getValue("songs");
         if (songs == null) { songs = {}; }
         songs[data.getId()] = [t["bpm"], t["camelot"], t["title"], t["durationMs"]];

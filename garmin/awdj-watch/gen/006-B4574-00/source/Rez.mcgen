@@ -10,6 +10,7 @@ module Rez {
     } // Drawables
 
     module Strings {
+        (:initialized) var ManifestTitle as ResourceId;
         (:initialized) var AppName as ResourceId;
     } // Strings
 

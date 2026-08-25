@@ -136,7 +136,24 @@ module Brain {
             System.println("AWDJ pick | " + name + " score=" + bestScore + " zone=" + zone + " climbing=" + climbing
                 + " inHard=" + effort[0] + " nextHard=" + effort[1]
                 + " | timer=" + (info != null ? info.timerTime : null) + " hr=" + (info != null ? info.currentHeartRate : null));
+            record({
+                "e" => "pick", "song" => name, "score" => bestScore, "zone" => zone,
+                "climbing" => climbing, "inHard" => effort[0], "nextHard" => effort[1],
+                "timer" => info != null ? info.timerTime : null,
+                "hr" => info != null ? info.currentHeartRate : null,
+            });
         }
         return best;
+    }
+
+    // Decision buffer → the flywheel. Ring-capped in Storage; the status
+    // view flushes it to the relay (BLE via the phone — no wifi needed for
+    // these few KB). Every pick and every overrule comes home by itself.
+    function record(event) {
+        var log = Storage.getValue("declog");
+        if (log == null) { log = []; }
+        log.add(event);
+        if (log.size() > 60) { log = log.slice(log.size() - 60, log.size()); }
+        Storage.setValue("declog", log);
     }
 }

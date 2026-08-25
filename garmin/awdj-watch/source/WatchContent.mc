@@ -27,10 +27,10 @@ class WatchContentDelegate extends Media.ContentDelegate {
         var name = songEvent >= 0 && songEvent < mEvents.size() ? mEvents[songEvent] : "evt" + songEvent;
         System.println("AWDJ onSong | " + name + " pos=" + playbackPosition);
         // A manual skip is a thumbs-down on what was playing — same doctrine
-        // as the phone tier's SkipEvent. Logged; harvested from the device
-        // log until the watch can upload.
+        // as the phone tier's SkipEvent, buffered for the relay upload.
         if (songEvent == Media.SONG_EVENT_SKIP_NEXT) {
             System.println("AWDJ skip | user overruled at pos=" + playbackPosition);
+            Brain.record({"e" => "skip", "pos" => playbackPosition});
         }
     }
 }

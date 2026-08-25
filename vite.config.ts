@@ -125,18 +125,26 @@ function libraryServer(): Plugin {
             } catch { /* keys optional */ }
             const onDisk = new Set(fs.existsSync(musicDir) ? fs.readdirSync(musicDir) : [])
             const limit = Number(new URL(req.url ?? '/', 'http://localhost').searchParams.get('limit') ?? 20)
+            // Absolute audio URLs: the watch fetches exactly what the
+            // manifest says — same shape whether this manifest comes from
+            // the dev server or the published cloud crate.
+            const host = req.headers.host ?? '127.0.0.1:5173'
             const tracks = (analysis.analysis ?? [])
               .filter((e: { sourceFile: string; bpm?: number }) => onDisk.has(e.sourceFile) && e.bpm)
               .slice(0, limit)
               .map((e: { sourceFile: string; title?: string; artist?: string; bpm?: number; camelot?: string; durationMs?: number }) => ({
-                file: encodeURIComponent(e.sourceFile),
+                url: `http://${host}/api/library/audio/${encodeURIComponent(e.sourceFile)}`,
                 title: e.title ?? e.sourceFile,
                 artist: e.artist ?? '',
                 bpm: e.bpm,
                 camelot: e.camelot ?? keys[e.sourceFile]?.camelot ?? null,
                 durationMs: e.durationMs ?? null,
               }))
-            res.end(JSON.stringify({ tracks }))
+            res.end(JSON.stringify({
+              tracks,
+              // Where the watch reports its decisions/skips (flywheel intake).
+              logUrl: 'https://awdj-relay.vercel.app/api/sessions?k=awdj-7g2k9x',
+            }))
           } catch (err) {
             res.statusCode = 500
             res.end(JSON.stringify({ error: String(err) }))

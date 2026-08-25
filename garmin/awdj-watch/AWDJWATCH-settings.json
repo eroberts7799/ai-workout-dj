@@ -1,0 +1,25 @@
+{
+  "settings" : [ {
+    "key" : "manifestUrl",
+    "valueType" : "string",
+    "defaultValue" : "",
+    "configTitle" : "ManifestTitle",
+    "configPrompt" : null,
+    "configType" : "alphaNumeric",
+    "configError" : null,
+    "configHelpUrl" : null,
+    "configReadonly" : false,
+    "configRequired" : false,
+    "configOptions" : null,
+    "configMin" : null,
+    "configMax" : null,
+    "configMaxLength" : null
+  } ],
+  "supportsLiveValidation" : false,
+  "languages" : {
+    "valyrian" : {
+      "ManifestTitle" : "Crate manifest URL",
+      "AppName" : "AWDJ"
+    }
+  }
+}
