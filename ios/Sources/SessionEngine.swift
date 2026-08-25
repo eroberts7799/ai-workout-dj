@@ -113,9 +113,12 @@ final class SessionEngine: ObservableObject {
   /// the music library while everything the bundle learned stays — hrMax,
   /// learned pairs. Persisted like any imported bundle.
   func adoptLibrary(name: String, tags: [TaggedSong]) {
+    // Plan deliberately dropped: adopting a music library is a fresh start,
+    // and an empty plan is what lets FOLLOW MODE conduct from the watch's
+    // step stream (a stale plan would silently block it — Thursday's test).
     let b = SessionBundle(
       name: name, planEndMs: 0, cues: [], songs: [],
-      plan: bundle?.plan, tags: tags,
+      plan: nil, tags: tags,
       hrMax: bundle?.hrMax ?? UserDefaults.standard.object(forKey: "awdj.hrMax") as? Double,
       pairBonus: bundle?.pairBonus, files: nil)
     bundle = b
