@@ -19,6 +19,8 @@ struct SessionView: View {
   @State private var clientIdText = ""
   @State private var showPlaylistPrompt = false
   @State private var playlistLinkText = ""
+  @State private var showPlaylistSheet = false
+  @State private var myPlaylists: [SpotifyLibrary.PlaylistRef] = []
 
   var body: some View {
     // ScrollView, not bare VStack: a 44-track crate's readiness list overflows
@@ -168,9 +170,25 @@ struct SessionView: View {
           }
       }
       HStack(spacing: 24) {
-        Button("Use a playlist") { showPlaylistPrompt = true }
+        Button("My playlists") {
+          engine.status = "loading your playlists…"
+          Task {
+            do {
+              myPlaylists = try await SpotifyLibrary.myPlaylists()
+              showPlaylistSheet = true
+              engine.status = ""
+            } catch {
+              // API list unavailable — the paste-a-link path always works.
+              engine.status = "couldn't list playlists (\(error.localizedDescription)) — paste a link instead"
+              showPlaylistPrompt = true
+            }
+          }
+        }
+        .buttonStyle(FieldButtonStyle(color: Theme.faded))
+        .disabled(!spotify.connected)
+        Button("Paste a link") { showPlaylistPrompt = true }
           .buttonStyle(FieldButtonStyle(color: Theme.faded))
-        Button("Use Liked Songs") {
+        Button("Liked Songs") {
           engine.status = "importing Liked Songs…"
           Task {
             do {
@@ -189,6 +207,29 @@ struct SessionView: View {
     .background(Theme.paper.ignoresSafeArea())
     .foregroundColor(Theme.ink)
     .tint(Theme.olive)
+    .sheet(isPresented: $showPlaylistSheet) {
+      NavigationView {
+        List(myPlaylists) { p in
+          Button {
+            showPlaylistSheet = false
+            engine.status = "importing \(p.name)…"
+            Task {
+              do {
+                let (name, tags) = try await SpotifyLibrary.playlistTracks(id: p.id, name: p.name)
+                engine.adoptLibrary(name: name, tags: tags)
+              } catch { engine.status = "import failed: \(error.localizedDescription)" }
+            }
+          } label: {
+            HStack {
+              Text(p.name)
+              Spacer()
+              Text("\(p.trackCount)").foregroundColor(.secondary)
+            }
+          }
+        }
+        .navigationTitle("Your playlists")
+      }
+    }
     .alert("Playlist link", isPresented: $showPlaylistPrompt) {
       TextField("Paste a Spotify playlist link", text: $playlistLinkText)
       Button("Import") {

@@ -123,4 +123,81 @@ enum SpotifyLibrary {
   private static func err(_ s: String) -> NSError {
     NSError(domain: "awdj", code: 1, userInfo: [NSLocalizedDescriptionKey: s])
   }
+
+  // MARK: - The user's own playlists (post-migration API)
+
+  struct PlaylistRef: Identifiable {
+    let id: String
+    let name: String
+    let trackCount: Int
+  }
+
+  /// GET /me/playlists — survived the Feb 2026 migration (verified against
+  /// migration reports; the legacy /playlists/{id}/tracks did not).
+  static func myPlaylists() async throws -> [PlaylistRef] {
+    let token = try await SpotifyAuth.shared.accessToken()
+    var req = URLRequest(url: URL(string: "https://api.spotify.com/v1/me/playlists?limit=50")!, timeoutInterval: 15)
+    req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+    let (data, resp) = try await URLSession.shared.data(for: req)
+    guard (resp as? HTTPURLResponse)?.statusCode == 200 else {
+      throw err("playlists HTTP \((resp as? HTTPURLResponse)?.statusCode ?? 0) — reconnect Spotify (new scopes)")
+    }
+    struct Page: Decodable {
+      struct Item: Decodable {
+        struct Tracks: Decodable { let total: Int? }
+        let id: String?
+        let name: String?
+        let tracks: Tracks?
+      }
+      let items: [Item]
+    }
+    let page = try JSONDecoder().decode(Page.self, from: data)
+    return page.items.compactMap { p in
+      guard let id = p.id, let name = p.name else { return nil }
+      return PlaylistRef(id: id, name: name, trackCount: p.tracks?.total ?? 0)
+    }
+  }
+
+  /// Tracks of one of MY playlists via the migrated /items endpoint —
+  /// full pagination, private playlists included. Falls back to the embed
+  /// scrape (public-only, first 100) if the API answers 403/404, so other
+  /// people's playlists and future purges both stay survivable.
+  static func playlistTracks(id: String, name: String) async throws -> (name: String, tags: [TaggedSong]) {
+    var out: [TaggedSong] = []
+    var offset = 0
+    while out.count < 1000 {
+      let token = try await SpotifyAuth.shared.accessToken()
+      var req = URLRequest(url: URL(string: "https://api.spotify.com/v1/playlists/\(id)/items?limit=50&offset=\(offset)")!, timeoutInterval: 15)
+      req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+      let (data, resp) = try await URLSession.shared.data(for: req)
+      let code = (resp as? HTTPURLResponse)?.statusCode ?? 0
+      if code == 403 || code == 404 {
+        // Not ours / endpoint gone — the embed scrape is the survivor path.
+        return try await scrapePlaylist(link: "https://open.spotify.com/playlist/\(id)")
+      }
+      guard code == 200,
+            let root = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+            let items = root["items"] as? [[String: Any]]
+      else { throw err("playlist items HTTP \(code)") }
+      for it in items {
+        // Migrated schema defensiveness: the payload may sit under
+        // "track", "item", or be the object itself.
+        let t = (it["track"] as? [String: Any]) ?? (it["item"] as? [String: Any]) ?? it
+        guard let trackId = t["id"] as? String,
+              let uri = t["uri"] as? String, uri.hasPrefix("spotify:track:"),
+              let title = t["name"] as? String else { continue }
+        let artists = ((t["artists"] as? [[String: Any]]) ?? [])
+          .compactMap { $0["name"] as? String }.joined(separator: ", ")
+        let e = enrich(artist: artists, title: title)
+        out.append(TaggedSong(trackId: trackId, uri: uri, name: title, artists: artists,
+                              durationMs: t["duration_ms"] as? Double ?? 0,
+                              bpm: e.bpm, camelot: e.camelot, markers: []))
+      }
+      let total = root["total"] as? Int ?? out.count
+      offset += 50
+      if offset >= total || items.isEmpty { break }
+    }
+    guard !out.isEmpty else { throw err("no playable tracks in \(name)") }
+    return (name, out)
+  }
 }

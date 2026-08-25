@@ -10,9 +10,17 @@ import Foundation
 final class SpotifyAuth: NSObject, ObservableObject, ASWebAuthenticationPresentationContextProviding {
   static let shared = SpotifyAuth()
   private static let redirect = "awdj://spotify-callback"
-  private static let scopes = "user-modify-playback-state user-read-playback-state"
+  // Playback control + the library surfaces: Liked Songs and the user's OWN
+  // playlists (the post-migration /items endpoint serves only your own —
+  // which is exactly the product's ask). Scope additions need one re-login.
+  private static let scopes = "user-modify-playback-state user-read-playback-state user-library-read playlist-read-private playlist-read-collaborative"
 
-  @Published var connected = UserDefaults.standard.string(forKey: "awdj.spotify.refresh") != nil
+  // Connected only counts if the stored token was minted with the CURRENT
+  // scope set — a scope addition (e.g. playlist reads) silently 403s on old
+  // tokens, so stale-scope tokens read as disconnected and prompt a re-login.
+  @Published var connected =
+    UserDefaults.standard.string(forKey: "awdj.spotify.refresh") != nil
+    && UserDefaults.standard.string(forKey: "awdj.spotify.scopes") == SpotifyAuth.scopes
 
   var clientId: String? {
     get { UserDefaults.standard.string(forKey: "awdj.spotify.clientId") }
@@ -48,6 +56,7 @@ final class SpotifyAuth: NSObject, ObservableObject, ASWebAuthenticationPresenta
       Task {
         do {
           try await self.exchange(code: code, verifier: verifier, clientId: clientId)
+          UserDefaults.standard.set(Self.scopes, forKey: "awdj.spotify.scopes")
           await MainActor.run {
             self.connected = true
             onDone(nil)
