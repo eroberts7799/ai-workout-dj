@@ -8,285 +8,285 @@
         <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/gen/006-B4574-00/source/Rez.mcgen" id="4" lineNum="7" parent="globals/Rez" pc="268435494" symbol="&lt;init&gt;"/>
         <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="5" lineNum="38" parent="globals/WatchContentIterator" pc="268435514" symbol="&lt;init&gt;"/>
         <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" id="6" lineNum="8" parent="globals/WatchApp" pc="268435526" symbol="&lt;init&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="7" lineNum="27" parent="globals/WatchSyncDelegate" pc="268435538" symbol="&lt;init&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="7" lineNum="36" parent="globals/WatchSyncDelegate" pc="268435538" symbol="&lt;init&gt;"/>
         <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="8" lineNum="9" parent="globals/WatchStatusDelegate" pc="268435550" symbol="&lt;init&gt;"/>
         <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="9" lineNum="79" parent="globals/WatchSyncView" pc="268435562" symbol="&lt;init&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="10" lineNum="14" parent="globals/WatchServer" pc="268435574" symbol="manifestUrl"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="10" lineNum="15" parent="globals/WatchServer" pc="268435585" symbol="manifestUrl"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="10" lineNum="18" parent="globals/WatchServer" pc="268435588" symbol="manifestUrl"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="10" lineNum="19" parent="globals/WatchServer" pc="268435613" symbol="manifestUrl"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="10" lineNum="20" parent="globals/WatchServer" pc="268435617" symbol="manifestUrl"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="10" lineNum="22" parent="globals/WatchServer" pc="268435632" symbol="manifestUrl"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="10" lineNum="22" parent="globals/WatchServer" pc="268435668" symbol="manifestUrl"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="10" lineNum="23" parent="globals/WatchServer" pc="268435673" symbol="manifestUrl"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="11" lineNum="90" parent="globals/Brain" pc="268435676" symbol="effortContext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="11" lineNum="91" parent="globals/Brain" pc="268435687" symbol="effortContext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="11" lineNum="92" parent="globals/Brain" pc="268435690" symbol="effortContext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="11" lineNum="93" parent="globals/Brain" pc="268435693" symbol="effortContext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="11" lineNum="94" parent="globals/Brain" pc="268435705" symbol="effortContext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="11" lineNum="96" parent="globals/Brain" pc="268435736" symbol="effortContext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="11" lineNum="98" parent="globals/Brain" pc="268435742" symbol="effortContext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="11" lineNum="99" parent="globals/Brain" pc="268435754" symbol="effortContext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="11" lineNum="101" parent="globals/Brain" pc="268435785" symbol="effortContext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="11" lineNum="103" parent="globals/Brain" pc="268435791" symbol="effortContext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="61" parent="globals/Brain" pc="268435806" symbol="mixScore"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="62" parent="globals/Brain" pc="268435817" symbol="mixScore"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="63" parent="globals/Brain" pc="268435820" symbol="mixScore"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="64" parent="globals/Brain" pc="268435832" symbol="mixScore"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="65" parent="globals/Brain" pc="268435838" symbol="mixScore"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="66" parent="globals/Brain" pc="268435844" symbol="mixScore"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="67" parent="globals/Brain" pc="268435863" symbol="mixScore"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="68" parent="globals/Brain" pc="268435882" symbol="mixScore"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="69" parent="globals/Brain" pc="268435898" symbol="mixScore"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="69" parent="globals/Brain" pc="268435909" symbol="mixScore"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="71" parent="globals/Brain" pc="268435922" symbol="mixScore"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="71" parent="globals/Brain" pc="268435961" symbol="mixScore"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="73" parent="globals/Brain" pc="268435974" symbol="mixScore"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="13" lineNum="29" parent="globals/Brain" pc="268435977" symbol="meta"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="13" lineNum="30" parent="globals/Brain" pc="268435988" symbol="meta"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="13" lineNum="31" parent="globals/Brain" pc="268436007" symbol="meta"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="13" lineNum="31" parent="globals/Brain" pc="268436013" symbol="meta"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="13" lineNum="32" parent="globals/Brain" pc="268436018" symbol="meta"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="14" lineNum="49" parent="globals/Brain" pc="268436024" symbol="camelotCompatible"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="14" lineNum="50" parent="globals/Brain" pc="268436035" symbol="camelotCompatible"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="14" lineNum="51" parent="globals/Brain" pc="268436047" symbol="camelotCompatible"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="14" lineNum="52" parent="globals/Brain" pc="268436059" symbol="camelotCompatible"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="14" lineNum="52" parent="globals/Brain" pc="268436071" symbol="camelotCompatible"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="14" lineNum="53" parent="globals/Brain" pc="268436076" symbol="camelotCompatible"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="14" lineNum="53" parent="globals/Brain" pc="268436088" symbol="camelotCompatible"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="14" lineNum="54" parent="globals/Brain" pc="268436093" symbol="camelotCompatible"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="14" lineNum="55" parent="globals/Brain" pc="268436110" symbol="camelotCompatible"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="14" lineNum="55" parent="globals/Brain" pc="268436121" symbol="camelotCompatible"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="14" lineNum="56" parent="globals/Brain" pc="268436131" symbol="camelotCompatible"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="15" lineNum="152" parent="globals/Brain" pc="268436161" symbol="record"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="15" lineNum="153" parent="globals/Brain" pc="268436172" symbol="record"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="15" lineNum="154" parent="globals/Brain" pc="268436191" symbol="record"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="15" lineNum="154" parent="globals/Brain" pc="268436197" symbol="record"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="15" lineNum="155" parent="globals/Brain" pc="268436204" symbol="record"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="15" lineNum="156" parent="globals/Brain" pc="268436216" symbol="record"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="15" lineNum="156" parent="globals/Brain" pc="268436229" symbol="record"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="15" lineNum="157" parent="globals/Brain" pc="268436260" symbol="record"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="36" parent="globals/Brain" pc="268436281" symbol="parseCamelot"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="37" parent="globals/Brain" pc="268436292" symbol="parseCamelot"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="37" parent="globals/Brain" pc="268436314" symbol="parseCamelot"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="38" parent="globals/Brain" pc="268436319" symbol="parseCamelot"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="39" parent="globals/Brain" pc="268436328" symbol="parseCamelot"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="39" parent="globals/Brain" pc="268436344" symbol="parseCamelot"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="40" parent="globals/Brain" pc="268436349" symbol="parseCamelot"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="41" parent="globals/Brain" pc="268436372" symbol="parseCamelot"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="42" parent="globals/Brain" pc="268436396" symbol="parseCamelot"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="42" parent="globals/Brain" pc="268436418" symbol="parseCamelot"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="43" parent="globals/Brain" pc="268436423" symbol="parseCamelot"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="43" parent="globals/Brain" pc="268436459" symbol="parseCamelot"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="44" parent="globals/Brain" pc="268436464" symbol="parseCamelot"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="110" parent="globals/Brain" pc="268436479" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="111" parent="globals/Brain" pc="268436490" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="112" parent="globals/Brain" pc="268436502" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="113" parent="globals/Brain" pc="268436514" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="114" parent="globals/Brain" pc="268436522" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="115" parent="globals/Brain" pc="268436550" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="116" parent="globals/Brain" pc="268436553" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="117" parent="globals/Brain" pc="268436570" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="117" parent="globals/Brain" pc="268436601" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="118" parent="globals/Brain" pc="268436607" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="120" parent="globals/Brain" pc="268436624" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="121" parent="globals/Brain" pc="268436646" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="122" parent="globals/Brain" pc="268436649" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="123" parent="globals/Brain" pc="268436654" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="124" parent="globals/Brain" pc="268436670" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="125" parent="globals/Brain" pc="268436677" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="125" parent="globals/Brain" pc="268436691" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="126" parent="globals/Brain" pc="268436697" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="127" parent="globals/Brain" pc="268436709" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="128" parent="globals/Brain" pc="268436723" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="128" parent="globals/Brain" pc="268436743" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="129" parent="globals/Brain" pc="268436753" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="129" parent="globals/Brain" pc="268436803" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="130" parent="globals/Brain" pc="268436813" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="130" parent="globals/Brain" pc="268436821" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="10" lineNum="21" parent="globals/WatchServer" pc="268435574" symbol="manifestUrl"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="10" lineNum="22" parent="globals/WatchServer" pc="268435585" symbol="manifestUrl"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="10" lineNum="25" parent="globals/WatchServer" pc="268435588" symbol="manifestUrl"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="10" lineNum="26" parent="globals/WatchServer" pc="268435613" symbol="manifestUrl"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="10" lineNum="27" parent="globals/WatchServer" pc="268435617" symbol="manifestUrl"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="10" lineNum="29" parent="globals/WatchServer" pc="268435632" symbol="manifestUrl"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="10" lineNum="30" parent="globals/WatchServer" pc="268435668" symbol="manifestUrl"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="10" lineNum="32" parent="globals/WatchServer" pc="268435677" symbol="manifestUrl"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="11" lineNum="90" parent="globals/Brain" pc="268435680" symbol="effortContext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="11" lineNum="91" parent="globals/Brain" pc="268435691" symbol="effortContext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="11" lineNum="92" parent="globals/Brain" pc="268435694" symbol="effortContext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="11" lineNum="93" parent="globals/Brain" pc="268435697" symbol="effortContext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="11" lineNum="94" parent="globals/Brain" pc="268435709" symbol="effortContext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="11" lineNum="96" parent="globals/Brain" pc="268435740" symbol="effortContext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="11" lineNum="98" parent="globals/Brain" pc="268435746" symbol="effortContext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="11" lineNum="99" parent="globals/Brain" pc="268435758" symbol="effortContext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="11" lineNum="101" parent="globals/Brain" pc="268435789" symbol="effortContext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="11" lineNum="103" parent="globals/Brain" pc="268435795" symbol="effortContext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="61" parent="globals/Brain" pc="268435810" symbol="mixScore"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="62" parent="globals/Brain" pc="268435821" symbol="mixScore"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="63" parent="globals/Brain" pc="268435824" symbol="mixScore"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="64" parent="globals/Brain" pc="268435836" symbol="mixScore"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="65" parent="globals/Brain" pc="268435842" symbol="mixScore"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="66" parent="globals/Brain" pc="268435848" symbol="mixScore"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="67" parent="globals/Brain" pc="268435867" symbol="mixScore"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="68" parent="globals/Brain" pc="268435886" symbol="mixScore"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="69" parent="globals/Brain" pc="268435902" symbol="mixScore"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="69" parent="globals/Brain" pc="268435913" symbol="mixScore"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="71" parent="globals/Brain" pc="268435926" symbol="mixScore"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="71" parent="globals/Brain" pc="268435965" symbol="mixScore"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="12" lineNum="73" parent="globals/Brain" pc="268435978" symbol="mixScore"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="13" lineNum="29" parent="globals/Brain" pc="268435981" symbol="meta"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="13" lineNum="30" parent="globals/Brain" pc="268435992" symbol="meta"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="13" lineNum="31" parent="globals/Brain" pc="268436011" symbol="meta"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="13" lineNum="31" parent="globals/Brain" pc="268436017" symbol="meta"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="13" lineNum="32" parent="globals/Brain" pc="268436022" symbol="meta"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="14" lineNum="49" parent="globals/Brain" pc="268436028" symbol="camelotCompatible"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="14" lineNum="50" parent="globals/Brain" pc="268436039" symbol="camelotCompatible"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="14" lineNum="51" parent="globals/Brain" pc="268436051" symbol="camelotCompatible"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="14" lineNum="52" parent="globals/Brain" pc="268436063" symbol="camelotCompatible"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="14" lineNum="52" parent="globals/Brain" pc="268436075" symbol="camelotCompatible"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="14" lineNum="53" parent="globals/Brain" pc="268436080" symbol="camelotCompatible"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="14" lineNum="53" parent="globals/Brain" pc="268436092" symbol="camelotCompatible"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="14" lineNum="54" parent="globals/Brain" pc="268436097" symbol="camelotCompatible"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="14" lineNum="55" parent="globals/Brain" pc="268436114" symbol="camelotCompatible"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="14" lineNum="55" parent="globals/Brain" pc="268436125" symbol="camelotCompatible"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="14" lineNum="56" parent="globals/Brain" pc="268436135" symbol="camelotCompatible"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="15" lineNum="152" parent="globals/Brain" pc="268436165" symbol="record"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="15" lineNum="153" parent="globals/Brain" pc="268436176" symbol="record"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="15" lineNum="154" parent="globals/Brain" pc="268436195" symbol="record"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="15" lineNum="154" parent="globals/Brain" pc="268436201" symbol="record"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="15" lineNum="155" parent="globals/Brain" pc="268436208" symbol="record"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="15" lineNum="156" parent="globals/Brain" pc="268436220" symbol="record"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="15" lineNum="156" parent="globals/Brain" pc="268436233" symbol="record"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="15" lineNum="157" parent="globals/Brain" pc="268436264" symbol="record"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="36" parent="globals/Brain" pc="268436285" symbol="parseCamelot"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="37" parent="globals/Brain" pc="268436296" symbol="parseCamelot"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="37" parent="globals/Brain" pc="268436318" symbol="parseCamelot"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="38" parent="globals/Brain" pc="268436323" symbol="parseCamelot"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="39" parent="globals/Brain" pc="268436332" symbol="parseCamelot"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="39" parent="globals/Brain" pc="268436348" symbol="parseCamelot"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="40" parent="globals/Brain" pc="268436353" symbol="parseCamelot"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="41" parent="globals/Brain" pc="268436376" symbol="parseCamelot"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="42" parent="globals/Brain" pc="268436400" symbol="parseCamelot"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="42" parent="globals/Brain" pc="268436422" symbol="parseCamelot"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="43" parent="globals/Brain" pc="268436427" symbol="parseCamelot"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="43" parent="globals/Brain" pc="268436463" symbol="parseCamelot"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="16" lineNum="44" parent="globals/Brain" pc="268436468" symbol="parseCamelot"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="110" parent="globals/Brain" pc="268436483" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="111" parent="globals/Brain" pc="268436494" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="112" parent="globals/Brain" pc="268436506" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="113" parent="globals/Brain" pc="268436518" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="114" parent="globals/Brain" pc="268436526" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="115" parent="globals/Brain" pc="268436554" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="116" parent="globals/Brain" pc="268436557" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="117" parent="globals/Brain" pc="268436574" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="117" parent="globals/Brain" pc="268436605" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="118" parent="globals/Brain" pc="268436611" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="120" parent="globals/Brain" pc="268436628" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="121" parent="globals/Brain" pc="268436650" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="122" parent="globals/Brain" pc="268436653" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="123" parent="globals/Brain" pc="268436658" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="124" parent="globals/Brain" pc="268436674" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="125" parent="globals/Brain" pc="268436681" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="125" parent="globals/Brain" pc="268436695" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="126" parent="globals/Brain" pc="268436701" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="127" parent="globals/Brain" pc="268436713" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="128" parent="globals/Brain" pc="268436727" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="128" parent="globals/Brain" pc="268436747" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="129" parent="globals/Brain" pc="268436757" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="129" parent="globals/Brain" pc="268436807" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="130" parent="globals/Brain" pc="268436817" symbol="pickNext"/>
         <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="130" parent="globals/Brain" pc="268436825" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="132" parent="globals/Brain" pc="268436842" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="133" parent="globals/Brain" pc="268436848" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="134" parent="globals/Brain" pc="268436864" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="134" parent="globals/Brain" pc="268436881" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="135" parent="globals/Brain" pc="268436917" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="136" parent="globals/Brain" pc="268436954" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="139" parent="globals/Brain" pc="268437073" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="146" parent="globals/Brain" pc="268437191" symbol="pickNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="76" parent="globals/Brain" pc="268437194" symbol="hrZone"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="77" parent="globals/Brain" pc="268437205" symbol="hrZone"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="77" parent="globals/Brain" pc="268437222" symbol="hrZone"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="78" parent="globals/Brain" pc="268437227" symbol="hrZone"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="79" parent="globals/Brain" pc="268437241" symbol="hrZone"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="79" parent="globals/Brain" pc="268437252" symbol="hrZone"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="80" parent="globals/Brain" pc="268437258" symbol="hrZone"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="80" parent="globals/Brain" pc="268437269" symbol="hrZone"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="81" parent="globals/Brain" pc="268437275" symbol="hrZone"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="81" parent="globals/Brain" pc="268437286" symbol="hrZone"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="82" parent="globals/Brain" pc="268437292" symbol="hrZone"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="82" parent="globals/Brain" pc="268437303" symbol="hrZone"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="83" parent="globals/Brain" pc="268437309" symbol="hrZone"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="19" lineNum="17" parent="globals/WatchContentDelegate" pc="268437312" symbol="getContentIterator"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="19" lineNum="18" parent="globals/WatchContentDelegate" pc="268437314" symbol="getContentIterator"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="20" lineNum="12" parent="globals/WatchContentDelegate" pc="268437320" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="20" lineNum="13" parent="globals/WatchContentDelegate" pc="268437322" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="20" lineNum="14" parent="globals/WatchContentDelegate" pc="268437334" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="21" lineNum="26" parent="globals/WatchContentDelegate" pc="268437360" symbol="onSong"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="21" lineNum="27" parent="globals/WatchContentDelegate" pc="268437363" symbol="onSong"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="21" lineNum="28" parent="globals/WatchContentDelegate" pc="268437408" symbol="onSong"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="21" lineNum="31" parent="globals/WatchContentDelegate" pc="268437438" symbol="onSong"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="21" lineNum="32" parent="globals/WatchContentDelegate" pc="268437446" symbol="onSong"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="21" lineNum="33" parent="globals/WatchContentDelegate" pc="268437467" symbol="onSong"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="22" lineNum="21" parent="globals/WatchContentDelegate" pc="268437499" symbol="resetContentIterator"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="22" lineNum="22" parent="globals/WatchContentDelegate" pc="268437501" symbol="resetContentIterator"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="22" lineNum="23" parent="globals/WatchContentDelegate" pc="268437526" symbol="resetContentIterator"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="23" lineNum="28" parent="globals/WatchStatusView" pc="268437532" symbol="onShow"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="23" lineNum="29" parent="globals/WatchStatusView" pc="268437535" symbol="onShow"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="23" lineNum="30" parent="globals/WatchStatusView" pc="268437542" symbol="onShow"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="23" lineNum="31" parent="globals/WatchStatusView" pc="268437561" symbol="onShow"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="23" lineNum="32" parent="globals/WatchStatusView" pc="268437581" symbol="onShow"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="23" lineNum="33" parent="globals/WatchStatusView" pc="268437588" symbol="onShow"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="23" lineNum="34" parent="globals/WatchStatusView" pc="268437602" symbol="onShow"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="23" lineNum="36" parent="globals/WatchStatusView" pc="268437617" symbol="onShow"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="23" lineNum="37" parent="globals/WatchStatusView" pc="268437629" symbol="onShow"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="23" lineNum="40" parent="globals/WatchStatusView" pc="268437643" symbol="onShow"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="24" lineNum="47" parent="globals/WatchStatusView" pc="268437665" symbol="flushDecisionLog"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="24" lineNum="48" parent="globals/WatchStatusView" pc="268437668" symbol="flushDecisionLog"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="24" lineNum="49" parent="globals/WatchStatusView" pc="268437687" symbol="flushDecisionLog"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="24" lineNum="50" parent="globals/WatchStatusView" pc="268437706" symbol="flushDecisionLog"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="24" lineNum="50" parent="globals/WatchStatusView" pc="268437731" symbol="flushDecisionLog"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="24" lineNum="51" parent="globals/WatchStatusView" pc="268437735" symbol="flushDecisionLog"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="25" lineNum="61" parent="globals/WatchStatusView" pc="268437810" symbol="onLogFlushed"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="25" lineNum="62" parent="globals/WatchStatusView" pc="268437812" symbol="onLogFlushed"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="25" lineNum="63" parent="globals/WatchStatusView" pc="268437821" symbol="onLogFlushed"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="25" lineNum="64" parent="globals/WatchStatusView" pc="268437841" symbol="onLogFlushed"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="25" lineNum="66" parent="globals/WatchStatusView" pc="268437862" symbol="onLogFlushed"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="26" lineNum="23" parent="globals/WatchStatusView" pc="268437890" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="26" lineNum="24" parent="globals/WatchStatusView" pc="268437892" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="26" lineNum="25" parent="globals/WatchStatusView" pc="268437904" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="27" lineNum="70" parent="globals/WatchStatusView" pc="268437917" symbol="onUpdate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="27" lineNum="71" parent="globals/WatchStatusView" pc="268437919" symbol="onUpdate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="27" lineNum="72" parent="globals/WatchStatusView" pc="268437931" symbol="onUpdate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="27" lineNum="73" parent="globals/WatchStatusView" pc="268437939" symbol="onUpdate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="27" lineNum="74" parent="globals/WatchStatusView" pc="268437955" symbol="onUpdate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="28" lineNum="75" parent="globals/WatchContentIterator" pc="268437995" symbol="next"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="28" lineNum="76" parent="globals/WatchContentIterator" pc="268437998" symbol="next"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="28" lineNum="77" parent="globals/WatchContentIterator" pc="268438022" symbol="next"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="28" lineNum="77" parent="globals/WatchContentIterator" pc="268438028" symbol="next"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="28" lineNum="78" parent="globals/WatchContentIterator" pc="268438033" symbol="next"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="28" lineNum="79" parent="globals/WatchContentIterator" pc="268438042" symbol="next"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="29" lineNum="58" parent="globals/WatchContentIterator" pc="268438053" symbol="getPlaybackProfile"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="29" lineNum="59" parent="globals/WatchContentIterator" pc="268438056" symbol="getPlaybackProfile"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="29" lineNum="60" parent="globals/WatchContentIterator" pc="268438080" symbol="getPlaybackProfile"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="29" lineNum="65" parent="globals/WatchContentIterator" pc="268438093" symbol="getPlaybackProfile"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="29" lineNum="66" parent="globals/WatchContentIterator" pc="268438102" symbol="getPlaybackProfile"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="30" lineNum="82" parent="globals/WatchContentIterator" pc="268438105" symbol="previous"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="30" lineNum="84" parent="globals/WatchContentIterator" pc="268438107" symbol="previous"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="30" lineNum="85" parent="globals/WatchContentIterator" pc="268438128" symbol="previous"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="30" lineNum="87" parent="globals/WatchContentIterator" pc="268438166" symbol="previous"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="31" lineNum="97" parent="globals/WatchContentIterator" pc="268438180" symbol="peekNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="31" lineNum="99" parent="globals/WatchContentIterator" pc="268438183" symbol="peekNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="31" lineNum="100" parent="globals/WatchContentIterator" pc="268438203" symbol="peekNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="31" lineNum="100" parent="globals/WatchContentIterator" pc="268438220" symbol="peekNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="31" lineNum="102" parent="globals/WatchContentIterator" pc="268438250" symbol="peekNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="32" lineNum="69" parent="globals/WatchContentIterator" pc="268438252" symbol="&lt;globals/WatchContentIterator/&lt;&gt;obj&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="32" lineNum="70" parent="globals/WatchContentIterator" pc="268438254" symbol="&lt;globals/WatchContentIterator/&lt;&gt;obj&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="32" lineNum="70" parent="globals/WatchContentIterator" pc="268438260" symbol="&lt;globals/WatchContentIterator/&lt;&gt;obj&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="32" lineNum="71" parent="globals/WatchContentIterator" pc="268438265" symbol="&lt;globals/WatchContentIterator/&lt;&gt;obj&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="33" lineNum="90" parent="globals/WatchContentIterator" pc="268438304" symbol="get"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="33" lineNum="91" parent="globals/WatchContentIterator" pc="268438306" symbol="get"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="33" lineNum="92" parent="globals/WatchContentIterator" pc="268438331" symbol="get"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="33" lineNum="94" parent="globals/WatchContentIterator" pc="268438359" symbol="get"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="34" lineNum="105" parent="globals/WatchContentIterator" pc="268438373" symbol="peekPrevious"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="34" lineNum="106" parent="globals/WatchContentIterator" pc="268438375" symbol="peekPrevious"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="35" lineNum="109" parent="globals/WatchContentIterator" pc="268438389" symbol="shuffling"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="35" lineNum="110" parent="globals/WatchContentIterator" pc="268438391" symbol="shuffling"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="36" lineNum="43" parent="globals/WatchContentIterator" pc="268438393" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="36" lineNum="44" parent="globals/WatchContentIterator" pc="268438396" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="36" lineNum="45" parent="globals/WatchContentIterator" pc="268438408" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="36" lineNum="46" parent="globals/WatchContentIterator" pc="268438417" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="36" lineNum="47" parent="globals/WatchContentIterator" pc="268438425" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="36" lineNum="48" parent="globals/WatchContentIterator" pc="268438452" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="36" lineNum="49" parent="globals/WatchContentIterator" pc="268438458" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="36" lineNum="50" parent="globals/WatchContentIterator" pc="268438468" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="36" lineNum="51" parent="globals/WatchContentIterator" pc="268438474" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="36" lineNum="52" parent="globals/WatchContentIterator" pc="268438496" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="36" lineNum="55" parent="globals/WatchContentIterator" pc="268438512" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="37" lineNum="113" parent="globals/WatchContentIterator" pc="268438543" symbol="canSkip"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="37" lineNum="114" parent="globals/WatchContentIterator" pc="268438545" symbol="canSkip"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" id="38" lineNum="22" parent="globals/WatchApp" pc="268438547" symbol="getPlaybackConfigurationView"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" id="38" lineNum="23" parent="globals/WatchApp" pc="268438549" symbol="getPlaybackConfigurationView"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" id="39" lineNum="14" parent="globals/WatchApp" pc="268438596" symbol="getContentDelegate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" id="39" lineNum="15" parent="globals/WatchApp" pc="268438598" symbol="getContentDelegate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" id="40" lineNum="18" parent="globals/WatchApp" pc="268438617" symbol="getSyncDelegate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" id="40" lineNum="19" parent="globals/WatchApp" pc="268438619" symbol="getSyncDelegate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" id="41" lineNum="10" parent="globals/WatchApp" pc="268438638" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" id="41" lineNum="11" parent="globals/WatchApp" pc="268438640" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" id="42" lineNum="29" parent="globals/WatchApp" pc="268438653" symbol="getSyncConfigurationView"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" id="42" lineNum="30" parent="globals/WatchApp" pc="268438655" symbol="getSyncConfigurationView"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="43" lineNum="43" parent="globals/WatchSyncDelegate" pc="268438681" symbol="onStartSync"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="43" lineNum="44" parent="globals/WatchSyncDelegate" pc="268438684" symbol="onStartSync"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="43" lineNum="45" parent="globals/WatchSyncDelegate" pc="268438696" symbol="onStartSync"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="43" lineNum="46" parent="globals/WatchSyncDelegate" pc="268438702" symbol="onStartSync"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="43" lineNum="47" parent="globals/WatchSyncDelegate" pc="268438720" symbol="onStartSync"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="43" lineNum="48" parent="globals/WatchSyncDelegate" pc="268438738" symbol="onStartSync"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="43" lineNum="50" parent="globals/WatchSyncDelegate" pc="268438742" symbol="onStartSync"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="43" lineNum="51" parent="globals/WatchSyncDelegate" pc="268438763" symbol="onStartSync"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="44" lineNum="73" parent="globals/WatchSyncDelegate" pc="268438813" symbol="syncNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="44" lineNum="74" parent="globals/WatchSyncDelegate" pc="268438816" symbol="syncNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="44" lineNum="75" parent="globals/WatchSyncDelegate" pc="268438832" symbol="syncNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="44" lineNum="76" parent="globals/WatchSyncDelegate" pc="268438851" symbol="syncNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="44" lineNum="77" parent="globals/WatchSyncDelegate" pc="268438888" symbol="syncNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="44" lineNum="78" parent="globals/WatchSyncDelegate" pc="268438902" symbol="syncNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="44" lineNum="80" parent="globals/WatchSyncDelegate" pc="268438906" symbol="syncNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="44" lineNum="81" parent="globals/WatchSyncDelegate" pc="268438915" symbol="syncNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="45" lineNum="32" parent="globals/WatchSyncDelegate" pc="268438980" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="45" lineNum="33" parent="globals/WatchSyncDelegate" pc="268438982" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="45" lineNum="34" parent="globals/WatchSyncDelegate" pc="268438994" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="45" lineNum="35" parent="globals/WatchSyncDelegate" pc="268439003" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="46" lineNum="60" parent="globals/WatchSyncDelegate" pc="268439012" symbol="onManifest"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="46" lineNum="61" parent="globals/WatchSyncDelegate" pc="268439014" symbol="onManifest"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="46" lineNum="62" parent="globals/WatchSyncDelegate" pc="268439045" symbol="onManifest"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="46" lineNum="63" parent="globals/WatchSyncDelegate" pc="268439066" symbol="onManifest"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="46" lineNum="64" parent="globals/WatchSyncDelegate" pc="268439087" symbol="onManifest"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="46" lineNum="66" parent="globals/WatchSyncDelegate" pc="268439091" symbol="onManifest"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="46" lineNum="67" parent="globals/WatchSyncDelegate" pc="268439106" symbol="onManifest"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="46" lineNum="68" parent="globals/WatchSyncDelegate" pc="268439124" symbol="onManifest"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="46" lineNum="68" parent="globals/WatchSyncDelegate" pc="268439136" symbol="onManifest"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="46" lineNum="69" parent="globals/WatchSyncDelegate" pc="268439165" symbol="onManifest"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="46" lineNum="70" parent="globals/WatchSyncDelegate" pc="268439195" symbol="onManifest"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="47" lineNum="38" parent="globals/WatchSyncDelegate" pc="268439203" symbol="isSyncNeeded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="47" lineNum="39" parent="globals/WatchSyncDelegate" pc="268439206" symbol="isSyncNeeded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="47" lineNum="40" parent="globals/WatchSyncDelegate" pc="268439225" symbol="isSyncNeeded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="91" parent="globals/WatchSyncDelegate" pc="268439245" symbol="onDownloaded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="92" parent="globals/WatchSyncDelegate" pc="268439248" symbol="onDownloaded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="93" parent="globals/WatchSyncDelegate" pc="268439263" symbol="onDownloaded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="94" parent="globals/WatchSyncDelegate" pc="268439284" symbol="onDownloaded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="95" parent="globals/WatchSyncDelegate" pc="268439305" symbol="onDownloaded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="97" parent="globals/WatchSyncDelegate" pc="268439309" symbol="onDownloaded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="98" parent="globals/WatchSyncDelegate" pc="268439318" symbol="onDownloaded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="99" parent="globals/WatchSyncDelegate" pc="268439351" symbol="onDownloaded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="100" parent="globals/WatchSyncDelegate" pc="268439370" symbol="onDownloaded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="100" parent="globals/WatchSyncDelegate" pc="268439376" symbol="onDownloaded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="101" parent="globals/WatchSyncDelegate" pc="268439383" symbol="onDownloaded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="102" parent="globals/WatchSyncDelegate" pc="268439441" symbol="onDownloaded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="103" parent="globals/WatchSyncDelegate" pc="268439461" symbol="onDownloaded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="104" parent="globals/WatchSyncDelegate" pc="268439512" symbol="onDownloaded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="105" parent="globals/WatchSyncDelegate" pc="268439551" symbol="onDownloaded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="49" lineNum="10" parent="globals/WatchStatusDelegate" pc="268439559" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="49" lineNum="11" parent="globals/WatchStatusDelegate" pc="268439561" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="50" lineNum="14" parent="globals/WatchStatusDelegate" pc="268439574" symbol="onSelect"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="50" lineNum="15" parent="globals/WatchStatusDelegate" pc="268439576" symbol="onSelect"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="50" lineNum="16" parent="globals/WatchStatusDelegate" pc="268439590" symbol="onSelect"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="51" lineNum="85" parent="globals/WatchSyncView" pc="268439592" symbol="onShow"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="51" lineNum="86" parent="globals/WatchSyncView" pc="268439594" symbol="onShow"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="52" lineNum="81" parent="globals/WatchSyncView" pc="268439606" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="52" lineNum="82" parent="globals/WatchSyncView" pc="268439608" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="53" lineNum="89" parent="globals/WatchSyncView" pc="268439621" symbol="onUpdate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="53" lineNum="90" parent="globals/WatchSyncView" pc="268439623" symbol="onUpdate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="53" lineNum="91" parent="globals/WatchSyncView" pc="268439635" symbol="onUpdate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="53" lineNum="92" parent="globals/WatchSyncView" pc="268439643" symbol="onUpdate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="53" lineNum="93" parent="globals/WatchSyncView" pc="268439659" symbol="onUpdate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="130" parent="globals/Brain" pc="268436829" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="132" parent="globals/Brain" pc="268436846" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="133" parent="globals/Brain" pc="268436852" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="134" parent="globals/Brain" pc="268436868" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="134" parent="globals/Brain" pc="268436885" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="135" parent="globals/Brain" pc="268436921" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="136" parent="globals/Brain" pc="268436958" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="139" parent="globals/Brain" pc="268437077" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="17" lineNum="146" parent="globals/Brain" pc="268437195" symbol="pickNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="76" parent="globals/Brain" pc="268437198" symbol="hrZone"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="77" parent="globals/Brain" pc="268437209" symbol="hrZone"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="77" parent="globals/Brain" pc="268437226" symbol="hrZone"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="78" parent="globals/Brain" pc="268437231" symbol="hrZone"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="79" parent="globals/Brain" pc="268437245" symbol="hrZone"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="79" parent="globals/Brain" pc="268437256" symbol="hrZone"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="80" parent="globals/Brain" pc="268437262" symbol="hrZone"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="80" parent="globals/Brain" pc="268437273" symbol="hrZone"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="81" parent="globals/Brain" pc="268437279" symbol="hrZone"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="81" parent="globals/Brain" pc="268437290" symbol="hrZone"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="82" parent="globals/Brain" pc="268437296" symbol="hrZone"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="82" parent="globals/Brain" pc="268437307" symbol="hrZone"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" id="18" lineNum="83" parent="globals/Brain" pc="268437313" symbol="hrZone"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="19" lineNum="17" parent="globals/WatchContentDelegate" pc="268437316" symbol="getContentIterator"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="19" lineNum="18" parent="globals/WatchContentDelegate" pc="268437318" symbol="getContentIterator"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="20" lineNum="12" parent="globals/WatchContentDelegate" pc="268437324" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="20" lineNum="13" parent="globals/WatchContentDelegate" pc="268437326" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="20" lineNum="14" parent="globals/WatchContentDelegate" pc="268437338" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="21" lineNum="26" parent="globals/WatchContentDelegate" pc="268437364" symbol="onSong"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="21" lineNum="27" parent="globals/WatchContentDelegate" pc="268437367" symbol="onSong"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="21" lineNum="28" parent="globals/WatchContentDelegate" pc="268437412" symbol="onSong"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="21" lineNum="31" parent="globals/WatchContentDelegate" pc="268437442" symbol="onSong"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="21" lineNum="32" parent="globals/WatchContentDelegate" pc="268437450" symbol="onSong"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="21" lineNum="33" parent="globals/WatchContentDelegate" pc="268437471" symbol="onSong"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="22" lineNum="21" parent="globals/WatchContentDelegate" pc="268437503" symbol="resetContentIterator"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="22" lineNum="22" parent="globals/WatchContentDelegate" pc="268437505" symbol="resetContentIterator"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="22" lineNum="23" parent="globals/WatchContentDelegate" pc="268437530" symbol="resetContentIterator"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="23" lineNum="28" parent="globals/WatchStatusView" pc="268437536" symbol="onShow"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="23" lineNum="29" parent="globals/WatchStatusView" pc="268437539" symbol="onShow"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="23" lineNum="30" parent="globals/WatchStatusView" pc="268437546" symbol="onShow"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="23" lineNum="31" parent="globals/WatchStatusView" pc="268437565" symbol="onShow"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="23" lineNum="32" parent="globals/WatchStatusView" pc="268437585" symbol="onShow"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="23" lineNum="33" parent="globals/WatchStatusView" pc="268437592" symbol="onShow"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="23" lineNum="34" parent="globals/WatchStatusView" pc="268437606" symbol="onShow"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="23" lineNum="36" parent="globals/WatchStatusView" pc="268437621" symbol="onShow"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="23" lineNum="37" parent="globals/WatchStatusView" pc="268437633" symbol="onShow"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="23" lineNum="40" parent="globals/WatchStatusView" pc="268437647" symbol="onShow"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="24" lineNum="47" parent="globals/WatchStatusView" pc="268437669" symbol="flushDecisionLog"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="24" lineNum="48" parent="globals/WatchStatusView" pc="268437672" symbol="flushDecisionLog"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="24" lineNum="49" parent="globals/WatchStatusView" pc="268437691" symbol="flushDecisionLog"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="24" lineNum="50" parent="globals/WatchStatusView" pc="268437710" symbol="flushDecisionLog"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="24" lineNum="50" parent="globals/WatchStatusView" pc="268437735" symbol="flushDecisionLog"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="24" lineNum="51" parent="globals/WatchStatusView" pc="268437739" symbol="flushDecisionLog"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="25" lineNum="61" parent="globals/WatchStatusView" pc="268437814" symbol="onLogFlushed"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="25" lineNum="62" parent="globals/WatchStatusView" pc="268437816" symbol="onLogFlushed"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="25" lineNum="63" parent="globals/WatchStatusView" pc="268437825" symbol="onLogFlushed"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="25" lineNum="64" parent="globals/WatchStatusView" pc="268437845" symbol="onLogFlushed"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="25" lineNum="66" parent="globals/WatchStatusView" pc="268437866" symbol="onLogFlushed"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="26" lineNum="23" parent="globals/WatchStatusView" pc="268437894" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="26" lineNum="24" parent="globals/WatchStatusView" pc="268437896" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="26" lineNum="25" parent="globals/WatchStatusView" pc="268437908" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="27" lineNum="70" parent="globals/WatchStatusView" pc="268437921" symbol="onUpdate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="27" lineNum="71" parent="globals/WatchStatusView" pc="268437923" symbol="onUpdate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="27" lineNum="72" parent="globals/WatchStatusView" pc="268437935" symbol="onUpdate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="27" lineNum="73" parent="globals/WatchStatusView" pc="268437943" symbol="onUpdate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="27" lineNum="74" parent="globals/WatchStatusView" pc="268437959" symbol="onUpdate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="28" lineNum="75" parent="globals/WatchContentIterator" pc="268437999" symbol="next"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="28" lineNum="76" parent="globals/WatchContentIterator" pc="268438002" symbol="next"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="28" lineNum="77" parent="globals/WatchContentIterator" pc="268438026" symbol="next"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="28" lineNum="77" parent="globals/WatchContentIterator" pc="268438032" symbol="next"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="28" lineNum="78" parent="globals/WatchContentIterator" pc="268438037" symbol="next"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="28" lineNum="79" parent="globals/WatchContentIterator" pc="268438046" symbol="next"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="29" lineNum="58" parent="globals/WatchContentIterator" pc="268438057" symbol="getPlaybackProfile"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="29" lineNum="59" parent="globals/WatchContentIterator" pc="268438060" symbol="getPlaybackProfile"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="29" lineNum="60" parent="globals/WatchContentIterator" pc="268438084" symbol="getPlaybackProfile"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="29" lineNum="65" parent="globals/WatchContentIterator" pc="268438097" symbol="getPlaybackProfile"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="29" lineNum="66" parent="globals/WatchContentIterator" pc="268438106" symbol="getPlaybackProfile"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="30" lineNum="82" parent="globals/WatchContentIterator" pc="268438109" symbol="previous"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="30" lineNum="84" parent="globals/WatchContentIterator" pc="268438111" symbol="previous"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="30" lineNum="85" parent="globals/WatchContentIterator" pc="268438132" symbol="previous"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="30" lineNum="87" parent="globals/WatchContentIterator" pc="268438170" symbol="previous"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="31" lineNum="97" parent="globals/WatchContentIterator" pc="268438184" symbol="peekNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="31" lineNum="99" parent="globals/WatchContentIterator" pc="268438187" symbol="peekNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="31" lineNum="100" parent="globals/WatchContentIterator" pc="268438207" symbol="peekNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="31" lineNum="100" parent="globals/WatchContentIterator" pc="268438224" symbol="peekNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="31" lineNum="102" parent="globals/WatchContentIterator" pc="268438254" symbol="peekNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="32" lineNum="69" parent="globals/WatchContentIterator" pc="268438256" symbol="&lt;globals/WatchContentIterator/&lt;&gt;obj&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="32" lineNum="70" parent="globals/WatchContentIterator" pc="268438258" symbol="&lt;globals/WatchContentIterator/&lt;&gt;obj&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="32" lineNum="70" parent="globals/WatchContentIterator" pc="268438264" symbol="&lt;globals/WatchContentIterator/&lt;&gt;obj&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="32" lineNum="71" parent="globals/WatchContentIterator" pc="268438269" symbol="&lt;globals/WatchContentIterator/&lt;&gt;obj&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="33" lineNum="90" parent="globals/WatchContentIterator" pc="268438308" symbol="get"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="33" lineNum="91" parent="globals/WatchContentIterator" pc="268438310" symbol="get"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="33" lineNum="92" parent="globals/WatchContentIterator" pc="268438335" symbol="get"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="33" lineNum="94" parent="globals/WatchContentIterator" pc="268438363" symbol="get"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="34" lineNum="105" parent="globals/WatchContentIterator" pc="268438377" symbol="peekPrevious"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="34" lineNum="106" parent="globals/WatchContentIterator" pc="268438379" symbol="peekPrevious"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="35" lineNum="109" parent="globals/WatchContentIterator" pc="268438393" symbol="shuffling"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="35" lineNum="110" parent="globals/WatchContentIterator" pc="268438395" symbol="shuffling"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="36" lineNum="43" parent="globals/WatchContentIterator" pc="268438397" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="36" lineNum="44" parent="globals/WatchContentIterator" pc="268438400" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="36" lineNum="45" parent="globals/WatchContentIterator" pc="268438412" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="36" lineNum="46" parent="globals/WatchContentIterator" pc="268438421" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="36" lineNum="47" parent="globals/WatchContentIterator" pc="268438429" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="36" lineNum="48" parent="globals/WatchContentIterator" pc="268438456" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="36" lineNum="49" parent="globals/WatchContentIterator" pc="268438462" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="36" lineNum="50" parent="globals/WatchContentIterator" pc="268438472" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="36" lineNum="51" parent="globals/WatchContentIterator" pc="268438478" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="36" lineNum="52" parent="globals/WatchContentIterator" pc="268438500" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="36" lineNum="55" parent="globals/WatchContentIterator" pc="268438516" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="37" lineNum="113" parent="globals/WatchContentIterator" pc="268438547" symbol="canSkip"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchContent.mc" id="37" lineNum="114" parent="globals/WatchContentIterator" pc="268438549" symbol="canSkip"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" id="38" lineNum="22" parent="globals/WatchApp" pc="268438551" symbol="getPlaybackConfigurationView"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" id="38" lineNum="23" parent="globals/WatchApp" pc="268438553" symbol="getPlaybackConfigurationView"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" id="39" lineNum="14" parent="globals/WatchApp" pc="268438600" symbol="getContentDelegate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" id="39" lineNum="15" parent="globals/WatchApp" pc="268438602" symbol="getContentDelegate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" id="40" lineNum="18" parent="globals/WatchApp" pc="268438621" symbol="getSyncDelegate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" id="40" lineNum="19" parent="globals/WatchApp" pc="268438623" symbol="getSyncDelegate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" id="41" lineNum="10" parent="globals/WatchApp" pc="268438642" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" id="41" lineNum="11" parent="globals/WatchApp" pc="268438644" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" id="42" lineNum="29" parent="globals/WatchApp" pc="268438657" symbol="getSyncConfigurationView"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" id="42" lineNum="30" parent="globals/WatchApp" pc="268438659" symbol="getSyncConfigurationView"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="43" lineNum="52" parent="globals/WatchSyncDelegate" pc="268438685" symbol="onStartSync"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="43" lineNum="53" parent="globals/WatchSyncDelegate" pc="268438688" symbol="onStartSync"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="43" lineNum="54" parent="globals/WatchSyncDelegate" pc="268438700" symbol="onStartSync"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="43" lineNum="55" parent="globals/WatchSyncDelegate" pc="268438706" symbol="onStartSync"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="43" lineNum="56" parent="globals/WatchSyncDelegate" pc="268438724" symbol="onStartSync"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="43" lineNum="57" parent="globals/WatchSyncDelegate" pc="268438742" symbol="onStartSync"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="43" lineNum="59" parent="globals/WatchSyncDelegate" pc="268438746" symbol="onStartSync"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="43" lineNum="60" parent="globals/WatchSyncDelegate" pc="268438767" symbol="onStartSync"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="44" lineNum="82" parent="globals/WatchSyncDelegate" pc="268438817" symbol="syncNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="44" lineNum="83" parent="globals/WatchSyncDelegate" pc="268438820" symbol="syncNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="44" lineNum="84" parent="globals/WatchSyncDelegate" pc="268438836" symbol="syncNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="44" lineNum="85" parent="globals/WatchSyncDelegate" pc="268438855" symbol="syncNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="44" lineNum="86" parent="globals/WatchSyncDelegate" pc="268438892" symbol="syncNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="44" lineNum="87" parent="globals/WatchSyncDelegate" pc="268438906" symbol="syncNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="44" lineNum="89" parent="globals/WatchSyncDelegate" pc="268438910" symbol="syncNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="44" lineNum="90" parent="globals/WatchSyncDelegate" pc="268438919" symbol="syncNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="45" lineNum="41" parent="globals/WatchSyncDelegate" pc="268438984" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="45" lineNum="42" parent="globals/WatchSyncDelegate" pc="268438986" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="45" lineNum="43" parent="globals/WatchSyncDelegate" pc="268438998" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="45" lineNum="44" parent="globals/WatchSyncDelegate" pc="268439007" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="46" lineNum="69" parent="globals/WatchSyncDelegate" pc="268439016" symbol="onManifest"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="46" lineNum="70" parent="globals/WatchSyncDelegate" pc="268439018" symbol="onManifest"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="46" lineNum="71" parent="globals/WatchSyncDelegate" pc="268439049" symbol="onManifest"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="46" lineNum="72" parent="globals/WatchSyncDelegate" pc="268439070" symbol="onManifest"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="46" lineNum="73" parent="globals/WatchSyncDelegate" pc="268439091" symbol="onManifest"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="46" lineNum="75" parent="globals/WatchSyncDelegate" pc="268439095" symbol="onManifest"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="46" lineNum="76" parent="globals/WatchSyncDelegate" pc="268439110" symbol="onManifest"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="46" lineNum="77" parent="globals/WatchSyncDelegate" pc="268439128" symbol="onManifest"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="46" lineNum="77" parent="globals/WatchSyncDelegate" pc="268439140" symbol="onManifest"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="46" lineNum="78" parent="globals/WatchSyncDelegate" pc="268439169" symbol="onManifest"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="46" lineNum="79" parent="globals/WatchSyncDelegate" pc="268439199" symbol="onManifest"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="47" lineNum="47" parent="globals/WatchSyncDelegate" pc="268439207" symbol="isSyncNeeded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="47" lineNum="48" parent="globals/WatchSyncDelegate" pc="268439210" symbol="isSyncNeeded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="47" lineNum="49" parent="globals/WatchSyncDelegate" pc="268439229" symbol="isSyncNeeded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="100" parent="globals/WatchSyncDelegate" pc="268439249" symbol="onDownloaded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="101" parent="globals/WatchSyncDelegate" pc="268439252" symbol="onDownloaded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="102" parent="globals/WatchSyncDelegate" pc="268439267" symbol="onDownloaded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="103" parent="globals/WatchSyncDelegate" pc="268439288" symbol="onDownloaded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="104" parent="globals/WatchSyncDelegate" pc="268439309" symbol="onDownloaded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="106" parent="globals/WatchSyncDelegate" pc="268439313" symbol="onDownloaded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="107" parent="globals/WatchSyncDelegate" pc="268439322" symbol="onDownloaded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="108" parent="globals/WatchSyncDelegate" pc="268439355" symbol="onDownloaded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="109" parent="globals/WatchSyncDelegate" pc="268439374" symbol="onDownloaded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="109" parent="globals/WatchSyncDelegate" pc="268439380" symbol="onDownloaded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="110" parent="globals/WatchSyncDelegate" pc="268439387" symbol="onDownloaded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="111" parent="globals/WatchSyncDelegate" pc="268439445" symbol="onDownloaded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="112" parent="globals/WatchSyncDelegate" pc="268439465" symbol="onDownloaded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="113" parent="globals/WatchSyncDelegate" pc="268439516" symbol="onDownloaded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchSync.mc" id="48" lineNum="114" parent="globals/WatchSyncDelegate" pc="268439555" symbol="onDownloaded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="49" lineNum="10" parent="globals/WatchStatusDelegate" pc="268439563" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="49" lineNum="11" parent="globals/WatchStatusDelegate" pc="268439565" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="50" lineNum="14" parent="globals/WatchStatusDelegate" pc="268439578" symbol="onSelect"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="50" lineNum="15" parent="globals/WatchStatusDelegate" pc="268439580" symbol="onSelect"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="50" lineNum="16" parent="globals/WatchStatusDelegate" pc="268439594" symbol="onSelect"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="51" lineNum="85" parent="globals/WatchSyncView" pc="268439596" symbol="onShow"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="51" lineNum="86" parent="globals/WatchSyncView" pc="268439598" symbol="onShow"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="52" lineNum="81" parent="globals/WatchSyncView" pc="268439610" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="52" lineNum="82" parent="globals/WatchSyncView" pc="268439612" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="53" lineNum="89" parent="globals/WatchSyncView" pc="268439625" symbol="onUpdate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="53" lineNum="90" parent="globals/WatchSyncView" pc="268439627" symbol="onUpdate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="53" lineNum="91" parent="globals/WatchSyncView" pc="268439639" symbol="onUpdate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="53" lineNum="92" parent="globals/WatchSyncView" pc="268439647" symbol="onUpdate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" id="53" lineNum="93" parent="globals/WatchSyncView" pc="268439663" symbol="onUpdate"/>
     </pcToLineNum>
     <symbolTable>
         <entry id="8388639" module="true" symbol="Graphics"/>
@@ -375,78 +375,78 @@
         <entry id="38" method="true" symbol="onManifest"/>
     </symbolTable>
     <localVars>
-        <entry endPc="268435675" name="v" stackId="1" startPc="268435585"/>
+        <entry endPc="268435679" name="v" stackId="1" startPc="268435585"/>
         <entry endPc="268435626" name="e" stackId="2" startPc="268435613"/>
-        <entry endPc="268435805" name="inHard" stackId="1" startPc="268435687"/>
-        <entry endPc="268435805" name="nextHard" stackId="2" startPc="268435687"/>
-        <entry endPc="268435805" name="cur" stackId="3" startPc="268435687"/>
-        <entry endPc="268435805" name="nxt" stackId="4" startPc="268435687"/>
-        <entry arg="true" endPc="268435976" name="fromMeta" stackId="1" startPc="268435806"/>
-        <entry arg="true" endPc="268435976" name="toMeta" stackId="2" startPc="268435806"/>
-        <entry endPc="268435976" name="s" stackId="3" startPc="268435817"/>
-        <entry endPc="268435970" name="fb" stackId="4" startPc="268435832"/>
-        <entry endPc="268435970" name="tb" stackId="5" startPc="268435832"/>
-        <entry endPc="268435918" name="ratio" stackId="6" startPc="268435863"/>
-        <entry endPc="268435918" name="dev" stackId="7" startPc="268435863"/>
-        <entry arg="true" endPc="268436023" name="refId" stackId="1" startPc="268435977"/>
-        <entry endPc="268436023" name="songs" stackId="2" startPc="268435988"/>
-        <entry arg="true" endPc="268436160" name="a" stackId="1" startPc="268436024"/>
-        <entry arg="true" endPc="268436160" name="b" stackId="2" startPc="268436024"/>
-        <entry endPc="268436160" name="pa" stackId="3" startPc="268436035"/>
-        <entry endPc="268436160" name="pb" stackId="4" startPc="268436035"/>
-        <entry endPc="268436160" name="d" stackId="5" startPc="268436035"/>
-        <entry arg="true" endPc="268436280" name="event" stackId="1" startPc="268436161"/>
-        <entry endPc="268436279" name="log" stackId="2" startPc="268436172"/>
-        <entry arg="true" endPc="268436478" name="c" stackId="1" startPc="268436281"/>
-        <entry endPc="268436478" name="len" stackId="2" startPc="268436292"/>
-        <entry endPc="268436478" name="num" stackId="3" startPc="268436292"/>
-        <entry endPc="268436478" name="letter" stackId="4" startPc="268436292"/>
-        <entry arg="true" endPc="268437193" name="currentRefId" stackId="1" startPc="268436479"/>
-        <entry arg="true" endPc="268437193" name="candidateIds" stackId="2" startPc="268436479"/>
-        <entry endPc="268437193" name="info" stackId="3" startPc="268436490"/>
-        <entry endPc="268437193" name="zone" stackId="4" startPc="268436490"/>
-        <entry endPc="268437193" name="effort" stackId="5" startPc="268436490"/>
-        <entry endPc="268437193" name="wantsEnergy" stackId="6" startPc="268436490"/>
-        <entry endPc="268437193" name="climbing" stackId="7" startPc="268436490"/>
-        <entry endPc="268437193" name="cur" stackId="8" startPc="268436490"/>
-        <entry endPc="268437193" name="best" stackId="9" startPc="268436490"/>
-        <entry endPc="268437193" name="bestScore" stackId="10" startPc="268436490"/>
-        <entry endPc="268436841" name="i" stackId="11" startPc="268436670"/>
-        <entry endPc="268436831" name="id" stackId="12" startPc="268436670"/>
-        <entry endPc="268436831" name="m" stackId="13" startPc="268436670"/>
-        <entry endPc="268436831" name="score" stackId="14" startPc="268436670"/>
-        <entry endPc="268437187" name="name" stackId="15" startPc="268436848"/>
-        <entry arg="true" endPc="268437311" name="info" stackId="1" startPc="268437194"/>
-        <entry endPc="268437311" name="pct" stackId="2" startPc="268437205"/>
-        <entry arg="true" endPc="268437498" name="refId" stackId="1" startPc="268437360"/>
-        <entry arg="true" endPc="268437498" name="songEvent" stackId="2" startPc="268437360"/>
-        <entry arg="true" endPc="268437498" name="playbackPosition" stackId="3" startPc="268437360"/>
-        <entry endPc="268437497" name="name" stackId="4" startPc="268437363"/>
-        <entry endPc="268437663" name="songs" stackId="1" startPc="268437535"/>
-        <entry endPc="268437663" name="n" stackId="2" startPc="268437535"/>
-        <entry endPc="268437808" name="log" stackId="1" startPc="268437668"/>
-        <entry endPc="268437808" name="url" stackId="2" startPc="268437668"/>
-        <entry arg="true" endPc="268437889" name="responseCode" stackId="1" startPc="268437810"/>
-        <entry arg="true" endPc="268437889" name="data" stackId="2" startPc="268437810"/>
-        <entry arg="true" endPc="268437994" name="dc" stackId="1" startPc="268437917"/>
-        <entry endPc="268438052" name="pick" stackId="1" startPc="268437998"/>
-        <entry endPc="268438104" name="profile" stackId="1" startPc="268438056"/>
-        <entry endPc="268438249" name="i" stackId="1" startPc="268438203"/>
-        <entry arg="true" endPc="268438303" name="id" stackId="1" startPc="268438252"/>
-        <entry endPc="268438541" name="iter" stackId="1" startPc="268438396"/>
-        <entry endPc="268438508" name="ref" stackId="2" startPc="268438458"/>
-        <entry arg="true" endPc="268438616" name="args" stackId="1" startPc="268438596"/>
-        <entry endPc="268438811" name="url" stackId="1" startPc="268438684"/>
-        <entry endPc="268438902" name="songs" stackId="1" startPc="268438832"/>
-        <entry endPc="268438978" name="t" stackId="2" startPc="268438816"/>
-        <entry arg="true" endPc="268439202" name="responseCode" stackId="1" startPc="268439012"/>
-        <entry arg="true" endPc="268439202" name="data" stackId="2" startPc="268439012"/>
-        <entry endPc="268439244" name="songs" stackId="1" startPc="268439206"/>
-        <entry arg="true" endPc="268439558" name="responseCode" stackId="1" startPc="268439245"/>
-        <entry arg="true" endPc="268439558" name="data" stackId="2" startPc="268439245"/>
-        <entry endPc="268439557" name="t" stackId="3" startPc="268439248"/>
-        <entry endPc="268439557" name="songs" stackId="4" startPc="268439248"/>
-        <entry arg="true" endPc="268439698" name="dc" stackId="1" startPc="268439621"/>
+        <entry endPc="268435809" name="inHard" stackId="1" startPc="268435691"/>
+        <entry endPc="268435809" name="nextHard" stackId="2" startPc="268435691"/>
+        <entry endPc="268435809" name="cur" stackId="3" startPc="268435691"/>
+        <entry endPc="268435809" name="nxt" stackId="4" startPc="268435691"/>
+        <entry arg="true" endPc="268435980" name="fromMeta" stackId="1" startPc="268435810"/>
+        <entry arg="true" endPc="268435980" name="toMeta" stackId="2" startPc="268435810"/>
+        <entry endPc="268435980" name="s" stackId="3" startPc="268435821"/>
+        <entry endPc="268435974" name="fb" stackId="4" startPc="268435836"/>
+        <entry endPc="268435974" name="tb" stackId="5" startPc="268435836"/>
+        <entry endPc="268435922" name="ratio" stackId="6" startPc="268435867"/>
+        <entry endPc="268435922" name="dev" stackId="7" startPc="268435867"/>
+        <entry arg="true" endPc="268436027" name="refId" stackId="1" startPc="268435981"/>
+        <entry endPc="268436027" name="songs" stackId="2" startPc="268435992"/>
+        <entry arg="true" endPc="268436164" name="a" stackId="1" startPc="268436028"/>
+        <entry arg="true" endPc="268436164" name="b" stackId="2" startPc="268436028"/>
+        <entry endPc="268436164" name="pa" stackId="3" startPc="268436039"/>
+        <entry endPc="268436164" name="pb" stackId="4" startPc="268436039"/>
+        <entry endPc="268436164" name="d" stackId="5" startPc="268436039"/>
+        <entry arg="true" endPc="268436284" name="event" stackId="1" startPc="268436165"/>
+        <entry endPc="268436283" name="log" stackId="2" startPc="268436176"/>
+        <entry arg="true" endPc="268436482" name="c" stackId="1" startPc="268436285"/>
+        <entry endPc="268436482" name="len" stackId="2" startPc="268436296"/>
+        <entry endPc="268436482" name="num" stackId="3" startPc="268436296"/>
+        <entry endPc="268436482" name="letter" stackId="4" startPc="268436296"/>
+        <entry arg="true" endPc="268437197" name="currentRefId" stackId="1" startPc="268436483"/>
+        <entry arg="true" endPc="268437197" name="candidateIds" stackId="2" startPc="268436483"/>
+        <entry endPc="268437197" name="info" stackId="3" startPc="268436494"/>
+        <entry endPc="268437197" name="zone" stackId="4" startPc="268436494"/>
+        <entry endPc="268437197" name="effort" stackId="5" startPc="268436494"/>
+        <entry endPc="268437197" name="wantsEnergy" stackId="6" startPc="268436494"/>
+        <entry endPc="268437197" name="climbing" stackId="7" startPc="268436494"/>
+        <entry endPc="268437197" name="cur" stackId="8" startPc="268436494"/>
+        <entry endPc="268437197" name="best" stackId="9" startPc="268436494"/>
+        <entry endPc="268437197" name="bestScore" stackId="10" startPc="268436494"/>
+        <entry endPc="268436845" name="i" stackId="11" startPc="268436674"/>
+        <entry endPc="268436835" name="id" stackId="12" startPc="268436674"/>
+        <entry endPc="268436835" name="m" stackId="13" startPc="268436674"/>
+        <entry endPc="268436835" name="score" stackId="14" startPc="268436674"/>
+        <entry endPc="268437191" name="name" stackId="15" startPc="268436852"/>
+        <entry arg="true" endPc="268437315" name="info" stackId="1" startPc="268437198"/>
+        <entry endPc="268437315" name="pct" stackId="2" startPc="268437209"/>
+        <entry arg="true" endPc="268437502" name="refId" stackId="1" startPc="268437364"/>
+        <entry arg="true" endPc="268437502" name="songEvent" stackId="2" startPc="268437364"/>
+        <entry arg="true" endPc="268437502" name="playbackPosition" stackId="3" startPc="268437364"/>
+        <entry endPc="268437501" name="name" stackId="4" startPc="268437367"/>
+        <entry endPc="268437667" name="songs" stackId="1" startPc="268437539"/>
+        <entry endPc="268437667" name="n" stackId="2" startPc="268437539"/>
+        <entry endPc="268437812" name="log" stackId="1" startPc="268437672"/>
+        <entry endPc="268437812" name="url" stackId="2" startPc="268437672"/>
+        <entry arg="true" endPc="268437893" name="responseCode" stackId="1" startPc="268437814"/>
+        <entry arg="true" endPc="268437893" name="data" stackId="2" startPc="268437814"/>
+        <entry arg="true" endPc="268437998" name="dc" stackId="1" startPc="268437921"/>
+        <entry endPc="268438056" name="pick" stackId="1" startPc="268438002"/>
+        <entry endPc="268438108" name="profile" stackId="1" startPc="268438060"/>
+        <entry endPc="268438253" name="i" stackId="1" startPc="268438207"/>
+        <entry arg="true" endPc="268438307" name="id" stackId="1" startPc="268438256"/>
+        <entry endPc="268438545" name="iter" stackId="1" startPc="268438400"/>
+        <entry endPc="268438512" name="ref" stackId="2" startPc="268438462"/>
+        <entry arg="true" endPc="268438620" name="args" stackId="1" startPc="268438600"/>
+        <entry endPc="268438815" name="url" stackId="1" startPc="268438688"/>
+        <entry endPc="268438906" name="songs" stackId="1" startPc="268438836"/>
+        <entry endPc="268438982" name="t" stackId="2" startPc="268438820"/>
+        <entry arg="true" endPc="268439206" name="responseCode" stackId="1" startPc="268439016"/>
+        <entry arg="true" endPc="268439206" name="data" stackId="2" startPc="268439016"/>
+        <entry endPc="268439248" name="songs" stackId="1" startPc="268439210"/>
+        <entry arg="true" endPc="268439562" name="responseCode" stackId="1" startPc="268439249"/>
+        <entry arg="true" endPc="268439562" name="data" stackId="2" startPc="268439249"/>
+        <entry endPc="268439561" name="t" stackId="3" startPc="268439252"/>
+        <entry endPc="268439561" name="songs" stackId="4" startPc="268439252"/>
+        <entry arg="true" endPc="268439702" name="dc" stackId="1" startPc="268439625"/>
     </localVars>
     <deviceInfo deviceVersion="361e256b74f66f7ba19da23c7ec7c7f06ab33c5c" partNumber="006-B4574-00"/>
     <annotations>
@@ -500,73 +500,73 @@
         <functionEntry accessMode="public" endPc="268435573" name="&lt;init&gt;" parent="WatchSyncView" startPc="268435562">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268435675" name="manifestUrl" parent="WatchServer" startPc="268435574">
+        <functionEntry accessMode="public" endPc="268435679" name="manifestUrl" parent="WatchServer" startPc="268435574">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268435805" name="effortContext" parent="Brain" startPc="268435676">
+        <functionEntry accessMode="public" endPc="268435809" name="effortContext" parent="Brain" startPc="268435680">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268435976" name="mixScore" parent="Brain" startPc="268435806">
+        <functionEntry accessMode="public" endPc="268435980" name="mixScore" parent="Brain" startPc="268435810">
             <param id="fromMeta"/>
             <param id="toMeta"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268436023" name="meta" parent="Brain" startPc="268435977">
+        <functionEntry accessMode="public" endPc="268436027" name="meta" parent="Brain" startPc="268435981">
             <param id="refId"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268436160" name="camelotCompatible" parent="Brain" startPc="268436024">
+        <functionEntry accessMode="public" endPc="268436164" name="camelotCompatible" parent="Brain" startPc="268436028">
             <param id="a"/>
             <param id="b"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268436280" name="record" parent="Brain" startPc="268436161">
+        <functionEntry accessMode="public" endPc="268436284" name="record" parent="Brain" startPc="268436165">
             <param id="event"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268436478" name="parseCamelot" parent="Brain" startPc="268436281">
+        <functionEntry accessMode="public" endPc="268436482" name="parseCamelot" parent="Brain" startPc="268436285">
             <param id="c"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268437193" name="pickNext" parent="Brain" startPc="268436479">
+        <functionEntry accessMode="public" endPc="268437197" name="pickNext" parent="Brain" startPc="268436483">
             <param id="currentRefId"/>
             <param id="candidateIds"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268437311" name="hrZone" parent="Brain" startPc="268437194">
+        <functionEntry accessMode="public" endPc="268437315" name="hrZone" parent="Brain" startPc="268437198">
             <param id="info"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268437319" name="getContentIterator" parent="WatchContentDelegate" startPc="268437312">
+        <functionEntry accessMode="public" endPc="268437323" name="getContentIterator" parent="WatchContentDelegate" startPc="268437316">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268437359" name="initialize" parent="WatchContentDelegate" startPc="268437320">
+        <functionEntry accessMode="public" endPc="268437363" name="initialize" parent="WatchContentDelegate" startPc="268437324">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268437498" name="onSong" parent="WatchContentDelegate" startPc="268437360">
+        <functionEntry accessMode="public" endPc="268437502" name="onSong" parent="WatchContentDelegate" startPc="268437364">
             <param id="refId"/>
             <param id="songEvent"/>
             <param id="playbackPosition"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268437531" name="resetContentIterator" parent="WatchContentDelegate" startPc="268437499">
+        <functionEntry accessMode="public" endPc="268437535" name="resetContentIterator" parent="WatchContentDelegate" startPc="268437503">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268437664" name="onShow" parent="WatchStatusView" startPc="268437532">
+        <functionEntry accessMode="public" endPc="268437668" name="onShow" parent="WatchStatusView" startPc="268437536">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268437809" name="flushDecisionLog" parent="WatchStatusView" startPc="268437665">
+        <functionEntry accessMode="public" endPc="268437813" name="flushDecisionLog" parent="WatchStatusView" startPc="268437669">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268437889" name="onLogFlushed" parent="WatchStatusView" startPc="268437810">
+        <functionEntry accessMode="public" endPc="268437893" name="onLogFlushed" parent="WatchStatusView" startPc="268437814">
             <param id="responseCode"/>
             <param id="data"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268437916" name="initialize" parent="WatchStatusView" startPc="268437890">
+        <functionEntry accessMode="public" endPc="268437920" name="initialize" parent="WatchStatusView" startPc="268437894">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268437994" name="onUpdate" parent="WatchStatusView" startPc="268437917">
+        <functionEntry accessMode="public" endPc="268437998" name="onUpdate" parent="WatchStatusView" startPc="268437921">
             <param id="dc"/>
             <documentation/>
         </functionEntry>
@@ -576,88 +576,88 @@
         <functionEntry accessMode="public" name="&lt;init&gt;" parent="Strings">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268438052" name="next" parent="WatchContentIterator" startPc="268437995">
+        <functionEntry accessMode="public" endPc="268438056" name="next" parent="WatchContentIterator" startPc="268437999">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268438104" name="getPlaybackProfile" parent="WatchContentIterator" startPc="268438053">
+        <functionEntry accessMode="public" endPc="268438108" name="getPlaybackProfile" parent="WatchContentIterator" startPc="268438057">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268438179" name="previous" parent="WatchContentIterator" startPc="268438105">
+        <functionEntry accessMode="public" endPc="268438183" name="previous" parent="WatchContentIterator" startPc="268438109">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268438251" name="peekNext" parent="WatchContentIterator" startPc="268438180">
+        <functionEntry accessMode="public" endPc="268438255" name="peekNext" parent="WatchContentIterator" startPc="268438184">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="private" endPc="268438303" name="&lt;globals/WatchContentIterator/&lt;&gt;obj&gt;" parent="WatchContentIterator" startPc="268438252">
+        <functionEntry accessMode="private" endPc="268438307" name="&lt;globals/WatchContentIterator/&lt;&gt;obj&gt;" parent="WatchContentIterator" startPc="268438256">
             <param id="id"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268438372" name="get" parent="WatchContentIterator" startPc="268438304">
+        <functionEntry accessMode="public" endPc="268438376" name="get" parent="WatchContentIterator" startPc="268438308">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268438388" name="peekPrevious" parent="WatchContentIterator" startPc="268438373">
+        <functionEntry accessMode="public" endPc="268438392" name="peekPrevious" parent="WatchContentIterator" startPc="268438377">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268438392" name="shuffling" parent="WatchContentIterator" startPc="268438389">
+        <functionEntry accessMode="public" endPc="268438396" name="shuffling" parent="WatchContentIterator" startPc="268438393">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268438542" name="initialize" parent="WatchContentIterator" startPc="268438393">
+        <functionEntry accessMode="public" endPc="268438546" name="initialize" parent="WatchContentIterator" startPc="268438397">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268438546" name="canSkip" parent="WatchContentIterator" startPc="268438543">
+        <functionEntry accessMode="public" endPc="268438550" name="canSkip" parent="WatchContentIterator" startPc="268438547">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268438595" name="getPlaybackConfigurationView" parent="WatchApp" startPc="268438547">
+        <functionEntry accessMode="public" endPc="268438599" name="getPlaybackConfigurationView" parent="WatchApp" startPc="268438551">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268438616" name="getContentDelegate" parent="WatchApp" startPc="268438596">
+        <functionEntry accessMode="public" endPc="268438620" name="getContentDelegate" parent="WatchApp" startPc="268438600">
             <param id="args"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268438637" name="getSyncDelegate" parent="WatchApp" startPc="268438617">
+        <functionEntry accessMode="public" endPc="268438641" name="getSyncDelegate" parent="WatchApp" startPc="268438621">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268438652" name="initialize" parent="WatchApp" startPc="268438638">
+        <functionEntry accessMode="public" endPc="268438656" name="initialize" parent="WatchApp" startPc="268438642">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268438680" name="getSyncConfigurationView" parent="WatchApp" startPc="268438653">
+        <functionEntry accessMode="public" endPc="268438684" name="getSyncConfigurationView" parent="WatchApp" startPc="268438657">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268438812" name="onStartSync" parent="WatchSyncDelegate" startPc="268438681">
+        <functionEntry accessMode="public" endPc="268438816" name="onStartSync" parent="WatchSyncDelegate" startPc="268438685">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268438979" name="syncNext" parent="WatchSyncDelegate" startPc="268438813">
+        <functionEntry accessMode="public" endPc="268438983" name="syncNext" parent="WatchSyncDelegate" startPc="268438817">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268439011" name="initialize" parent="WatchSyncDelegate" startPc="268438980">
+        <functionEntry accessMode="public" endPc="268439015" name="initialize" parent="WatchSyncDelegate" startPc="268438984">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268439202" name="onManifest" parent="WatchSyncDelegate" startPc="268439012">
+        <functionEntry accessMode="public" endPc="268439206" name="onManifest" parent="WatchSyncDelegate" startPc="268439016">
             <param id="responseCode"/>
             <param id="data"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268439244" name="isSyncNeeded" parent="WatchSyncDelegate" startPc="268439203">
+        <functionEntry accessMode="public" endPc="268439248" name="isSyncNeeded" parent="WatchSyncDelegate" startPc="268439207">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268439558" name="onDownloaded" parent="WatchSyncDelegate" startPc="268439245">
+        <functionEntry accessMode="public" endPc="268439562" name="onDownloaded" parent="WatchSyncDelegate" startPc="268439249">
             <param id="responseCode"/>
             <param id="data"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268439573" name="initialize" parent="WatchStatusDelegate" startPc="268439559">
+        <functionEntry accessMode="public" endPc="268439577" name="initialize" parent="WatchStatusDelegate" startPc="268439563">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268439591" name="onSelect" parent="WatchStatusDelegate" startPc="268439574">
+        <functionEntry accessMode="public" endPc="268439595" name="onSelect" parent="WatchStatusDelegate" startPc="268439578">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268439605" name="onShow" parent="WatchSyncView" startPc="268439592">
+        <functionEntry accessMode="public" endPc="268439609" name="onShow" parent="WatchSyncView" startPc="268439596">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268439620" name="initialize" parent="WatchSyncView" startPc="268439606">
+        <functionEntry accessMode="public" endPc="268439624" name="initialize" parent="WatchSyncView" startPc="268439610">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268439698" name="onUpdate" parent="WatchSyncView" startPc="268439621">
+        <functionEntry accessMode="public" endPc="268439702" name="onUpdate" parent="WatchSyncView" startPc="268439625">
             <param id="dc"/>
             <documentation/>
         </functionEntry>

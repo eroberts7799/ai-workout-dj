@@ -11,6 +11,13 @@ using Toybox.Media;
 using Toybox.System;
 
 module WatchServer {
+    // DEV DEFAULT — Ethan's cloud crate, so the sideloaded build works with
+    // zero configuration (Garmin's phone settings editors don't reliably
+    // show sideloaded apps). ⚠ STORE BUILDS MUST NULL THIS (STORE.md
+    // checklist): shipping it would hand Ethan's purchased music to every
+    // installer. Store users set their own manifest via app settings.
+    const DEV_DEFAULT_MANIFEST = "https://xo5ag40y70msuxua.public.blob.vercel-storage.com/watch-crate/manifest-EENyhmbQVEsy8K1Z7CJf1gU4piOh5B.json";
+
     function manifestUrl() {
         var v = null;
         // Properties.getValue throws on unset in some SDK versions — guard.
@@ -19,7 +26,9 @@ module WatchServer {
         } catch (e) {
             v = null;
         }
-        if (v == null || !(v instanceof Toybox.Lang.String) || v.length() < 8) { return null; }
+        if (v == null || !(v instanceof Toybox.Lang.String) || v.length() < 8) {
+            return DEV_DEFAULT_MANIFEST;
+        }
         return v;
     }
 }
