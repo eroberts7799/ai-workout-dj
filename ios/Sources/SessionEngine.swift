@@ -109,6 +109,24 @@ final class SessionEngine: ObservableObject {
     }
   }
 
+  /// In-app music source (playlist scrape / Liked Songs): the tags REPLACE
+  /// the music library while everything the bundle learned stays — hrMax,
+  /// learned pairs. Persisted like any imported bundle.
+  func adoptLibrary(name: String, tags: [TaggedSong]) {
+    let b = SessionBundle(
+      name: name, planEndMs: 0, cues: [], songs: [],
+      plan: bundle?.plan, tags: tags,
+      hrMax: bundle?.hrMax ?? UserDefaults.standard.object(forKey: "awdj.hrMax") as? Double,
+      pairBonus: bundle?.pairBonus, files: nil)
+    bundle = b
+    if let data = try? JSONEncoder().encode(b) {
+      try? data.write(to: docs.appendingPathComponent("session-bundle.json"))
+    }
+    matchAudioFiles()
+    let tagged = tags.filter { $0.bpm != nil }.count
+    status = "library: \(name) · \(tags.count) songs (\(tagged) with DJ tags)"
+  }
+
   func importAudio(from urls: [URL]) {
     for url in urls {
       let scoped = url.startAccessingSecurityScopedResource()

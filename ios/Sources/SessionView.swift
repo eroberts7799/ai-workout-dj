@@ -17,6 +17,8 @@ struct SessionView: View {
   @ObservedObject private var bleHr = BleHeartRate.shared
   @State private var showClientIdPrompt = false
   @State private var clientIdText = ""
+  @State private var showPlaylistPrompt = false
+  @State private var playlistLinkText = ""
 
   var body: some View {
     // ScrollView, not bare VStack: a 44-track crate's readiness list overflows
@@ -165,6 +167,21 @@ struct SessionView: View {
             if case .success(let urls) = result { engine.importAudio(from: urls) }
           }
       }
+      HStack(spacing: 24) {
+        Button("Use a playlist") { showPlaylistPrompt = true }
+          .buttonStyle(FieldButtonStyle(color: Theme.faded))
+        Button("Use Liked Songs") {
+          engine.status = "importing Liked Songs…"
+          Task {
+            do {
+              let tags = try await SpotifyLibrary.likedSongs()
+              engine.adoptLibrary(name: "Liked Songs", tags: tags)
+            } catch { engine.status = "Liked Songs failed: \(error.localizedDescription)" }
+          }
+        }
+        .buttonStyle(FieldButtonStyle(color: Theme.faded))
+        .disabled(!spotify.connected)
+      }
     }
     .padding()
     }
@@ -172,6 +189,22 @@ struct SessionView: View {
     .background(Theme.paper.ignoresSafeArea())
     .foregroundColor(Theme.ink)
     .tint(Theme.olive)
+    .alert("Playlist link", isPresented: $showPlaylistPrompt) {
+      TextField("Paste a Spotify playlist link", text: $playlistLinkText)
+      Button("Import") {
+        let link = playlistLinkText.trimmingCharacters(in: .whitespaces)
+        engine.status = "importing playlist…"
+        Task {
+          do {
+            let (name, tags) = try await SpotifyLibrary.scrapePlaylist(link: link)
+            engine.adoptLibrary(name: name, tags: tags)
+          } catch { engine.status = "playlist import failed: \(error.localizedDescription)" }
+        }
+      }
+      Button("Cancel", role: .cancel) {}
+    } message: {
+      Text("Public playlists only (first 100 tracks). The conductor tags what it recognizes.")
+    }
     .alert("Spotify Client ID", isPresented: $showClientIdPrompt) {
       TextField("Client ID (from developer dashboard)", text: $clientIdText)
       Button("Save & Connect") {
