@@ -415,14 +415,20 @@ describe('LiveEngine', () => {
     })
     const cruise: WorkoutPlan = { name: 'cruise', steps: [{ kind: 'easy', seconds: 900 }] }
 
-    // 3:30 songs (end within 3:00 + 90s slack) → chains at ~3:30, not 3:00.
+    // 3:30 songs → play to their end (~3:30 chains), never the 3:00 timer.
     const short = new LiveEngine(cruise, [mk('s1', 210_000), mk('s2', 210_000), mk('s3', 210_000)], { paceSecPerKm: 340 })
     run(short, stream([{ seconds: 900, mps: 3 }]))
     const gaps = short.commands.slice(1).map((c, i) => c.tMs - short.commands[i].tMs)
     for (const g of gaps) expect(g).toBeGreaterThanOrEqual(205_000) // never the 180s timer
 
-    // 6:00 extended mixes → the freshness timer still rules at 3:00.
-    const long = new LiveEngine(cruise, [mk('l1', 360_000), mk('l2', 360_000), mk('l3', 360_000)], { paceSecPerKm: 340 })
+    // 5:30 songs → also play out (8/25 run: anything under 6:00 finishes).
+    const mid = new LiveEngine(cruise, [mk('m1', 330_000), mk('m2', 330_000), mk('m3', 330_000)], { paceSecPerKm: 340 })
+    run(mid, stream([{ seconds: 900, mps: 3 }]))
+    const mgaps = mid.commands.slice(1).map((c, i) => c.tMs - mid.commands[i].tMs)
+    for (const g of mgaps) expect(g).toBeGreaterThanOrEqual(325_000)
+
+    // 7:00 extended mixes → the freshness timer still rules at 3:00.
+    const long = new LiveEngine(cruise, [mk('l1', 420_000), mk('l2', 420_000), mk('l3', 420_000)], { paceSecPerKm: 340 })
     run(long, stream([{ seconds: 900, mps: 3 }]))
     const lgaps = long.commands.slice(1).map((c, i) => c.tMs - long.commands[i].tMs)
     for (const g of lgaps) expect(g).toBeLessThanOrEqual(182_000)

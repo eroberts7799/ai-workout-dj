@@ -332,7 +332,12 @@ final class LiveEngineTests: XCTestCase {
     let gaps = zip(short.commands.dropFirst(), short.commands).map { $0.tMs - $1.tMs }
     for g in gaps { XCTAssertGreaterThanOrEqual(g, 205_000) }
 
-    let long = LiveEngine(plan: cruise, songs: [mk("l1", 360_000), mk("l2", 360_000), mk("l3", 360_000)], paceSecPerKm: 340)
+    let mid = LiveEngine(plan: cruise, songs: [mk("m1", 330_000), mk("m2", 330_000), mk("m3", 330_000)], paceSecPerKm: 340)
+    for s in stream([(seconds: 900, mps: 3)]) { mid.advance(s) }
+    let mgaps = zip(mid.commands.dropFirst(), mid.commands).map { $0.tMs - $1.tMs }
+    for g in mgaps { XCTAssertGreaterThanOrEqual(g, 325_000) }
+
+    let long = LiveEngine(plan: cruise, songs: [mk("l1", 420_000), mk("l2", 420_000), mk("l3", 420_000)], paceSecPerKm: 340)
     for s in stream([(seconds: 900, mps: 3)]) { long.advance(s) }
     let lgaps = zip(long.commands.dropFirst(), long.commands).map { $0.tMs - $1.tMs }
     for g in lgaps { XCTAssertLessThanOrEqual(g, 182_000) }

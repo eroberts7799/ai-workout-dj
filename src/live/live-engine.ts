@@ -82,11 +82,12 @@ const CREST_RIDE_MS = 25_000
  *  (Fred: 140s). Past this, a cruise chains to a fresh groove. */
 const MAX_FILL_RIDE_MS = 180_000
 /** How far past the freshness timer a structureless song may run to reach
- *  its natural end. 90s: covers the 3:00–4:30 band where most pop/dance
- *  radio edits end (44-track crate median ~3:20), without letting extended
- *  mixes monopolize a fill. Judgment call, not data-tuned — revisit when the
- *  HR-response reward can price long rides. */
-const NATURAL_END_SLACK_MS = 90_000
+ *  its natural end. Was 90s (4:30 ceiling) — the 8/25 easy run voted it
+ *  down: every >4:30 track still got the 3:00 guillotine and Ethan heard
+ *  every cut ("songs were def getting cut off"). On a cruise, songs
+ *  FINISH: 180s slack = a 6:00 ceiling that covers effectively the whole
+ *  radio-edit universe; only true extended mixes get the timer. */
+const NATURAL_END_SLACK_MS = 180_000
 /** Energy-aware chain window brackets that median: never change before MIN,
  *  force a change by CAP; between them, leave at a segment boundary where a
  *  strong section (chorus/inst/solo) just ended — on top, not mid-breakdown. */

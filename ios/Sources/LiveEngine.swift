@@ -68,8 +68,9 @@ final class LiveEngine {
   /// past this, a fill trades its loop for a fresh groove. Mirrors TS.
   private static let maxFillRideMs: Double = 180_000
   /// How far past the freshness timer a structureless song may run to reach
-  /// its natural end. Mirrors TS NATURAL_END_SLACK_MS (judgment call).
-  private static let naturalEndSlackMs: Double = 90_000
+  /// its natural end. Mirrors TS NATURAL_END_SLACK_MS — 6:00 ceiling after
+  /// the 8/25 easy run ("songs were def getting cut off"): cruise songs finish.
+  private static let naturalEndSlackMs: Double = 180_000
   /// Energy-aware chain window bracketing the ~190s corpus median: never
   /// change before MIN, force by CAP; between them leave where a strong
   /// section (chorus/inst/solo) just ended. Mirrors TS.
