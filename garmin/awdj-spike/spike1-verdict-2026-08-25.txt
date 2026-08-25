@@ -1,0 +1,29 @@
+AWDJ iterator.init | songs=0 | timer=0 dist=null hr=null state=0
+AWDJ getContentIterator | - | timer=0 dist=null hr=null state=0
+AWDJ get | idx=0 | timer=0 dist=null hr=null state=0
+AWDJ statusView.autosync | cache empty | timer=0 dist=null hr=73 state=0
+AWDJ sync.start | queue=3 | timer=0 dist=null hr=75 state=0
+AWDJ sync.got | remaining=2 | timer=0 dist=null hr=75 state=0
+AWDJ sync.got | remaining=1 | timer=0 dist=null hr=75 state=0
+AWDJ sync.got | remaining=0 | timer=0 dist=null hr=82 state=0
+AWDJ sync.done | cached=3 | timer=0 dist=null hr=82 state=0
+AWDJ iterator.init | songs=3 | timer=0 dist=null hr=null state=0
+AWDJ getContentIterator | - | timer=0 dist=null hr=null state=0
+AWDJ get | idx=0 | timer=0 dist=null hr=null state=0
+AWDJ onSong | Start pos=0 | timer=17411 dist=0.000000 hr=null state=3
+AWDJ onSong | Pause pos=2 | timer=20210 dist=0.000000 hr=null state=3
+AWDJ onSong | Resume pos=2 | timer=20806 dist=0.000000 hr=null state=3
+AWDJ onSong | SkipNext pos=60 | timer=78223 dist=2.360665 hr=73 state=3
+AWDJ get | idx=0 | timer=78237 dist=2.360665 hr=73 state=3
+AWDJ next | idx=1 | timer=78267 dist=2.360665 hr=73 state=3
+AWDJ onSong | Start pos=0 | timer=78355 dist=2.360665 hr=73 state=3
+AWDJ onSong | SkipNext pos=40 | timer=118374 dist=2.360665 hr=null state=3
+AWDJ get | idx=1 | timer=118385 dist=2.360665 hr=null state=3
+AWDJ next | idx=2 | timer=118399 dist=2.360665 hr=null state=3
+AWDJ onSong | Start pos=0 | timer=118476 dist=2.360665 hr=null state=3
+AWDJ onSong | SkipNext pos=62 | timer=181305 dist=2.360665 hr=null state=3
+AWDJ get | idx=2 | timer=181315 dist=2.360665 hr=null state=3
+AWDJ next | idx=0 | timer=181344 dist=2.360665 hr=null state=3
+AWDJ onSong | Start pos=0 | timer=181422 dist=2.360665 hr=null state=3
+AWDJ onSong | Pause pos=48 | timer=230401 dist=2.360665 hr=null state=3
+AWDJ onSong | Stop pos=48 | timer=0 dist=null hr=null state=0
