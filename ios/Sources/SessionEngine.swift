@@ -14,7 +14,9 @@ final class SessionEngine: ObservableObject {
   @Published var bundle: SessionBundle?
   @Published var audioReady: [String: Bool] = [:]
   @Published var firedCount = 0
-  @Published var liveMode = false
+  // LIVE is the one brain (static cues are the legacy path, kept only for
+  // clock-started HIIT programs) — no user toggle, no mode to explain.
+  @Published var liveMode = true
   @Published var lastCommand = ""
   @Published var landingCount = 0
   @Published var simulating = false

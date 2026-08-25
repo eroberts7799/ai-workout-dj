@@ -6,8 +6,6 @@ import UniformTypeIdentifiers
 struct SessionView: View {
   @StateObject private var engine = SessionEngine()
   @StateObject private var relay = RelayPoller()
-  @State private var armed = true
-  @State private var simSpeed = 8.0
   @State private var showBundlePicker = false
   @State private var showAudioPicker = false
   @AppStorage("awdj.profileName") private var profileName = ""
@@ -47,19 +45,15 @@ struct SessionView: View {
       ZStack(alignment: .topLeading) {
         if engine.phase == .idle {
           Button { withAnimation { showMenu = true } } label: {
-            Text("MENU").fieldMono(13, weight: .bold).foregroundColor(Theme.faded)
+            Label("MENU", systemImage: "line.3.horizontal")
+              .font(.system(size: 13, weight: .bold, design: .monospaced))
+              .foregroundColor(Theme.faded)
           }
         }
-        VStack(spacing: 4) {
-          Text(profileName.isEmpty ? "AWDJ · FIELD UNIT" : "AWDJ · FIELD UNIT · \(profileName.uppercased())")
-            .fieldLabel()
-            .foregroundColor(Theme.faded)
-          Text("The music moves first.")
-            .fieldDisplay(30)
-            .textCase(.uppercase)
-        }
-        .frame(maxWidth: .infinity)
-        .onTapGesture { showProfile = true }
+        Text("AWDJ")
+          .fieldDisplay(30)
+          .textCase(.uppercase)
+          .frame(maxWidth: .infinity)
       }
 
       switch engine.phase {
@@ -109,13 +103,8 @@ struct SessionView: View {
         }
         .buttonStyle(FieldButtonStyle())
         .disabled(!spotify.connected)
-        if armed {
-          Text("armed — watch START launches the session")
-            .fieldMono(12)
-            .foregroundColor(Theme.olive)
-        }
         if relay.fresh {
-          Text(relay.line)
+          Text("watch connected — press START on the watch for a planned workout")
             .fieldMono(12)
             .foregroundColor(Theme.olive)
         }
@@ -246,7 +235,7 @@ struct SessionView: View {
       engine.restore()
       relay.onSample = { [weak engine] s in
         guard let engine else { return }
-        engine.handleGarmin(event: s.event, timerMs: s.timerMs, receivedAt: s.receivedAt, armed: armed)
+        engine.handleGarmin(event: s.event, timerMs: s.timerMs, receivedAt: s.receivedAt, armed: true)
         // LIVE mode: every fresh watch sample advances the conductor
         // (unless a simulated runner is already driving it).
         if let t = s.timerMs, !engine.simulating {
@@ -280,14 +269,12 @@ struct SessionView: View {
       .padding(.horizontal, 20)
       .padding(.vertical, 16)
       List {
-        Section("Music source") {
+        Section("Music") {
           Picker("Source", selection: $engine.musicSource) {
             Text("Spotify").tag(SessionEngine.MusicSource.spotify)
             Text("Owned files").tag(SessionEngine.MusicSource.ownedFiles)
           }
           .pickerStyle(.segmented)
-        }
-        Section("Library") {
           Button("Liked Songs") {
             withAnimation { showMenu = false }
             engine.status = "importing Liked Songs…"
@@ -302,6 +289,21 @@ struct SessionView: View {
             withAnimation { showMenu = false }
             showPlaylistPrompt = true
           }
+        }
+        Section("Workouts") {
+          // One tap: the program loads and counts itself down.
+          ForEach(SessionEngine.builtinPrograms, id: \.resource) { p in
+            Button(p.title) {
+              withAnimation { showMenu = false }
+              engine.loadBuiltin(p.resource)
+              engine.status = "\(p.title) — starting in 3s"
+              DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                if engine.phase == .idle { engine.start(atOffsetMs: 0) }
+              }
+            }
+          }
+        }
+        Section("Advanced") {
           Button("Import bundle") {
             withAnimation { showMenu = false }
             showBundlePicker = true
@@ -310,26 +312,6 @@ struct SessionView: View {
             withAnimation { showMenu = false }
             showAudioPicker = true
           }
-        }
-        Section("Watch & plans") {
-          Toggle("Arm Garmin auto-start", isOn: $armed)
-          if engine.supportsLive {
-            Toggle("LIVE mode (body-driven)", isOn: $engine.liveMode)
-          }
-          Menu("Load program") {
-            ForEach(SessionEngine.builtinPrograms, id: \.resource) { p in
-              Button(p.title) { engine.loadBuiltin(p.resource) }
-            }
-          }
-          Button("Start plan in 3s") {
-            withAnimation { showMenu = false }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-              if engine.phase == .idle { engine.start(atOffsetMs: 0) }
-            }
-          }
-          .disabled(!engine.allAudioReady)
-        }
-        Section("Testing") {
           Menu("Simulate run") {
             ForEach([1.0, 2.0, 4.0, 8.0], id: \.self) { s in
               Button("×\(Int(s))\(s == 1 ? " (dress rehearsal)" : "")") {
@@ -345,6 +327,10 @@ struct SessionView: View {
             } else {
               spotify.login { err in if let err { engine.status = err } }
             }
+          }
+          Button("Athlete profile") {
+            withAnimation { showMenu = false }
+            showProfile = true
           }
         }
       }
