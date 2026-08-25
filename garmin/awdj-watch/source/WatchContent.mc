@@ -26,6 +26,14 @@ class WatchContentDelegate extends Media.ContentDelegate {
     function onSong(refId, songEvent, playbackPosition) {
         var name = songEvent >= 0 && songEvent < mEvents.size() ? mEvents[songEvent] : "evt" + songEvent;
         System.println("AWDJ onSong | " + name + " pos=" + playbackPosition);
+        // The model never argues with the speaker: whatever ACTUALLY starts
+        // is the current song, no matter what we planned (first desk test:
+        // skip restarted the current track while the Brain "picked" another).
+        if (songEvent == Media.SONG_EVENT_START) {
+            mIterator.noteStarted(refId);
+            var m = Brain.meta(refId);
+            Brain.record({"e" => "start", "song" => m != null ? m[2] : "?"});
+        }
         // A manual skip is a thumbs-down on what was playing — same doctrine
         // as the phone tier's SkipEvent, buffered for the relay upload.
         if (songEvent == Media.SONG_EVENT_SKIP_NEXT) {
@@ -39,11 +47,16 @@ class WatchContentIterator extends Media.ContentIterator {
 
     private var mIds;
     private var mCurrent;
+    // The committed plan for what plays next. peekNext() and next() MUST
+    // agree — the system player preloads from peekNext, and a mismatch with
+    // next() makes it restart the current track (first desk test).
+    private var mPlanned;
 
     function initialize() {
         ContentIterator.initialize();
         mIds = [];
         mCurrent = null;
+        mPlanned = null;
         var iter = Media.getContentRefIter({:contentType => Media.CONTENT_TYPE_AUDIO});
         if (iter != null) {
             var ref = iter.next();
@@ -71,11 +84,27 @@ class WatchContentIterator extends Media.ContentIterator {
         return Media.getCachedContentObj(new Media.ContentRef(id, Media.CONTENT_TYPE_AUDIO));
     }
 
-    // The boundary. The Brain reads the live activity and chooses.
+    // Plan once, answer consistently: the Brain decides at first ask
+    // (peek OR next), and both return that same committed plan.
+    private function planned() {
+        if (mPlanned == null) {
+            mPlanned = Brain.pickNext(mCurrent, mIds);
+        }
+        return mPlanned;
+    }
+
+    // The player reports what actually started — adopt it and re-plan.
+    function noteStarted(refId) {
+        mCurrent = refId;
+        mPlanned = null;
+    }
+
+    // The boundary. Consume the plan (making one if the player never peeked).
     function next() {
-        var pick = Brain.pickNext(mCurrent, mIds);
+        var pick = planned();
         if (pick == null) { return null; }
         mCurrent = pick;
+        mPlanned = null;
         return obj(pick);
     }
 
@@ -84,6 +113,7 @@ class WatchContentIterator extends Media.ContentIterator {
         if (Brain.recentIds.size() >= 2) {
             mCurrent = Brain.recentIds[Brain.recentIds.size() - 2];
         }
+        mPlanned = null;
         return obj(mCurrent);
     }
 
@@ -95,11 +125,8 @@ class WatchContentIterator extends Media.ContentIterator {
     }
 
     function peekNext() {
-        // A peek must not consume Brain state; show the neutral candidate.
-        for (var i = 0; i < mIds.size(); i++) {
-            if (mIds[i] != mCurrent) { return obj(mIds[i]); }
-        }
-        return null;
+        var pick = planned();
+        return pick != null ? obj(pick) : null;
     }
 
     function peekPrevious() {
