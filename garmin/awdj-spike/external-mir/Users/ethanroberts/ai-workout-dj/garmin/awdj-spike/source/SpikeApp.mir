@@ -44,38 +44,43 @@ _Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeApp_mc_22_31_24_
     }
     [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc"; @line = 26; @symbol_functiondef = [getPlaybackConfigurationView,26,13,41]; ]
     function getPlaybackConfigurationView() {
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeApp_mc_26_44_28_4_start:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeApp_mc_26_44_31_4_start:
 [ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc" 27 8 ]
-        %tmp.1 = newa 1;
-        symbol [ SpikeStatusView %tmp.5 27 20 35 ];
+        %tmp.1 = newa 2;
+        symbol [ SpikeStatusView %tmp.5 28 16 31 ];
         %tmp.5 = getv ? :SpikeStatusView;
         %tmp.6 = "AWDJ Spike\nsongs cached: ";
-        symbol [ SpikeLog %tmp.8 27 67 75 ];
+        symbol [ SpikeLog %tmp.8 28 63 71 ];
         %tmp.8 = getv ? :SpikeLog;
-        symbol [ cachedCount %tmp.9 27 76 87 ];
+        symbol [ cachedCount %tmp.9 28 72 83 ];
         %tmp.9 = getv function %tmp.8 :cachedCount;
         %tmp.10 = invoke %tmp.8 %tmp.9();
         %tmp.11 = add %tmp.6 %tmp.10;
-        %tmp.12 = "\nplay via watch music player";
+        %tmp.12 = "\npress START to play";
         %tmp.13 = add %tmp.11 %tmp.12;
         %tmp.2 = newc %tmp.5 (%tmp.13);
         %tmp.14 = dup %tmp.1;
         %tmp.15 = aputv %tmp.14 0 %tmp.2;
-        ret %tmp.15;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeApp_mc_26_44_28_4_stop:
+        symbol [ SpikeStatusDelegate %tmp.19 29 16 35 ];
+        %tmp.19 = getv ? :SpikeStatusDelegate;
+        %tmp.16 = newc %tmp.19 ();
+        %tmp.20 = dup %tmp.15;
+        %tmp.21 = aputv %tmp.20 1 %tmp.16;
+        ret %tmp.21;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeApp_mc_26_44_31_4_stop:
     }
-    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc"; @line = 30; @symbol_functiondef = [getSyncConfigurationView,30,13,37]; ]
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc"; @line = 33; @symbol_functiondef = [getSyncConfigurationView,33,13,37]; ]
     function getSyncConfigurationView() {
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeApp_mc_30_40_32_4_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc" 31 8 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeApp_mc_33_40_35_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc" 34 8 ]
         %tmp.1 = newa 1;
-        symbol [ SpikeSyncView %tmp.5 31 20 33 ];
+        symbol [ SpikeSyncView %tmp.5 34 20 33 ];
         %tmp.5 = getv ? :SpikeSyncView;
         %tmp.2 = newc %tmp.5 ();
         %tmp.6 = dup %tmp.1;
         %tmp.7 = aputv %tmp.6 0 %tmp.2;
         ret %tmp.7;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeApp_mc_30_40_32_4_stop:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeApp_mc_33_40_35_4_stop:
     }
 }
 [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc"; @line = 9; ]

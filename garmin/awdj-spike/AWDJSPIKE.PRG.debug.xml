@@ -3,155 +3,167 @@
     <manifest filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/manifest.xml"/>
     <pcToLineNum>
         <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc" id="1" lineNum="12" parent="globals/SpikeApp" pc="268435460" symbol="&lt;init&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="2" lineNum="26" parent="globals/SpikeSyncView" pc="268435472" symbol="&lt;init&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="3" lineNum="9" parent="globals/SpikeStatusView" pc="268435484" symbol="&lt;init&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/gen/006-B4574-00/source/Rez.mcgen" id="4" lineNum="7" parent="globals/Rez" pc="268435496" symbol="&lt;init&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="5" lineNum="19" parent="globals/SpikeSyncDelegate" pc="268435516" symbol="&lt;init&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="6" lineNum="8" parent="globals/SpikeContentDelegate" pc="268435528" symbol="&lt;init&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="7" lineNum="34" parent="globals/SpikeContentIterator" pc="268435540" symbol="&lt;init&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc" id="8" lineNum="26" parent="globals/SpikeApp" pc="268435552" symbol="getPlaybackConfigurationView"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc" id="8" lineNum="27" parent="globals/SpikeApp" pc="268435554" symbol="getPlaybackConfigurationView"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc" id="9" lineNum="18" parent="globals/SpikeApp" pc="268435602" symbol="getContentDelegate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc" id="9" lineNum="19" parent="globals/SpikeApp" pc="268435604" symbol="getContentDelegate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc" id="10" lineNum="22" parent="globals/SpikeApp" pc="268435623" symbol="getSyncDelegate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc" id="10" lineNum="23" parent="globals/SpikeApp" pc="268435625" symbol="getSyncDelegate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc" id="11" lineNum="14" parent="globals/SpikeApp" pc="268435644" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc" id="11" lineNum="15" parent="globals/SpikeApp" pc="268435646" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc" id="12" lineNum="30" parent="globals/SpikeApp" pc="268435659" symbol="getSyncConfigurationView"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc" id="12" lineNum="31" parent="globals/SpikeApp" pc="268435661" symbol="getSyncConfigurationView"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="13" lineNum="32" parent="globals/SpikeSyncView" pc="268435687" symbol="onShow"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="13" lineNum="33" parent="globals/SpikeSyncView" pc="268435689" symbol="onShow"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="13" lineNum="34" parent="globals/SpikeSyncView" pc="268435712" symbol="onShow"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="14" lineNum="28" parent="globals/SpikeSyncView" pc="268435724" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="14" lineNum="29" parent="globals/SpikeSyncView" pc="268435726" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="15" lineNum="37" parent="globals/SpikeSyncView" pc="268435739" symbol="onUpdate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="15" lineNum="38" parent="globals/SpikeSyncView" pc="268435741" symbol="onUpdate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="15" lineNum="39" parent="globals/SpikeSyncView" pc="268435753" symbol="onUpdate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="15" lineNum="40" parent="globals/SpikeSyncView" pc="268435761" symbol="onUpdate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="15" lineNum="41" parent="globals/SpikeSyncView" pc="268435777" symbol="onUpdate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="16" lineNum="12" parent="globals/SpikeStatusView" pc="268435817" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="16" lineNum="13" parent="globals/SpikeStatusView" pc="268435819" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="16" lineNum="14" parent="globals/SpikeStatusView" pc="268435831" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="17" lineNum="17" parent="globals/SpikeStatusView" pc="268435841" symbol="onUpdate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="17" lineNum="18" parent="globals/SpikeStatusView" pc="268435843" symbol="onUpdate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="17" lineNum="19" parent="globals/SpikeStatusView" pc="268435855" symbol="onUpdate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="17" lineNum="20" parent="globals/SpikeStatusView" pc="268435863" symbol="onUpdate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="17" lineNum="21" parent="globals/SpikeStatusView" pc="268435879" symbol="onUpdate"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="18" lineNum="11" parent="globals/SpikeLog" pc="268435919" symbol="activityLine"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="18" lineNum="12" parent="globals/SpikeLog" pc="268435930" symbol="activityLine"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="18" lineNum="13" parent="globals/SpikeLog" pc="268435942" symbol="activityLine"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="18" lineNum="14" parent="globals/SpikeLog" pc="268435948" symbol="activityLine"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="18" lineNum="16" parent="globals/SpikeLog" pc="268435957" symbol="activityLine"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="18" lineNum="18" parent="globals/SpikeLog" pc="268436010" symbol="activityLine"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="19" lineNum="21" parent="globals/SpikeLog" pc="268436013" symbol="log"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="19" lineNum="22" parent="globals/SpikeLog" pc="268436023" symbol="log"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="20" lineNum="25" parent="globals/SpikeLog" pc="268436067" symbol="cachedCount"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="20" lineNum="26" parent="globals/SpikeLog" pc="268436078" symbol="cachedCount"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="20" lineNum="27" parent="globals/SpikeLog" pc="268436105" symbol="cachedCount"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="20" lineNum="28" parent="globals/SpikeLog" pc="268436108" symbol="cachedCount"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="20" lineNum="29" parent="globals/SpikeLog" pc="268436114" symbol="cachedCount"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="20" lineNum="29" parent="globals/SpikeLog" pc="268436126" symbol="cachedCount"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="20" lineNum="31" parent="globals/SpikeLog" pc="268436139" symbol="cachedCount"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="21" lineNum="33" parent="globals/SpikeSyncDelegate" pc="268436142" symbol="onStartSync"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="21" lineNum="34" parent="globals/SpikeSyncDelegate" pc="268436145" symbol="onStartSync"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="21" lineNum="35" parent="globals/SpikeSyncDelegate" pc="268436154" symbol="onStartSync"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="21" lineNum="36" parent="globals/SpikeSyncDelegate" pc="268436178" symbol="onStartSync"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="21" lineNum="38" parent="globals/SpikeSyncDelegate" pc="268436220" symbol="onStartSync"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="21" lineNum="39" parent="globals/SpikeSyncDelegate" pc="268436238" symbol="onStartSync"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="21" lineNum="40" parent="globals/SpikeSyncDelegate" pc="268436267" symbol="onStartSync"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="22" lineNum="43" parent="globals/SpikeSyncDelegate" pc="268436275" symbol="syncNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="22" lineNum="44" parent="globals/SpikeSyncDelegate" pc="268436278" symbol="syncNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="22" lineNum="45" parent="globals/SpikeSyncDelegate" pc="268436294" symbol="syncNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="22" lineNum="46" parent="globals/SpikeSyncDelegate" pc="268436328" symbol="syncNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="22" lineNum="47" parent="globals/SpikeSyncDelegate" pc="268436342" symbol="syncNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="22" lineNum="49" parent="globals/SpikeSyncDelegate" pc="268436346" symbol="syncNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="22" lineNum="50" parent="globals/SpikeSyncDelegate" pc="268436355" symbol="syncNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="22" lineNum="55" parent="globals/SpikeSyncDelegate" pc="268436386" symbol="syncNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="23" lineNum="24" parent="globals/SpikeSyncDelegate" pc="268436418" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="23" lineNum="25" parent="globals/SpikeSyncDelegate" pc="268436420" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="23" lineNum="26" parent="globals/SpikeSyncDelegate" pc="268436432" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="24" lineNum="29" parent="globals/SpikeSyncDelegate" pc="268436442" symbol="isSyncNeeded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="24" lineNum="30" parent="globals/SpikeSyncDelegate" pc="268436444" symbol="isSyncNeeded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="25" lineNum="58" parent="globals/SpikeSyncDelegate" pc="268436471" symbol="onDownloaded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="25" lineNum="59" parent="globals/SpikeSyncDelegate" pc="268436473" symbol="onDownloaded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="25" lineNum="60" parent="globals/SpikeSyncDelegate" pc="268436482" symbol="onDownloaded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="25" lineNum="61" parent="globals/SpikeSyncDelegate" pc="268436515" symbol="onDownloaded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="25" lineNum="62" parent="globals/SpikeSyncDelegate" pc="268436550" symbol="onDownloaded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="25" lineNum="63" parent="globals/SpikeSyncDelegate" pc="268436589" symbol="onDownloaded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="25" lineNum="65" parent="globals/SpikeSyncDelegate" pc="268436599" symbol="onDownloaded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="25" lineNum="66" parent="globals/SpikeSyncDelegate" pc="268436625" symbol="onDownloaded"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="26" lineNum="18" parent="globals/SpikeContentDelegate" pc="268436647" symbol="getContentIterator"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="26" lineNum="19" parent="globals/SpikeContentDelegate" pc="268436649" symbol="getContentIterator"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="26" lineNum="20" parent="globals/SpikeContentDelegate" pc="268436672" symbol="getContentIterator"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="27" lineNum="13" parent="globals/SpikeContentDelegate" pc="268436678" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="27" lineNum="14" parent="globals/SpikeContentDelegate" pc="268436680" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="27" lineNum="15" parent="globals/SpikeContentDelegate" pc="268436692" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="28" lineNum="28" parent="globals/SpikeContentDelegate" pc="268436718" symbol="onSong"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="28" lineNum="29" parent="globals/SpikeContentDelegate" pc="268436721" symbol="onSong"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="28" lineNum="30" parent="globals/SpikeContentDelegate" pc="268436766" symbol="onSong"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="29" lineNum="23" parent="globals/SpikeContentDelegate" pc="268436796" symbol="resetContentIterator"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="29" lineNum="24" parent="globals/SpikeContentDelegate" pc="268436798" symbol="resetContentIterator"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="29" lineNum="25" parent="globals/SpikeContentDelegate" pc="268436823" symbol="resetContentIterator"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="30" lineNum="74" parent="globals/SpikeContentIterator" pc="268436829" symbol="next"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="30" lineNum="75" parent="globals/SpikeContentIterator" pc="268436831" symbol="next"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="30" lineNum="76" parent="globals/SpikeContentIterator" pc="268436879" symbol="next"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="30" lineNum="77" parent="globals/SpikeContentIterator" pc="268436908" symbol="next"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="31" lineNum="54" parent="globals/SpikeContentIterator" pc="268436922" symbol="getPlaybackProfile"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="31" lineNum="55" parent="globals/SpikeContentIterator" pc="268436925" symbol="getPlaybackProfile"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="31" lineNum="56" parent="globals/SpikeContentIterator" pc="268436949" symbol="getPlaybackProfile"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="31" lineNum="61" parent="globals/SpikeContentIterator" pc="268436962" symbol="getPlaybackProfile"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="31" lineNum="62" parent="globals/SpikeContentIterator" pc="268436971" symbol="getPlaybackProfile"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="32" lineNum="65" parent="globals/SpikeContentIterator" pc="268436974" symbol="&lt;globals/SpikeContentIterator/&lt;&gt;at&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="32" lineNum="66" parent="globals/SpikeContentIterator" pc="268436976" symbol="&lt;globals/SpikeContentIterator/&lt;&gt;at&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="32" lineNum="67" parent="globals/SpikeContentIterator" pc="268437000" symbol="&lt;globals/SpikeContentIterator/&lt;&gt;at&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="32" lineNum="69" parent="globals/SpikeContentIterator" pc="268437005" symbol="&lt;globals/SpikeContentIterator/&lt;&gt;at&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="33" lineNum="80" parent="globals/SpikeContentIterator" pc="268437050" symbol="previous"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="33" lineNum="81" parent="globals/SpikeContentIterator" pc="268437052" symbol="previous"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="33" lineNum="82" parent="globals/SpikeContentIterator" pc="268437081" symbol="previous"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="33" lineNum="83" parent="globals/SpikeContentIterator" pc="268437110" symbol="previous"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="34" lineNum="91" parent="globals/SpikeContentIterator" pc="268437124" symbol="peekNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="34" lineNum="92" parent="globals/SpikeContentIterator" pc="268437126" symbol="peekNext"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="35" lineNum="86" parent="globals/SpikeContentIterator" pc="268437176" symbol="get"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="35" lineNum="87" parent="globals/SpikeContentIterator" pc="268437178" symbol="get"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="35" lineNum="88" parent="globals/SpikeContentIterator" pc="268437207" symbol="get"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="36" lineNum="95" parent="globals/SpikeContentIterator" pc="268437221" symbol="peekPrevious"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="36" lineNum="96" parent="globals/SpikeContentIterator" pc="268437223" symbol="peekPrevious"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="37" lineNum="99" parent="globals/SpikeContentIterator" pc="268437240" symbol="shuffling"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="37" lineNum="100" parent="globals/SpikeContentIterator" pc="268437242" symbol="shuffling"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="38" lineNum="39" parent="globals/SpikeContentIterator" pc="268437244" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="38" lineNum="40" parent="globals/SpikeContentIterator" pc="268437247" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="38" lineNum="41" parent="globals/SpikeContentIterator" pc="268437259" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="38" lineNum="42" parent="globals/SpikeContentIterator" pc="268437267" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="38" lineNum="43" parent="globals/SpikeContentIterator" pc="268437276" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="38" lineNum="44" parent="globals/SpikeContentIterator" pc="268437303" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="38" lineNum="45" parent="globals/SpikeContentIterator" pc="268437309" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="38" lineNum="46" parent="globals/SpikeContentIterator" pc="268437319" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="38" lineNum="47" parent="globals/SpikeContentIterator" pc="268437325" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="38" lineNum="48" parent="globals/SpikeContentIterator" pc="268437347" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="38" lineNum="51" parent="globals/SpikeContentIterator" pc="268437363" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="39" lineNum="103" parent="globals/SpikeContentIterator" pc="268437399" symbol="canSkip"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="39" lineNum="104" parent="globals/SpikeContentIterator" pc="268437401" symbol="canSkip"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="2" lineNum="11" parent="globals/SpikeStatusDelegate" pc="268435472" symbol="&lt;init&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="3" lineNum="50" parent="globals/SpikeSyncView" pc="268435484" symbol="&lt;init&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="4" lineNum="23" parent="globals/SpikeStatusView" pc="268435496" symbol="&lt;init&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/gen/006-B4574-00/source/Rez.mcgen" id="5" lineNum="7" parent="globals/Rez" pc="268435508" symbol="&lt;init&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="6" lineNum="19" parent="globals/SpikeSyncDelegate" pc="268435528" symbol="&lt;init&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="7" lineNum="8" parent="globals/SpikeContentDelegate" pc="268435540" symbol="&lt;init&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="8" lineNum="34" parent="globals/SpikeContentIterator" pc="268435552" symbol="&lt;init&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc" id="9" lineNum="26" parent="globals/SpikeApp" pc="268435564" symbol="getPlaybackConfigurationView"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc" id="9" lineNum="27" parent="globals/SpikeApp" pc="268435566" symbol="getPlaybackConfigurationView"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc" id="10" lineNum="18" parent="globals/SpikeApp" pc="268435635" symbol="getContentDelegate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc" id="10" lineNum="19" parent="globals/SpikeApp" pc="268435637" symbol="getContentDelegate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc" id="11" lineNum="22" parent="globals/SpikeApp" pc="268435656" symbol="getSyncDelegate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc" id="11" lineNum="23" parent="globals/SpikeApp" pc="268435658" symbol="getSyncDelegate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc" id="12" lineNum="14" parent="globals/SpikeApp" pc="268435677" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc" id="12" lineNum="15" parent="globals/SpikeApp" pc="268435679" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc" id="13" lineNum="33" parent="globals/SpikeApp" pc="268435692" symbol="getSyncConfigurationView"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeApp.mc" id="13" lineNum="34" parent="globals/SpikeApp" pc="268435694" symbol="getSyncConfigurationView"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="14" lineNum="12" parent="globals/SpikeStatusDelegate" pc="268435720" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="14" lineNum="13" parent="globals/SpikeStatusDelegate" pc="268435722" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="15" lineNum="16" parent="globals/SpikeStatusDelegate" pc="268435735" symbol="onSelect"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="15" lineNum="17" parent="globals/SpikeStatusDelegate" pc="268435737" symbol="onSelect"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="15" lineNum="18" parent="globals/SpikeStatusDelegate" pc="268435760" symbol="onSelect"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="15" lineNum="19" parent="globals/SpikeStatusDelegate" pc="268435774" symbol="onSelect"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="16" lineNum="56" parent="globals/SpikeSyncView" pc="268435776" symbol="onShow"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="16" lineNum="57" parent="globals/SpikeSyncView" pc="268435778" symbol="onShow"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="16" lineNum="58" parent="globals/SpikeSyncView" pc="268435801" symbol="onShow"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="17" lineNum="52" parent="globals/SpikeSyncView" pc="268435813" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="17" lineNum="53" parent="globals/SpikeSyncView" pc="268435815" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="18" lineNum="61" parent="globals/SpikeSyncView" pc="268435828" symbol="onUpdate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="18" lineNum="62" parent="globals/SpikeSyncView" pc="268435830" symbol="onUpdate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="18" lineNum="63" parent="globals/SpikeSyncView" pc="268435842" symbol="onUpdate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="18" lineNum="64" parent="globals/SpikeSyncView" pc="268435850" symbol="onUpdate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="18" lineNum="65" parent="globals/SpikeSyncView" pc="268435866" symbol="onUpdate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="19" lineNum="33" parent="globals/SpikeStatusView" pc="268435906" symbol="onShow"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="19" lineNum="34" parent="globals/SpikeStatusView" pc="268435908" symbol="onShow"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="19" lineNum="35" parent="globals/SpikeStatusView" pc="268435923" symbol="onShow"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="19" lineNum="36" parent="globals/SpikeStatusView" pc="268435946" symbol="onShow"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="19" lineNum="37" parent="globals/SpikeStatusView" pc="268435958" symbol="onShow"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="20" lineNum="26" parent="globals/SpikeStatusView" pc="268435973" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="20" lineNum="27" parent="globals/SpikeStatusView" pc="268435975" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="20" lineNum="28" parent="globals/SpikeStatusView" pc="268435987" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="21" lineNum="41" parent="globals/SpikeStatusView" pc="268435997" symbol="onUpdate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="21" lineNum="42" parent="globals/SpikeStatusView" pc="268435999" symbol="onUpdate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="21" lineNum="43" parent="globals/SpikeStatusView" pc="268436011" symbol="onUpdate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="21" lineNum="44" parent="globals/SpikeStatusView" pc="268436019" symbol="onUpdate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" id="21" lineNum="45" parent="globals/SpikeStatusView" pc="268436035" symbol="onUpdate"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="22" lineNum="11" parent="globals/SpikeLog" pc="268436075" symbol="activityLine"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="22" lineNum="12" parent="globals/SpikeLog" pc="268436086" symbol="activityLine"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="22" lineNum="13" parent="globals/SpikeLog" pc="268436098" symbol="activityLine"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="22" lineNum="14" parent="globals/SpikeLog" pc="268436104" symbol="activityLine"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="22" lineNum="16" parent="globals/SpikeLog" pc="268436113" symbol="activityLine"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="22" lineNum="18" parent="globals/SpikeLog" pc="268436166" symbol="activityLine"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="23" lineNum="21" parent="globals/SpikeLog" pc="268436169" symbol="log"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="23" lineNum="22" parent="globals/SpikeLog" pc="268436179" symbol="log"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="24" lineNum="25" parent="globals/SpikeLog" pc="268436223" symbol="cachedCount"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="24" lineNum="26" parent="globals/SpikeLog" pc="268436234" symbol="cachedCount"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="24" lineNum="27" parent="globals/SpikeLog" pc="268436261" symbol="cachedCount"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="24" lineNum="28" parent="globals/SpikeLog" pc="268436264" symbol="cachedCount"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="24" lineNum="29" parent="globals/SpikeLog" pc="268436270" symbol="cachedCount"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="24" lineNum="29" parent="globals/SpikeLog" pc="268436282" symbol="cachedCount"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeLog.mc" id="24" lineNum="31" parent="globals/SpikeLog" pc="268436295" symbol="cachedCount"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="25" lineNum="33" parent="globals/SpikeSyncDelegate" pc="268436298" symbol="onStartSync"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="25" lineNum="34" parent="globals/SpikeSyncDelegate" pc="268436301" symbol="onStartSync"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="25" lineNum="35" parent="globals/SpikeSyncDelegate" pc="268436310" symbol="onStartSync"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="25" lineNum="36" parent="globals/SpikeSyncDelegate" pc="268436334" symbol="onStartSync"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="25" lineNum="38" parent="globals/SpikeSyncDelegate" pc="268436376" symbol="onStartSync"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="25" lineNum="39" parent="globals/SpikeSyncDelegate" pc="268436394" symbol="onStartSync"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="25" lineNum="40" parent="globals/SpikeSyncDelegate" pc="268436423" symbol="onStartSync"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="26" lineNum="43" parent="globals/SpikeSyncDelegate" pc="268436431" symbol="syncNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="26" lineNum="44" parent="globals/SpikeSyncDelegate" pc="268436434" symbol="syncNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="26" lineNum="45" parent="globals/SpikeSyncDelegate" pc="268436450" symbol="syncNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="26" lineNum="46" parent="globals/SpikeSyncDelegate" pc="268436484" symbol="syncNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="26" lineNum="47" parent="globals/SpikeSyncDelegate" pc="268436498" symbol="syncNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="26" lineNum="49" parent="globals/SpikeSyncDelegate" pc="268436502" symbol="syncNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="26" lineNum="50" parent="globals/SpikeSyncDelegate" pc="268436511" symbol="syncNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="26" lineNum="55" parent="globals/SpikeSyncDelegate" pc="268436542" symbol="syncNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="27" lineNum="24" parent="globals/SpikeSyncDelegate" pc="268436574" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="27" lineNum="25" parent="globals/SpikeSyncDelegate" pc="268436576" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="27" lineNum="26" parent="globals/SpikeSyncDelegate" pc="268436588" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="28" lineNum="29" parent="globals/SpikeSyncDelegate" pc="268436598" symbol="isSyncNeeded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="28" lineNum="30" parent="globals/SpikeSyncDelegate" pc="268436600" symbol="isSyncNeeded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="29" lineNum="58" parent="globals/SpikeSyncDelegate" pc="268436627" symbol="onDownloaded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="29" lineNum="59" parent="globals/SpikeSyncDelegate" pc="268436629" symbol="onDownloaded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="29" lineNum="60" parent="globals/SpikeSyncDelegate" pc="268436638" symbol="onDownloaded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="29" lineNum="61" parent="globals/SpikeSyncDelegate" pc="268436671" symbol="onDownloaded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="29" lineNum="62" parent="globals/SpikeSyncDelegate" pc="268436706" symbol="onDownloaded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="29" lineNum="63" parent="globals/SpikeSyncDelegate" pc="268436745" symbol="onDownloaded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="29" lineNum="65" parent="globals/SpikeSyncDelegate" pc="268436755" symbol="onDownloaded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeSync.mc" id="29" lineNum="66" parent="globals/SpikeSyncDelegate" pc="268436781" symbol="onDownloaded"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="30" lineNum="18" parent="globals/SpikeContentDelegate" pc="268436803" symbol="getContentIterator"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="30" lineNum="19" parent="globals/SpikeContentDelegate" pc="268436805" symbol="getContentIterator"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="30" lineNum="20" parent="globals/SpikeContentDelegate" pc="268436828" symbol="getContentIterator"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="31" lineNum="13" parent="globals/SpikeContentDelegate" pc="268436834" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="31" lineNum="14" parent="globals/SpikeContentDelegate" pc="268436836" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="31" lineNum="15" parent="globals/SpikeContentDelegate" pc="268436848" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="32" lineNum="28" parent="globals/SpikeContentDelegate" pc="268436874" symbol="onSong"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="32" lineNum="29" parent="globals/SpikeContentDelegate" pc="268436877" symbol="onSong"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="32" lineNum="30" parent="globals/SpikeContentDelegate" pc="268436922" symbol="onSong"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="33" lineNum="23" parent="globals/SpikeContentDelegate" pc="268436952" symbol="resetContentIterator"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="33" lineNum="24" parent="globals/SpikeContentDelegate" pc="268436954" symbol="resetContentIterator"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="33" lineNum="25" parent="globals/SpikeContentDelegate" pc="268436979" symbol="resetContentIterator"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="34" lineNum="74" parent="globals/SpikeContentIterator" pc="268436985" symbol="next"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="34" lineNum="75" parent="globals/SpikeContentIterator" pc="268436987" symbol="next"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="34" lineNum="76" parent="globals/SpikeContentIterator" pc="268437035" symbol="next"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="34" lineNum="77" parent="globals/SpikeContentIterator" pc="268437064" symbol="next"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="35" lineNum="54" parent="globals/SpikeContentIterator" pc="268437078" symbol="getPlaybackProfile"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="35" lineNum="55" parent="globals/SpikeContentIterator" pc="268437081" symbol="getPlaybackProfile"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="35" lineNum="56" parent="globals/SpikeContentIterator" pc="268437105" symbol="getPlaybackProfile"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="35" lineNum="61" parent="globals/SpikeContentIterator" pc="268437118" symbol="getPlaybackProfile"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="35" lineNum="62" parent="globals/SpikeContentIterator" pc="268437127" symbol="getPlaybackProfile"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="36" lineNum="65" parent="globals/SpikeContentIterator" pc="268437130" symbol="&lt;globals/SpikeContentIterator/&lt;&gt;at&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="36" lineNum="66" parent="globals/SpikeContentIterator" pc="268437132" symbol="&lt;globals/SpikeContentIterator/&lt;&gt;at&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="36" lineNum="67" parent="globals/SpikeContentIterator" pc="268437156" symbol="&lt;globals/SpikeContentIterator/&lt;&gt;at&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="36" lineNum="69" parent="globals/SpikeContentIterator" pc="268437161" symbol="&lt;globals/SpikeContentIterator/&lt;&gt;at&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="37" lineNum="80" parent="globals/SpikeContentIterator" pc="268437206" symbol="previous"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="37" lineNum="81" parent="globals/SpikeContentIterator" pc="268437208" symbol="previous"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="37" lineNum="82" parent="globals/SpikeContentIterator" pc="268437237" symbol="previous"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="37" lineNum="83" parent="globals/SpikeContentIterator" pc="268437266" symbol="previous"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="38" lineNum="91" parent="globals/SpikeContentIterator" pc="268437280" symbol="peekNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="38" lineNum="92" parent="globals/SpikeContentIterator" pc="268437282" symbol="peekNext"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="39" lineNum="86" parent="globals/SpikeContentIterator" pc="268437332" symbol="get"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="39" lineNum="87" parent="globals/SpikeContentIterator" pc="268437334" symbol="get"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="39" lineNum="88" parent="globals/SpikeContentIterator" pc="268437363" symbol="get"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="40" lineNum="95" parent="globals/SpikeContentIterator" pc="268437377" symbol="peekPrevious"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="40" lineNum="96" parent="globals/SpikeContentIterator" pc="268437379" symbol="peekPrevious"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="41" lineNum="99" parent="globals/SpikeContentIterator" pc="268437396" symbol="shuffling"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="41" lineNum="100" parent="globals/SpikeContentIterator" pc="268437398" symbol="shuffling"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="42" lineNum="39" parent="globals/SpikeContentIterator" pc="268437400" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="42" lineNum="40" parent="globals/SpikeContentIterator" pc="268437403" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="42" lineNum="41" parent="globals/SpikeContentIterator" pc="268437415" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="42" lineNum="42" parent="globals/SpikeContentIterator" pc="268437423" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="42" lineNum="43" parent="globals/SpikeContentIterator" pc="268437432" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="42" lineNum="44" parent="globals/SpikeContentIterator" pc="268437459" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="42" lineNum="45" parent="globals/SpikeContentIterator" pc="268437465" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="42" lineNum="46" parent="globals/SpikeContentIterator" pc="268437475" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="42" lineNum="47" parent="globals/SpikeContentIterator" pc="268437481" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="42" lineNum="48" parent="globals/SpikeContentIterator" pc="268437503" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="42" lineNum="51" parent="globals/SpikeContentIterator" pc="268437519" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="43" lineNum="103" parent="globals/SpikeContentIterator" pc="268437555" symbol="canSkip"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeContent.mc" id="43" lineNum="104" parent="globals/SpikeContentIterator" pc="268437557" symbol="canSkip"/>
     </pcToLineNum>
     <symbolTable>
         <entry id="8388639" module="true" symbol="Graphics"/>
         <entry id="8390434" method="true" symbol="getSyncConfigurationView"/>
         <entry id="8390557" method="true" symbol="resetContentIterator"/>
         <entry id="8390211" module="true" symbol="Media"/>
-        <entry field="true" id="25" symbol="&lt;globals/SpikeContentIterator/&lt;&gt;mIdx&gt;"/>
+        <entry field="true" id="26" symbol="&lt;globals/SpikeContentIterator/&lt;&gt;mIdx&gt;"/>
         <entry id="8388632" method="true" symbol="&lt;init&gt;"/>
         <entry id="8388826" method="true" symbol="next"/>
-        <entry id="27" symbol="FILES"/>
+        <entry id="28" symbol="FILES"/>
         <entry id="6" module="true" symbol="globals/SpikeSongs"/>
         <entry field="true" id="8388611" module="true" symbol="Toybox"/>
         <entry id="8390377" method="true" symbol="getContentIterator"/>
         <entry id="8390373" method="true" symbol="shuffling"/>
-        <entry field="true" id="29" symbol="AppName"/>
+        <entry field="true" id="30" symbol="AppName"/>
         <entry id="8390440" symbol="contentType"/>
         <entry id="4" module="true" symbol="globals/Rez/Strings"/>
         <entry id="8390430" method="true" symbol="getContentDelegate"/>
         <entry id="8388631" module="true" symbol="Activity"/>
         <entry id="8388648" module="true" symbol="WatchUi"/>
-        <entry field="true" id="26" symbol="&lt;globals/SpikeContentIterator/&lt;&gt;mRefs&gt;"/>
+        <entry field="true" id="27" symbol="&lt;globals/SpikeContentIterator/&lt;&gt;mRefs&gt;"/>
         <entry id="7" object="true" symbol="SpikeApp"/>
         <entry id="2" module="true" symbol="globals/Rez"/>
         <entry id="8388789" method="true" symbol="get"/>
@@ -160,10 +172,10 @@
         <entry id="8389124" method="true" symbol="onUpdate"/>
         <entry id="8390431" method="true" symbol="getSyncDelegate"/>
         <entry id="8388771" module="true" object="true" symbol="Drawables"/>
-        <entry id="20" method="true" symbol="onDownloaded"/>
+        <entry id="21" method="true" symbol="onDownloaded"/>
         <entry id="9" object="true" symbol="SpikeContentIterator"/>
         <entry id="8388899" method="true" symbol="log"/>
-        <entry id="16" method="true" symbol="activityLine"/>
+        <entry id="17" method="true" symbol="activityLine"/>
         <entry id="8388637" module="true" symbol="Communications"/>
         <entry id="3" module="true" symbol="globals/Rez/Drawables"/>
         <entry id="8390371" method="true" symbol="peekNext"/>
@@ -172,60 +184,62 @@
         <entry id="10" module="true" symbol="SpikeLog"/>
         <entry id="8388786" method="true" symbol="method"/>
         <entry id="8388644" module="true" symbol="System"/>
-        <entry id="22" symbol="&lt;globals/SpikeContentDelegate/&lt;&gt;mEvents&gt;"/>
+        <entry id="23" symbol="&lt;globals/SpikeContentDelegate/&lt;&gt;mEvents&gt;"/>
         <entry id="8390382" method="true" symbol="onSong"/>
-        <entry id="13" object="true" symbol="SpikeSyncDelegate"/>
+        <entry id="14" object="true" symbol="SpikeSyncDelegate"/>
+        <entry id="8389619" method="true" symbol="onSelect"/>
         <entry id="8388769" module="true" object="true" symbol="Rez"/>
         <entry id="11" module="true" symbol="SpikeSongs"/>
         <entry id="8390432" method="true" symbol="getPlaybackConfigurationView"/>
         <entry id="8388640" module="true" symbol="Lang"/>
-        <entry id="21" method="true" symbol="syncNext"/>
-        <entry field="true" id="28" symbol="LauncherIcon"/>
+        <entry id="22" method="true" symbol="syncNext"/>
+        <entry field="true" id="29" symbol="LauncherIcon"/>
         <entry id="8390374" method="true" symbol="canSkip"/>
         <entry id="8388610" symbol="statics"/>
         <entry id="8389123" method="true" symbol="onShow"/>
         <entry id="8390369" method="true" symbol="getPlaybackProfile"/>
         <entry id="5" module="true" symbol="globals/SpikeLog"/>
         <entry id="8390370" method="true" symbol="previous"/>
+        <entry id="12" object="true" symbol="SpikeStatusDelegate"/>
         <entry id="8389350" module="true" symbol="globals"/>
         <entry id="8388770" module="true" object="true" symbol="Strings"/>
         <entry id="8388702" method="true" symbol="initialize"/>
-        <entry field="true" id="18" symbol="&lt;globals/SpikeSyncDelegate/&lt;&gt;mQueue&gt;"/>
+        <entry field="true" id="19" symbol="&lt;globals/SpikeSyncDelegate/&lt;&gt;mQueue&gt;"/>
         <entry id="8390341" method="true" symbol="onStartSync"/>
-        <entry id="24" method="true" symbol="&lt;globals/SpikeContentIterator/&lt;&gt;at&gt;"/>
-        <entry field="true" id="19" symbol="&lt;globals/SpikeSyncDelegate/&lt;&gt;mTotal&gt;"/>
-        <entry field="true" id="15" symbol="&lt;globals/SpikeStatusView/&lt;&gt;mText&gt;"/>
-        <entry field="true" id="23" symbol="&lt;globals/SpikeContentDelegate/&lt;&gt;mIterator&gt;"/>
-        <entry id="12" object="true" symbol="SpikeStatusView"/>
+        <entry id="25" method="true" symbol="&lt;globals/SpikeContentIterator/&lt;&gt;at&gt;"/>
+        <entry field="true" id="20" symbol="&lt;globals/SpikeSyncDelegate/&lt;&gt;mTotal&gt;"/>
+        <entry field="true" id="16" symbol="&lt;globals/SpikeStatusView/&lt;&gt;mText&gt;"/>
+        <entry field="true" id="24" symbol="&lt;globals/SpikeContentDelegate/&lt;&gt;mIterator&gt;"/>
+        <entry id="13" object="true" symbol="SpikeStatusView"/>
         <entry id="8390441" object="true" symbol="mediaEncoding"/>
-        <entry id="17" method="true" symbol="cachedCount"/>
+        <entry id="18" method="true" symbol="cachedCount"/>
         <entry id="8388635" module="true" symbol="Application"/>
-        <entry id="14" object="true" symbol="SpikeSyncView"/>
+        <entry id="15" object="true" symbol="SpikeSyncView"/>
     </symbolTable>
     <localVars>
-        <entry arg="true" endPc="268435622" name="args" stackId="1" startPc="268435602"/>
-        <entry arg="true" endPc="268435816" name="dc" stackId="1" startPc="268435739"/>
-        <entry arg="true" endPc="268435840" name="text" stackId="1" startPc="268435817"/>
-        <entry arg="true" endPc="268435918" name="dc" stackId="1" startPc="268435841"/>
-        <entry endPc="268436012" name="info" stackId="1" startPc="268435930"/>
-        <entry endPc="268436012" name="line" stackId="2" startPc="268435930"/>
-        <entry arg="true" endPc="268436066" name="where" stackId="1" startPc="268436013"/>
-        <entry arg="true" endPc="268436066" name="detail" stackId="2" startPc="268436013"/>
-        <entry endPc="268436141" name="iter" stackId="1" startPc="268436078"/>
-        <entry endPc="268436141" name="n" stackId="2" startPc="268436078"/>
-        <entry endPc="268436219" name="i" stackId="1" startPc="268436178"/>
-        <entry endPc="268436416" name="url" stackId="1" startPc="268436278"/>
-        <entry endPc="268436416" name="options" stackId="2" startPc="268436278"/>
-        <entry arg="true" endPc="268436646" name="responseCode" stackId="1" startPc="268436471"/>
-        <entry arg="true" endPc="268436646" name="data" stackId="2" startPc="268436471"/>
-        <entry arg="true" endPc="268436795" name="refId" stackId="1" startPc="268436718"/>
-        <entry arg="true" endPc="268436795" name="songEvent" stackId="2" startPc="268436718"/>
-        <entry arg="true" endPc="268436795" name="playbackPosition" stackId="3" startPc="268436718"/>
-        <entry endPc="268436794" name="name" stackId="4" startPc="268436721"/>
-        <entry endPc="268436973" name="profile" stackId="1" startPc="268436925"/>
-        <entry arg="true" endPc="268437049" name="idx" stackId="1" startPc="268436974"/>
-        <entry endPc="268437397" name="iter" stackId="1" startPc="268437247"/>
-        <entry endPc="268437359" name="ref" stackId="2" startPc="268437309"/>
+        <entry arg="true" endPc="268435655" name="args" stackId="1" startPc="268435635"/>
+        <entry arg="true" endPc="268435905" name="dc" stackId="1" startPc="268435828"/>
+        <entry arg="true" endPc="268435996" name="text" stackId="1" startPc="268435973"/>
+        <entry arg="true" endPc="268436074" name="dc" stackId="1" startPc="268435997"/>
+        <entry endPc="268436168" name="info" stackId="1" startPc="268436086"/>
+        <entry endPc="268436168" name="line" stackId="2" startPc="268436086"/>
+        <entry arg="true" endPc="268436222" name="where" stackId="1" startPc="268436169"/>
+        <entry arg="true" endPc="268436222" name="detail" stackId="2" startPc="268436169"/>
+        <entry endPc="268436297" name="iter" stackId="1" startPc="268436234"/>
+        <entry endPc="268436297" name="n" stackId="2" startPc="268436234"/>
+        <entry endPc="268436375" name="i" stackId="1" startPc="268436334"/>
+        <entry endPc="268436572" name="url" stackId="1" startPc="268436434"/>
+        <entry endPc="268436572" name="options" stackId="2" startPc="268436434"/>
+        <entry arg="true" endPc="268436802" name="responseCode" stackId="1" startPc="268436627"/>
+        <entry arg="true" endPc="268436802" name="data" stackId="2" startPc="268436627"/>
+        <entry arg="true" endPc="268436951" name="refId" stackId="1" startPc="268436874"/>
+        <entry arg="true" endPc="268436951" name="songEvent" stackId="2" startPc="268436874"/>
+        <entry arg="true" endPc="268436951" name="playbackPosition" stackId="3" startPc="268436874"/>
+        <entry endPc="268436950" name="name" stackId="4" startPc="268436877"/>
+        <entry endPc="268437129" name="profile" stackId="1" startPc="268437081"/>
+        <entry arg="true" endPc="268437205" name="idx" stackId="1" startPc="268437130"/>
+        <entry endPc="268437553" name="iter" stackId="1" startPc="268437403"/>
+        <entry endPc="268437515" name="ref" stackId="2" startPc="268437465"/>
     </localVars>
     <deviceInfo deviceVersion="361e256b74f66f7ba19da23c7ec7c7f06ab33c5c" partNumber="006-B4574-00"/>
     <annotations>
@@ -234,89 +248,102 @@
     </annotations>
     <dataEntryOffsetMappings>
         <dataEntry label="globals" offset="67" parentId="" symbolId="globals" type="module"/>
-        <dataEntry label="globals/SpikeApp" offset="179" parentId="globals" symbolId="SpikeApp" type="class"/>
-        <dataEntry label="globals/SpikeSyncView" offset="259" parentId="globals" symbolId="SpikeSyncView" type="class"/>
-        <dataEntry label="globals/SpikeStatusView" offset="321" parentId="globals" symbolId="SpikeStatusView" type="class"/>
-        <dataEntry label="globals/SpikeLog" offset="383" parentId="globals" symbolId="SpikeLog" type="module"/>
-        <dataEntry label="globals/Rez" offset="436" parentId="globals" symbolId="Rez" type="module"/>
-        <dataEntry label="globals/SpikeSyncDelegate" offset="480" parentId="globals" symbolId="SpikeSyncDelegate" type="class"/>
-        <dataEntry label="globals/SpikeContentDelegate" offset="578" parentId="globals" symbolId="SpikeContentDelegate" type="class"/>
-        <dataEntry label="globals/SpikeContentIterator" offset="667" parentId="globals" symbolId="SpikeContentIterator" type="class"/>
-        <dataEntry label="globals/SpikeSongs" offset="810" parentId="globals" symbolId="SpikeSongs" type="module"/>
-        <dataEntry label="globals/Rez/Drawables" offset="845" parentId="Rez" symbolId="Drawables" type="module"/>
-        <dataEntry label="globals/Rez/Strings" offset="880" parentId="Rez" symbolId="Strings" type="module"/>
+        <dataEntry label="globals/SpikeApp" offset="188" parentId="globals" symbolId="SpikeApp" type="class"/>
+        <dataEntry label="globals/SpikeStatusDelegate" offset="268" parentId="globals" symbolId="SpikeStatusDelegate" type="class"/>
+        <dataEntry label="globals/SpikeSyncView" offset="321" parentId="globals" symbolId="SpikeSyncView" type="class"/>
+        <dataEntry label="globals/SpikeStatusView" offset="383" parentId="globals" symbolId="SpikeStatusView" type="class"/>
+        <dataEntry label="globals/SpikeLog" offset="454" parentId="globals" symbolId="SpikeLog" type="module"/>
+        <dataEntry label="globals/Rez" offset="507" parentId="globals" symbolId="Rez" type="module"/>
+        <dataEntry label="globals/SpikeSyncDelegate" offset="551" parentId="globals" symbolId="SpikeSyncDelegate" type="class"/>
+        <dataEntry label="globals/SpikeContentDelegate" offset="649" parentId="globals" symbolId="SpikeContentDelegate" type="class"/>
+        <dataEntry label="globals/SpikeContentIterator" offset="738" parentId="globals" symbolId="SpikeContentIterator" type="class"/>
+        <dataEntry label="globals/SpikeSongs" offset="881" parentId="globals" symbolId="SpikeSongs" type="module"/>
+        <dataEntry label="globals/Rez/Drawables" offset="916" parentId="Rez" symbolId="Drawables" type="module"/>
+        <dataEntry label="globals/Rez/Strings" offset="951" parentId="Rez" symbolId="Strings" type="module"/>
     </dataEntryOffsetMappings>
     <functions>
         <functionEntry accessMode="public" endPc="268435471" name="&lt;init&gt;" parent="SpikeApp" startPc="268435460">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268435483" name="&lt;init&gt;" parent="SpikeSyncView" startPc="268435472">
+        <functionEntry accessMode="public" endPc="268435483" name="&lt;init&gt;" parent="SpikeStatusDelegate" startPc="268435472">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268435495" name="&lt;init&gt;" parent="SpikeStatusView" startPc="268435484">
+        <functionEntry accessMode="public" endPc="268435495" name="&lt;init&gt;" parent="SpikeSyncView" startPc="268435484">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268435507" name="&lt;init&gt;" parent="SpikeStatusView" startPc="268435496">
             <documentation/>
         </functionEntry>
         <functionEntry accessMode="public" name="&lt;init&gt;" parent="SpikeLog">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268435515" name="&lt;init&gt;" parent="Rez" startPc="268435496">
+        <functionEntry accessMode="public" endPc="268435527" name="&lt;init&gt;" parent="Rez" startPc="268435508">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268435527" name="&lt;init&gt;" parent="SpikeSyncDelegate" startPc="268435516">
+        <functionEntry accessMode="public" endPc="268435539" name="&lt;init&gt;" parent="SpikeSyncDelegate" startPc="268435528">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268435539" name="&lt;init&gt;" parent="SpikeContentDelegate" startPc="268435528">
+        <functionEntry accessMode="public" endPc="268435551" name="&lt;init&gt;" parent="SpikeContentDelegate" startPc="268435540">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268435551" name="&lt;init&gt;" parent="SpikeContentIterator" startPc="268435540">
+        <functionEntry accessMode="public" endPc="268435563" name="&lt;init&gt;" parent="SpikeContentIterator" startPc="268435552">
             <documentation/>
         </functionEntry>
         <functionEntry accessMode="public" name="&lt;init&gt;" parent="SpikeSongs">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268435601" name="getPlaybackConfigurationView" parent="SpikeApp" startPc="268435552">
+        <functionEntry accessMode="public" endPc="268435634" name="getPlaybackConfigurationView" parent="SpikeApp" startPc="268435564">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268435622" name="getContentDelegate" parent="SpikeApp" startPc="268435602">
+        <functionEntry accessMode="public" endPc="268435655" name="getContentDelegate" parent="SpikeApp" startPc="268435635">
             <param id="args"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268435643" name="getSyncDelegate" parent="SpikeApp" startPc="268435623">
+        <functionEntry accessMode="public" endPc="268435676" name="getSyncDelegate" parent="SpikeApp" startPc="268435656">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268435658" name="initialize" parent="SpikeApp" startPc="268435644">
+        <functionEntry accessMode="public" endPc="268435691" name="initialize" parent="SpikeApp" startPc="268435677">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268435686" name="getSyncConfigurationView" parent="SpikeApp" startPc="268435659">
+        <functionEntry accessMode="public" endPc="268435719" name="getSyncConfigurationView" parent="SpikeApp" startPc="268435692">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268435723" name="onShow" parent="SpikeSyncView" startPc="268435687">
+        <functionEntry accessMode="public" endPc="268435734" name="initialize" parent="SpikeStatusDelegate" startPc="268435720">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268435738" name="initialize" parent="SpikeSyncView" startPc="268435724">
+        <functionEntry accessMode="public" endPc="268435775" name="onSelect" parent="SpikeStatusDelegate" startPc="268435735">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268435816" name="onUpdate" parent="SpikeSyncView" startPc="268435739">
+        <functionEntry accessMode="public" endPc="268435812" name="onShow" parent="SpikeSyncView" startPc="268435776">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268435827" name="initialize" parent="SpikeSyncView" startPc="268435813">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268435905" name="onUpdate" parent="SpikeSyncView" startPc="268435828">
             <param id="dc"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268435840" name="initialize" parent="SpikeStatusView" startPc="268435817">
+        <functionEntry accessMode="public" endPc="268435972" name="onShow" parent="SpikeStatusView" startPc="268435906">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268435996" name="initialize" parent="SpikeStatusView" startPc="268435973">
             <param id="text"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268435918" name="onUpdate" parent="SpikeStatusView" startPc="268435841">
+        <functionEntry accessMode="public" endPc="268436074" name="onUpdate" parent="SpikeStatusView" startPc="268435997">
             <param id="dc"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268436012" name="activityLine" parent="SpikeLog" startPc="268435919">
+        <functionEntry accessMode="public" endPc="268436168" name="activityLine" parent="SpikeLog" startPc="268436075">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268436066" name="log" parent="SpikeLog" startPc="268436013">
+        <functionEntry accessMode="public" endPc="268436222" name="log" parent="SpikeLog" startPc="268436169">
             <param id="where"/>
             <param id="detail"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268436141" name="cachedCount" parent="SpikeLog" startPc="268436067">
+        <functionEntry accessMode="public" endPc="268436297" name="cachedCount" parent="SpikeLog" startPc="268436223">
             <documentation/>
         </functionEntry>
         <functionEntry accessMode="public" name="&lt;init&gt;" parent="Drawables">
@@ -325,67 +352,67 @@
         <functionEntry accessMode="public" name="&lt;init&gt;" parent="Strings">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268436274" name="onStartSync" parent="SpikeSyncDelegate" startPc="268436142">
+        <functionEntry accessMode="public" endPc="268436430" name="onStartSync" parent="SpikeSyncDelegate" startPc="268436298">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268436417" name="syncNext" parent="SpikeSyncDelegate" startPc="268436275">
+        <functionEntry accessMode="public" endPc="268436573" name="syncNext" parent="SpikeSyncDelegate" startPc="268436431">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268436441" name="initialize" parent="SpikeSyncDelegate" startPc="268436418">
+        <functionEntry accessMode="public" endPc="268436597" name="initialize" parent="SpikeSyncDelegate" startPc="268436574">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268436470" name="isSyncNeeded" parent="SpikeSyncDelegate" startPc="268436442">
+        <functionEntry accessMode="public" endPc="268436626" name="isSyncNeeded" parent="SpikeSyncDelegate" startPc="268436598">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268436646" name="onDownloaded" parent="SpikeSyncDelegate" startPc="268436471">
+        <functionEntry accessMode="public" endPc="268436802" name="onDownloaded" parent="SpikeSyncDelegate" startPc="268436627">
             <param id="responseCode"/>
             <param id="data"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268436677" name="getContentIterator" parent="SpikeContentDelegate" startPc="268436647">
+        <functionEntry accessMode="public" endPc="268436833" name="getContentIterator" parent="SpikeContentDelegate" startPc="268436803">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268436717" name="initialize" parent="SpikeContentDelegate" startPc="268436678">
+        <functionEntry accessMode="public" endPc="268436873" name="initialize" parent="SpikeContentDelegate" startPc="268436834">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268436795" name="onSong" parent="SpikeContentDelegate" startPc="268436718">
+        <functionEntry accessMode="public" endPc="268436951" name="onSong" parent="SpikeContentDelegate" startPc="268436874">
             <param id="refId"/>
             <param id="songEvent"/>
             <param id="playbackPosition"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268436828" name="resetContentIterator" parent="SpikeContentDelegate" startPc="268436796">
+        <functionEntry accessMode="public" endPc="268436984" name="resetContentIterator" parent="SpikeContentDelegate" startPc="268436952">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268436921" name="next" parent="SpikeContentIterator" startPc="268436829">
+        <functionEntry accessMode="public" endPc="268437077" name="next" parent="SpikeContentIterator" startPc="268436985">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268436973" name="getPlaybackProfile" parent="SpikeContentIterator" startPc="268436922">
+        <functionEntry accessMode="public" endPc="268437129" name="getPlaybackProfile" parent="SpikeContentIterator" startPc="268437078">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="private" endPc="268437049" name="&lt;globals/SpikeContentIterator/&lt;&gt;at&gt;" parent="SpikeContentIterator" startPc="268436974">
+        <functionEntry accessMode="private" endPc="268437205" name="&lt;globals/SpikeContentIterator/&lt;&gt;at&gt;" parent="SpikeContentIterator" startPc="268437130">
             <param id="idx"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268437123" name="previous" parent="SpikeContentIterator" startPc="268437050">
+        <functionEntry accessMode="public" endPc="268437279" name="previous" parent="SpikeContentIterator" startPc="268437206">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268437175" name="peekNext" parent="SpikeContentIterator" startPc="268437124">
+        <functionEntry accessMode="public" endPc="268437331" name="peekNext" parent="SpikeContentIterator" startPc="268437280">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268437220" name="get" parent="SpikeContentIterator" startPc="268437176">
+        <functionEntry accessMode="public" endPc="268437376" name="get" parent="SpikeContentIterator" startPc="268437332">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268437239" name="peekPrevious" parent="SpikeContentIterator" startPc="268437221">
+        <functionEntry accessMode="public" endPc="268437395" name="peekPrevious" parent="SpikeContentIterator" startPc="268437377">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268437243" name="shuffling" parent="SpikeContentIterator" startPc="268437240">
+        <functionEntry accessMode="public" endPc="268437399" name="shuffling" parent="SpikeContentIterator" startPc="268437396">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268437398" name="initialize" parent="SpikeContentIterator" startPc="268437244">
+        <functionEntry accessMode="public" endPc="268437554" name="initialize" parent="SpikeContentIterator" startPc="268437400">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268437402" name="canSkip" parent="SpikeContentIterator" startPc="268437399">
+        <functionEntry accessMode="public" endPc="268437558" name="canSkip" parent="SpikeContentIterator" startPc="268437555">
             <documentation/>
         </functionEntry>
     </functions>

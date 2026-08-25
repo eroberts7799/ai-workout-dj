@@ -24,7 +24,10 @@ class SpikeApp extends Application.AudioContentProviderApp {
     }
 
     function getPlaybackConfigurationView() {
-        return [new SpikeStatusView("AWDJ Spike\nsongs cached: " + SpikeLog.cachedCount() + "\nplay via watch music player")];
+        return [
+            new SpikeStatusView("AWDJ Spike\nsongs cached: " + SpikeLog.cachedCount() + "\npress START to play"),
+            new SpikeStatusDelegate(),
+        ];
     }
 
     function getSyncConfigurationView() {

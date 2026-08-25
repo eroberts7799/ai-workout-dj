@@ -4,220 +4,302 @@ using Toybox.Graphics;
 using Toybox.Media;
 [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 7; @symbol_usingdef<0> = [Toybox,7,6,12]; @symbol_usingdef<1> = [WatchUi,7,13,20]; ]
 using Toybox.WatchUi;
-[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 9; @symbol_classdef = [SpikeStatusView,9,6,21]; @symbol_extends<0> = [WatchUi,9,30,37]; @symbol_extends<1> = [View,9,38,42]; ]
-class SpikeStatusView extends WatchUi.View {
-    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 9; ]
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 11; @symbol_classdef = [SpikeStatusDelegate,11,6,25]; @symbol_extends<0> = [WatchUi,11,34,41]; @symbol_extends<1> = [BehaviorDelegate,11,42,58]; ]
+class SpikeStatusDelegate extends WatchUi.BehaviorDelegate {
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 11; ]
     <init> {
     }
-    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 9; ]
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 11; ]
     static
     <init> {
     }
-    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 10; @position = 16; @symbol_vardef = [mText,10,16,21]; ]
-    private
-    var mText;
-    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 12; @symbol_functiondef = [initialize,12,13,23]; @symbol_param<0> = [text,12,24,28]; ]
-    function initialize(text) as Void {
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_12_30_15_4_start:
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 12; @symbol_functiondef = [initialize,12,13,23]; ]
+    function initialize() as Void {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_12_26_14_4_start:
 [ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 13 8 ]
-        symbol [ View %tmp.2 13 8 12 ];
-        %tmp.2 = getv ? :View;
-        symbol [ initialize %tmp.3 13 13 23 ];
+        symbol [ BehaviorDelegate %tmp.2 13 8 24 ];
+        %tmp.2 = getv ? :BehaviorDelegate;
+        symbol [ initialize %tmp.3 13 25 35 ];
         %tmp.3 = getv function %tmp.2 :initialize;
         invoke %tmp.2 %tmp.3();
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 14 8 ]
-        %tmp.4 = lgetv %text;
-        symbol [ text %tmp.4 14 16 20 ];
-        symbol [ mText ? 14 8 13 ];
-        putv self :mText %tmp.4;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_12_30_15_4_stop:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_12_26_14_4_stop:
     }
-    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 17; @symbol_functiondef = [onUpdate,17,13,21]; @symbol_param<0> = [dc,17,22,24]; ]
-    function onUpdate(dc) {
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_17_26_23_4_start:
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 16; @symbol_functiondef = [onSelect,16,13,21]; ]
+    function onSelect() {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_16_24_20_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 17 8 ]
+        symbol [ SpikeLog %tmp.2 17 8 16 ];
+        %tmp.2 = getv ? :SpikeLog;
+        symbol [ log %tmp.3 17 17 20 ];
+        %tmp.3 = getv function %tmp.2 :log;
+        %tmp.4 = "statusView.play";
+        %tmp.5 = "startPlayback";
+        invoke %tmp.2 %tmp.3(%tmp.4, %tmp.5);
 [ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 18 8 ]
+        symbol [ Media %tmp.6 18 8 13 ];
+        %tmp.6 = getm $.Toybox.Media;
+        symbol [ startPlayback %tmp.7 18 14 27 ];
+        %tmp.7 = getv function %tmp.6 :startPlayback;
+        %tmp.8 = null;
+        invoke %tmp.6 %tmp.7(%tmp.8);
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 19 8 ]
+        %tmp.9 = true;
+        ret %tmp.9;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_16_24_20_4_stop:
+    }
+}
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 23; @symbol_classdef = [SpikeStatusView,23,6,21]; @symbol_extends<0> = [WatchUi,23,30,37]; @symbol_extends<1> = [View,23,38,42]; ]
+class SpikeStatusView extends WatchUi.View {
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 23; ]
+    <init> {
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 23; ]
+    static
+    <init> {
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 24; @position = 16; @symbol_vardef = [mText,24,16,21]; ]
+    private
+    var mText;
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 26; @symbol_functiondef = [initialize,26,13,23]; @symbol_param<0> = [text,26,24,28]; ]
+    function initialize(text) as Void {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_26_30_29_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 27 8 ]
+        symbol [ View %tmp.2 27 8 12 ];
+        %tmp.2 = getv ? :View;
+        symbol [ initialize %tmp.3 27 13 23 ];
+        %tmp.3 = getv function %tmp.2 :initialize;
+        invoke %tmp.2 %tmp.3();
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 28 8 ]
+        %tmp.4 = lgetv %text;
+        symbol [ text %tmp.4 28 16 20 ];
+        symbol [ mText ? 28 8 13 ];
+        putv self :mText %tmp.4;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_26_30_29_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 33; @symbol_functiondef = [onShow,33,13,19]; ]
+    function onShow() {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_33_22_39_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 34 8 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_34_8_38_8_if_stmt:
+        symbol [ SpikeLog %tmp.2 34 12 20 ];
+        %tmp.2 = getv ? :SpikeLog;
+        symbol [ cachedCount %tmp.3 34 21 32 ];
+        %tmp.3 = getv function %tmp.2 :cachedCount;
+        %tmp.4 = invoke %tmp.2 %tmp.3();
+        %tmp.5 = 0;
+        %tmp.6 = eq %tmp.4 %tmp.5;
+        bf %tmp.6 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_34_8_38_8_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_34_8_38_8_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_34_41_38_8_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 35 12 ]
+        symbol [ SpikeLog %tmp.8 35 12 20 ];
+        %tmp.8 = getv ? :SpikeLog;
+        symbol [ log %tmp.9 35 21 24 ];
+        %tmp.9 = getv function %tmp.8 :log;
+        %tmp.10 = "statusView.autosync";
+        %tmp.11 = "cache empty";
+        invoke %tmp.8 %tmp.9(%tmp.10, %tmp.11);
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 36 12 ]
+        %tmp.12 = "AWDJ Spike\nsyncing 3 songs...\nMac dev server + wifi required";
+        symbol [ mText ? 36 12 17 ];
+        putv self :mText %tmp.12;
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 37 12 ]
+        symbol [ Media %tmp.13 37 12 17 ];
+        %tmp.13 = getm $.Toybox.Media;
+        symbol [ startSync %tmp.14 37 18 27 ];
+        %tmp.14 = getv function %tmp.13 :startSync;
+        invoke %tmp.13 %tmp.14();
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_34_41_38_8_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_34_8_38_8_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_34_8_38_8_if_end:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_33_22_39_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 41; @symbol_functiondef = [onUpdate,41,13,21]; @symbol_param<0> = [dc,41,22,24]; ]
+    function onUpdate(dc) {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_41_26_47_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 42 8 ]
         %tmp.1 = lgetv %dc;
-        symbol [ dc %tmp.1 18 8 10 ];
-        symbol [ setColor %tmp.2 18 11 19 ];
+        symbol [ dc %tmp.1 42 8 10 ];
+        symbol [ setColor %tmp.2 42 11 19 ];
         %tmp.2 = getv function %tmp.1 :setColor;
-        symbol [ Graphics %tmp.3 18 20 28 ];
+        symbol [ Graphics %tmp.3 42 20 28 ];
         %tmp.3 = getm $.Toybox.Graphics;
-        symbol [ COLOR_BLACK %tmp.4 18 29 40 ];
+        symbol [ COLOR_BLACK %tmp.4 42 29 40 ];
         %tmp.4 = getv %tmp.3 :COLOR_BLACK;
-        symbol [ Graphics %tmp.5 18 42 50 ];
+        symbol [ Graphics %tmp.5 42 42 50 ];
         %tmp.5 = getm $.Toybox.Graphics;
-        symbol [ COLOR_BLACK %tmp.6 18 51 62 ];
+        symbol [ COLOR_BLACK %tmp.6 42 51 62 ];
         %tmp.6 = getv %tmp.5 :COLOR_BLACK;
         invoke %tmp.1 %tmp.2(%tmp.4, %tmp.6);
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 19 8 ]
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 43 8 ]
         %tmp.7 = lgetv %dc;
-        symbol [ dc %tmp.7 19 8 10 ];
-        symbol [ clear %tmp.8 19 11 16 ];
+        symbol [ dc %tmp.7 43 8 10 ];
+        symbol [ clear %tmp.8 43 11 16 ];
         %tmp.8 = getv function %tmp.7 :clear;
         invoke %tmp.7 %tmp.8();
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 20 8 ]
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 44 8 ]
         %tmp.9 = lgetv %dc;
-        symbol [ dc %tmp.9 20 8 10 ];
-        symbol [ setColor %tmp.10 20 11 19 ];
+        symbol [ dc %tmp.9 44 8 10 ];
+        symbol [ setColor %tmp.10 44 11 19 ];
         %tmp.10 = getv function %tmp.9 :setColor;
-        symbol [ Graphics %tmp.11 20 20 28 ];
+        symbol [ Graphics %tmp.11 44 20 28 ];
         %tmp.11 = getm $.Toybox.Graphics;
-        symbol [ COLOR_WHITE %tmp.12 20 29 40 ];
+        symbol [ COLOR_WHITE %tmp.12 44 29 40 ];
         %tmp.12 = getv %tmp.11 :COLOR_WHITE;
-        symbol [ Graphics %tmp.13 20 42 50 ];
+        symbol [ Graphics %tmp.13 44 42 50 ];
         %tmp.13 = getm $.Toybox.Graphics;
-        symbol [ COLOR_BLACK %tmp.14 20 51 62 ];
+        symbol [ COLOR_BLACK %tmp.14 44 51 62 ];
         %tmp.14 = getv %tmp.13 :COLOR_BLACK;
         invoke %tmp.9 %tmp.10(%tmp.12, %tmp.14);
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 21 8 ]
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 45 8 ]
         %tmp.15 = lgetv %dc;
-        symbol [ dc %tmp.15 21 8 10 ];
-        symbol [ drawText %tmp.16 21 11 19 ];
+        symbol [ dc %tmp.15 45 8 10 ];
+        symbol [ drawText %tmp.16 45 11 19 ];
         %tmp.16 = getv function %tmp.15 :drawText;
         %tmp.17 = lgetv %dc;
-        symbol [ dc %tmp.17 21 20 22 ];
-        symbol [ getWidth %tmp.18 21 23 31 ];
+        symbol [ dc %tmp.17 45 20 22 ];
+        symbol [ getWidth %tmp.18 45 23 31 ];
         %tmp.18 = getv function %tmp.17 :getWidth;
         %tmp.19 = invoke %tmp.17 %tmp.18();
         %tmp.20 = 2;
         %tmp.21 = div %tmp.19 %tmp.20;
         %tmp.22 = lgetv %dc;
-        symbol [ dc %tmp.22 21 39 41 ];
-        symbol [ getHeight %tmp.23 21 42 51 ];
+        symbol [ dc %tmp.22 45 39 41 ];
+        symbol [ getHeight %tmp.23 45 42 51 ];
         %tmp.23 = getv function %tmp.22 :getHeight;
         %tmp.24 = invoke %tmp.22 %tmp.23();
         %tmp.25 = 2;
         %tmp.26 = div %tmp.24 %tmp.25;
-        symbol [ Graphics %tmp.27 21 59 67 ];
+        symbol [ Graphics %tmp.27 45 59 67 ];
         %tmp.27 = getm $.Toybox.Graphics;
-        symbol [ FONT_SMALL %tmp.28 21 68 78 ];
+        symbol [ FONT_SMALL %tmp.28 45 68 78 ];
         %tmp.28 = getv %tmp.27 :FONT_SMALL;
-        symbol [ mText %tmp.30 21 80 85 ];
+        symbol [ mText %tmp.30 45 80 85 ];
         %tmp.30 = getv ? :mText;
-        symbol [ Graphics %tmp.31 22 12 20 ];
+        symbol [ Graphics %tmp.31 46 12 20 ];
         %tmp.31 = getm $.Toybox.Graphics;
-        symbol [ TEXT_JUSTIFY_CENTER %tmp.32 22 21 40 ];
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.32 46 21 40 ];
         %tmp.32 = getv %tmp.31 :TEXT_JUSTIFY_CENTER;
-        symbol [ Graphics %tmp.33 22 43 51 ];
+        symbol [ Graphics %tmp.33 46 43 51 ];
         %tmp.33 = getm $.Toybox.Graphics;
-        symbol [ TEXT_JUSTIFY_VCENTER %tmp.34 22 52 72 ];
+        symbol [ TEXT_JUSTIFY_VCENTER %tmp.34 46 52 72 ];
         %tmp.34 = getv %tmp.33 :TEXT_JUSTIFY_VCENTER;
         %tmp.35 = bitor %tmp.32 %tmp.34;
         invoke %tmp.15 %tmp.16(%tmp.21, %tmp.26, %tmp.28, %tmp.30, %tmp.35);
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_17_26_23_4_stop:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_41_26_47_4_stop:
     }
 }
-[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 26; @symbol_classdef = [SpikeSyncView,26,6,19]; @symbol_extends<0> = [WatchUi,26,28,35]; @symbol_extends<1> = [View,26,36,40]; ]
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 50; @symbol_classdef = [SpikeSyncView,50,6,19]; @symbol_extends<0> = [WatchUi,50,28,35]; @symbol_extends<1> = [View,50,36,40]; ]
 class SpikeSyncView extends WatchUi.View {
-    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 26; ]
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 50; ]
     <init> {
     }
-    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 26; ]
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 50; ]
     static
     <init> {
     }
-    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 28; @symbol_functiondef = [initialize,28,13,23]; ]
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 52; @symbol_functiondef = [initialize,52,13,23]; ]
     function initialize() as Void {
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_28_26_30_4_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 29 8 ]
-        symbol [ View %tmp.2 29 8 12 ];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_52_26_54_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 53 8 ]
+        symbol [ View %tmp.2 53 8 12 ];
         %tmp.2 = getv ? :View;
-        symbol [ initialize %tmp.3 29 13 23 ];
+        symbol [ initialize %tmp.3 53 13 23 ];
         %tmp.3 = getv function %tmp.2 :initialize;
         invoke %tmp.2 %tmp.3();
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_28_26_30_4_stop:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_52_26_54_4_stop:
     }
-    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 32; @symbol_functiondef = [onShow,32,13,19]; ]
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 56; @symbol_functiondef = [onShow,56,13,19]; ]
     function onShow() {
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_32_22_35_4_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 33 8 ]
-        symbol [ SpikeLog %tmp.2 33 8 16 ];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_56_22_59_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 57 8 ]
+        symbol [ SpikeLog %tmp.2 57 8 16 ];
         %tmp.2 = getv ? :SpikeLog;
-        symbol [ log %tmp.3 33 17 20 ];
+        symbol [ log %tmp.3 57 17 20 ];
         %tmp.3 = getv function %tmp.2 :log;
         %tmp.4 = "syncView.show";
         %tmp.5 = "requesting sync";
         invoke %tmp.2 %tmp.3(%tmp.4, %tmp.5);
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 34 8 ]
-        symbol [ Media %tmp.6 34 8 13 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 58 8 ]
+        symbol [ Media %tmp.6 58 8 13 ];
         %tmp.6 = getm $.Toybox.Media;
-        symbol [ startSync %tmp.7 34 14 23 ];
+        symbol [ startSync %tmp.7 58 14 23 ];
         %tmp.7 = getv function %tmp.6 :startSync;
         invoke %tmp.6 %tmp.7();
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_32_22_35_4_stop:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_56_22_59_4_stop:
     }
-    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 37; @symbol_functiondef = [onUpdate,37,13,21]; @symbol_param<0> = [dc,37,22,24]; ]
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 61; @symbol_functiondef = [onUpdate,61,13,21]; @symbol_param<0> = [dc,61,22,24]; ]
     function onUpdate(dc) {
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_37_26_44_4_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 38 8 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_61_26_68_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 62 8 ]
         %tmp.1 = lgetv %dc;
-        symbol [ dc %tmp.1 38 8 10 ];
-        symbol [ setColor %tmp.2 38 11 19 ];
+        symbol [ dc %tmp.1 62 8 10 ];
+        symbol [ setColor %tmp.2 62 11 19 ];
         %tmp.2 = getv function %tmp.1 :setColor;
-        symbol [ Graphics %tmp.3 38 20 28 ];
+        symbol [ Graphics %tmp.3 62 20 28 ];
         %tmp.3 = getm $.Toybox.Graphics;
-        symbol [ COLOR_BLACK %tmp.4 38 29 40 ];
+        symbol [ COLOR_BLACK %tmp.4 62 29 40 ];
         %tmp.4 = getv %tmp.3 :COLOR_BLACK;
-        symbol [ Graphics %tmp.5 38 42 50 ];
+        symbol [ Graphics %tmp.5 62 42 50 ];
         %tmp.5 = getm $.Toybox.Graphics;
-        symbol [ COLOR_BLACK %tmp.6 38 51 62 ];
+        symbol [ COLOR_BLACK %tmp.6 62 51 62 ];
         %tmp.6 = getv %tmp.5 :COLOR_BLACK;
         invoke %tmp.1 %tmp.2(%tmp.4, %tmp.6);
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 39 8 ]
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 63 8 ]
         %tmp.7 = lgetv %dc;
-        symbol [ dc %tmp.7 39 8 10 ];
-        symbol [ clear %tmp.8 39 11 16 ];
+        symbol [ dc %tmp.7 63 8 10 ];
+        symbol [ clear %tmp.8 63 11 16 ];
         %tmp.8 = getv function %tmp.7 :clear;
         invoke %tmp.7 %tmp.8();
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 40 8 ]
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 64 8 ]
         %tmp.9 = lgetv %dc;
-        symbol [ dc %tmp.9 40 8 10 ];
-        symbol [ setColor %tmp.10 40 11 19 ];
+        symbol [ dc %tmp.9 64 8 10 ];
+        symbol [ setColor %tmp.10 64 11 19 ];
         %tmp.10 = getv function %tmp.9 :setColor;
-        symbol [ Graphics %tmp.11 40 20 28 ];
+        symbol [ Graphics %tmp.11 64 20 28 ];
         %tmp.11 = getm $.Toybox.Graphics;
-        symbol [ COLOR_WHITE %tmp.12 40 29 40 ];
+        symbol [ COLOR_WHITE %tmp.12 64 29 40 ];
         %tmp.12 = getv %tmp.11 :COLOR_WHITE;
-        symbol [ Graphics %tmp.13 40 42 50 ];
+        symbol [ Graphics %tmp.13 64 42 50 ];
         %tmp.13 = getm $.Toybox.Graphics;
-        symbol [ COLOR_BLACK %tmp.14 40 51 62 ];
+        symbol [ COLOR_BLACK %tmp.14 64 51 62 ];
         %tmp.14 = getv %tmp.13 :COLOR_BLACK;
         invoke %tmp.9 %tmp.10(%tmp.12, %tmp.14);
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 41 8 ]
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc" 65 8 ]
         %tmp.15 = lgetv %dc;
-        symbol [ dc %tmp.15 41 8 10 ];
-        symbol [ drawText %tmp.16 41 11 19 ];
+        symbol [ dc %tmp.15 65 8 10 ];
+        symbol [ drawText %tmp.16 65 11 19 ];
         %tmp.16 = getv function %tmp.15 :drawText;
         %tmp.17 = lgetv %dc;
-        symbol [ dc %tmp.17 41 20 22 ];
-        symbol [ getWidth %tmp.18 41 23 31 ];
+        symbol [ dc %tmp.17 65 20 22 ];
+        symbol [ getWidth %tmp.18 65 23 31 ];
         %tmp.18 = getv function %tmp.17 :getWidth;
         %tmp.19 = invoke %tmp.17 %tmp.18();
         %tmp.20 = 2;
         %tmp.21 = div %tmp.19 %tmp.20;
         %tmp.22 = lgetv %dc;
-        symbol [ dc %tmp.22 41 39 41 ];
-        symbol [ getHeight %tmp.23 41 42 51 ];
+        symbol [ dc %tmp.22 65 39 41 ];
+        symbol [ getHeight %tmp.23 65 42 51 ];
         %tmp.23 = getv function %tmp.22 :getHeight;
         %tmp.24 = invoke %tmp.22 %tmp.23();
         %tmp.25 = 2;
         %tmp.26 = div %tmp.24 %tmp.25;
-        symbol [ Graphics %tmp.27 41 59 67 ];
+        symbol [ Graphics %tmp.27 65 59 67 ];
         %tmp.27 = getm $.Toybox.Graphics;
-        symbol [ FONT_SMALL %tmp.28 41 68 78 ];
+        symbol [ FONT_SMALL %tmp.28 65 68 78 ];
         %tmp.28 = getv %tmp.27 :FONT_SMALL;
         %tmp.29 = "AWDJ Spike sync\nMac dev server must be up\n(3 songs over wifi)";
-        symbol [ Graphics %tmp.30 43 12 20 ];
+        symbol [ Graphics %tmp.30 67 12 20 ];
         %tmp.30 = getm $.Toybox.Graphics;
-        symbol [ TEXT_JUSTIFY_CENTER %tmp.31 43 21 40 ];
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.31 67 21 40 ];
         %tmp.31 = getv %tmp.30 :TEXT_JUSTIFY_CENTER;
-        symbol [ Graphics %tmp.32 43 43 51 ];
+        symbol [ Graphics %tmp.32 67 43 51 ];
         %tmp.32 = getm $.Toybox.Graphics;
-        symbol [ TEXT_JUSTIFY_VCENTER %tmp.33 43 52 72 ];
+        symbol [ TEXT_JUSTIFY_VCENTER %tmp.33 67 52 72 ];
         %tmp.33 = getv %tmp.32 :TEXT_JUSTIFY_VCENTER;
         %tmp.34 = bitor %tmp.31 %tmp.33;
         invoke %tmp.15 %tmp.16(%tmp.21, %tmp.26, %tmp.28, %tmp.29, %tmp.34);
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_37_26_44_4_stop:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_spike_source_SpikeViews_mc_61_26_68_4_stop:
     }
 }
 [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-spike/source/SpikeViews.mc"; @line = 5; ]
