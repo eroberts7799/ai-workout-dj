@@ -351,6 +351,13 @@ final class SessionEngine: ObservableObject {
     if let live {
       payload["landings"] = live.landings.map { ["targetTMs": $0.targetTMs, "actualTMs": $0.actualTMs, "errorMs": $0.errorMs] }
       payload["commands"] = live.commands.map { ["tMs": $0.tMs, "trackId": $0.trackId, "positionMs": $0.positionMs, "reason": $0.reason] }
+      // The runner's overrules — per-transition negative feedback, free.
+      payload["skips"] = live.skips.map {
+        var d: [String: Any] = ["tMs": $0.tMs, "toTrackId": $0.toTrackId]
+        if let f = $0.fromTrackId { d["fromTrackId"] = f }
+        if let p = $0.fromPositionMs { d["fromPositionMs"] = p }
+        return d
+      }
     }
     guard let data = try? JSONSerialization.data(withJSONObject: payload) else { return }
     // DURABLE FIRST: a trail run may end in a dead zone — the log lands on
@@ -439,15 +446,17 @@ final class SessionEngine: ObservableObject {
   // away — Ethan DJed by hand at mile 9. An undelivered command is now
   // retried every 10s at the engine's modeled playhead, so music rejoins
   // where the model thinks it is the moment signal returns.
-  private struct PendingSpotify { let uri: String; let positionMs: Double; let atTimerMs: Double; let gen: Int; let reason: String }
+  private struct PendingSpotify { let uris: [String]; let positionMs: Double; let atTimerMs: Double; let gen: Int; let reason: String }
   private var pendingSpotify: PendingSpotify?
   private var spotifyGen = 0
   private var spotifyRetryAtMs: Double = 0
   private var spotifyAttemptInFlight = false
+  private var spotifyPollAtMs: Double = 0
+  private var spotifyPollInFlight = false
 
-  private func deliverSpotify(uri: String, positionMs: Double, timerMs: Double, reason: String) {
+  private func deliverSpotify(uris: [String], positionMs: Double, timerMs: Double, reason: String) {
     spotifyGen += 1
-    pendingSpotify = PendingSpotify(uri: uri, positionMs: positionMs, atTimerMs: timerMs, gen: spotifyGen, reason: reason)
+    pendingSpotify = PendingSpotify(uris: uris, positionMs: positionMs, atTimerMs: timerMs, gen: spotifyGen, reason: reason)
     spotifyRetryAtMs = timerMs + 10_000
     attemptSpotifyDelivery()
   }
@@ -460,7 +469,7 @@ final class SessionEngine: ObservableObject {
     // after it drifts off the model.
     let position = p.positionMs + max(0, clockMs - p.atTimerMs)
     Task { [weak self] in
-      let err = await SpotifyRemote.shared.play(uri: p.uri, positionMs: position)
+      let err = await SpotifyRemote.shared.play(uris: p.uris, positionMs: position)
       guard let self else { return }
       self.spotifyAttemptInFlight = false
       guard self.pendingSpotify?.gen == p.gen else { return } // superseded mid-flight
@@ -546,9 +555,12 @@ final class SessionEngine: ObservableObject {
       if suppressLoopbacks && c.reason.hasPrefix("loop back") { continue }
       if trailMode && musicSource == .spotify {
         // Phone conducts its own Spotify app; the watchdog owns delivery.
+        // The spare rides along so the runner's "next" button works.
         firedCount += 1
         lastCommand = c.reason
-        deliverSpotify(uri: c.uri, positionMs: c.positionMs, timerMs: timerMs, reason: c.reason)
+        var uris = [c.uri]
+        if let spare = c.spareUri { uris.append(spare) }
+        deliverSpotify(uris: uris, positionMs: c.positionMs, timerMs: timerMs, reason: c.reason)
       } else {
         // Never interrupt the run: a missing file leaves current audio playing.
         try? deck.play(id: c.trackId, positionMs: c.positionMs, fadeSec: c.fadeSec, opts: BeatMath.deckOpts(for: c.reason))
@@ -561,6 +573,22 @@ final class SessionEngine: ObservableObject {
     if pendingSpotify != nil, timerMs >= spotifyRetryAtMs {
       spotifyRetryAtMs = timerMs + 10_000
       attemptSpotifyDelivery()
+    }
+    // Reconciliation: every 20s ask Spotify what is ACTUALLY playing. A
+    // mismatch = the runner skipped (or the queue spare fired) — the model
+    // adopts reality and the overrule lands in the log as feedback.
+    // Skipped while a delivery is pending: the player is known-stale then.
+    if trailMode, musicSource == .spotify, pendingSpotify == nil,
+       timerMs >= spotifyPollAtMs, !spotifyPollInFlight {
+      spotifyPollAtMs = timerMs + 20_000
+      spotifyPollInFlight = true
+      Task { [weak self] in
+        let state = await SpotifyRemote.shared.playerState()
+        guard let self else { return }
+        self.spotifyPollInFlight = false
+        guard self.phase == .running, let st = state, st.isPlaying else { return }
+        self.live?.syncExternalPlayback(trackId: st.trackId, positionMs: st.progressMs, tMs: self.clockMs)
+      }
     }
     landingCount = live.landings.count
   }

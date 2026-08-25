@@ -343,6 +343,51 @@ final class LiveEngineTests: XCTestCase {
     for g in lgaps { XCTAssertLessThanOrEqual(g, 182_000) }
   }
 
+  func testCruiseCommandsCarryASpareNext() {
+    let cruise = [WorkoutStep(kind: "easy", seconds: 600, meters: nil)]
+    let engine = LiveEngine(plan: cruise, songs: songs, paceSecPerKm: 340)
+    for s in stream([(seconds: 600, mps: 3)]) { engine.advance(s) }
+    let fills = engine.commands.filter { $0.reason.hasPrefix("groove fill") }
+    XCTAssertGreaterThanOrEqual(fills.count, 2)
+    for f in fills {
+      XCTAssertNotNil(f.spareTrackId)
+      XCTAssertNotEqual(f.spareTrackId, f.trackId)
+    }
+  }
+
+  func testManualSkipAdoptsRealityAndRecordsTheOverrule() {
+    let cruise = [WorkoutStep(kind: "easy", seconds: 900, meters: nil)]
+    let engine = LiveEngine(plan: cruise, songs: songs, paceSecPerKm: 340)
+    for s in stream([(seconds: 60, mps: 3)]) { engine.advance(s) }
+    let playing = engine.commands.last!
+    let other = songs.first { $0.trackId != playing.trackId }!
+    engine.syncExternalPlayback(trackId: other.trackId, positionMs: 0, tMs: 61_000)
+    XCTAssertEqual(engine.skips.count, 1)
+    XCTAssertEqual(engine.skips[0].fromTrackId, playing.trackId)
+    XCTAssertEqual(engine.skips[0].toTrackId, other.trackId)
+    XCTAssertGreaterThan(engine.skips[0].fromPositionMs ?? 0, 55_000)
+    // Model follows the skipped-to song: no new command for ~2 min after.
+    let before = engine.commands.count
+    for s in stream([(seconds: 100, mps: 3)]) {
+      engine.advance(LiveSample(tMs: s.tMs + 61_000, distanceM: (s.distanceM ?? 0) + 183))
+    }
+    XCTAssertEqual(engine.commands.count, before)
+  }
+
+  func testSameTrackDriftReanchorsWithoutASkipEvent() {
+    let cruise = [WorkoutStep(kind: "easy", seconds: 900, meters: nil)]
+    let engine = LiveEngine(plan: cruise, songs: songs, paceSecPerKm: 340)
+    for s in stream([(seconds: 30, mps: 3)]) { engine.advance(s) }
+    let playing = engine.commands.last!
+    engine.syncExternalPlayback(trackId: playing.trackId, positionMs: 10_000, tMs: 31_000)
+    XCTAssertEqual(engine.skips.count, 0)
+    let before = engine.commands.count
+    for s in stream([(seconds: 180, mps: 3)]) {
+      engine.advance(LiveSample(tMs: s.tMs + 31_000, distanceM: (s.distanceM ?? 0) + 93))
+    }
+    XCTAssertEqual(engine.commands.count, before)
+  }
+
   func testMidBuildSlowdownReaimsAndLandsTight() {
     let engine = LiveEngine(plan: plan, songs: songs, paceSecPerKm: 340)
     for s in stream([(370, 3), (200, 1.8)]) { engine.advance(s) }

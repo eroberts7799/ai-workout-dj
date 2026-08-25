@@ -52,13 +52,16 @@ final class SpotifyRemote {
     return id
   }
 
-  /// Play a track from positionMs on this phone's Spotify. Soft-fails.
-  func play(uri: String, positionMs: Double) async -> String? {
+  /// Play tracks from positionMs on this phone's Spotify. Soft-fails.
+  /// A second uri in the list is the engine's spare: it gives the runner's
+  /// "next" button somewhere real to land (a single-uri context made next
+  /// RESTART the song — 8/25 easy run).
+  func play(uris: [String], positionMs: Double) async -> String? {
     do {
       var id = try await resolveDevice(force: false)
       var (code, _) = try await api(
         "/me/player/play?device_id=\(id)", method: "PUT",
-        json: ["uris": [uri], "position_ms": Int(max(0, positionMs))]
+        json: ["uris": uris, "position_ms": Int(max(0, positionMs))]
       )
       if code == 404 || code == 403 {
         // Device id churned or went inactive — re-resolve, transfer, retry.
@@ -66,12 +69,32 @@ final class SpotifyRemote {
         _ = try await api("/me/player", method: "PUT", json: ["device_ids": [id], "play": false])
         (code, _) = try await api(
           "/me/player/play?device_id=\(id)", method: "PUT",
-          json: ["uris": [uri], "position_ms": Int(max(0, positionMs))]
+          json: ["uris": uris, "position_ms": Int(max(0, positionMs))]
         )
       }
       return (200...299).contains(code) ? nil : "spotify HTTP \(code)"
     } catch {
       return "spotify offline (\((error as NSError).code)) — music pauses at song end"
+    }
+  }
+
+  /// What is ACTUALLY playing — the reconciliation read that lets the
+  /// engine notice manual skips. nil when unknown (offline, nothing playing).
+  func playerState() async -> (trackId: String, progressMs: Double, isPlaying: Bool)? {
+    do {
+      let (code, data) = try await api("/me/player")
+      guard code == 200 else { return nil } // 204 = nothing playing
+      struct State: Decodable {
+        struct Item: Decodable { let id: String? }
+        let item: Item?
+        let progress_ms: Double?
+        let is_playing: Bool?
+      }
+      let s = try JSONDecoder().decode(State.self, from: data)
+      guard let id = s.item?.id else { return nil }
+      return (trackId: id, progressMs: s.progress_ms ?? 0, isPlaying: s.is_playing ?? false)
+    } catch {
+      return nil
     }
   }
 

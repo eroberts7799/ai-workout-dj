@@ -48,6 +48,21 @@ export interface PlayCommand {
   positionMs: number
   fadeSec: number
   reason: string
+  /** Cruise commands carry a second pick so a streaming executor can queue
+   *  it — the runner's "next" button lands somewhere real instead of
+   *  restarting the song (8/25 easy run). Pure suggestion: if it actually
+   *  plays, the executor reports it via syncExternalPlayback. */
+  spareTrackId?: string
+  spareUri?: string
+}
+
+/** A manual song change the executor observed — the runner overruled the
+ *  DJ. The abandoned track is the flywheel's first thumbs-down signal. */
+export interface SkipEvent {
+  tMs: number
+  fromTrackId: string | null
+  fromPositionMs: number | null
+  toTrackId: string
 }
 
 export interface LandingReport {
@@ -144,6 +159,7 @@ export class LiveEngine {
   readonly commands: PlayCommand[] = []
   readonly landings: LandingReport[] = []
   readonly warnings: string[] = []
+  readonly skips: SkipEvent[] = []
 
   /** Learned pairing weights ("<norm from>><norm to>" → observed count) —
    *  mined from real DJ sets by analysis/selection_weights.py. */
@@ -222,9 +238,56 @@ export class LiveEngine {
     return this.playing.positionAtMs + (t - this.playing.atTMs)
   }
 
-  private emit(t: number, song: SongTags, positionMs: number, fadeSec: number, reason: string) {
-    this.commands.push({ tMs: t, trackId: song.trackId, uri: song.uri, positionMs, fadeSec, reason })
+  private emit(t: number, song: SongTags, positionMs: number, fadeSec: number, reason: string, spare?: SongTags | null) {
+    this.commands.push({
+      tMs: t, trackId: song.trackId, uri: song.uri, positionMs, fadeSec, reason,
+      ...(spare ? { spareTrackId: spare.trackId, spareUri: spare.uri } : {}),
+    })
     this.playing = { song, positionAtMs: positionMs, atTMs: t }
+  }
+
+  /** The executor's queue insurance: what "next" should land on if the
+   *  runner skips DURING `chosen`. Pure peek — no freshness, index, or
+   *  recency consumption; state only changes if the spare actually plays
+   *  (reported back via syncExternalPlayback). */
+  private peekSpare(chosen: SongTags): SongTags | null {
+    const recent = new Set(this.commands.slice(-6).map((c) => c.trackId))
+    let best: { song: SongTags; score: number } | null = null
+    for (const c of this.loopable) {
+      if (c.song.trackId === chosen.trackId) continue
+      const learned = Math.min(2, this.pairBonus[`${this.normKey.get(chosen.trackId)}>${this.normKey.get(c.song.trackId)}`] ?? 0)
+      const score = mixScore(chosen, c.song) + learned - (recent.has(c.song.trackId) ? 1 : 0)
+      if (!best || score > best.score) best = { song: c.song, score }
+    }
+    return best?.song ?? null
+  }
+
+  /** The executor observed playback that differs from the model — a manual
+   *  skip, a queue-spare firing, any external change. Adopt reality (the
+   *  model must never argue with the speaker) and record the overrule:
+   *  the abandoned song at its abandoned position is ground-truth negative
+   *  feedback. Same-track calls with drifted position re-anchor the model
+   *  (late watchdog delivery, restarts). */
+  syncExternalPlayback(trackId: string, positionMs: number, tMs: number): void {
+    const cur = this.playing
+    if (cur && cur.song.trackId === trackId) {
+      const modeled = cur.positionAtMs + (tMs - cur.atTMs)
+      if (Math.abs(modeled - positionMs) > 5000) {
+        this.playing = { song: cur.song, positionAtMs: positionMs, atTMs: tMs }
+        if (this.mode === 'fill') this.fillExitPosMs = this.chainExitPosMs(cur.song, Math.min(positionMs, cur.song.durationMs))
+      }
+      return
+    }
+    const found = this.loopable.find((c) => c.song.trackId === trackId)
+    this.skips.push({
+      tMs,
+      fromTrackId: cur?.song.trackId ?? null,
+      fromPositionMs: cur ? Math.round(cur.positionAtMs + (tMs - cur.atTMs)) : null,
+      toTrackId: trackId,
+    })
+    if (!found) return // external track outside the library — feedback logged, model unchanged
+    this.playing = { song: found.song, positionAtMs: positionMs, atTMs: tMs }
+    if (this.mode === 'fill') this.fillExitPosMs = this.chainExitPosMs(found.song, positionMs)
   }
 
   private currentStep(): WorkoutStep | null {
@@ -534,7 +597,7 @@ export class LiveEngine {
     // Songs start at the BEGINNING — Spotify-style listening ("until we get
     // really great mixing, songs should just play from the beginning").
     this.fillExitPosMs = this.chainExitPosMs(fill.song, 0)
-    this.emit(t, fill.song, 0, 1.2, `groove fill (${fill.song.name})`)
+    this.emit(t, fill.song, 0, 1.2, `groove fill (${fill.song.name})`, this.peekSpare(fill.song))
   }
 
   /** Advance the engine with a fresh sample; returns commands issued this tick. */
@@ -636,7 +699,7 @@ export class LiveEngine {
           // three songs in 90s (trail run 2026-08-22, all 6 crests).
           const pick = this.pickLoop()
           if (pick) {
-            this.emit(t, pick.song, 0, 0.45, `rep change (crest reward) (${pick.song.name})`)
+            this.emit(t, pick.song, 0, 0.45, `rep change (crest reward) (${pick.song.name})`, this.peekSpare(pick.song))
             this.fillExitPosMs = this.chainExitPosMs(pick.song, 0)
           }
         } else {

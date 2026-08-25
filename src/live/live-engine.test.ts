@@ -500,6 +500,54 @@ describe('LiveEngine', () => {
     expect(Math.abs(last.actualTMs - 460_000)).toBeLessThanOrEqual(5000)
   })
 
+  test('cruise commands carry a spare next for the executor queue', () => {
+    const cruise: WorkoutPlan = { name: 'cruise', steps: [{ kind: 'easy', seconds: 600 }] }
+    const engine = new LiveEngine(cruise, songs, { paceSecPerKm: 340 })
+    run(engine, stream([{ seconds: 600, mps: 3 }]))
+    const fills = engine.commands.filter((c) => c.reason.startsWith('groove fill'))
+    expect(fills.length).toBeGreaterThanOrEqual(2)
+    for (const f of fills) {
+      expect(f.spareTrackId).toBeDefined()
+      expect(f.spareTrackId).not.toBe(f.trackId) // never "next = same song"
+    }
+  })
+
+  test('manual skip: the model adopts reality and records the overrule', () => {
+    const cruise: WorkoutPlan = { name: 'cruise', steps: [{ kind: 'easy', seconds: 900 }] }
+    const engine = new LiveEngine(cruise, songs, { paceSecPerKm: 340 })
+    // 60s in, cruising on the first pick…
+    for (const s of stream([{ seconds: 60, mps: 3 }])) engine.advance(s)
+    const playing = engine.commands[engine.commands.length - 1]
+    const other = songs.find((s) => s.trackId !== playing.trackId)!
+    // …the runner skips to a different library song at its 0:00.
+    engine.syncExternalPlayback(other.trackId, 0, 61_000)
+    expect(engine.skips.length).toBe(1)
+    expect(engine.skips[0].fromTrackId).toBe(playing.trackId)
+    expect(engine.skips[0].toTrackId).toBe(other.trackId)
+    expect(engine.skips[0].fromPositionMs).toBeGreaterThan(55_000)
+    // The model now follows the skipped-to song: the next natural chain
+    // happens relative to ITS start, so no command for at least ~2 more min.
+    const before = engine.commands.length
+    for (const s of stream([{ seconds: 100, mps: 3 }]).map((x) => ({ ...x, tMs: x.tMs + 61_000, distanceM: (x.distanceM ?? 0) + 183 })))
+      engine.advance(s)
+    expect(engine.commands.length).toBe(before)
+  })
+
+  test('same-track position drift re-anchors the model without a skip event', () => {
+    const cruise: WorkoutPlan = { name: 'cruise', steps: [{ kind: 'easy', seconds: 900 }] }
+    const engine = new LiveEngine(cruise, songs, { paceSecPerKm: 340 })
+    for (const s of stream([{ seconds: 30, mps: 3 }])) engine.advance(s)
+    const playing = engine.commands[engine.commands.length - 1]
+    // Executor reports the SAME track but 20s behind the model (late delivery).
+    engine.syncExternalPlayback(playing.trackId, 10_000, 31_000)
+    expect(engine.skips.length).toBe(0)
+    // Chain exit moved later: no change until the re-anchored song end.
+    const before = engine.commands.length
+    for (const s of stream([{ seconds: 180, mps: 3 }]).map((x) => ({ ...x, tMs: x.tMs + 31_000, distanceM: (x.distanceM ?? 0) + 93 })))
+      engine.advance(s)
+    expect(engine.commands.length).toBe(before)
+  })
+
   test('mid-build slowdown triggers a re-aim and the drop still lands tight', () => {
     // Fade hard in the last stretch before the rep — exactly when the old
     // engine rode a stale forecast into an early drop.

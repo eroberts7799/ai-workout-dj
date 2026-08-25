@@ -36,6 +36,19 @@ struct LivePlayCommand {
   let positionMs: Double
   let fadeSec: Double
   let reason: String
+  /// Cruise commands carry a second pick for the executor's queue — the
+  /// runner's "next" button lands somewhere real (mirrors TS, 8/25 run).
+  var spareTrackId: String? = nil
+  var spareUri: String? = nil
+}
+
+/// A manual song change the executor observed — the runner overruled the
+/// DJ. The abandoned track is the flywheel's first thumbs-down signal.
+struct SkipEvent {
+  let tMs: Double
+  let fromTrackId: String?
+  let fromPositionMs: Double?
+  let toTrackId: String
 }
 
 struct LandingReport {
@@ -116,6 +129,7 @@ final class LiveEngine {
   private var lastReaimT: Double = -.infinity
 
   private(set) var commands: [LivePlayCommand] = []
+  private(set) var skips: [SkipEvent] = []
   private(set) var landings: [LandingReport] = []
   private(set) var warnings: [String] = []
 
@@ -194,9 +208,50 @@ final class LiveEngine {
     return p.positionAtMs + (t - p.atTMs)
   }
 
-  private func emit(t: Double, song: TaggedSong, positionMs: Double, fadeSec: Double, reason: String) {
-    commands.append(LivePlayCommand(tMs: t, trackId: song.trackId, uri: song.uri, positionMs: positionMs, fadeSec: fadeSec, reason: reason))
+  private func emit(t: Double, song: TaggedSong, positionMs: Double, fadeSec: Double, reason: String, spare: TaggedSong? = nil) {
+    commands.append(LivePlayCommand(
+      tMs: t, trackId: song.trackId, uri: song.uri, positionMs: positionMs, fadeSec: fadeSec, reason: reason,
+      spareTrackId: spare?.trackId, spareUri: spare?.uri))
     playing = (song: song, positionAtMs: positionMs, atTMs: t)
+  }
+
+  /// The executor's queue insurance: what "next" lands on if the runner
+  /// skips DURING `chosen`. Pure peek — no rotation/recency consumption;
+  /// state changes only if it actually plays (syncExternalPlayback). Mirrors TS.
+  private func peekSpare(chosen: TaggedSong) -> TaggedSong? {
+    let recent = Set(commands.suffix(6).map { $0.trackId })
+    var best: (song: TaggedSong, score: Int)?
+    for c in loopable {
+      if c.song.trackId == chosen.trackId { continue }
+      var score = BeatMath.mixScore(fromBpm: chosen.bpm, fromKey: chosen.camelot, toBpm: c.song.bpm, toKey: c.song.camelot)
+      score += learnedBonus(from: chosen, to: c.song)
+      if recent.contains(c.song.trackId) { score -= 1 }
+      if best == nil || score > best!.score { best = (c.song, score) }
+    }
+    return best?.song
+  }
+
+  /// The executor observed playback that differs from the model — a manual
+  /// skip, the queue spare firing, any external change. Adopt reality (the
+  /// model never argues with the speaker), record the overrule as feedback.
+  /// Same-track calls with >5s drift re-anchor the model. Mirrors TS.
+  func syncExternalPlayback(trackId: String, positionMs: Double, tMs: Double) {
+    if let cur = playing, cur.song.trackId == trackId {
+      let modeled = cur.positionAtMs + (tMs - cur.atTMs)
+      if abs(modeled - positionMs) > 5000 {
+        playing = (song: cur.song, positionAtMs: positionMs, atTMs: tMs)
+        if mode == .fill { fillExitPosMs = chainExitPosMs(song: cur.song, entryMs: min(positionMs, cur.song.durationMs)) }
+      }
+      return
+    }
+    skips.append(SkipEvent(
+      tMs: tMs,
+      fromTrackId: playing?.song.trackId,
+      fromPositionMs: playing.map { $0.positionAtMs + (tMs - $0.atTMs) },
+      toTrackId: trackId))
+    guard let found = loopable.first(where: { $0.song.trackId == trackId }) else { return }
+    playing = (song: found.song, positionAtMs: positionMs, atTMs: tMs)
+    if mode == .fill { fillExitPosMs = chainExitPosMs(song: found.song, entryMs: positionMs) }
   }
 
   private func currentStep() -> WorkoutStep? {
@@ -482,7 +537,8 @@ final class LiveEngine {
     guard let fill = pickLoop() else { return }
     mode = .fill
     fillExitPosMs = chainExitPosMs(song: fill.song, entryMs: 0)
-    emit(t: t, song: fill.song, positionMs: 0, fadeSec: 1.2, reason: "groove fill (\(fill.song.name))")
+    let spare = peekSpare(chosen: fill.song)
+    emit(t: t, song: fill.song, positionMs: 0, fadeSec: 1.2, reason: "groove fill (\(fill.song.name))", spare: spare)
   }
 
   /// Advance the engine with a fresh sample; returns commands issued this tick.
@@ -576,7 +632,8 @@ final class LiveEngine {
           // its own chain point. The 25s time-box belongs to the anticipated
           // style; boxing a 0:00 entry amputated it mid-intro (trail run
           // 2026-08-22, all 6 crests → three songs in 90s per summit).
-          emit(t: t, song: pick.song, positionMs: 0, fadeSec: 0.45, reason: "rep change (crest reward) (\(pick.song.name))")
+          let spare = peekSpare(chosen: pick.song)
+          emit(t: t, song: pick.song, positionMs: 0, fadeSec: 0.45, reason: "rep change (crest reward) (\(pick.song.name))", spare: spare)
           fillExitPosMs = chainExitPosMs(song: pick.song, entryMs: 0)
         } else if dropStyle == .anticipated, let pick = pickDrop() {
           emit(t: t, song: pick.song, positionMs: pick.dropMs, fadeSec: 0.45, reason: "drop lands (crest reward) (\(pick.song.name))")
