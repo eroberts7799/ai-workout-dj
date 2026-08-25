@@ -83,12 +83,35 @@ module Brain {
         return 5;
     }
 
+    // The watch knows the Runna plan natively (same API the data field
+    // streams to the phone). Boundary-mode plan awareness: are we IN a hard
+    // step, or is the NEXT one hard (the song chosen now will be playing
+    // when it starts)? Intensity map mirrors AwdjField.kindOf.
+    function effortContext() {
+        var inHard = false;
+        var nextHard = false;
+        var cur = Activity.getCurrentWorkoutStep();
+        if (cur != null && (cur.intensity == Activity.WORKOUT_INTENSITY_ACTIVE
+            || cur.intensity == Activity.WORKOUT_INTENSITY_INTERVAL)) {
+            inHard = true;
+        }
+        var nxt = Activity.getNextWorkoutStep();
+        if (nxt != null && (nxt.intensity == Activity.WORKOUT_INTENSITY_ACTIVE
+            || nxt.intensity == Activity.WORKOUT_INTENSITY_INTERVAL)) {
+            nextHard = true;
+        }
+        return [inHard, nextHard];
+    }
+
     // The moment of choice: score every cached candidate against what just
-    // ended, with the body's state as the tiebreaker — climbing or deep
-    // effort prefers faster songs (bpm-as-energy is crude; honest v1).
+    // ended, with the body AND the plan as tiebreakers — a hard step now
+    // (or next: this song will be playing when it starts), a climb, or
+    // deep effort all prefer faster songs (bpm-as-energy is crude; honest v1).
     function pickNext(currentRefId, candidateIds) {
         var info = Activity.getActivityInfo();
         var zone = hrZone(info);
+        var effort = effortContext();
+        var wantsEnergy = effort[0] || effort[1] || zone >= 4;
         var climbing = false;
         if (info != null && info.altitude != null) {
             if (lastAltitudeM != null && info.altitude - lastAltitudeM >= CLIMB_GAIN_M) { climbing = true; }
@@ -103,7 +126,7 @@ module Brain {
             var m = meta(id);
             var score = mixScore(cur, m);
             if (recentIds.indexOf(id) >= 0) { score -= 1; }
-            if ((climbing || zone >= 4) && m != null && cur != null && m[0] != null && cur[0] != null && m[0] > cur[0]) { score += 1; }
+            if ((wantsEnergy || climbing) && m != null && cur != null && m[0] != null && cur[0] != null && m[0] > cur[0]) { score += 1; }
             if (score > bestScore) { bestScore = score; best = id; }
         }
         if (best != null) {
@@ -111,6 +134,7 @@ module Brain {
             if (recentIds.size() > 6) { recentIds = recentIds.slice(1, recentIds.size()); }
             var name = meta(best) != null ? meta(best)[2] : "?";
             System.println("AWDJ pick | " + name + " score=" + bestScore + " zone=" + zone + " climbing=" + climbing
+                + " inHard=" + effort[0] + " nextHard=" + effort[1]
                 + " | timer=" + (info != null ? info.timerTime : null) + " hr=" + (info != null ? info.currentHeartRate : null));
         }
         return best;
