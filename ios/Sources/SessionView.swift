@@ -22,21 +22,45 @@ struct SessionView: View {
   @State private var showPlaylistSheet = false
   @State private var myPlaylists: [SpotifyLibrary.PlaylistRef] = []
 
+  @State private var showMenu = false
+
   var body: some View {
+    ZStack(alignment: .leading) {
+      mainContent
+      if showMenu {
+        Color.black.opacity(0.35)
+          .ignoresSafeArea()
+          .onTapGesture { withAnimation { showMenu = false } }
+        sideMenu
+          .transition(.move(edge: .leading))
+      }
+    }
+    .animation(.easeOut(duration: 0.2), value: showMenu)
+  }
+
+  private var mainContent: some View {
     // ScrollView, not bare VStack: a 44-track crate's readiness list overflows
     // any screen — without scrolling, the import buttons become unreachable
     // (build 7 froze exactly this way the first time a real bundle landed).
     ScrollView {
     VStack(spacing: 20) {
-      VStack(spacing: 4) {
-        Text(profileName.isEmpty ? "AWDJ · FIELD UNIT" : "AWDJ · FIELD UNIT · \(profileName.uppercased())")
-          .fieldLabel()
-          .foregroundColor(Theme.faded)
-        Text("The music moves first.")
-          .fieldDisplay(30)
-          .textCase(.uppercase)
+      ZStack(alignment: .topLeading) {
+        if engine.phase == .idle {
+          Button { withAnimation { showMenu = true } } label: {
+            Text("MENU").fieldMono(13, weight: .bold).foregroundColor(Theme.faded)
+          }
+        }
+        VStack(spacing: 4) {
+          Text(profileName.isEmpty ? "AWDJ · FIELD UNIT" : "AWDJ · FIELD UNIT · \(profileName.uppercased())")
+            .fieldLabel()
+            .foregroundColor(Theme.faded)
+          Text("The music moves first.")
+            .fieldDisplay(30)
+            .textCase(.uppercase)
+        }
+        .frame(maxWidth: .infinity)
+        .onTapGesture { showProfile = true }
       }
-      .onTapGesture { showProfile = true }
 
       switch engine.phase {
       case .idle:
@@ -94,59 +118,6 @@ struct SessionView: View {
           Text(relay.line)
             .fieldMono(12)
             .foregroundColor(Theme.olive)
-        }
-        Menu("More ▾") {
-          Section("Music source") {
-            Picker("music", selection: $engine.musicSource) {
-              Text("Spotify").tag(SessionEngine.MusicSource.spotify)
-              Text("Owned files").tag(SessionEngine.MusicSource.ownedFiles)
-            }
-          }
-          Section("Library") {
-            Button("Liked Songs") {
-              engine.status = "importing Liked Songs…"
-              Task {
-                do {
-                  let tags = try await SpotifyLibrary.likedSongs()
-                  engine.adoptLibrary(name: "Liked Songs", tags: tags)
-                } catch { engine.status = "Liked Songs failed: \(error.localizedDescription)" }
-              }
-            }
-            Button("Paste a playlist link") { showPlaylistPrompt = true }
-            Button("Import bundle") { showBundlePicker = true }
-            Button("Import audio files") { showAudioPicker = true }
-          }
-          Section("Watch & plans") {
-            Toggle("Arm Garmin auto-start", isOn: $armed)
-            if engine.supportsLive {
-              Toggle("LIVE mode (body-driven)", isOn: $engine.liveMode)
-            }
-            Menu("Program") {
-              ForEach(SessionEngine.builtinPrograms, id: \.resource) { p in
-                Button(p.title) { engine.loadBuiltin(p.resource) }
-              }
-            }
-            Button("Start plan in 3s") {
-              DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                if engine.phase == .idle { engine.start(atOffsetMs: 0) }
-              }
-            }
-            .disabled(!engine.allAudioReady)
-          }
-          Section("Testing") {
-            Menu("Simulate run") {
-              ForEach([1.0, 2.0, 4.0, 8.0], id: \.self) { s in
-                Button("×\(Int(s))\(s == 1 ? " (dress rehearsal)" : "")") { engine.startSimulatedRun(speed: s) }
-              }
-            }
-            Button("Reconnect Spotify") {
-              if (spotify.clientId ?? "").isEmpty {
-                showClientIdPrompt = true
-              } else {
-                spotify.login { err in if let err { engine.status = err } }
-              }
-            }
-          }
         }
       case .running, .paused:
         Text(RelayPoller.clock(engine.clockMs)).fieldMono(48, weight: .heavy)
@@ -293,5 +264,96 @@ struct SessionView: View {
         }
       }
     }
+  }
+
+  // Side drawer: distinct sections, everything non-essential (Ethan
+  // 2026-08-25: "side bar menu with distinct sections").
+  private var sideMenu: some View {
+    VStack(alignment: .leading, spacing: 0) {
+      HStack {
+        Text("AWDJ").fieldDisplay(20).textCase(.uppercase)
+        Spacer()
+        Button { withAnimation { showMenu = false } } label: {
+          Text("CLOSE").fieldMono(12, weight: .bold).foregroundColor(Theme.faded)
+        }
+      }
+      .padding(.horizontal, 20)
+      .padding(.vertical, 16)
+      List {
+        Section("Music source") {
+          Picker("Source", selection: $engine.musicSource) {
+            Text("Spotify").tag(SessionEngine.MusicSource.spotify)
+            Text("Owned files").tag(SessionEngine.MusicSource.ownedFiles)
+          }
+          .pickerStyle(.segmented)
+        }
+        Section("Library") {
+          Button("Liked Songs") {
+            withAnimation { showMenu = false }
+            engine.status = "importing Liked Songs…"
+            Task {
+              do {
+                let tags = try await SpotifyLibrary.likedSongs()
+                engine.adoptLibrary(name: "Liked Songs", tags: tags)
+              } catch { engine.status = "Liked Songs failed: \(error.localizedDescription)" }
+            }
+          }
+          Button("Paste a playlist link") {
+            withAnimation { showMenu = false }
+            showPlaylistPrompt = true
+          }
+          Button("Import bundle") {
+            withAnimation { showMenu = false }
+            showBundlePicker = true
+          }
+          Button("Import audio files") {
+            withAnimation { showMenu = false }
+            showAudioPicker = true
+          }
+        }
+        Section("Watch & plans") {
+          Toggle("Arm Garmin auto-start", isOn: $armed)
+          if engine.supportsLive {
+            Toggle("LIVE mode (body-driven)", isOn: $engine.liveMode)
+          }
+          Menu("Load program") {
+            ForEach(SessionEngine.builtinPrograms, id: \.resource) { p in
+              Button(p.title) { engine.loadBuiltin(p.resource) }
+            }
+          }
+          Button("Start plan in 3s") {
+            withAnimation { showMenu = false }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+              if engine.phase == .idle { engine.start(atOffsetMs: 0) }
+            }
+          }
+          .disabled(!engine.allAudioReady)
+        }
+        Section("Testing") {
+          Menu("Simulate run") {
+            ForEach([1.0, 2.0, 4.0, 8.0], id: \.self) { s in
+              Button("×\(Int(s))\(s == 1 ? " (dress rehearsal)" : "")") {
+                withAnimation { showMenu = false }
+                engine.startSimulatedRun(speed: s)
+              }
+            }
+          }
+          Button("Reconnect Spotify") {
+            withAnimation { showMenu = false }
+            if (spotify.clientId ?? "").isEmpty {
+              showClientIdPrompt = true
+            } else {
+              spotify.login { err in if let err { engine.status = err } }
+            }
+          }
+        }
+      }
+      .listStyle(.insetGrouped)
+      .scrollContentBackground(.hidden)
+    }
+    .frame(width: 300)
+    .frame(maxHeight: .infinity)
+    .background(Theme.paper)
+    .foregroundColor(Theme.ink)
   }
 }

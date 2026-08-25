@@ -662,6 +662,9 @@ final class SessionEngine: ObservableObject {
   func handleGarmin(event: String?, timerMs: Double?, receivedAt: Double, armed: Bool) {
     guard let event, receivedAt != lastHandledEvent else { return }
     lastHandledEvent = receivedAt
+    // Trail sessions are phone-clocked: a watch recording running alongside
+    // must not pause/steer the music (the 8/21 conflict, finally closed).
+    if trailMode { return }
     let backdated = (timerMs ?? 0) + (Date().timeIntervalSince1970 * 1000 - receivedAt)
     switch (event, phase) {
     case ("timerStart", .idle) where armed:
