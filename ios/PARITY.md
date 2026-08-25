@@ -48,3 +48,14 @@ replays every case against `BeatMath`. Regenerate after any `beat.ts` change.
       open: freshness chains can land mid-breakdown (dip −9.6dB) —
       energy-aware chain points from analysis segments are the next rung.
 - [x] DualDeck: tempo-locked blends, bar cuts, bass swap
+
+## Watch tier (garmin/awdj-watch) — DELIBERATELY REDUCED surface, not a port
+The Monkey C Brain is boundary-mode only (the platform physics: code runs
+only at song boundaries, no mid-song cuts). It mirrors EXACTLY: mixScore
+(+2 bpm≤3%, +1 camelot-compatible), camelotCompatible, recency -1 (last 6),
+hrMax 197. It does NOT have: buildups/drops, chain points, never-silence
+(the native player owns playback), loop machinery, wkStep/follow mode,
+learned pairs (yet). Climb detection is altitude-delta-since-last-boundary
+(CLIMB_GAIN_M 8m, GUESS) — not GradeTracker. Engine changes to selection
+scoring in TS must consider Brain.mc; everything else is out of its scope
+by design.

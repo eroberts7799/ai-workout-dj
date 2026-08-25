@@ -1,0 +1,79 @@
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc"; @line = 5; @symbol_usingdef<0> = [Toybox,5,6,12]; @symbol_usingdef<1> = [Application,5,13,24]; ]
+using Toybox.Application;
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc"; @line = 6; @symbol_usingdef<0> = [Toybox,6,6,12]; @symbol_usingdef<1> = [Media,6,13,18]; ]
+using Toybox.Media;
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc"; @line = 8; @symbol_classdef = [WatchApp,8,6,14]; @symbol_extends<0> = [Application,8,23,34]; @symbol_extends<1> = [AudioContentProviderApp,8,35,58]; ]
+class WatchApp extends Application.AudioContentProviderApp {
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc"; @line = 8; ]
+    <init> {
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc"; @line = 8; ]
+    static
+    <init> {
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc"; @line = 10; @symbol_functiondef = [initialize,10,13,23]; ]
+    function initialize() as Void {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchApp_mc_10_26_12_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" 11 8 ]
+        symbol [ AudioContentProviderApp %tmp.2 11 8 31 ];
+        %tmp.2 = getv ? :AudioContentProviderApp;
+        symbol [ initialize %tmp.3 11 32 42 ];
+        %tmp.3 = getv function %tmp.2 :initialize;
+        invoke %tmp.2 %tmp.3();
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchApp_mc_10_26_12_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc"; @line = 14; @symbol_functiondef = [getContentDelegate,14,13,31]; @symbol_param<0> = [args,14,32,36]; ]
+    function getContentDelegate(args) {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchApp_mc_14_38_16_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" 15 8 ]
+        symbol [ WatchContentDelegate %tmp.4 15 19 39 ];
+        %tmp.4 = getv ? :WatchContentDelegate;
+        %tmp.1 = newc %tmp.4 ();
+        ret %tmp.1;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchApp_mc_14_38_16_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc"; @line = 18; @symbol_functiondef = [getSyncDelegate,18,13,28]; ]
+    function getSyncDelegate() {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchApp_mc_18_31_20_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" 19 8 ]
+        symbol [ WatchSyncDelegate %tmp.4 19 19 36 ];
+        %tmp.4 = getv ? :WatchSyncDelegate;
+        %tmp.1 = newc %tmp.4 ();
+        ret %tmp.1;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchApp_mc_18_31_20_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc"; @line = 22; @symbol_functiondef = [getPlaybackConfigurationView,22,13,41]; ]
+    function getPlaybackConfigurationView() {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchApp_mc_22_44_27_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" 23 8 ]
+        %tmp.1 = newa 2;
+        symbol [ WatchStatusView %tmp.5 24 16 31 ];
+        %tmp.5 = getv ? :WatchStatusView;
+        %tmp.2 = newc %tmp.5 ();
+        %tmp.6 = dup %tmp.1;
+        %tmp.7 = aputv %tmp.6 0 %tmp.2;
+        symbol [ WatchStatusDelegate %tmp.11 25 16 35 ];
+        %tmp.11 = getv ? :WatchStatusDelegate;
+        %tmp.8 = newc %tmp.11 ();
+        %tmp.12 = dup %tmp.7;
+        %tmp.13 = aputv %tmp.12 1 %tmp.8;
+        ret %tmp.13;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchApp_mc_22_44_27_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc"; @line = 29; @symbol_functiondef = [getSyncConfigurationView,29,13,37]; ]
+    function getSyncConfigurationView() {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchApp_mc_29_40_31_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc" 30 8 ]
+        %tmp.1 = newa 1;
+        symbol [ WatchSyncView %tmp.5 30 20 33 ];
+        %tmp.5 = getv ? :WatchSyncView;
+        %tmp.2 = newc %tmp.5 ();
+        %tmp.6 = dup %tmp.1;
+        %tmp.7 = aputv %tmp.6 0 %tmp.2;
+        ret %tmp.7;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchApp_mc_29_40_31_4_stop:
+    }
+}
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchApp.mc"; @line = 5; ]
+<init> {
+}

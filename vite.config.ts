@@ -112,6 +112,37 @@ function libraryServer(): Plugin {
     configureServer(server) {
       server.middlewares.use('/api/library', (req, res) => {
         const sub = decodeURIComponent((req.url ?? '/').replace(/^\//, '').split('?')[0])
+        // The watch tier's shopping list: lean per-track metadata (Monkey C
+        // storage is tiny — 8KB per value) for the CIQ app's sync. Audio
+        // follows via the audio/ route below.
+        if (sub === 'watch-manifest') {
+          res.setHeader('Content-Type', 'application/json')
+          try {
+            const analysis = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), 'analysis', 'crate-analysis.json'), 'utf8'))
+            let keys: Record<string, { camelot?: string }> = {}
+            try {
+              keys = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), 'analysis', 'crate-keys.json'), 'utf8'))
+            } catch { /* keys optional */ }
+            const onDisk = new Set(fs.existsSync(musicDir) ? fs.readdirSync(musicDir) : [])
+            const limit = Number(new URL(req.url ?? '/', 'http://localhost').searchParams.get('limit') ?? 20)
+            const tracks = (analysis.analysis ?? [])
+              .filter((e: { sourceFile: string; bpm?: number }) => onDisk.has(e.sourceFile) && e.bpm)
+              .slice(0, limit)
+              .map((e: { sourceFile: string; title?: string; artist?: string; bpm?: number; camelot?: string; durationMs?: number }) => ({
+                file: encodeURIComponent(e.sourceFile),
+                title: e.title ?? e.sourceFile,
+                artist: e.artist ?? '',
+                bpm: e.bpm,
+                camelot: e.camelot ?? keys[e.sourceFile]?.camelot ?? null,
+                durationMs: e.durationMs ?? null,
+              }))
+            res.end(JSON.stringify({ tracks }))
+          } catch (err) {
+            res.statusCode = 500
+            res.end(JSON.stringify({ error: String(err) }))
+          }
+          return
+        }
         // POST = library backup: the browser's localStorage tags land on disk
         // (data/library-dump.json, gitignored). Insurance — a closed tab once
         // cost a session; a cleared localStorage would cost every tag — and

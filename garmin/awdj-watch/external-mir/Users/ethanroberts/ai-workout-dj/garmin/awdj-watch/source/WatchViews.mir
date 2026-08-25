@@ -1,0 +1,331 @@
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 4; @symbol_usingdef<0> = [Toybox,4,6,12]; @symbol_usingdef<1> = [Application,4,13,24]; @symbol_usingdef<2> = [Storage,4,25,32]; ]
+using Toybox.Application.Storage;
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 5; @symbol_usingdef<0> = [Toybox,5,6,12]; @symbol_usingdef<1> = [Graphics,5,13,21]; ]
+using Toybox.Graphics;
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 6; @symbol_usingdef<0> = [Toybox,6,6,12]; @symbol_usingdef<1> = [Media,6,13,18]; ]
+using Toybox.Media;
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 7; @symbol_usingdef<0> = [Toybox,7,6,12]; @symbol_usingdef<1> = [WatchUi,7,13,20]; ]
+using Toybox.WatchUi;
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 9; @symbol_classdef = [WatchStatusDelegate,9,6,25]; @symbol_extends<0> = [WatchUi,9,34,41]; @symbol_extends<1> = [BehaviorDelegate,9,42,58]; ]
+class WatchStatusDelegate extends WatchUi.BehaviorDelegate {
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 9; ]
+    <init> {
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 9; ]
+    static
+    <init> {
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 10; @symbol_functiondef = [initialize,10,13,23]; ]
+    function initialize() as Void {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_10_26_12_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 11 8 ]
+        symbol [ BehaviorDelegate %tmp.2 11 8 24 ];
+        %tmp.2 = getv ? :BehaviorDelegate;
+        symbol [ initialize %tmp.3 11 25 35 ];
+        %tmp.3 = getv function %tmp.2 :initialize;
+        invoke %tmp.2 %tmp.3();
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_10_26_12_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 14; @symbol_functiondef = [onSelect,14,13,21]; ]
+    function onSelect() {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_14_24_17_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 15 8 ]
+        symbol [ Media %tmp.1 15 8 13 ];
+        %tmp.1 = getm $.Toybox.Media;
+        symbol [ startPlayback %tmp.2 15 14 27 ];
+        %tmp.2 = getv function %tmp.1 :startPlayback;
+        %tmp.3 = null;
+        invoke %tmp.1 %tmp.2(%tmp.3);
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 16 8 ]
+        %tmp.4 = true;
+        ret %tmp.4;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_14_24_17_4_stop:
+    }
+}
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 20; @symbol_classdef = [WatchStatusView,20,6,21]; @symbol_extends<0> = [WatchUi,20,30,37]; @symbol_extends<1> = [View,20,38,42]; ]
+class WatchStatusView extends WatchUi.View {
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 20; ]
+    <init> {
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 20; ]
+    static
+    <init> {
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 21; @position = 16; @symbol_vardef = [mText,21,16,21]; ]
+    private
+    var mText;
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 23; @symbol_functiondef = [initialize,23,13,23]; ]
+    function initialize() as Void {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_23_26_26_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 24 8 ]
+        symbol [ View %tmp.2 24 8 12 ];
+        %tmp.2 = getv ? :View;
+        symbol [ initialize %tmp.3 24 13 23 ];
+        %tmp.3 = getv function %tmp.2 :initialize;
+        invoke %tmp.2 %tmp.3();
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 25 8 ]
+        %tmp.4 = "";
+        symbol [ mText ? 25 8 13 ];
+        putv self :mText %tmp.4;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_23_26_26_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 28; @symbol_functiondef = [onShow,28,13,19]; ]
+    function onShow() {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_28_22_37_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 29 8 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_28_22_37_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_28_22_37_4_stop" ]
+        %songs.1 = local;
+        symbol [ songs %songs.1 29 12 17 ];
+        symbol [ Storage %tmp.1 29 20 27 ];
+        %tmp.1 = getm $.Toybox.Application.Storage;
+        symbol [ getValue %tmp.2 29 28 36 ];
+        %tmp.2 = getv function %tmp.1 :getValue;
+        %tmp.3 = "songs";
+        %tmp.4 = invoke %tmp.1 %tmp.2(%tmp.3);
+        lputv %songs.1 %tmp.4;
+        symbol [ songs %songs.1 29 12 17 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 30 8 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_28_22_37_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_28_22_37_4_stop" ]
+        %n.2 = local;
+        symbol [ n %n.2 30 12 13 ];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_30_16_30_47_begin:
+        %tmp.5 = lgetv %songs.1;
+        symbol [ songs %tmp.5 30 16 21 ];
+        %tmp.6 = null;
+        %tmp.7 = ne %tmp.5 %tmp.6;
+        bf %tmp.7 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_30_16_30_47_else_false;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_30_16_30_47_true:
+        %tmp.8 = lgetv %songs.1;
+        symbol [ songs %tmp.8 30 32 37 ];
+        %tmp.9 = as %tmp.8 { (!Null) };
+        symbol [ size %tmp.10 30 38 42 ];
+        %tmp.10 = getv function %tmp.9 :size;
+        %tmp.11 = invoke %tmp.9 %tmp.10();
+        push %tmp.11;
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_30_16_30_47_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_30_16_30_47_else_false:
+        %tmp.12 = 0;
+        push %tmp.12;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_30_16_30_47_end:
+        %tmp.13 = phi [%tmp.7 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_30_16_30_47_begin] [%tmp.11 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_30_16_30_47_true] [%tmp.12 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_30_16_30_47_else_false] [%tmp.13 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_30_16_30_47_end];
+        lputv %n.2 %tmp.13;
+        symbol [ n %n.2 30 12 13 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 31 8 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_31_8_36_8_if_stmt:
+        %tmp.14 = lgetv %n.2;
+        symbol [ n %tmp.14 31 12 13 ];
+        %tmp.15 = 0;
+        %tmp.16 = eq %tmp.14 %tmp.15;
+        bf %tmp.16 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_31_8_36_8_if_else_false;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_31_8_36_8_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_31_20_34_8_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 32 12 ]
+        %tmp.17 = "AWDJ\nsyncing crate...\nMac server + wifi required";
+        symbol [ mText ? 32 12 17 ];
+        putv self :mText %tmp.17;
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 33 12 ]
+        symbol [ Media %tmp.18 33 12 17 ];
+        %tmp.18 = getm $.Toybox.Media;
+        symbol [ startSync %tmp.19 33 18 27 ];
+        %tmp.19 = getv function %tmp.18 :startSync;
+        invoke %tmp.18 %tmp.19();
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_31_20_34_8_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_31_8_36_8_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_31_8_36_8_if_else_false:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_34_15_36_8_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 35 12 ]
+        %tmp.20 = "AWDJ\n";
+        %tmp.21 = lgetv %n.2;
+        symbol [ n %tmp.21 35 31 32 ];
+        %tmp.22 = add %tmp.20 %tmp.21;
+        %tmp.23 = " songs on wrist\npress START to play";
+        %tmp.24 = add %tmp.22 %tmp.23;
+        symbol [ mText ? 35 12 17 ];
+        putv self :mText %tmp.24;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_34_15_36_8_stop:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_31_8_36_8_if_end:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_28_22_37_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 39; @symbol_functiondef = [onUpdate,39,13,21]; @symbol_param<0> = [dc,39,22,24]; ]
+    function onUpdate(dc) {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_39_26_45_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 40 8 ]
+        %tmp.1 = lgetv %dc;
+        symbol [ dc %tmp.1 40 8 10 ];
+        symbol [ setColor %tmp.2 40 11 19 ];
+        %tmp.2 = getv function %tmp.1 :setColor;
+        symbol [ Graphics %tmp.3 40 20 28 ];
+        %tmp.3 = getm $.Toybox.Graphics;
+        symbol [ COLOR_BLACK %tmp.4 40 29 40 ];
+        %tmp.4 = getv %tmp.3 :COLOR_BLACK;
+        symbol [ Graphics %tmp.5 40 42 50 ];
+        %tmp.5 = getm $.Toybox.Graphics;
+        symbol [ COLOR_BLACK %tmp.6 40 51 62 ];
+        %tmp.6 = getv %tmp.5 :COLOR_BLACK;
+        invoke %tmp.1 %tmp.2(%tmp.4, %tmp.6);
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 41 8 ]
+        %tmp.7 = lgetv %dc;
+        symbol [ dc %tmp.7 41 8 10 ];
+        symbol [ clear %tmp.8 41 11 16 ];
+        %tmp.8 = getv function %tmp.7 :clear;
+        invoke %tmp.7 %tmp.8();
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 42 8 ]
+        %tmp.9 = lgetv %dc;
+        symbol [ dc %tmp.9 42 8 10 ];
+        symbol [ setColor %tmp.10 42 11 19 ];
+        %tmp.10 = getv function %tmp.9 :setColor;
+        symbol [ Graphics %tmp.11 42 20 28 ];
+        %tmp.11 = getm $.Toybox.Graphics;
+        symbol [ COLOR_WHITE %tmp.12 42 29 40 ];
+        %tmp.12 = getv %tmp.11 :COLOR_WHITE;
+        symbol [ Graphics %tmp.13 42 42 50 ];
+        %tmp.13 = getm $.Toybox.Graphics;
+        symbol [ COLOR_BLACK %tmp.14 42 51 62 ];
+        %tmp.14 = getv %tmp.13 :COLOR_BLACK;
+        invoke %tmp.9 %tmp.10(%tmp.12, %tmp.14);
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 43 8 ]
+        %tmp.15 = lgetv %dc;
+        symbol [ dc %tmp.15 43 8 10 ];
+        symbol [ drawText %tmp.16 43 11 19 ];
+        %tmp.16 = getv function %tmp.15 :drawText;
+        %tmp.17 = lgetv %dc;
+        symbol [ dc %tmp.17 43 20 22 ];
+        symbol [ getWidth %tmp.18 43 23 31 ];
+        %tmp.18 = getv function %tmp.17 :getWidth;
+        %tmp.19 = invoke %tmp.17 %tmp.18();
+        %tmp.20 = 2;
+        %tmp.21 = div %tmp.19 %tmp.20;
+        %tmp.22 = lgetv %dc;
+        symbol [ dc %tmp.22 43 39 41 ];
+        symbol [ getHeight %tmp.23 43 42 51 ];
+        %tmp.23 = getv function %tmp.22 :getHeight;
+        %tmp.24 = invoke %tmp.22 %tmp.23();
+        %tmp.25 = 2;
+        %tmp.26 = div %tmp.24 %tmp.25;
+        symbol [ Graphics %tmp.27 43 59 67 ];
+        %tmp.27 = getm $.Toybox.Graphics;
+        symbol [ FONT_SMALL %tmp.28 43 68 78 ];
+        %tmp.28 = getv %tmp.27 :FONT_SMALL;
+        symbol [ mText %tmp.30 43 80 85 ];
+        %tmp.30 = getv ? :mText;
+        symbol [ Graphics %tmp.31 44 12 20 ];
+        %tmp.31 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.32 44 21 40 ];
+        %tmp.32 = getv %tmp.31 :TEXT_JUSTIFY_CENTER;
+        symbol [ Graphics %tmp.33 44 43 51 ];
+        %tmp.33 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_VCENTER %tmp.34 44 52 72 ];
+        %tmp.34 = getv %tmp.33 :TEXT_JUSTIFY_VCENTER;
+        %tmp.35 = bitor %tmp.32 %tmp.34;
+        invoke %tmp.15 %tmp.16(%tmp.21, %tmp.26, %tmp.28, %tmp.30, %tmp.35);
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_39_26_45_4_stop:
+    }
+}
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 48; @symbol_classdef = [WatchSyncView,48,6,19]; @symbol_extends<0> = [WatchUi,48,28,35]; @symbol_extends<1> = [View,48,36,40]; ]
+class WatchSyncView extends WatchUi.View {
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 48; ]
+    <init> {
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 48; ]
+    static
+    <init> {
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 50; @symbol_functiondef = [initialize,50,13,23]; ]
+    function initialize() as Void {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_50_26_52_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 51 8 ]
+        symbol [ View %tmp.2 51 8 12 ];
+        %tmp.2 = getv ? :View;
+        symbol [ initialize %tmp.3 51 13 23 ];
+        %tmp.3 = getv function %tmp.2 :initialize;
+        invoke %tmp.2 %tmp.3();
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_50_26_52_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 54; @symbol_functiondef = [onShow,54,13,19]; ]
+    function onShow() {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_54_22_56_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 55 8 ]
+        symbol [ Media %tmp.1 55 8 13 ];
+        %tmp.1 = getm $.Toybox.Media;
+        symbol [ startSync %tmp.2 55 14 23 ];
+        %tmp.2 = getv function %tmp.1 :startSync;
+        invoke %tmp.1 %tmp.2();
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_54_22_56_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 58; @symbol_functiondef = [onUpdate,58,13,21]; @symbol_param<0> = [dc,58,22,24]; ]
+    function onUpdate(dc) {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_58_26_65_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 59 8 ]
+        %tmp.1 = lgetv %dc;
+        symbol [ dc %tmp.1 59 8 10 ];
+        symbol [ setColor %tmp.2 59 11 19 ];
+        %tmp.2 = getv function %tmp.1 :setColor;
+        symbol [ Graphics %tmp.3 59 20 28 ];
+        %tmp.3 = getm $.Toybox.Graphics;
+        symbol [ COLOR_BLACK %tmp.4 59 29 40 ];
+        %tmp.4 = getv %tmp.3 :COLOR_BLACK;
+        symbol [ Graphics %tmp.5 59 42 50 ];
+        %tmp.5 = getm $.Toybox.Graphics;
+        symbol [ COLOR_BLACK %tmp.6 59 51 62 ];
+        %tmp.6 = getv %tmp.5 :COLOR_BLACK;
+        invoke %tmp.1 %tmp.2(%tmp.4, %tmp.6);
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 60 8 ]
+        %tmp.7 = lgetv %dc;
+        symbol [ dc %tmp.7 60 8 10 ];
+        symbol [ clear %tmp.8 60 11 16 ];
+        %tmp.8 = getv function %tmp.7 :clear;
+        invoke %tmp.7 %tmp.8();
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 61 8 ]
+        %tmp.9 = lgetv %dc;
+        symbol [ dc %tmp.9 61 8 10 ];
+        symbol [ setColor %tmp.10 61 11 19 ];
+        %tmp.10 = getv function %tmp.9 :setColor;
+        symbol [ Graphics %tmp.11 61 20 28 ];
+        %tmp.11 = getm $.Toybox.Graphics;
+        symbol [ COLOR_WHITE %tmp.12 61 29 40 ];
+        %tmp.12 = getv %tmp.11 :COLOR_WHITE;
+        symbol [ Graphics %tmp.13 61 42 50 ];
+        %tmp.13 = getm $.Toybox.Graphics;
+        symbol [ COLOR_BLACK %tmp.14 61 51 62 ];
+        %tmp.14 = getv %tmp.13 :COLOR_BLACK;
+        invoke %tmp.9 %tmp.10(%tmp.12, %tmp.14);
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 62 8 ]
+        %tmp.15 = lgetv %dc;
+        symbol [ dc %tmp.15 62 8 10 ];
+        symbol [ drawText %tmp.16 62 11 19 ];
+        %tmp.16 = getv function %tmp.15 :drawText;
+        %tmp.17 = lgetv %dc;
+        symbol [ dc %tmp.17 62 20 22 ];
+        symbol [ getWidth %tmp.18 62 23 31 ];
+        %tmp.18 = getv function %tmp.17 :getWidth;
+        %tmp.19 = invoke %tmp.17 %tmp.18();
+        %tmp.20 = 2;
+        %tmp.21 = div %tmp.19 %tmp.20;
+        %tmp.22 = lgetv %dc;
+        symbol [ dc %tmp.22 62 39 41 ];
+        symbol [ getHeight %tmp.23 62 42 51 ];
+        %tmp.23 = getv function %tmp.22 :getHeight;
+        %tmp.24 = invoke %tmp.22 %tmp.23();
+        %tmp.25 = 2;
+        %tmp.26 = div %tmp.24 %tmp.25;
+        symbol [ Graphics %tmp.27 62 59 67 ];
+        %tmp.27 = getm $.Toybox.Graphics;
+        symbol [ FONT_SMALL %tmp.28 62 68 78 ];
+        %tmp.28 = getv %tmp.27 :FONT_SMALL;
+        %tmp.29 = "AWDJ crate sync\nMac dev server must be up";
+        symbol [ Graphics %tmp.30 64 12 20 ];
+        %tmp.30 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.31 64 21 40 ];
+        %tmp.31 = getv %tmp.30 :TEXT_JUSTIFY_CENTER;
+        symbol [ Graphics %tmp.32 64 43 51 ];
+        %tmp.32 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_VCENTER %tmp.33 64 52 72 ];
+        %tmp.33 = getv %tmp.32 :TEXT_JUSTIFY_VCENTER;
+        %tmp.34 = bitor %tmp.31 %tmp.33;
+        invoke %tmp.15 %tmp.16(%tmp.21, %tmp.26, %tmp.28, %tmp.29, %tmp.34);
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_58_26_65_4_stop:
+    }
+}
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 4; ]
+<init> {
+}
