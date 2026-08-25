@@ -88,17 +88,23 @@ module Brain {
     // step, or is the NEXT one hard (the song chosen now will be playing
     // when it starts)? Intensity map mirrors AwdjField.kindOf.
     function effortContext() {
+        // Outside a structured workout these calls can throw, not just
+        // return null (untested by the spike — desk playback found it).
         var inHard = false;
         var nextHard = false;
-        var cur = Activity.getCurrentWorkoutStep();
-        if (cur != null && (cur.intensity == Activity.WORKOUT_INTENSITY_ACTIVE
-            || cur.intensity == Activity.WORKOUT_INTENSITY_INTERVAL)) {
-            inHard = true;
-        }
-        var nxt = Activity.getNextWorkoutStep();
-        if (nxt != null && (nxt.intensity == Activity.WORKOUT_INTENSITY_ACTIVE
-            || nxt.intensity == Activity.WORKOUT_INTENSITY_INTERVAL)) {
-            nextHard = true;
+        try {
+            var cur = Activity.getCurrentWorkoutStep();
+            if (cur != null && (cur.intensity == Activity.WORKOUT_INTENSITY_ACTIVE
+                || cur.intensity == Activity.WORKOUT_INTENSITY_INTERVAL)) {
+                inHard = true;
+            }
+            var nxt = Activity.getNextWorkoutStep();
+            if (nxt != null && (nxt.intensity == Activity.WORKOUT_INTENSITY_ACTIVE
+                || nxt.intensity == Activity.WORKOUT_INTENSITY_INTERVAL)) {
+                nextHard = true;
+            }
+        } catch (e) {
+            // no workout context — a plain run or the couch
         }
         return [inHard, nextHard];
     }
@@ -108,6 +114,20 @@ module Brain {
     // (or next: this song will be playing when it starts), a climb, or
     // deep effort all prefer faster songs (bpm-as-energy is crude; honest v1).
     function pickNext(currentRefId, candidateIds) {
+        try {
+            return pickNextInner(currentRefId, candidateIds);
+        } catch (e) {
+            // The Brain must NEVER kill the music. Any scoring failure
+            // degrades to "play something that isn't the current song".
+            System.println("AWDJ pick | BRAIN ERROR, fallback: " + e.getErrorMessage());
+            for (var i = 0; i < candidateIds.size(); i++) {
+                if (candidateIds[i] != currentRefId) { return candidateIds[i]; }
+            }
+            return candidateIds.size() > 0 ? candidateIds[0] : null;
+        }
+    }
+
+    function pickNextInner(currentRefId, candidateIds) {
         var info = Activity.getActivityInfo();
         var zone = hrZone(info);
         var effort = effortContext();

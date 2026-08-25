@@ -6,12 +6,28 @@ using Toybox.Graphics;
 using Toybox.Media;
 using Toybox.WatchUi;
 
+// The media CACHE is truth, not our Storage bookkeeping — count what the
+// system will actually play (a desync between the two showed up as a
+// "media error" on the first desk test).
+function cachedAudioCount() {
+    var n = 0;
+    var iter = Media.getContentRefIter({:contentType => Media.CONTENT_TYPE_AUDIO});
+    if (iter != null) {
+        while (iter.next() != null) { n++; }
+    }
+    return n;
+}
+
 class WatchStatusDelegate extends WatchUi.BehaviorDelegate {
     function initialize() {
         BehaviorDelegate.initialize();
     }
 
     function onSelect() {
+        if (cachedAudioCount() == 0) {
+            Toybox.System.println("AWDJ play | refused: cache empty");
+            return true;
+        }
         Media.startPlayback(null);
         return true;
     }
@@ -27,8 +43,8 @@ class WatchStatusView extends WatchUi.View {
 
     function onShow() {
         flushDecisionLog();
-        var songs = Storage.getValue("songs");
-        var n = songs != null ? songs.size() : 0;
+        var n = cachedAudioCount();
+        var tagged = Storage.getValue("songs");
         if (n == 0) {
             if (WatchServer.manifestUrl() == null) {
                 mText = "AWDJ\nset crate manifest URL\nin Garmin Connect settings";
@@ -37,7 +53,7 @@ class WatchStatusView extends WatchUi.View {
                 Media.startSync();
             }
         } else {
-            mText = "AWDJ\n" + n + " songs on wrist\npress START to play";
+            mText = "AWDJ\n" + n + " songs cached (" + (tagged != null ? tagged.size() : 0) + " tagged)\npress START to play";
         }
     }
 

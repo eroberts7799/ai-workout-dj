@@ -699,733 +699,901 @@ _Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_76_26_84_4_s
     }
     [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc"; @line = 90; @symbol_functiondef = [effortContext,90,13,26]; ]
     function effortContext() {
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_90_29_104_4_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 91 8 ]
-        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_90_29_104_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_90_29_104_4_stop" ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_90_29_110_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 93 8 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_90_29_110_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_90_29_110_4_stop" ]
         %inHard.1 = local;
-        symbol [ inHard %inHard.1 91 12 18 ];
+        symbol [ inHard %inHard.1 93 12 18 ];
         %tmp.1 = false;
         lputv %inHard.1 %tmp.1;
-        symbol [ inHard %inHard.1 91 12 18 ];
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 92 8 ]
-        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_90_29_104_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_90_29_104_4_stop" ]
+        symbol [ inHard %inHard.1 93 12 18 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 94 8 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_90_29_110_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_90_29_110_4_stop" ]
         %nextHard.2 = local;
-        symbol [ nextHard %nextHard.2 92 12 20 ];
+        symbol [ nextHard %nextHard.2 94 12 20 ];
         %tmp.2 = false;
         lputv %nextHard.2 %tmp.2;
-        symbol [ nextHard %nextHard.2 92 12 20 ];
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 93 8 ]
-        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_90_29_104_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_90_29_104_4_stop" ]
+        symbol [ nextHard %nextHard.2 94 12 20 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 95 8 ]
+        try @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_8_108_8_beginTry @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_8_108_8_endTry @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_8_108_8_catch @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_8_108_8_finally;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_8_108_8_beginTry:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_12_106_8_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 96 12 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_12_106_8_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_12_106_8_stop" ]
         %cur.3 = local;
-        symbol [ cur %cur.3 93 12 15 ];
-        symbol [ Activity %tmp.3 93 18 26 ];
+        symbol [ cur %cur.3 96 16 19 ];
+        symbol [ Activity %tmp.3 96 22 30 ];
         %tmp.3 = getm $.Toybox.Activity;
-        symbol [ getCurrentWorkoutStep %tmp.4 93 27 48 ];
+        symbol [ getCurrentWorkoutStep %tmp.4 96 31 52 ];
         %tmp.4 = getv function %tmp.3 :getCurrentWorkoutStep;
         %tmp.5 = invoke %tmp.3 %tmp.4();
         lputv %cur.3 %tmp.5;
-        symbol [ cur %cur.3 93 12 15 ];
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 94 8 ]
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_94_8_97_8_if_stmt:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_94_12_95_67_begin:
+        symbol [ cur %cur.3 96 16 19 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 97 12 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_97_12_100_12_if_stmt:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_97_16_98_71_begin:
         %tmp.6 = lgetv %cur.3;
-        symbol [ cur %tmp.6 94 12 15 ];
+        symbol [ cur %tmp.6 97 16 19 ];
         %tmp.7 = null;
         %tmp.8 = ne %tmp.6 %tmp.7;
-        bf %tmp.8 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_94_8_97_8_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_94_27_95_67_true:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_94_28_95_41_begin:
+        bf %tmp.8 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_97_12_100_12_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_97_31_98_71_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_97_32_98_45_begin:
         %tmp.9 = lgetv %cur.3;
-        symbol [ cur %tmp.9 94 28 31 ];
+        symbol [ cur %tmp.9 97 32 35 ];
         %tmp.10 = as %tmp.9 { (!Null) };
-        symbol [ intensity %tmp.11 94 32 41 ];
+        symbol [ intensity %tmp.11 97 36 45 ];
         %tmp.11 = getv %tmp.10 :intensity;
-        symbol [ Activity %tmp.12 94 45 53 ];
+        symbol [ Activity %tmp.12 97 49 57 ];
         %tmp.12 = getm $.Toybox.Activity;
-        symbol [ WORKOUT_INTENSITY_ACTIVE %tmp.13 94 54 78 ];
+        symbol [ WORKOUT_INTENSITY_ACTIVE %tmp.13 97 58 82 ];
         %tmp.13 = getv %tmp.12 :WORKOUT_INTENSITY_ACTIVE;
         %tmp.14 = eq %tmp.11 %tmp.13;
-        bt %tmp.14 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_94_8_97_8_if_true;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_15_95_41_false:
+        bt %tmp.14 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_97_12_100_12_if_true;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_98_19_98_45_false:
         %tmp.15 = lgetv %cur.3;
-        symbol [ cur %tmp.15 95 15 18 ];
+        symbol [ cur %tmp.15 98 19 22 ];
         %tmp.16 = as %tmp.15 { (!Null) };
-        symbol [ intensity %tmp.17 95 19 28 ];
+        symbol [ intensity %tmp.17 98 23 32 ];
         %tmp.17 = getv %tmp.16 :intensity;
-        symbol [ Activity %tmp.18 95 32 40 ];
+        symbol [ Activity %tmp.18 98 36 44 ];
         %tmp.18 = getm $.Toybox.Activity;
-        symbol [ WORKOUT_INTENSITY_INTERVAL %tmp.19 95 41 67 ];
+        symbol [ WORKOUT_INTENSITY_INTERVAL %tmp.19 98 45 71 ];
         %tmp.19 = getv %tmp.18 :WORKOUT_INTENSITY_INTERVAL;
         %tmp.20 = eq %tmp.17 %tmp.19;
         push %tmp.20;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_15_95_41_end:
-        %tmp.21 = phi [%tmp.14 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_94_28_95_41_begin] [%tmp.20 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_15_95_41_false] [%tmp.21 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_15_95_41_end];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_98_19_98_45_end:
+        %tmp.21 = phi [%tmp.14 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_97_32_98_45_begin] [%tmp.20 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_98_19_98_45_false] [%tmp.21 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_98_19_98_45_end];
         push %tmp.21;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_94_27_95_67_end:
-        %tmp.22 = phi [%tmp.8 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_94_12_95_67_begin] [%tmp.21 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_94_27_95_67_true] [%tmp.22 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_94_27_95_67_end];
-        bf %tmp.22 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_94_8_97_8_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_94_8_97_8_if_true:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_70_97_8_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 96 12 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_97_31_98_71_end:
+        %tmp.22 = phi [%tmp.8 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_97_16_98_71_begin] [%tmp.21 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_97_31_98_71_true] [%tmp.22 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_97_31_98_71_end];
+        bf %tmp.22 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_97_12_100_12_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_97_12_100_12_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_98_74_100_12_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 99 16 ]
         %tmp.23 = true;
         lputv %inHard.1 %tmp.23;
-        symbol [ inHard %inHard.1 96 12 18 ];
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_70_97_8_stop:
-        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_94_8_97_8_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_94_8_97_8_if_end:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 98 8 ]
-        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_90_29_104_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_90_29_104_4_stop" ]
+        symbol [ inHard %inHard.1 99 16 22 ];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_98_74_100_12_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_97_12_100_12_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_97_12_100_12_if_end:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 101 12 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_12_106_8_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_12_106_8_stop" ]
         %nxt.4 = local;
-        symbol [ nxt %nxt.4 98 12 15 ];
-        symbol [ Activity %tmp.24 98 18 26 ];
+        symbol [ nxt %nxt.4 101 16 19 ];
+        symbol [ Activity %tmp.24 101 22 30 ];
         %tmp.24 = getm $.Toybox.Activity;
-        symbol [ getNextWorkoutStep %tmp.25 98 27 45 ];
+        symbol [ getNextWorkoutStep %tmp.25 101 31 49 ];
         %tmp.25 = getv function %tmp.24 :getNextWorkoutStep;
         %tmp.26 = invoke %tmp.24 %tmp.25();
         lputv %nxt.4 %tmp.26;
-        symbol [ nxt %nxt.4 98 12 15 ];
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 99 8 ]
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_99_8_102_8_if_stmt:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_99_12_100_67_begin:
+        symbol [ nxt %nxt.4 101 16 19 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 102 12 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_102_12_105_12_if_stmt:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_102_16_103_71_begin:
         %tmp.27 = lgetv %nxt.4;
-        symbol [ nxt %tmp.27 99 12 15 ];
+        symbol [ nxt %tmp.27 102 16 19 ];
         %tmp.28 = null;
         %tmp.29 = ne %tmp.27 %tmp.28;
-        bf %tmp.29 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_99_8_102_8_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_99_27_100_67_true:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_99_28_100_41_begin:
+        bf %tmp.29 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_102_12_105_12_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_102_31_103_71_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_102_32_103_45_begin:
         %tmp.30 = lgetv %nxt.4;
-        symbol [ nxt %tmp.30 99 28 31 ];
+        symbol [ nxt %tmp.30 102 32 35 ];
         %tmp.31 = as %tmp.30 { (!Null) };
-        symbol [ intensity %tmp.32 99 32 41 ];
+        symbol [ intensity %tmp.32 102 36 45 ];
         %tmp.32 = getv %tmp.31 :intensity;
-        symbol [ Activity %tmp.33 99 45 53 ];
+        symbol [ Activity %tmp.33 102 49 57 ];
         %tmp.33 = getm $.Toybox.Activity;
-        symbol [ WORKOUT_INTENSITY_ACTIVE %tmp.34 99 54 78 ];
+        symbol [ WORKOUT_INTENSITY_ACTIVE %tmp.34 102 58 82 ];
         %tmp.34 = getv %tmp.33 :WORKOUT_INTENSITY_ACTIVE;
         %tmp.35 = eq %tmp.32 %tmp.34;
-        bt %tmp.35 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_99_8_102_8_if_true;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_100_15_100_41_false:
+        bt %tmp.35 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_102_12_105_12_if_true;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_103_19_103_45_false:
         %tmp.36 = lgetv %nxt.4;
-        symbol [ nxt %tmp.36 100 15 18 ];
+        symbol [ nxt %tmp.36 103 19 22 ];
         %tmp.37 = as %tmp.36 { (!Null) };
-        symbol [ intensity %tmp.38 100 19 28 ];
+        symbol [ intensity %tmp.38 103 23 32 ];
         %tmp.38 = getv %tmp.37 :intensity;
-        symbol [ Activity %tmp.39 100 32 40 ];
+        symbol [ Activity %tmp.39 103 36 44 ];
         %tmp.39 = getm $.Toybox.Activity;
-        symbol [ WORKOUT_INTENSITY_INTERVAL %tmp.40 100 41 67 ];
+        symbol [ WORKOUT_INTENSITY_INTERVAL %tmp.40 103 45 71 ];
         %tmp.40 = getv %tmp.39 :WORKOUT_INTENSITY_INTERVAL;
         %tmp.41 = eq %tmp.38 %tmp.40;
         push %tmp.41;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_100_15_100_41_end:
-        %tmp.42 = phi [%tmp.35 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_99_28_100_41_begin] [%tmp.41 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_100_15_100_41_false] [%tmp.42 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_100_15_100_41_end];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_103_19_103_45_end:
+        %tmp.42 = phi [%tmp.35 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_102_32_103_45_begin] [%tmp.41 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_103_19_103_45_false] [%tmp.42 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_103_19_103_45_end];
         push %tmp.42;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_99_27_100_67_end:
-        %tmp.43 = phi [%tmp.29 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_99_12_100_67_begin] [%tmp.42 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_99_27_100_67_true] [%tmp.43 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_99_27_100_67_end];
-        bf %tmp.43 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_99_8_102_8_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_99_8_102_8_if_true:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_100_70_102_8_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 101 12 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_102_31_103_71_end:
+        %tmp.43 = phi [%tmp.29 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_102_16_103_71_begin] [%tmp.42 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_102_31_103_71_true] [%tmp.43 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_102_31_103_71_end];
+        bf %tmp.43 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_102_12_105_12_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_102_12_105_12_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_103_74_105_12_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 104 16 ]
         %tmp.44 = true;
         lputv %nextHard.2 %tmp.44;
-        symbol [ nextHard %nextHard.2 101 12 20 ];
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_100_70_102_8_stop:
-        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_99_8_102_8_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_99_8_102_8_if_end:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 103 8 ]
-        %tmp.45 = newa 2;
-        %tmp.46 = lgetv %inHard.1;
-        symbol [ inHard %tmp.46 103 16 22 ];
-        %tmp.47 = dup %tmp.45;
-        %tmp.48 = aputv %tmp.47 0 %tmp.46;
-        %tmp.49 = lgetv %nextHard.2;
-        symbol [ nextHard %tmp.49 103 24 32 ];
-        %tmp.50 = dup %tmp.48;
-        %tmp.51 = aputv %tmp.50 1 %tmp.49;
-        ret %tmp.51;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_90_29_104_4_stop:
+        symbol [ nextHard %nextHard.2 104 16 24 ];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_103_74_105_12_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_102_12_105_12_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_102_12_105_12_if_end:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_12_106_8_stop:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_8_108_8_endTry:
+        jsr @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_8_108_8_finally;
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_8_108_8_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_8_108_8_catch:
+        %tmp.45 = exception;
+        push %tmp.45;
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 106 10 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_8_108_8_catch" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_106_10_108_8_end" ]
+        %e.5 = local;
+        symbol [ e %e.5 106 17 18 ];
+        %tmp.46 = dup %tmp.45;
+        lputv %e.5 %tmp.46;
+        symbol [ e %e.5 106 17 18 ];
+        jsr @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_8_108_8_finally;
+        pop;
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_8_108_8_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_106_10_108_8_end:
+        try @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_8_108_8_catch @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_106_10_108_8_end @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_106_10_108_8_end @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_8_108_8_finally;
+        jsr @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_8_108_8_finally;
+        throw %tmp.45;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_8_108_8_finally:
+        jsrret;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_95_8_108_8_end:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 109 8 ]
+        %tmp.47 = newa 2;
+        %tmp.48 = lgetv %inHard.1;
+        symbol [ inHard %tmp.48 109 16 22 ];
+        %tmp.49 = dup %tmp.47;
+        %tmp.50 = aputv %tmp.49 0 %tmp.48;
+        %tmp.51 = lgetv %nextHard.2;
+        symbol [ nextHard %tmp.51 109 24 32 ];
+        %tmp.52 = dup %tmp.50;
+        %tmp.53 = aputv %tmp.52 1 %tmp.51;
+        ret %tmp.53;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_90_29_110_4_stop:
     }
-    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc"; @line = 110; @symbol_functiondef = [pickNext,110,13,21]; @symbol_param<0> = [currentRefId,110,22,34]; @symbol_param<1> = [candidateIds,110,36,48]; ]
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc"; @line = 116; @symbol_functiondef = [pickNext,116,13,21]; @symbol_param<0> = [currentRefId,116,22,34]; @symbol_param<1> = [candidateIds,116,36,48]; ]
     function pickNext(currentRefId, candidateIds) {
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_110_50_147_4_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 111 8 ]
-        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_110_50_147_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_110_50_147_4_stop" ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_116_50_128_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 117 8 ]
+        try @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_8_127_8_beginTry @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_8_127_8_endTry @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_8_127_8_catch @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_8_127_8_finally;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_8_127_8_beginTry:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_12_119_8_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 118 12 ]
+        %tmp.1 = self;
+        symbol [ pickNextInner %tmp.2 118 19 32 ];
+        %tmp.2 = getv function %tmp.1 :pickNextInner;
+        %tmp.3 = lgetv %currentRefId;
+        symbol [ currentRefId %tmp.3 118 33 45 ];
+        %tmp.4 = lgetv %candidateIds;
+        symbol [ candidateIds %tmp.4 118 47 59 ];
+        %tmp.5 = invoke %tmp.1 %tmp.2(%tmp.3, %tmp.4);
+        jsr @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_8_127_8_finally;
+        ret %tmp.5;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_12_119_8_stop:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_8_127_8_endTry:
+        jsr @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_8_127_8_finally;
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_8_127_8_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_8_127_8_catch:
+        %tmp.6 = exception;
+        push %tmp.6;
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 119 10 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_8_127_8_catch" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_119_10_127_8_end" ]
+        %e.1 = local;
+        symbol [ e %e.1 119 17 18 ];
+        %tmp.7 = dup %tmp.6;
+        lputv %e.1 %tmp.7;
+        symbol [ e %e.1 119 17 18 ];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_119_20_127_8_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 122 12 ]
+        symbol [ System %tmp.8 122 12 18 ];
+        %tmp.8 = getm $.Toybox.System;
+        symbol [ println %tmp.9 122 19 26 ];
+        %tmp.9 = getv function %tmp.8 :println;
+        %tmp.10 = "AWDJ pick | BRAIN ERROR, fallback: ";
+        %tmp.11 = lgetv %e.1;
+        symbol [ e %tmp.11 122 67 68 ];
+        symbol [ getErrorMessage %tmp.12 122 69 84 ];
+        %tmp.12 = getv function %tmp.11 :getErrorMessage;
+        %tmp.13 = invoke %tmp.11 %tmp.12();
+        %tmp.14 = add %tmp.10 %tmp.13;
+        invoke %tmp.8 %tmp.9(%tmp.14);
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 123 12 ]
+        for @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_12_125_12_for_test @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_12_125_12_for_incr @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_12_125_12_for_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_12_125_12_for_init:
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_12_125_12_for_begin" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_12_125_12_for_end" ]
+        %i.2 = local;
+        symbol [ i %i.2 123 21 22 ];
+        %tmp.15 = 0;
+        lputv %i.2 %tmp.15;
+        symbol [ i %i.2 123 21 22 ];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_12_125_12_for_test:
+        %tmp.16 = lgetv %i.2;
+        symbol [ i %tmp.16 123 28 29 ];
+        %tmp.17 = lgetv %candidateIds;
+        symbol [ candidateIds %tmp.17 123 32 44 ];
+        symbol [ size %tmp.18 123 45 49 ];
+        %tmp.18 = getv function %tmp.17 :size;
+        %tmp.19 = invoke %tmp.17 %tmp.18();
+        %tmp.20 = lt %tmp.16 %tmp.19;
+        bf %tmp.20 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_12_125_12_for_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_12_125_12_for_begin:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_58_125_12_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 124 16 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_124_16_124_79_if_stmt:
+        %tmp.21 = lgetv %candidateIds;
+        symbol [ candidateIds %tmp.21 124 20 32 ];
+        %tmp.22 = lgetv %i.2;
+        symbol [ i %tmp.22 124 33 34 ];
+        %tmp.23 = agetv %tmp.21 %tmp.22;
+        %tmp.24 = lgetv %currentRefId;
+        symbol [ currentRefId %tmp.24 124 39 51 ];
+        %tmp.25 = ne %tmp.23 %tmp.24;
+        bf %tmp.25 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_124_16_124_79_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_124_16_124_79_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_124_53_124_79_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 124 55 ]
+        pop;
+        %tmp.26 = lgetv %candidateIds;
+        symbol [ candidateIds %tmp.26 124 62 74 ];
+        %tmp.27 = lgetv %i.2;
+        symbol [ i %tmp.27 124 75 76 ];
+        %tmp.28 = agetv %tmp.26 %tmp.27;
+        jsr @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_8_127_8_finally;
+        ret %tmp.28;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_124_53_124_79_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_124_16_124_79_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_124_16_124_79_if_end:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_58_125_12_stop:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_12_125_12_for_incr:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 123 ]
+        %tmp.31 = lgetv %i.2;
+        symbol [ i %tmp.31 123 53 54 ];
+        %tmp.32 = add %tmp.31 1;
+        lputv %i.2 %tmp.32;
+        symbol [ i %i.2 123 53 54 ];
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_12_125_12_for_test;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_12_125_12_for_end:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 126 12 ]
+        pop;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_126_19_126_63_begin:
+        %tmp.33 = lgetv %candidateIds;
+        symbol [ candidateIds %tmp.33 126 19 31 ];
+        symbol [ size %tmp.34 126 32 36 ];
+        %tmp.34 = getv function %tmp.33 :size;
+        %tmp.35 = invoke %tmp.33 %tmp.34();
+        %tmp.36 = 0;
+        %tmp.37 = gt %tmp.35 %tmp.36;
+        bf %tmp.37 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_126_19_126_63_else_false;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_126_19_126_63_true:
+        %tmp.38 = lgetv %candidateIds;
+        symbol [ candidateIds %tmp.38 126 45 57 ];
+        %tmp.39 = 0;
+        %tmp.40 = agetv %tmp.38 %tmp.39;
+        push %tmp.40;
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_126_19_126_63_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_126_19_126_63_else_false:
+        %tmp.41 = null;
+        push %tmp.41;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_126_19_126_63_end:
+        %tmp.42 = phi [%tmp.37 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_126_19_126_63_begin] [%tmp.40 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_126_19_126_63_true] [%tmp.41 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_126_19_126_63_else_false] [%tmp.42 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_126_19_126_63_end];
+        jsr @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_8_127_8_finally;
+        ret %tmp.42;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_119_20_127_8_stop:
+        jsr @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_8_127_8_finally;
+        pop;
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_8_127_8_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_119_10_127_8_end:
+        try @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_8_127_8_catch @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_119_10_127_8_end @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_119_10_127_8_end @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_8_127_8_finally;
+        jsr @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_8_127_8_finally;
+        throw %tmp.6;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_8_127_8_finally:
+        jsrret;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_8_127_8_end:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_116_50_128_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc"; @line = 130; @symbol_functiondef = [pickNextInner,130,13,26]; @symbol_param<0> = [currentRefId,130,27,39]; @symbol_param<1> = [candidateIds,130,41,53]; ]
+    function pickNextInner(currentRefId, candidateIds) {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_130_55_167_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 131 8 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_130_55_167_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_130_55_167_4_stop" ]
         %info.1 = local;
-        symbol [ info %info.1 111 12 16 ];
-        symbol [ Activity %tmp.1 111 19 27 ];
+        symbol [ info %info.1 131 12 16 ];
+        symbol [ Activity %tmp.1 131 19 27 ];
         %tmp.1 = getm $.Toybox.Activity;
-        symbol [ getActivityInfo %tmp.2 111 28 43 ];
+        symbol [ getActivityInfo %tmp.2 131 28 43 ];
         %tmp.2 = getv function %tmp.1 :getActivityInfo;
         %tmp.3 = invoke %tmp.1 %tmp.2();
         lputv %info.1 %tmp.3;
-        symbol [ info %info.1 111 12 16 ];
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 112 8 ]
-        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_110_50_147_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_110_50_147_4_stop" ]
+        symbol [ info %info.1 131 12 16 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 132 8 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_130_55_167_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_130_55_167_4_stop" ]
         %zone.2 = local;
-        symbol [ zone %zone.2 112 12 16 ];
+        symbol [ zone %zone.2 132 12 16 ];
         %tmp.4 = self;
-        symbol [ hrZone %tmp.5 112 19 25 ];
+        symbol [ hrZone %tmp.5 132 19 25 ];
         %tmp.5 = getv function %tmp.4 :hrZone;
         %tmp.6 = lgetv %info.1;
-        symbol [ info %tmp.6 112 26 30 ];
+        symbol [ info %tmp.6 132 26 30 ];
         %tmp.7 = invoke %tmp.4 %tmp.5(%tmp.6);
         lputv %zone.2 %tmp.7;
-        symbol [ zone %zone.2 112 12 16 ];
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 113 8 ]
-        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_110_50_147_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_110_50_147_4_stop" ]
+        symbol [ zone %zone.2 132 12 16 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 133 8 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_130_55_167_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_130_55_167_4_stop" ]
         %effort.3 = local;
-        symbol [ effort %effort.3 113 12 18 ];
+        symbol [ effort %effort.3 133 12 18 ];
         %tmp.8 = self;
-        symbol [ effortContext %tmp.9 113 21 34 ];
+        symbol [ effortContext %tmp.9 133 21 34 ];
         %tmp.9 = getv function %tmp.8 :effortContext;
         %tmp.10 = invoke %tmp.8 %tmp.9();
         lputv %effort.3 %tmp.10;
-        symbol [ effort %effort.3 113 12 18 ];
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 114 8 ]
-        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_110_50_147_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_110_50_147_4_stop" ]
+        symbol [ effort %effort.3 133 12 18 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 134 8 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_130_55_167_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_130_55_167_4_stop" ]
         %wantsEnergy.4 = local;
-        symbol [ wantsEnergy %wantsEnergy.4 114 12 23 ];
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_114_26_114_60_begin:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_114_26_114_47_begin:
+        symbol [ wantsEnergy %wantsEnergy.4 134 12 23 ];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_134_26_134_60_begin:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_134_26_134_47_begin:
         %tmp.11 = lgetv %effort.3;
-        symbol [ effort %tmp.11 114 26 32 ];
+        symbol [ effort %tmp.11 134 26 32 ];
         %tmp.12 = 0;
         %tmp.13 = agetv %tmp.11 %tmp.12;
         %tmp.14 = dup %tmp.13;
-        bt %tmp.14 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_114_39_114_47_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_114_39_114_47_false:
+        bt %tmp.14 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_134_39_134_47_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_134_39_134_47_false:
         %tmp.15 = lgetv %effort.3;
-        symbol [ effort %tmp.15 114 39 45 ];
+        symbol [ effort %tmp.15 134 39 45 ];
         %tmp.16 = 1;
         %tmp.17 = agetv %tmp.15 %tmp.16;
         %tmp.18 = or %tmp.13 %tmp.17;
         push %tmp.18;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_114_39_114_47_end:
-        %tmp.19 = phi [%tmp.14 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_114_26_114_47_begin] [%tmp.18 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_114_39_114_47_false] [%tmp.19 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_114_39_114_47_end];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_134_39_134_47_end:
+        %tmp.19 = phi [%tmp.14 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_134_26_134_47_begin] [%tmp.18 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_134_39_134_47_false] [%tmp.19 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_134_39_134_47_end];
         %tmp.20 = dup %tmp.19;
-        bt %tmp.20 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_114_52_114_60_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_114_52_114_60_false:
+        bt %tmp.20 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_134_52_134_60_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_134_52_134_60_false:
         %tmp.21 = lgetv %zone.2;
-        symbol [ zone %tmp.21 114 52 56 ];
+        symbol [ zone %tmp.21 134 52 56 ];
         %tmp.22 = 4;
         %tmp.23 = gte %tmp.21 %tmp.22;
         %tmp.24 = or %tmp.19 %tmp.23;
         push %tmp.24;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_114_52_114_60_end:
-        %tmp.25 = phi [%tmp.20 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_114_26_114_60_begin] [%tmp.24 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_114_52_114_60_false] [%tmp.25 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_114_52_114_60_end];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_134_52_134_60_end:
+        %tmp.25 = phi [%tmp.20 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_134_26_134_60_begin] [%tmp.24 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_134_52_134_60_false] [%tmp.25 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_134_52_134_60_end];
         lputv %wantsEnergy.4 %tmp.25;
-        symbol [ wantsEnergy %wantsEnergy.4 114 12 23 ];
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 115 8 ]
-        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_110_50_147_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_110_50_147_4_stop" ]
+        symbol [ wantsEnergy %wantsEnergy.4 134 12 23 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 135 8 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_130_55_167_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_130_55_167_4_stop" ]
         %climbing.5 = local;
-        symbol [ climbing %climbing.5 115 12 20 ];
+        symbol [ climbing %climbing.5 135 12 20 ];
         %tmp.26 = false;
         lputv %climbing.5 %tmp.26;
-        symbol [ climbing %climbing.5 115 12 20 ];
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 116 8 ]
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_116_8_119_8_if_stmt:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_116_12_116_45_begin:
+        symbol [ climbing %climbing.5 135 12 20 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 136 8 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_136_8_139_8_if_stmt:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_136_12_136_45_begin:
         %tmp.27 = lgetv %info.1;
-        symbol [ info %tmp.27 116 12 16 ];
+        symbol [ info %tmp.27 136 12 16 ];
         %tmp.28 = null;
         %tmp.29 = ne %tmp.27 %tmp.28;
-        bf %tmp.29 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_116_8_119_8_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_116_28_116_45_true:
+        bf %tmp.29 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_136_8_139_8_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_136_28_136_45_true:
         %tmp.30 = lgetv %info.1;
-        symbol [ info %tmp.30 116 28 32 ];
+        symbol [ info %tmp.30 136 28 32 ];
         %tmp.31 = as %tmp.30 { (!Null) };
-        symbol [ altitude %tmp.32 116 33 41 ];
+        symbol [ altitude %tmp.32 136 33 41 ];
         %tmp.32 = getv %tmp.31 :altitude;
         %tmp.33 = null;
         %tmp.34 = ne %tmp.32 %tmp.33;
         push %tmp.34;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_116_28_116_45_end:
-        %tmp.35 = phi [%tmp.29 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_116_12_116_45_begin] [%tmp.34 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_116_28_116_45_true] [%tmp.35 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_116_28_116_45_end];
-        bf %tmp.35 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_116_8_119_8_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_116_8_119_8_if_true:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_116_51_119_8_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 117 12 ]
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_12_117_107_if_stmt:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_16_117_74_begin:
-        symbol [ lastAltitudeM %tmp.37 117 16 29 ];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_136_28_136_45_end:
+        %tmp.35 = phi [%tmp.29 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_136_12_136_45_begin] [%tmp.34 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_136_28_136_45_true] [%tmp.35 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_136_28_136_45_end];
+        bf %tmp.35 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_136_8_139_8_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_136_8_139_8_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_136_51_139_8_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 137 12 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_137_12_137_107_if_stmt:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_137_16_137_74_begin:
+        symbol [ lastAltitudeM %tmp.37 137 16 29 ];
         %tmp.37 = getv ? :lastAltitudeM;
         %tmp.38 = null;
         %tmp.39 = ne %tmp.37 %tmp.38;
-        bf %tmp.39 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_12_117_107_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_41_117_74_true:
+        bf %tmp.39 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_137_12_137_107_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_137_41_137_74_true:
         %tmp.40 = lgetv %info.1;
-        symbol [ info %tmp.40 117 41 45 ];
+        symbol [ info %tmp.40 137 41 45 ];
         %tmp.41 = as %tmp.40 { (!Null) };
-        symbol [ altitude %tmp.42 117 46 54 ];
+        symbol [ altitude %tmp.42 137 46 54 ];
         %tmp.42 = getv %tmp.41 :altitude;
-        symbol [ lastAltitudeM %tmp.44 117 57 70 ];
+        symbol [ lastAltitudeM %tmp.44 137 57 70 ];
         %tmp.44 = getv ? :lastAltitudeM;
         %tmp.45 = as %tmp.44 { (!Null) };
         %tmp.46 = sub %tmp.42 %tmp.45;
-        symbol [ CLIMB_GAIN_M %tmp.48 117 74 86 ];
+        symbol [ CLIMB_GAIN_M %tmp.48 137 74 86 ];
         %tmp.48 = getv ? :CLIMB_GAIN_M;
         %tmp.49 = gte %tmp.46 %tmp.48;
         push %tmp.49;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_41_117_74_end:
-        %tmp.50 = phi [%tmp.39 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_16_117_74_begin] [%tmp.49 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_41_117_74_true] [%tmp.50 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_41_117_74_end];
-        bf %tmp.50 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_12_117_107_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_12_117_107_if_true:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_88_117_107_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 117 90 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_137_41_137_74_end:
+        %tmp.50 = phi [%tmp.39 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_137_16_137_74_begin] [%tmp.49 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_137_41_137_74_true] [%tmp.50 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_137_41_137_74_end];
+        bf %tmp.50 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_137_12_137_107_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_137_12_137_107_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_137_88_137_107_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 137 90 ]
         %tmp.51 = true;
         lputv %climbing.5 %tmp.51;
-        symbol [ climbing %climbing.5 117 90 98 ];
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_88_117_107_stop:
-        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_12_117_107_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_117_12_117_107_if_end:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 118 12 ]
+        symbol [ climbing %climbing.5 137 90 98 ];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_137_88_137_107_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_137_12_137_107_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_137_12_137_107_if_end:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 138 12 ]
         %tmp.52 = lgetv %info.1;
-        symbol [ info %tmp.52 118 28 32 ];
+        symbol [ info %tmp.52 138 28 32 ];
         %tmp.53 = as %tmp.52 { (!Null) };
-        symbol [ altitude %tmp.54 118 33 41 ];
+        symbol [ altitude %tmp.54 138 33 41 ];
         %tmp.54 = getv %tmp.53 :altitude;
-        symbol [ lastAltitudeM ? 118 12 25 ];
+        symbol [ lastAltitudeM ? 138 12 25 ];
         putv self :lastAltitudeM %tmp.54;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_116_51_119_8_stop:
-        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_116_8_119_8_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_116_8_119_8_if_end:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 120 8 ]
-        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_110_50_147_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_110_50_147_4_stop" ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_136_51_139_8_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_136_8_139_8_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_136_8_139_8_if_end:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 140 8 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_130_55_167_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_130_55_167_4_stop" ]
         %cur.6 = local;
-        symbol [ cur %cur.6 120 12 15 ];
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_120_18_120_62_begin:
+        symbol [ cur %cur.6 140 12 15 ];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_140_18_140_62_begin:
         %tmp.55 = lgetv %currentRefId;
-        symbol [ currentRefId %tmp.55 120 18 30 ];
+        symbol [ currentRefId %tmp.55 140 18 30 ];
         %tmp.56 = null;
         %tmp.57 = ne %tmp.55 %tmp.56;
-        bf %tmp.57 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_120_18_120_62_else_false;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_120_18_120_62_true:
+        bf %tmp.57 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_140_18_140_62_else_false;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_140_18_140_62_true:
         %tmp.58 = self;
-        symbol [ meta %tmp.59 120 41 45 ];
+        symbol [ meta %tmp.59 140 41 45 ];
         %tmp.59 = getv function %tmp.58 :meta;
         %tmp.60 = lgetv %currentRefId;
-        symbol [ currentRefId %tmp.60 120 46 58 ];
+        symbol [ currentRefId %tmp.60 140 46 58 ];
         %tmp.61 = as %tmp.60 { (!Null) };
         %tmp.62 = invoke %tmp.58 %tmp.59(%tmp.61);
         push %tmp.62;
-        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_120_18_120_62_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_120_18_120_62_else_false:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_140_18_140_62_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_140_18_140_62_else_false:
         %tmp.63 = null;
         push %tmp.63;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_120_18_120_62_end:
-        %tmp.64 = phi [%tmp.57 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_120_18_120_62_begin] [%tmp.62 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_120_18_120_62_true] [%tmp.63 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_120_18_120_62_else_false] [%tmp.64 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_120_18_120_62_end];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_140_18_140_62_end:
+        %tmp.64 = phi [%tmp.57 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_140_18_140_62_begin] [%tmp.62 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_140_18_140_62_true] [%tmp.63 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_140_18_140_62_else_false] [%tmp.64 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_140_18_140_62_end];
         lputv %cur.6 %tmp.64;
-        symbol [ cur %cur.6 120 12 15 ];
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 121 8 ]
-        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_110_50_147_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_110_50_147_4_stop" ]
+        symbol [ cur %cur.6 140 12 15 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 141 8 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_130_55_167_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_130_55_167_4_stop" ]
         %best.7 = local;
-        symbol [ best %best.7 121 12 16 ];
+        symbol [ best %best.7 141 12 16 ];
         %tmp.65 = null;
         lputv %best.7 %tmp.65;
-        symbol [ best %best.7 121 12 16 ];
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 122 8 ]
-        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_110_50_147_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_110_50_147_4_stop" ]
+        symbol [ best %best.7 141 12 16 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 142 8 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_130_55_167_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_130_55_167_4_stop" ]
         %bestScore.8 = local;
-        symbol [ bestScore %bestScore.8 122 12 21 ];
+        symbol [ bestScore %bestScore.8 142 12 21 ];
         %tmp.66 = -999;
         lputv %bestScore.8 %tmp.66;
-        symbol [ bestScore %bestScore.8 122 12 21 ];
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 123 8 ]
-        for @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_8_131_8_for_test @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_8_131_8_for_incr @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_8_131_8_for_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_8_131_8_for_init:
-        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_8_131_8_for_begin" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_8_131_8_for_end" ]
+        symbol [ bestScore %bestScore.8 142 12 21 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 143 8 ]
+        for @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_8_151_8_for_test @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_8_151_8_for_incr @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_8_151_8_for_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_8_151_8_for_init:
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_8_151_8_for_begin" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_8_151_8_for_end" ]
         %i.9 = local;
-        symbol [ i %i.9 123 17 18 ];
+        symbol [ i %i.9 143 17 18 ];
         %tmp.67 = 0;
         lputv %i.9 %tmp.67;
-        symbol [ i %i.9 123 17 18 ];
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_8_131_8_for_test:
+        symbol [ i %i.9 143 17 18 ];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_8_151_8_for_test:
         %tmp.68 = lgetv %i.9;
-        symbol [ i %tmp.68 123 24 25 ];
+        symbol [ i %tmp.68 143 24 25 ];
         %tmp.69 = lgetv %candidateIds;
-        symbol [ candidateIds %tmp.69 123 28 40 ];
-        symbol [ size %tmp.70 123 41 45 ];
+        symbol [ candidateIds %tmp.69 143 28 40 ];
+        symbol [ size %tmp.70 143 41 45 ];
         %tmp.70 = getv function %tmp.69 :size;
         %tmp.71 = invoke %tmp.69 %tmp.70();
         %tmp.72 = lt %tmp.68 %tmp.71;
-        bf %tmp.72 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_8_131_8_for_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_8_131_8_for_begin:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_54_131_8_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 124 12 ]
-        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_54_131_8_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_54_131_8_stop" ]
+        bf %tmp.72 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_8_151_8_for_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_8_151_8_for_begin:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_54_151_8_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 144 12 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_54_151_8_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_54_151_8_stop" ]
         %id.10 = local;
-        symbol [ id %id.10 124 16 18 ];
+        symbol [ id %id.10 144 16 18 ];
         %tmp.73 = lgetv %candidateIds;
-        symbol [ candidateIds %tmp.73 124 21 33 ];
+        symbol [ candidateIds %tmp.73 144 21 33 ];
         %tmp.74 = lgetv %i.9;
-        symbol [ i %tmp.74 124 34 35 ];
+        symbol [ i %tmp.74 144 34 35 ];
         %tmp.75 = agetv %tmp.73 %tmp.74;
         lputv %id.10 %tmp.75;
-        symbol [ id %id.10 124 16 18 ];
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 125 12 ]
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_125_12_125_72_if_stmt:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_125_16_125_46_begin:
+        symbol [ id %id.10 144 16 18 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 145 12 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_145_12_145_72_if_stmt:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_145_16_145_46_begin:
         %tmp.76 = lgetv %currentRefId;
-        symbol [ currentRefId %tmp.76 125 16 28 ];
+        symbol [ currentRefId %tmp.76 145 16 28 ];
         %tmp.77 = null;
         %tmp.78 = ne %tmp.76 %tmp.77;
-        bf %tmp.78 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_125_12_125_72_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_125_40_125_46_true:
+        bf %tmp.78 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_145_12_145_72_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_145_40_145_46_true:
         %tmp.79 = lgetv %id.10;
-        symbol [ id %tmp.79 125 40 42 ];
+        symbol [ id %tmp.79 145 40 42 ];
         %tmp.80 = lgetv %currentRefId;
-        symbol [ currentRefId %tmp.80 125 46 58 ];
+        symbol [ currentRefId %tmp.80 145 46 58 ];
         %tmp.81 = as %tmp.80 { (!Null) };
         %tmp.82 = eq %tmp.79 %tmp.81;
         push %tmp.82;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_125_40_125_46_end:
-        %tmp.83 = phi [%tmp.78 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_125_16_125_46_begin] [%tmp.82 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_125_40_125_46_true] [%tmp.83 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_125_40_125_46_end];
-        bf %tmp.83 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_125_12_125_72_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_125_12_125_72_if_true:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_125_60_125_72_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 125 62 ]
-        goto break @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_8_131_8_for_incr;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_125_60_125_72_stop:
-        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_125_12_125_72_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_125_12_125_72_if_end:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 126 12 ]
-        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_54_131_8_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_54_131_8_stop" ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_145_40_145_46_end:
+        %tmp.83 = phi [%tmp.78 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_145_16_145_46_begin] [%tmp.82 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_145_40_145_46_true] [%tmp.83 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_145_40_145_46_end];
+        bf %tmp.83 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_145_12_145_72_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_145_12_145_72_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_145_60_145_72_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 145 62 ]
+        goto break @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_8_151_8_for_incr;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_145_60_145_72_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_145_12_145_72_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_145_12_145_72_if_end:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 146 12 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_54_151_8_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_54_151_8_stop" ]
         %m.11 = local;
-        symbol [ m %m.11 126 16 17 ];
+        symbol [ m %m.11 146 16 17 ];
         %tmp.84 = self;
-        symbol [ meta %tmp.85 126 20 24 ];
+        symbol [ meta %tmp.85 146 20 24 ];
         %tmp.85 = getv function %tmp.84 :meta;
         %tmp.86 = lgetv %id.10;
-        symbol [ id %tmp.86 126 25 27 ];
+        symbol [ id %tmp.86 146 25 27 ];
         %tmp.87 = invoke %tmp.84 %tmp.85(%tmp.86);
         lputv %m.11 %tmp.87;
-        symbol [ m %m.11 126 16 17 ];
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 127 12 ]
-        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_54_131_8_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_54_131_8_stop" ]
+        symbol [ m %m.11 146 16 17 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 147 12 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_54_151_8_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_54_151_8_stop" ]
         %score.12 = local;
-        symbol [ score %score.12 127 16 21 ];
+        symbol [ score %score.12 147 16 21 ];
         %tmp.88 = self;
-        symbol [ mixScore %tmp.89 127 24 32 ];
+        symbol [ mixScore %tmp.89 147 24 32 ];
         %tmp.89 = getv function %tmp.88 :mixScore;
         %tmp.90 = lgetv %cur.6;
-        symbol [ cur %tmp.90 127 33 36 ];
+        symbol [ cur %tmp.90 147 33 36 ];
         %tmp.91 = lgetv %m.11;
-        symbol [ m %tmp.91 127 38 39 ];
+        symbol [ m %tmp.91 147 38 39 ];
         %tmp.92 = invoke %tmp.88 %tmp.89(%tmp.90, %tmp.91);
         lputv %score.12 %tmp.92;
-        symbol [ score %score.12 127 16 21 ];
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 128 12 ]
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_128_12_128_58_if_stmt:
-        symbol [ recentIds %tmp.94 128 16 25 ];
+        symbol [ score %score.12 147 16 21 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 148 12 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_148_12_148_58_if_stmt:
+        symbol [ recentIds %tmp.94 148 16 25 ];
         %tmp.94 = getv ? :recentIds;
-        symbol [ indexOf %tmp.95 128 26 33 ];
+        symbol [ indexOf %tmp.95 148 26 33 ];
         %tmp.95 = getv function %tmp.94 :indexOf;
         %tmp.96 = lgetv %id.10;
-        symbol [ id %tmp.96 128 34 36 ];
+        symbol [ id %tmp.96 148 34 36 ];
         %tmp.97 = invoke %tmp.94 %tmp.95(%tmp.96);
         %tmp.98 = 0;
         %tmp.99 = gte %tmp.97 %tmp.98;
-        bf %tmp.99 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_128_12_128_58_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_128_12_128_58_if_true:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_128_44_128_58_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 128 46 ]
+        bf %tmp.99 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_148_12_148_58_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_148_12_148_58_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_148_44_148_58_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 148 46 ]
         %tmp.100 = lgetv %score.12;
-        symbol [ score %tmp.100 128 46 51 ];
+        symbol [ score %tmp.100 148 46 51 ];
         %tmp.101 = 1;
         %tmp.102 = sub %tmp.100 %tmp.101;
         lputv %score.12 %tmp.102;
-        symbol [ score %score.12 128 46 51 ];
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_128_44_128_58_stop:
-        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_128_12_128_58_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_128_12_128_58_if_end:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 129 12 ]
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_12_129_136_if_stmt:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_16_129_119_begin:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_16_129_99_begin:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_16_129_81_begin:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_16_129_65_begin:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_16_129_50_begin:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_17_129_32_begin:
+        symbol [ score %score.12 148 46 51 ];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_148_44_148_58_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_148_12_148_58_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_148_12_148_58_if_end:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 149 12 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_12_149_136_if_stmt:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_16_149_119_begin:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_16_149_99_begin:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_16_149_81_begin:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_16_149_65_begin:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_16_149_50_begin:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_17_149_32_begin:
         %tmp.103 = lgetv %wantsEnergy.4;
-        symbol [ wantsEnergy %tmp.103 129 17 28 ];
-        bt %tmp.103 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_45_129_50_true;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_32_129_32_false:
+        symbol [ wantsEnergy %tmp.103 149 17 28 ];
+        bt %tmp.103 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_45_149_50_true;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_32_149_32_false:
         %tmp.104 = lgetv %climbing.5;
-        symbol [ climbing %tmp.104 129 32 40 ];
+        symbol [ climbing %tmp.104 149 32 40 ];
         push %tmp.104;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_32_129_32_end:
-        %tmp.105 = phi [%tmp.103 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_17_129_32_begin] [%tmp.104 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_32_129_32_false] [%tmp.105 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_32_129_32_end];
-        bf %tmp.105 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_12_129_136_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_45_129_50_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_32_149_32_end:
+        %tmp.105 = phi [%tmp.103 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_17_149_32_begin] [%tmp.104 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_32_149_32_false] [%tmp.105 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_32_149_32_end];
+        bf %tmp.105 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_12_149_136_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_45_149_50_true:
         %tmp.106 = lgetv %m.11;
-        symbol [ m %tmp.106 129 45 46 ];
+        symbol [ m %tmp.106 149 45 46 ];
         %tmp.107 = null;
         %tmp.108 = ne %tmp.106 %tmp.107;
         push %tmp.108;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_45_129_50_end:
-        %tmp.109 = phi [%tmp.105 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_16_129_50_begin] [%tmp.108 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_45_129_50_true] [%tmp.109 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_45_129_50_end];
-        bf %tmp.109 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_12_129_136_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_58_129_65_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_45_149_50_end:
+        %tmp.109 = phi [%tmp.105 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_16_149_50_begin] [%tmp.108 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_45_149_50_true] [%tmp.109 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_45_149_50_end];
+        bf %tmp.109 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_12_149_136_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_58_149_65_true:
         %tmp.110 = lgetv %cur.6;
-        symbol [ cur %tmp.110 129 58 61 ];
+        symbol [ cur %tmp.110 149 58 61 ];
         %tmp.111 = null;
         %tmp.112 = ne %tmp.110 %tmp.111;
         push %tmp.112;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_58_129_65_end:
-        %tmp.113 = phi [%tmp.109 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_16_129_65_begin] [%tmp.112 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_58_129_65_true] [%tmp.113 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_58_129_65_end];
-        bf %tmp.113 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_12_129_136_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_73_129_81_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_58_149_65_end:
+        %tmp.113 = phi [%tmp.109 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_16_149_65_begin] [%tmp.112 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_58_149_65_true] [%tmp.113 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_58_149_65_end];
+        bf %tmp.113 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_12_149_136_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_73_149_81_true:
         %tmp.114 = lgetv %m.11;
-        symbol [ m %tmp.114 129 73 74 ];
+        symbol [ m %tmp.114 149 73 74 ];
         %tmp.115 = as %tmp.114 { (!Null) };
         %tmp.116 = 0;
         %tmp.117 = agetv %tmp.115 %tmp.116;
         %tmp.118 = null;
         %tmp.119 = ne %tmp.117 %tmp.118;
         push %tmp.119;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_73_129_81_end:
-        %tmp.120 = phi [%tmp.113 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_16_129_81_begin] [%tmp.119 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_73_129_81_true] [%tmp.120 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_73_129_81_end];
-        bf %tmp.120 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_12_129_136_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_89_129_99_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_73_149_81_end:
+        %tmp.120 = phi [%tmp.113 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_16_149_81_begin] [%tmp.119 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_73_149_81_true] [%tmp.120 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_73_149_81_end];
+        bf %tmp.120 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_12_149_136_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_89_149_99_true:
         %tmp.121 = lgetv %cur.6;
-        symbol [ cur %tmp.121 129 89 92 ];
+        symbol [ cur %tmp.121 149 89 92 ];
         %tmp.122 = as %tmp.121 { (!Null) };
         %tmp.123 = 0;
         %tmp.124 = agetv %tmp.122 %tmp.123;
         %tmp.125 = null;
         %tmp.126 = ne %tmp.124 %tmp.125;
         push %tmp.126;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_89_129_99_end:
-        %tmp.127 = phi [%tmp.120 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_16_129_99_begin] [%tmp.126 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_89_129_99_true] [%tmp.127 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_89_129_99_end];
-        bf %tmp.127 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_12_129_136_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_107_129_119_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_89_149_99_end:
+        %tmp.127 = phi [%tmp.120 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_16_149_99_begin] [%tmp.126 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_89_149_99_true] [%tmp.127 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_89_149_99_end];
+        bf %tmp.127 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_12_149_136_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_107_149_119_true:
         %tmp.128 = lgetv %m.11;
-        symbol [ m %tmp.128 129 107 108 ];
+        symbol [ m %tmp.128 149 107 108 ];
         %tmp.129 = as %tmp.128 { (!Null) };
         %tmp.130 = 0;
         %tmp.131 = agetv %tmp.129 %tmp.130;
         %tmp.132 = lgetv %cur.6;
-        symbol [ cur %tmp.132 129 114 117 ];
+        symbol [ cur %tmp.132 149 114 117 ];
         %tmp.133 = as %tmp.132 { (!Null) };
         %tmp.134 = 0;
         %tmp.135 = agetv %tmp.133 %tmp.134;
         %tmp.136 = gt %tmp.131 %tmp.135;
         push %tmp.136;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_107_129_119_end:
-        %tmp.137 = phi [%tmp.127 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_16_129_119_begin] [%tmp.136 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_107_129_119_true] [%tmp.137 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_107_129_119_end];
-        bf %tmp.137 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_12_129_136_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_12_129_136_if_true:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_122_129_136_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 129 124 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_107_149_119_end:
+        %tmp.137 = phi [%tmp.127 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_16_149_119_begin] [%tmp.136 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_107_149_119_true] [%tmp.137 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_107_149_119_end];
+        bf %tmp.137 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_12_149_136_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_12_149_136_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_122_149_136_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 149 124 ]
         %tmp.138 = lgetv %score.12;
-        symbol [ score %tmp.138 129 124 129 ];
+        symbol [ score %tmp.138 149 124 129 ];
         %tmp.139 = 1;
         %tmp.140 = add %tmp.138 %tmp.139;
         lputv %score.12 %tmp.140;
-        symbol [ score %score.12 129 124 129 ];
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_122_129_136_stop:
-        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_12_129_136_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_129_12_129_136_if_end:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 130 12 ]
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_130_12_130_67_if_stmt:
+        symbol [ score %score.12 149 124 129 ];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_122_149_136_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_12_149_136_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_149_12_149_136_if_end:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 150 12 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_150_12_150_67_if_stmt:
         %tmp.141 = lgetv %score.12;
-        symbol [ score %tmp.141 130 16 21 ];
+        symbol [ score %tmp.141 150 16 21 ];
         %tmp.142 = lgetv %bestScore.8;
-        symbol [ bestScore %tmp.142 130 24 33 ];
+        symbol [ bestScore %tmp.142 150 24 33 ];
         %tmp.143 = gt %tmp.141 %tmp.142;
-        bf %tmp.143 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_130_12_130_67_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_130_12_130_67_if_true:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_130_35_130_67_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 130 37 ]
+        bf %tmp.143 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_150_12_150_67_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_150_12_150_67_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_150_35_150_67_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 150 37 ]
         %tmp.144 = lgetv %score.12;
-        symbol [ score %tmp.144 130 49 54 ];
+        symbol [ score %tmp.144 150 49 54 ];
         lputv %bestScore.8 %tmp.144;
-        symbol [ bestScore %bestScore.8 130 37 46 ];
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 130 56 ]
+        symbol [ bestScore %bestScore.8 150 37 46 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 150 56 ]
         %tmp.145 = lgetv %id.10;
-        symbol [ id %tmp.145 130 63 65 ];
+        symbol [ id %tmp.145 150 63 65 ];
         lputv %best.7 %tmp.145;
-        symbol [ best %best.7 130 56 60 ];
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_130_35_130_67_stop:
-        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_130_12_130_67_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_130_12_130_67_if_end:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_54_131_8_stop:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_8_131_8_for_incr:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 123 ]
+        symbol [ best %best.7 150 56 60 ];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_150_35_150_67_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_150_12_150_67_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_150_12_150_67_if_end:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_54_151_8_stop:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_8_151_8_for_incr:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 143 ]
         %tmp.148 = lgetv %i.9;
-        symbol [ i %tmp.148 123 49 50 ];
+        symbol [ i %tmp.148 143 49 50 ];
         %tmp.149 = add %tmp.148 1;
         lputv %i.9 %tmp.149;
-        symbol [ i %i.9 123 49 50 ];
-        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_8_131_8_for_test;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_123_8_131_8_for_end:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 132 8 ]
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_132_8_145_8_if_stmt:
+        symbol [ i %i.9 143 49 50 ];
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_8_151_8_for_test;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_8_151_8_for_end:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 152 8 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_152_8_165_8_if_stmt:
         %tmp.150 = lgetv %best.7;
-        symbol [ best %tmp.150 132 12 16 ];
+        symbol [ best %tmp.150 152 12 16 ];
         %tmp.151 = null;
         %tmp.152 = ne %tmp.150 %tmp.151;
-        bf %tmp.152 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_132_8_145_8_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_132_8_145_8_if_true:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_132_26_145_8_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 133 12 ]
-        symbol [ recentIds %tmp.154 133 12 21 ];
+        bf %tmp.152 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_152_8_165_8_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_152_8_165_8_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_152_26_165_8_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 153 12 ]
+        symbol [ recentIds %tmp.154 153 12 21 ];
         %tmp.154 = getv ? :recentIds;
-        symbol [ add %tmp.155 133 22 25 ];
+        symbol [ add %tmp.155 153 22 25 ];
         %tmp.155 = getv function %tmp.154 :add;
         %tmp.156 = lgetv %best.7;
-        symbol [ best %tmp.156 133 26 30 ];
+        symbol [ best %tmp.156 153 26 30 ];
         %tmp.157 = as %tmp.156 { (!Null) };
         invoke %tmp.154 %tmp.155(%tmp.157);
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 134 12 ]
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_134_12_134_90_if_stmt:
-        symbol [ recentIds %tmp.159 134 16 25 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 154 12 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_154_12_154_90_if_stmt:
+        symbol [ recentIds %tmp.159 154 16 25 ];
         %tmp.159 = getv ? :recentIds;
-        symbol [ size %tmp.160 134 26 30 ];
+        symbol [ size %tmp.160 154 26 30 ];
         %tmp.160 = getv function %tmp.159 :size;
         %tmp.161 = invoke %tmp.159 %tmp.160();
         %tmp.162 = 6;
         %tmp.163 = gt %tmp.161 %tmp.162;
-        bf %tmp.163 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_134_12_134_90_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_134_12_134_90_if_true:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_134_38_134_90_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 134 40 ]
-        symbol [ recentIds %tmp.165 134 52 61 ];
+        bf %tmp.163 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_154_12_154_90_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_154_12_154_90_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_154_38_154_90_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 154 40 ]
+        symbol [ recentIds %tmp.165 154 52 61 ];
         %tmp.165 = getv ? :recentIds;
-        symbol [ slice %tmp.166 134 62 67 ];
+        symbol [ slice %tmp.166 154 62 67 ];
         %tmp.166 = getv function %tmp.165 :slice;
         %tmp.167 = 1;
-        symbol [ recentIds %tmp.169 134 71 80 ];
+        symbol [ recentIds %tmp.169 154 71 80 ];
         %tmp.169 = getv ? :recentIds;
-        symbol [ size %tmp.170 134 81 85 ];
+        symbol [ size %tmp.170 154 81 85 ];
         %tmp.170 = getv function %tmp.169 :size;
         %tmp.171 = invoke %tmp.169 %tmp.170();
         %tmp.172 = invoke %tmp.165 %tmp.166(%tmp.167, %tmp.171);
-        symbol [ recentIds ? 134 40 49 ];
+        symbol [ recentIds ? 154 40 49 ];
         putv self :recentIds %tmp.172;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_134_38_134_90_stop:
-        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_134_12_134_90_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_134_12_134_90_if_end:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 135 12 ]
-        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_132_26_145_8_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_132_26_145_8_stop" ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_154_38_154_90_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_154_12_154_90_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_154_12_154_90_if_end:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 155 12 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_152_26_165_8_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_152_26_165_8_stop" ]
         %name.13 = local;
-        symbol [ name %name.13 135 16 20 ];
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_135_23_135_60_begin:
+        symbol [ name %name.13 155 16 20 ];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_155_23_155_60_begin:
         %tmp.173 = self;
-        symbol [ meta %tmp.174 135 23 27 ];
+        symbol [ meta %tmp.174 155 23 27 ];
         %tmp.174 = getv function %tmp.173 :meta;
         %tmp.175 = lgetv %best.7;
-        symbol [ best %tmp.175 135 28 32 ];
+        symbol [ best %tmp.175 155 28 32 ];
         %tmp.176 = as %tmp.175 { (!Null) };
         %tmp.177 = invoke %tmp.173 %tmp.174(%tmp.176);
         %tmp.178 = null;
         %tmp.179 = ne %tmp.177 %tmp.178;
-        bf %tmp.179 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_135_23_135_60_else_false;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_135_23_135_60_true:
+        bf %tmp.179 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_155_23_155_60_else_false;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_155_23_155_60_true:
         %tmp.180 = self;
-        symbol [ meta %tmp.181 135 44 48 ];
+        symbol [ meta %tmp.181 155 44 48 ];
         %tmp.181 = getv function %tmp.180 :meta;
         %tmp.182 = lgetv %best.7;
-        symbol [ best %tmp.182 135 49 53 ];
+        symbol [ best %tmp.182 155 49 53 ];
         %tmp.183 = as %tmp.182 { (!Null) };
         %tmp.184 = invoke %tmp.180 %tmp.181(%tmp.183);
         %tmp.185 = 2;
         %tmp.186 = agetv %tmp.184 %tmp.185;
         push %tmp.186;
-        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_135_23_135_60_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_135_23_135_60_else_false:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_155_23_155_60_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_155_23_155_60_else_false:
         %tmp.187 = "?";
         push %tmp.187;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_135_23_135_60_end:
-        %tmp.188 = phi [%tmp.179 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_135_23_135_60_begin] [%tmp.186 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_135_23_135_60_true] [%tmp.187 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_135_23_135_60_else_false] [%tmp.188 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_135_23_135_60_end];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_155_23_155_60_end:
+        %tmp.188 = phi [%tmp.179 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_155_23_155_60_begin] [%tmp.186 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_155_23_155_60_true] [%tmp.187 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_155_23_155_60_else_false] [%tmp.188 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_155_23_155_60_end];
         lputv %name.13 %tmp.188;
-        symbol [ name %name.13 135 16 20 ];
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 136 12 ]
-        symbol [ System %tmp.189 136 12 18 ];
+        symbol [ name %name.13 155 16 20 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 156 12 ]
+        symbol [ System %tmp.189 156 12 18 ];
         %tmp.189 = getm $.Toybox.System;
-        symbol [ println %tmp.190 136 19 26 ];
+        symbol [ println %tmp.190 156 19 26 ];
         %tmp.190 = getv function %tmp.189 :println;
         %tmp.191 = "AWDJ pick | ";
         %tmp.192 = lgetv %name.13;
-        symbol [ name %tmp.192 136 44 48 ];
+        symbol [ name %tmp.192 156 44 48 ];
         %tmp.193 = add %tmp.191 %tmp.192;
         %tmp.194 = " score=";
         %tmp.195 = add %tmp.193 %tmp.194;
         %tmp.196 = lgetv %bestScore.8;
-        symbol [ bestScore %tmp.196 136 63 72 ];
+        symbol [ bestScore %tmp.196 156 63 72 ];
         %tmp.197 = add %tmp.195 %tmp.196;
         %tmp.198 = " zone=";
         %tmp.199 = add %tmp.197 %tmp.198;
         %tmp.200 = lgetv %zone.2;
-        symbol [ zone %tmp.200 136 86 90 ];
+        symbol [ zone %tmp.200 156 86 90 ];
         %tmp.201 = add %tmp.199 %tmp.200;
         %tmp.202 = " climbing=";
         %tmp.203 = add %tmp.201 %tmp.202;
         %tmp.204 = lgetv %climbing.5;
-        symbol [ climbing %tmp.204 136 108 116 ];
+        symbol [ climbing %tmp.204 156 108 116 ];
         %tmp.205 = add %tmp.203 %tmp.204;
         %tmp.206 = " inHard=";
         %tmp.207 = add %tmp.205 %tmp.206;
         %tmp.208 = lgetv %effort.3;
-        symbol [ effort %tmp.208 137 31 37 ];
+        symbol [ effort %tmp.208 157 31 37 ];
         %tmp.209 = 0;
         %tmp.210 = agetv %tmp.208 %tmp.209;
         %tmp.211 = add %tmp.207 %tmp.210;
         %tmp.212 = " nextHard=";
         %tmp.213 = add %tmp.211 %tmp.212;
         %tmp.214 = lgetv %effort.3;
-        symbol [ effort %tmp.214 137 58 64 ];
+        symbol [ effort %tmp.214 157 58 64 ];
         %tmp.215 = 1;
         %tmp.216 = agetv %tmp.214 %tmp.215;
         %tmp.217 = add %tmp.213 %tmp.216;
         %tmp.218 = " | timer=";
         %tmp.219 = add %tmp.217 %tmp.218;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_138_33_138_65_begin:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_158_33_158_65_begin:
         %tmp.220 = lgetv %info.1;
-        symbol [ info %tmp.220 138 33 37 ];
+        symbol [ info %tmp.220 158 33 37 ];
         %tmp.221 = null;
         %tmp.222 = ne %tmp.220 %tmp.221;
-        bf %tmp.222 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_138_33_138_65_else_false;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_138_33_138_65_true:
+        bf %tmp.222 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_158_33_158_65_else_false;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_158_33_158_65_true:
         %tmp.223 = lgetv %info.1;
-        symbol [ info %tmp.223 138 48 52 ];
+        symbol [ info %tmp.223 158 48 52 ];
         %tmp.224 = as %tmp.223 { (!Null) };
-        symbol [ timerTime %tmp.225 138 53 62 ];
+        symbol [ timerTime %tmp.225 158 53 62 ];
         %tmp.225 = getv %tmp.224 :timerTime;
         push %tmp.225;
-        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_138_33_138_65_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_138_33_138_65_else_false:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_158_33_158_65_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_158_33_158_65_else_false:
         %tmp.226 = null;
         push %tmp.226;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_138_33_138_65_end:
-        %tmp.227 = phi [%tmp.222 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_138_33_138_65_begin] [%tmp.225 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_138_33_138_65_true] [%tmp.226 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_138_33_138_65_else_false] [%tmp.227 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_138_33_138_65_end];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_158_33_158_65_end:
+        %tmp.227 = phi [%tmp.222 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_158_33_158_65_begin] [%tmp.225 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_158_33_158_65_true] [%tmp.226 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_158_33_158_65_else_false] [%tmp.227 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_158_33_158_65_end];
         %tmp.228 = add %tmp.219 %tmp.227;
         %tmp.229 = " hr=";
         %tmp.230 = add %tmp.228 %tmp.229;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_138_83_138_122_begin:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_158_83_158_122_begin:
         %tmp.231 = lgetv %info.1;
-        symbol [ info %tmp.231 138 83 87 ];
+        symbol [ info %tmp.231 158 83 87 ];
         %tmp.232 = null;
         %tmp.233 = ne %tmp.231 %tmp.232;
-        bf %tmp.233 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_138_83_138_122_else_false;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_138_83_138_122_true:
+        bf %tmp.233 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_158_83_158_122_else_false;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_158_83_158_122_true:
         %tmp.234 = lgetv %info.1;
-        symbol [ info %tmp.234 138 98 102 ];
+        symbol [ info %tmp.234 158 98 102 ];
         %tmp.235 = as %tmp.234 { (!Null) };
-        symbol [ currentHeartRate %tmp.236 138 103 119 ];
+        symbol [ currentHeartRate %tmp.236 158 103 119 ];
         %tmp.236 = getv %tmp.235 :currentHeartRate;
         push %tmp.236;
-        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_138_83_138_122_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_138_83_138_122_else_false:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_158_83_158_122_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_158_83_158_122_else_false:
         %tmp.237 = null;
         push %tmp.237;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_138_83_138_122_end:
-        %tmp.238 = phi [%tmp.233 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_138_83_138_122_begin] [%tmp.236 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_138_83_138_122_true] [%tmp.237 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_138_83_138_122_else_false] [%tmp.238 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_138_83_138_122_end];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_158_83_158_122_end:
+        %tmp.238 = phi [%tmp.233 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_158_83_158_122_begin] [%tmp.236 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_158_83_158_122_true] [%tmp.237 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_158_83_158_122_else_false] [%tmp.238 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_158_83_158_122_end];
         %tmp.239 = add %tmp.230 %tmp.238;
         invoke %tmp.189 %tmp.190(%tmp.239);
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 139 12 ]
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 159 12 ]
         %tmp.240 = self;
-        symbol [ record %tmp.241 139 12 18 ];
+        symbol [ record %tmp.241 159 12 18 ];
         %tmp.241 = getv function %tmp.240 :record;
         %tmp.242 = newd 9;
         %tmp.243 = "e";
@@ -1434,176 +1602,176 @@ _Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_138_83_138_1
         %tmp.246 = aputv %tmp.245 %tmp.243 %tmp.244;
         %tmp.247 = "song";
         %tmp.248 = lgetv %name.13;
-        symbol [ name %tmp.248 140 41 45 ];
+        symbol [ name %tmp.248 160 41 45 ];
         %tmp.249 = dup %tmp.246;
         %tmp.250 = aputv %tmp.249 %tmp.247 %tmp.248;
         %tmp.251 = "score";
         %tmp.252 = lgetv %bestScore.8;
-        symbol [ bestScore %tmp.252 140 58 67 ];
+        symbol [ bestScore %tmp.252 160 58 67 ];
         %tmp.253 = dup %tmp.250;
         %tmp.254 = aputv %tmp.253 %tmp.251 %tmp.252;
         %tmp.255 = "zone";
         %tmp.256 = lgetv %zone.2;
-        symbol [ zone %tmp.256 140 79 83 ];
+        symbol [ zone %tmp.256 160 79 83 ];
         %tmp.257 = dup %tmp.254;
         %tmp.258 = aputv %tmp.257 %tmp.255 %tmp.256;
         %tmp.259 = "climbing";
         %tmp.260 = lgetv %climbing.5;
-        symbol [ climbing %tmp.260 141 30 38 ];
+        symbol [ climbing %tmp.260 161 30 38 ];
         %tmp.261 = dup %tmp.258;
         %tmp.262 = aputv %tmp.261 %tmp.259 %tmp.260;
         %tmp.263 = "inHard";
         %tmp.264 = lgetv %effort.3;
-        symbol [ effort %tmp.264 141 52 58 ];
+        symbol [ effort %tmp.264 161 52 58 ];
         %tmp.265 = 0;
         %tmp.266 = agetv %tmp.264 %tmp.265;
         %tmp.267 = dup %tmp.262;
         %tmp.268 = aputv %tmp.267 %tmp.263 %tmp.266;
         %tmp.269 = "nextHard";
         %tmp.270 = lgetv %effort.3;
-        symbol [ effort %tmp.270 141 77 83 ];
+        symbol [ effort %tmp.270 161 77 83 ];
         %tmp.271 = 1;
         %tmp.272 = agetv %tmp.270 %tmp.271;
         %tmp.273 = dup %tmp.268;
         %tmp.274 = aputv %tmp.273 %tmp.269 %tmp.272;
         %tmp.275 = "timer";
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_142_27_142_59_begin:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_162_27_162_59_begin:
         %tmp.276 = lgetv %info.1;
-        symbol [ info %tmp.276 142 27 31 ];
+        symbol [ info %tmp.276 162 27 31 ];
         %tmp.277 = null;
         %tmp.278 = ne %tmp.276 %tmp.277;
-        bf %tmp.278 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_142_27_142_59_else_false;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_142_27_142_59_true:
+        bf %tmp.278 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_162_27_162_59_else_false;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_162_27_162_59_true:
         %tmp.279 = lgetv %info.1;
-        symbol [ info %tmp.279 142 42 46 ];
+        symbol [ info %tmp.279 162 42 46 ];
         %tmp.280 = as %tmp.279 { (!Null) };
-        symbol [ timerTime %tmp.281 142 47 56 ];
+        symbol [ timerTime %tmp.281 162 47 56 ];
         %tmp.281 = getv %tmp.280 :timerTime;
         push %tmp.281;
-        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_142_27_142_59_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_142_27_142_59_else_false:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_162_27_162_59_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_162_27_162_59_else_false:
         %tmp.282 = null;
         push %tmp.282;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_142_27_142_59_end:
-        %tmp.283 = phi [%tmp.278 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_142_27_142_59_begin] [%tmp.281 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_142_27_142_59_true] [%tmp.282 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_142_27_142_59_else_false] [%tmp.283 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_142_27_142_59_end];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_162_27_162_59_end:
+        %tmp.283 = phi [%tmp.278 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_162_27_162_59_begin] [%tmp.281 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_162_27_162_59_true] [%tmp.282 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_162_27_162_59_else_false] [%tmp.283 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_162_27_162_59_end];
         %tmp.284 = dup %tmp.274;
         %tmp.285 = aputv %tmp.284 %tmp.275 %tmp.283;
         %tmp.286 = "hr";
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_24_143_63_begin:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_163_24_163_63_begin:
         %tmp.287 = lgetv %info.1;
-        symbol [ info %tmp.287 143 24 28 ];
+        symbol [ info %tmp.287 163 24 28 ];
         %tmp.288 = null;
         %tmp.289 = ne %tmp.287 %tmp.288;
-        bf %tmp.289 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_24_143_63_else_false;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_24_143_63_true:
+        bf %tmp.289 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_163_24_163_63_else_false;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_163_24_163_63_true:
         %tmp.290 = lgetv %info.1;
-        symbol [ info %tmp.290 143 39 43 ];
+        symbol [ info %tmp.290 163 39 43 ];
         %tmp.291 = as %tmp.290 { (!Null) };
-        symbol [ currentHeartRate %tmp.292 143 44 60 ];
+        symbol [ currentHeartRate %tmp.292 163 44 60 ];
         %tmp.292 = getv %tmp.291 :currentHeartRate;
         push %tmp.292;
-        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_24_143_63_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_24_143_63_else_false:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_163_24_163_63_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_163_24_163_63_else_false:
         %tmp.293 = null;
         push %tmp.293;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_24_143_63_end:
-        %tmp.294 = phi [%tmp.289 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_24_143_63_begin] [%tmp.292 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_24_143_63_true] [%tmp.293 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_24_143_63_else_false] [%tmp.294 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_143_24_143_63_end];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_163_24_163_63_end:
+        %tmp.294 = phi [%tmp.289 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_163_24_163_63_begin] [%tmp.292 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_163_24_163_63_true] [%tmp.293 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_163_24_163_63_else_false] [%tmp.294 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_163_24_163_63_end];
         %tmp.295 = dup %tmp.285;
         %tmp.296 = aputv %tmp.295 %tmp.286 %tmp.294;
         invoke %tmp.240 %tmp.241(%tmp.296);
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_132_26_145_8_stop:
-        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_132_8_145_8_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_132_8_145_8_if_end:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 146 8 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_152_26_165_8_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_152_8_165_8_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_152_8_165_8_if_end:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 166 8 ]
         %tmp.297 = lgetv %best.7;
-        symbol [ best %tmp.297 146 15 19 ];
+        symbol [ best %tmp.297 166 15 19 ];
         ret %tmp.297;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_110_50_147_4_stop:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_130_55_167_4_stop:
     }
-    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc"; @line = 152; @symbol_functiondef = [record,152,13,19]; @symbol_param<0> = [event,152,20,25]; ]
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc"; @line = 172; @symbol_functiondef = [record,172,13,19]; @symbol_param<0> = [event,172,20,25]; ]
     function record(event) {
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_152_27_158_4_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 153 8 ]
-        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_152_27_158_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_152_27_158_4_stop" ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_172_27_178_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 173 8 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_172_27_178_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_172_27_178_4_stop" ]
         %log.1 = local;
-        symbol [ log %log.1 153 12 15 ];
-        symbol [ Storage %tmp.1 153 18 25 ];
+        symbol [ log %log.1 173 12 15 ];
+        symbol [ Storage %tmp.1 173 18 25 ];
         %tmp.1 = getm $.Toybox.Application.Storage;
-        symbol [ getValue %tmp.2 153 26 34 ];
+        symbol [ getValue %tmp.2 173 26 34 ];
         %tmp.2 = getv function %tmp.1 :getValue;
         %tmp.3 = "declog";
         %tmp.4 = invoke %tmp.1 %tmp.2(%tmp.3);
         lputv %log.1 %tmp.4;
-        symbol [ log %log.1 153 12 15 ];
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 154 8 ]
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_154_8_154_37_if_stmt:
+        symbol [ log %log.1 173 12 15 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 174 8 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_174_8_174_37_if_stmt:
         %tmp.5 = lgetv %log.1;
-        symbol [ log %tmp.5 154 12 15 ];
+        symbol [ log %tmp.5 174 12 15 ];
         %tmp.6 = null;
         %tmp.7 = eq %tmp.5 %tmp.6;
-        bf %tmp.7 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_154_8_154_37_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_154_8_154_37_if_true:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_154_25_154_37_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 154 27 ]
+        bf %tmp.7 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_174_8_174_37_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_174_8_174_37_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_174_25_174_37_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 174 27 ]
         %tmp.8 = newa 0;
         lputv %log.1 %tmp.8;
-        symbol [ log %log.1 154 27 30 ];
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_154_25_154_37_stop:
-        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_154_8_154_37_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_154_8_154_37_if_end:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 155 8 ]
+        symbol [ log %log.1 174 27 30 ];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_174_25_174_37_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_174_8_174_37_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_174_8_174_37_if_end:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 175 8 ]
         %tmp.9 = lgetv %log.1;
-        symbol [ log %tmp.9 155 8 11 ];
-        symbol [ add %tmp.10 155 12 15 ];
+        symbol [ log %tmp.9 175 8 11 ];
+        symbol [ add %tmp.10 175 12 15 ];
         %tmp.10 = getv function %tmp.9 :add;
         %tmp.11 = lgetv %event;
-        symbol [ event %tmp.11 155 16 21 ];
+        symbol [ event %tmp.11 175 16 21 ];
         invoke %tmp.9 %tmp.10(%tmp.11);
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 156 8 ]
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_156_8_156_77_if_stmt:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 176 8 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_176_8_176_77_if_stmt:
         %tmp.12 = lgetv %log.1;
-        symbol [ log %tmp.12 156 12 15 ];
-        symbol [ size %tmp.13 156 16 20 ];
+        symbol [ log %tmp.12 176 12 15 ];
+        symbol [ size %tmp.13 176 16 20 ];
         %tmp.13 = getv function %tmp.12 :size;
         %tmp.14 = invoke %tmp.12 %tmp.13();
         %tmp.15 = 60;
         %tmp.16 = gt %tmp.14 %tmp.15;
-        bf %tmp.16 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_156_8_156_77_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_156_8_156_77_if_true:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_156_29_156_77_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 156 31 ]
+        bf %tmp.16 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_176_8_176_77_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_176_8_176_77_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_176_29_176_77_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 176 31 ]
         %tmp.17 = lgetv %log.1;
-        symbol [ log %tmp.17 156 37 40 ];
-        symbol [ slice %tmp.18 156 41 46 ];
+        symbol [ log %tmp.17 176 37 40 ];
+        symbol [ slice %tmp.18 176 41 46 ];
         %tmp.18 = getv function %tmp.17 :slice;
         %tmp.19 = lgetv %log.1;
-        symbol [ log %tmp.19 156 47 50 ];
-        symbol [ size %tmp.20 156 51 55 ];
+        symbol [ log %tmp.19 176 47 50 ];
+        symbol [ size %tmp.20 176 51 55 ];
         %tmp.20 = getv function %tmp.19 :size;
         %tmp.21 = invoke %tmp.19 %tmp.20();
         %tmp.22 = 60;
         %tmp.23 = sub %tmp.21 %tmp.22;
         %tmp.24 = lgetv %log.1;
-        symbol [ log %tmp.24 156 64 67 ];
-        symbol [ size %tmp.25 156 68 72 ];
+        symbol [ log %tmp.24 176 64 67 ];
+        symbol [ size %tmp.25 176 68 72 ];
         %tmp.25 = getv function %tmp.24 :size;
         %tmp.26 = invoke %tmp.24 %tmp.25();
         %tmp.27 = invoke %tmp.17 %tmp.18(%tmp.23, %tmp.26);
         lputv %log.1 %tmp.27;
-        symbol [ log %log.1 156 31 34 ];
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_156_29_156_77_stop:
-        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_156_8_156_77_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_156_8_156_77_if_end:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 157 8 ]
-        symbol [ Storage %tmp.28 157 8 15 ];
+        symbol [ log %log.1 176 31 34 ];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_176_29_176_77_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_176_8_176_77_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_176_8_176_77_if_end:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc" 177 8 ]
+        symbol [ Storage %tmp.28 177 8 15 ];
         %tmp.28 = getm $.Toybox.Application.Storage;
-        symbol [ setValue %tmp.29 157 16 24 ];
+        symbol [ setValue %tmp.29 177 16 24 ];
         %tmp.29 = getv function %tmp.28 :setValue;
         %tmp.30 = "declog";
         %tmp.31 = lgetv %log.1;
-        symbol [ log %tmp.31 157 35 38 ];
+        symbol [ log %tmp.31 177 35 38 ];
         invoke %tmp.28 %tmp.29(%tmp.30, %tmp.31);
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_152_27_158_4_stop:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_Brain_mc_172_27_178_4_stop:
     }
 }
 [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/Brain.mc"; @line = 10; ]
