@@ -7,19 +7,19 @@
         <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="2" lineNum="14" parent="globals/AwdjField" pc="268435481" symbol="&lt;init&gt;"/>
         <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/gen/006-B4574-00/source/Rez.mcgen" id="3" lineNum="7" parent="globals/Rez" pc="268435493" symbol="&lt;init&gt;"/>
         <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc" id="4" lineNum="5" parent="globals/AwdjApp" pc="268435513" symbol="&lt;init&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="5" lineNum="49" parent="globals/AwdjField" pc="268435525" symbol="onTimerStart"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="5" lineNum="50" parent="globals/AwdjField" pc="268435527" symbol="onTimerStart"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="6" lineNum="65" parent="globals/AwdjField" pc="268435540" symbol="compute"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="6" lineNum="66" parent="globals/AwdjField" pc="268435543" symbol="compute"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="6" lineNum="68" parent="globals/AwdjField" pc="268435555" symbol="compute"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="6" lineNum="69" parent="globals/AwdjField" pc="268435579" symbol="compute"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="6" lineNum="70" parent="globals/AwdjField" pc="268435590" symbol="compute"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="6" lineNum="72" parent="globals/AwdjField" pc="268435602" symbol="compute"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="7" lineNum="126" parent="globals/AwdjField" pc="268435623" symbol="onResponse"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="8" lineNum="57" parent="globals/AwdjField" pc="268435626" symbol="onTimerResume"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="8" lineNum="58" parent="globals/AwdjField" pc="268435628" symbol="onTimerResume"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="9" lineNum="53" parent="globals/AwdjField" pc="268435641" symbol="onTimerPause"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="9" lineNum="54" parent="globals/AwdjField" pc="268435643" symbol="onTimerPause"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="5" lineNum="53" parent="globals/AwdjField" pc="268435525" symbol="onTimerStart"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="5" lineNum="54" parent="globals/AwdjField" pc="268435527" symbol="onTimerStart"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="6" lineNum="69" parent="globals/AwdjField" pc="268435540" symbol="compute"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="6" lineNum="70" parent="globals/AwdjField" pc="268435543" symbol="compute"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="6" lineNum="72" parent="globals/AwdjField" pc="268435555" symbol="compute"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="6" lineNum="73" parent="globals/AwdjField" pc="268435579" symbol="compute"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="6" lineNum="74" parent="globals/AwdjField" pc="268435590" symbol="compute"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="6" lineNum="76" parent="globals/AwdjField" pc="268435602" symbol="compute"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="7" lineNum="136" parent="globals/AwdjField" pc="268435623" symbol="onResponse"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="8" lineNum="61" parent="globals/AwdjField" pc="268435626" symbol="onTimerResume"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="8" lineNum="62" parent="globals/AwdjField" pc="268435628" symbol="onTimerResume"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="9" lineNum="57" parent="globals/AwdjField" pc="268435641" symbol="onTimerPause"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="9" lineNum="58" parent="globals/AwdjField" pc="268435643" symbol="onTimerPause"/>
         <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="10" lineNum="27" parent="globals/AwdjField" pc="268435656" symbol="&lt;globals/AwdjField/&lt;&gt;kindOf&gt;"/>
         <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="10" lineNum="28" parent="globals/AwdjField" pc="268435658" symbol="&lt;globals/AwdjField/&lt;&gt;kindOf&gt;"/>
         <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="10" lineNum="28" parent="globals/AwdjField" pc="268435665" symbol="&lt;globals/AwdjField/&lt;&gt;kindOf&gt;"/>
@@ -44,34 +44,34 @@
         <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="12" lineNum="40" parent="globals/AwdjField" pc="268435825" symbol="&lt;globals/AwdjField/&lt;&gt;stepDict&gt;"/>
         <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="12" lineNum="40" parent="globals/AwdjField" pc="268435841" symbol="&lt;globals/AwdjField/&lt;&gt;stepDict&gt;"/>
         <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="12" lineNum="41" parent="globals/AwdjField" pc="268435846" symbol="&lt;globals/AwdjField/&lt;&gt;stepDict&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="13" lineNum="61" parent="globals/AwdjField" pc="268435908" symbol="onTimerStop"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="13" lineNum="62" parent="globals/AwdjField" pc="268435910" symbol="onTimerStop"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="75" parent="globals/AwdjField" pc="268435923" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="76" parent="globals/AwdjField" pc="268435926" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="77" parent="globals/AwdjField" pc="268435945" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="80" parent="globals/AwdjField" pc="268435969" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="82" parent="globals/AwdjField" pc="268435979" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="95" parent="globals/AwdjField" pc="268436071" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="96" parent="globals/AwdjField" pc="268436091" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="97" parent="globals/AwdjField" pc="268436097" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="98" parent="globals/AwdjField" pc="268436137" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="99" parent="globals/AwdjField" pc="268436155" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="100" parent="globals/AwdjField" pc="268436164" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="102" parent="globals/AwdjField" pc="268436182" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="103" parent="globals/AwdjField" pc="268436192" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="104" parent="globals/AwdjField" pc="268436205" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="105" parent="globals/AwdjField" pc="268436225" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="106" parent="globals/AwdjField" pc="268436231" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="109" parent="globals/AwdjField" pc="268436247" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="110" parent="globals/AwdjField" pc="268436257" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="111" parent="globals/AwdjField" pc="268436271" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="112" parent="globals/AwdjField" pc="268436283" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="114" parent="globals/AwdjField" pc="268436299" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="115" parent="globals/AwdjField" pc="268436307" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc" id="15" lineNum="10" parent="globals/AwdjApp" pc="268436362" symbol="getInitialView"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc" id="15" lineNum="11" parent="globals/AwdjApp" pc="268436364" symbol="getInitialView"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc" id="16" lineNum="6" parent="globals/AwdjApp" pc="268436390" symbol="initialize"/>
-        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc" id="16" lineNum="7" parent="globals/AwdjApp" pc="268436392" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="13" lineNum="65" parent="globals/AwdjField" pc="268435932" symbol="onTimerStop"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="13" lineNum="66" parent="globals/AwdjField" pc="268435934" symbol="onTimerStop"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="79" parent="globals/AwdjField" pc="268435947" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="80" parent="globals/AwdjField" pc="268435950" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="81" parent="globals/AwdjField" pc="268435969" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="84" parent="globals/AwdjField" pc="268435993" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="86" parent="globals/AwdjField" pc="268436003" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="99" parent="globals/AwdjField" pc="268436095" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="100" parent="globals/AwdjField" pc="268436115" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="106" parent="globals/AwdjField" pc="268436121" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="108" parent="globals/AwdjField" pc="268436206" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="109" parent="globals/AwdjField" pc="268436224" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="110" parent="globals/AwdjField" pc="268436233" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="112" parent="globals/AwdjField" pc="268436251" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="113" parent="globals/AwdjField" pc="268436261" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="114" parent="globals/AwdjField" pc="268436274" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="115" parent="globals/AwdjField" pc="268436294" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="116" parent="globals/AwdjField" pc="268436300" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="119" parent="globals/AwdjField" pc="268436316" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="120" parent="globals/AwdjField" pc="268436326" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="121" parent="globals/AwdjField" pc="268436340" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="122" parent="globals/AwdjField" pc="268436352" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="124" parent="globals/AwdjField" pc="268436368" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjField.mc" id="14" lineNum="125" parent="globals/AwdjField" pc="268436376" symbol="&lt;globals/AwdjField/&lt;&gt;postSample&gt;"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc" id="15" lineNum="10" parent="globals/AwdjApp" pc="268436431" symbol="getInitialView"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc" id="15" lineNum="11" parent="globals/AwdjApp" pc="268436433" symbol="getInitialView"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc" id="16" lineNum="6" parent="globals/AwdjApp" pc="268436459" symbol="initialize"/>
+        <entry filename="/Users/ethanroberts/ai-workout-dj/garmin/awdj-field/source/AwdjApp.mc" id="16" lineNum="7" parent="globals/AwdjApp" pc="268436461" symbol="initialize"/>
     </pcToLineNum>
     <symbolTable>
         <entry id="8388639" module="true" symbol="Graphics"/>
@@ -121,15 +121,15 @@
         <entry arg="true" endPc="268435622" name="info" stackId="1" startPc="268435540"/>
         <entry endPc="268435622" name="now" stackId="2" startPc="268435543"/>
         <entry arg="true" endPc="268435764" name="intensity" stackId="1" startPc="268435656"/>
-        <entry arg="true" endPc="268435907" name="step" stackId="1" startPc="268435792"/>
-        <entry endPc="268435907" name="ws" stackId="2" startPc="268435795"/>
-        <entry arg="true" endPc="268436361" name="info" stackId="1" startPc="268435923"/>
-        <entry endPc="268436360" name="url" stackId="2" startPc="268435926"/>
-        <entry endPc="268436360" name="body" stackId="3" startPc="268435926"/>
-        <entry endPc="268436360" name="cur" stackId="4" startPc="268435926"/>
-        <entry endPc="268436243" name="sig" stackId="5" startPc="268436097"/>
-        <entry endPc="268436243" name="nxt" stackId="6" startPc="268436097"/>
-        <entry endPc="268436295" name="deg" stackId="7" startPc="268436257"/>
+        <entry arg="true" endPc="268435931" name="step" stackId="1" startPc="268435792"/>
+        <entry endPc="268435931" name="ws" stackId="2" startPc="268435795"/>
+        <entry arg="true" endPc="268436430" name="info" stackId="1" startPc="268435947"/>
+        <entry endPc="268436429" name="url" stackId="2" startPc="268435950"/>
+        <entry endPc="268436429" name="body" stackId="3" startPc="268435950"/>
+        <entry endPc="268436429" name="cur" stackId="4" startPc="268435950"/>
+        <entry endPc="268436312" name="sig" stackId="5" startPc="268436121"/>
+        <entry endPc="268436312" name="nxt" stackId="6" startPc="268436121"/>
+        <entry endPc="268436364" name="deg" stackId="7" startPc="268436326"/>
     </localVars>
     <deviceInfo deviceVersion="361e256b74f66f7ba19da23c7ec7c7f06ab33c5c" partNumber="006-B4574-00"/>
     <annotations>
@@ -183,14 +183,14 @@
         <functionEntry accessMode="public" endPc="268435791" name="initialize" parent="AwdjField" startPc="268435765">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="private" endPc="268435907" name="&lt;globals/AwdjField/&lt;&gt;stepDict&gt;" parent="AwdjField" startPc="268435792">
+        <functionEntry accessMode="private" endPc="268435931" name="&lt;globals/AwdjField/&lt;&gt;stepDict&gt;" parent="AwdjField" startPc="268435792">
             <param id="step"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268435922" name="onTimerStop" parent="AwdjField" startPc="268435908">
+        <functionEntry accessMode="public" endPc="268435946" name="onTimerStop" parent="AwdjField" startPc="268435932">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="private" endPc="268436361" name="&lt;globals/AwdjField/&lt;&gt;postSample&gt;" parent="AwdjField" startPc="268435923">
+        <functionEntry accessMode="private" endPc="268436430" name="&lt;globals/AwdjField/&lt;&gt;postSample&gt;" parent="AwdjField" startPc="268435947">
             <param id="info"/>
             <documentation/>
         </functionEntry>
@@ -200,10 +200,10 @@
         <functionEntry accessMode="public" name="&lt;init&gt;" parent="Strings">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268436389" name="getInitialView" parent="AwdjApp" startPc="268436362">
+        <functionEntry accessMode="public" endPc="268436458" name="getInitialView" parent="AwdjApp" startPc="268436431">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268436404" name="initialize" parent="AwdjApp" startPc="268436390">
+        <functionEntry accessMode="public" endPc="268436473" name="initialize" parent="AwdjApp" startPc="268436459">
             <documentation/>
         </functionEntry>
     </functions>

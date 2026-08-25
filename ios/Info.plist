@@ -38,6 +38,8 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<false/>
 	</dict>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Your watch can broadcast heart rate over Bluetooth — the music rewards real effort, even with no signal on the trail.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Trail mode conducts your music from your position and elevation — the drop hits as you crest the hill, no signal needed.</string>
 	<key>NSMotionUsageDescription</key>
@@ -46,6 +48,7 @@
 	<array>
 		<string>audio</string>
 		<string>location</string>
+		<string>bluetooth-central</string>
 	</array>
 	<key>UILaunchScreen</key>
 	<dict/>
