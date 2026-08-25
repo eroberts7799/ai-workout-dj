@@ -191,7 +191,13 @@ def main():
         })
         note = f"{tags['bpm']}bpm {tags['camelot']} e={tags['energy']}" if tags else "no preview tags"
         print(f"  {i+1:3}. ✓ {c['artist']} — {c['title']}  [{c['sets']} sets, {c['score']}]  {note}")
-    json.dump({"generatedFrom": {"sets": len(corpus), "seeds": len(seeds)}, "tracks": out}, open(OUT, "w"), indent=1)
+    json.dump({
+        "generatedFrom": {"sets": len(corpus), "seeds": len(seeds)},
+        "caveats": "preview BPM sits on librosa's coarse tempo grid (~±3, half-time folds possible) — "
+                   "curation-grade only; energy proxy uncalibrated. True analysis happens if a track "
+                   "is bought and run through allin1.",
+        "tracks": out,
+    }, open(OUT, "w"), indent=1)
     print(f"\nwrote {OUT} — {len(out)} verified candidates")
 
 
