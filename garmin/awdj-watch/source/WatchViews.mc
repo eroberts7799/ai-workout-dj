@@ -43,6 +43,7 @@ class WatchStatusView extends WatchUi.View {
 
     function onShow() {
         flushDecisionLog();
+        refreshManifestMeta();
         var n = cachedAudioCount();
         var tagged = Storage.getValue("songs");
         if (n == 0) {
@@ -72,6 +73,27 @@ class WatchStatusView extends WatchUi.View {
              :responseType => Toybox.Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON},
             method(:onLogFlushed)
         );
+    }
+
+    // Audio syncs once; BRAINS refresh every open. The manifest's pairs and
+    // logUrl update without a re-sync (a full sync only runs on an empty
+    // cache, so published pair updates would otherwise never arrive).
+    function refreshManifestMeta() {
+        var url = WatchServer.manifestUrl();
+        if (url == null) { return; }
+        Toybox.Communications.makeWebRequest(
+            url, null,
+            {:method => Toybox.Communications.HTTP_REQUEST_METHOD_GET,
+             :responseType => Toybox.Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON},
+            method(:onManifestMeta)
+        );
+    }
+
+    function onManifestMeta(responseCode, data) {
+        if (responseCode != 200 || data == null || !(data instanceof Toybox.Lang.Dictionary)) { return; }
+        if (data["pairs"] != null) { Storage.setValue("pairs", data["pairs"]); }
+        if (data["logUrl"] != null) { Storage.setValue("logUrl", data["logUrl"]); }
+        Toybox.System.println("AWDJ meta | refreshed pairs=" + (data["pairs"] != null ? data["pairs"].size() : 0));
     }
 
     function onLogFlushed(responseCode, data) {

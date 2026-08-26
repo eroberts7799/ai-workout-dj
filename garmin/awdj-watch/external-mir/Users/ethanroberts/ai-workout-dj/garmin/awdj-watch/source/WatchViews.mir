@@ -168,189 +168,194 @@ _Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_39_26_4
     }
     [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 44; @symbol_functiondef = [onShow,44,13,19]; ]
     function onShow() {
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_44_22_58_4_start:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_44_22_59_4_start:
 [ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 45 8 ]
         %tmp.1 = self;
         symbol [ flushDecisionLog %tmp.2 45 8 24 ];
         %tmp.2 = getv function %tmp.1 :flushDecisionLog;
         invoke %tmp.1 %tmp.2();
 [ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 46 8 ]
-        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_44_22_58_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_44_22_58_4_stop" ]
-        %n.1 = local;
-        symbol [ n %n.1 46 12 13 ];
         %tmp.3 = self;
-        symbol [ cachedAudioCount %tmp.4 46 16 32 ];
-        %tmp.4 = getv function %tmp.3 :cachedAudioCount;
-        %tmp.5 = invoke %tmp.3 %tmp.4();
-        lputv %n.1 %tmp.5;
-        symbol [ n %n.1 46 12 13 ];
+        symbol [ refreshManifestMeta %tmp.4 46 8 27 ];
+        %tmp.4 = getv function %tmp.3 :refreshManifestMeta;
+        invoke %tmp.3 %tmp.4();
 [ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 47 8 ]
-        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_44_22_58_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_44_22_58_4_stop" ]
-        %tagged.2 = local;
-        symbol [ tagged %tagged.2 47 12 18 ];
-        symbol [ Storage %tmp.6 47 21 28 ];
-        %tmp.6 = getm $.Toybox.Application.Storage;
-        symbol [ getValue %tmp.7 47 29 37 ];
-        %tmp.7 = getv function %tmp.6 :getValue;
-        %tmp.8 = "songs";
-        %tmp.9 = invoke %tmp.6 %tmp.7(%tmp.8);
-        lputv %tagged.2 %tmp.9;
-        symbol [ tagged %tagged.2 47 12 18 ];
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_44_22_59_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_44_22_59_4_stop" ]
+        %n.1 = local;
+        symbol [ n %n.1 47 12 13 ];
+        %tmp.5 = self;
+        symbol [ cachedAudioCount %tmp.6 47 16 32 ];
+        %tmp.6 = getv function %tmp.5 :cachedAudioCount;
+        %tmp.7 = invoke %tmp.5 %tmp.6();
+        lputv %n.1 %tmp.7;
+        symbol [ n %n.1 47 12 13 ];
 [ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 48 8 ]
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_48_8_57_8_if_stmt:
-        %tmp.10 = lgetv %n.1;
-        symbol [ n %tmp.10 48 12 13 ];
-        %tmp.11 = 0;
-        %tmp.12 = eq %tmp.10 %tmp.11;
-        bf %tmp.12 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_48_8_57_8_if_else_false;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_48_8_57_8_if_true:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_48_20_55_8_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 49 12 ]
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_49_12_54_12_if_stmt:
-        symbol [ WatchServer %tmp.14 49 16 27 ];
-        %tmp.14 = getv ? :WatchServer;
-        symbol [ manifestUrl %tmp.15 49 28 39 ];
-        %tmp.15 = getv function %tmp.14 :manifestUrl;
-        %tmp.16 = invoke %tmp.14 %tmp.15();
-        %tmp.17 = null;
-        %tmp.18 = eq %tmp.16 %tmp.17;
-        bf %tmp.18 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_49_12_54_12_if_else_false;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_49_12_54_12_if_true:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_49_51_51_12_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 50 16 ]
-        %tmp.19 = "AWDJ\nset crate manifest URL\nin Garmin Connect settings";
-        symbol [ mText ? 50 16 21 ];
-        putv self :mText %tmp.19;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_49_51_51_12_stop:
-        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_49_12_54_12_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_49_12_54_12_if_else_false:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_51_19_54_12_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 52 16 ]
-        %tmp.20 = "AWDJ\nsyncing crate...";
-        symbol [ mText ? 52 16 21 ];
-        putv self :mText %tmp.20;
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_44_22_59_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_44_22_59_4_stop" ]
+        %tagged.2 = local;
+        symbol [ tagged %tagged.2 48 12 18 ];
+        symbol [ Storage %tmp.8 48 21 28 ];
+        %tmp.8 = getm $.Toybox.Application.Storage;
+        symbol [ getValue %tmp.9 48 29 37 ];
+        %tmp.9 = getv function %tmp.8 :getValue;
+        %tmp.10 = "songs";
+        %tmp.11 = invoke %tmp.8 %tmp.9(%tmp.10);
+        lputv %tagged.2 %tmp.11;
+        symbol [ tagged %tagged.2 48 12 18 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 49 8 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_49_8_58_8_if_stmt:
+        %tmp.12 = lgetv %n.1;
+        symbol [ n %tmp.12 49 12 13 ];
+        %tmp.13 = 0;
+        %tmp.14 = eq %tmp.12 %tmp.13;
+        bf %tmp.14 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_49_8_58_8_if_else_false;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_49_8_58_8_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_49_20_56_8_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 50 12 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_50_12_55_12_if_stmt:
+        symbol [ WatchServer %tmp.16 50 16 27 ];
+        %tmp.16 = getv ? :WatchServer;
+        symbol [ manifestUrl %tmp.17 50 28 39 ];
+        %tmp.17 = getv function %tmp.16 :manifestUrl;
+        %tmp.18 = invoke %tmp.16 %tmp.17();
+        %tmp.19 = null;
+        %tmp.20 = eq %tmp.18 %tmp.19;
+        bf %tmp.20 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_50_12_55_12_if_else_false;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_50_12_55_12_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_50_51_52_12_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 51 16 ]
+        %tmp.21 = "AWDJ\nset crate manifest URL\nin Garmin Connect settings";
+        symbol [ mText ? 51 16 21 ];
+        putv self :mText %tmp.21;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_50_51_52_12_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_50_12_55_12_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_50_12_55_12_if_else_false:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_52_19_55_12_start:
 [ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 53 16 ]
-        symbol [ Media %tmp.21 53 16 21 ];
-        %tmp.21 = getm $.Toybox.Media;
-        symbol [ startSync %tmp.22 53 22 31 ];
-        %tmp.22 = getv function %tmp.21 :startSync;
-        invoke %tmp.21 %tmp.22();
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_51_19_54_12_stop:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_49_12_54_12_if_end:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_48_20_55_8_stop:
-        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_48_8_57_8_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_48_8_57_8_if_else_false:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_55_15_57_8_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 56 12 ]
-        %tmp.23 = "AWDJ\n";
-        %tmp.24 = lgetv %n.1;
-        symbol [ n %tmp.24 56 31 32 ];
-        %tmp.25 = add %tmp.23 %tmp.24;
-        %tmp.26 = " songs cached (";
+        %tmp.22 = "AWDJ\nsyncing crate...";
+        symbol [ mText ? 53 16 21 ];
+        putv self :mText %tmp.22;
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 54 16 ]
+        symbol [ Media %tmp.23 54 16 21 ];
+        %tmp.23 = getm $.Toybox.Media;
+        symbol [ startSync %tmp.24 54 22 31 ];
+        %tmp.24 = getv function %tmp.23 :startSync;
+        invoke %tmp.23 %tmp.24();
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_52_19_55_12_stop:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_50_12_55_12_if_end:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_49_20_56_8_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_49_8_58_8_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_49_8_58_8_if_else_false:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_56_15_58_8_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 57 12 ]
+        %tmp.25 = "AWDJ\n";
+        %tmp.26 = lgetv %n.1;
+        symbol [ n %tmp.26 57 31 32 ];
         %tmp.27 = add %tmp.25 %tmp.26;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_56_56_56_89_begin:
-        %tmp.28 = lgetv %tagged.2;
-        symbol [ tagged %tmp.28 56 56 62 ];
-        %tmp.29 = null;
-        %tmp.30 = ne %tmp.28 %tmp.29;
-        bf %tmp.30 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_56_56_56_89_else_false;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_56_56_56_89_true:
-        %tmp.31 = lgetv %tagged.2;
-        symbol [ tagged %tmp.31 56 73 79 ];
-        %tmp.32 = as %tmp.31 { (!Null) };
-        symbol [ size %tmp.33 56 80 84 ];
-        %tmp.33 = getv function %tmp.32 :size;
-        %tmp.34 = invoke %tmp.32 %tmp.33();
-        push %tmp.34;
-        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_56_56_56_89_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_56_56_56_89_else_false:
-        %tmp.35 = 0;
-        push %tmp.35;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_56_56_56_89_end:
-        %tmp.36 = phi [%tmp.30 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_56_56_56_89_begin] [%tmp.34 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_56_56_56_89_true] [%tmp.35 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_56_56_56_89_else_false] [%tmp.36 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_56_56_56_89_end];
-        %tmp.37 = add %tmp.27 %tmp.36;
-        %tmp.38 = " tagged)\npress START to play";
-        %tmp.39 = add %tmp.37 %tmp.38;
-        symbol [ mText ? 56 12 17 ];
-        putv self :mText %tmp.39;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_55_15_57_8_stop:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_48_8_57_8_if_end:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_44_22_58_4_stop:
+        %tmp.28 = " songs cached (";
+        %tmp.29 = add %tmp.27 %tmp.28;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_57_56_57_89_begin:
+        %tmp.30 = lgetv %tagged.2;
+        symbol [ tagged %tmp.30 57 56 62 ];
+        %tmp.31 = null;
+        %tmp.32 = ne %tmp.30 %tmp.31;
+        bf %tmp.32 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_57_56_57_89_else_false;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_57_56_57_89_true:
+        %tmp.33 = lgetv %tagged.2;
+        symbol [ tagged %tmp.33 57 73 79 ];
+        %tmp.34 = as %tmp.33 { (!Null) };
+        symbol [ size %tmp.35 57 80 84 ];
+        %tmp.35 = getv function %tmp.34 :size;
+        %tmp.36 = invoke %tmp.34 %tmp.35();
+        push %tmp.36;
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_57_56_57_89_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_57_56_57_89_else_false:
+        %tmp.37 = 0;
+        push %tmp.37;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_57_56_57_89_end:
+        %tmp.38 = phi [%tmp.32 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_57_56_57_89_begin] [%tmp.36 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_57_56_57_89_true] [%tmp.37 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_57_56_57_89_else_false] [%tmp.38 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_57_56_57_89_end];
+        %tmp.39 = add %tmp.29 %tmp.38;
+        %tmp.40 = " tagged)\npress START to play";
+        %tmp.41 = add %tmp.39 %tmp.40;
+        symbol [ mText ? 57 12 17 ];
+        putv self :mText %tmp.41;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_56_15_58_8_stop:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_49_8_58_8_if_end:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_44_22_59_4_stop:
     }
-    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 63; @symbol_functiondef = [flushDecisionLog,63,13,29]; ]
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 64; @symbol_functiondef = [flushDecisionLog,64,13,29]; ]
     function flushDecisionLog() {
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_63_32_75_4_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 64 8 ]
-        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_63_32_75_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_63_32_75_4_stop" ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_64_32_76_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 65 8 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_64_32_76_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_64_32_76_4_stop" ]
         %log.1 = local;
-        symbol [ log %log.1 64 12 15 ];
-        symbol [ Storage %tmp.1 64 18 25 ];
+        symbol [ log %log.1 65 12 15 ];
+        symbol [ Storage %tmp.1 65 18 25 ];
         %tmp.1 = getm $.Toybox.Application.Storage;
-        symbol [ getValue %tmp.2 64 26 34 ];
+        symbol [ getValue %tmp.2 65 26 34 ];
         %tmp.2 = getv function %tmp.1 :getValue;
         %tmp.3 = "declog";
         %tmp.4 = invoke %tmp.1 %tmp.2(%tmp.3);
         lputv %log.1 %tmp.4;
-        symbol [ log %log.1 64 12 15 ];
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 65 8 ]
-        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_63_32_75_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_63_32_75_4_stop" ]
+        symbol [ log %log.1 65 12 15 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 66 8 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_64_32_76_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_64_32_76_4_stop" ]
         %url.2 = local;
-        symbol [ url %url.2 65 12 15 ];
-        symbol [ Storage %tmp.5 65 18 25 ];
+        symbol [ url %url.2 66 12 15 ];
+        symbol [ Storage %tmp.5 66 18 25 ];
         %tmp.5 = getm $.Toybox.Application.Storage;
-        symbol [ getValue %tmp.6 65 26 34 ];
+        symbol [ getValue %tmp.6 66 26 34 ];
         %tmp.6 = getv function %tmp.5 :getValue;
         %tmp.7 = "logUrl";
         %tmp.8 = invoke %tmp.5 %tmp.6(%tmp.7);
         lputv %url.2 %tmp.8;
-        symbol [ url %url.2 65 12 15 ];
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 66 8 ]
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_66_8_66_69_if_stmt:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_66_12_66_53_begin:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_66_12_66_41_begin:
+        symbol [ url %url.2 66 12 15 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 67 8 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_67_8_67_69_if_stmt:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_67_12_67_53_begin:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_67_12_67_41_begin:
         %tmp.9 = lgetv %log.1;
-        symbol [ log %tmp.9 66 12 15 ];
+        symbol [ log %tmp.9 67 12 15 ];
         %tmp.10 = null;
         %tmp.11 = eq %tmp.9 %tmp.10;
-        bt %tmp.11 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_66_8_66_69_if_true;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_66_27_66_41_false:
+        bt %tmp.11 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_67_8_67_69_if_true;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_67_27_67_41_false:
         %tmp.12 = lgetv %log.1;
-        symbol [ log %tmp.12 66 27 30 ];
+        symbol [ log %tmp.12 67 27 30 ];
         %tmp.13 = as %tmp.12 { (!Null) };
-        symbol [ size %tmp.14 66 31 35 ];
+        symbol [ size %tmp.14 67 31 35 ];
         %tmp.14 = getv function %tmp.13 :size;
         %tmp.15 = invoke %tmp.13 %tmp.14();
         %tmp.16 = 0;
         %tmp.17 = eq %tmp.15 %tmp.16;
         push %tmp.17;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_66_27_66_41_end:
-        %tmp.18 = phi [%tmp.11 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_66_12_66_41_begin] [%tmp.17 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_66_27_66_41_false] [%tmp.18 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_66_27_66_41_end];
-        bt %tmp.18 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_66_8_66_69_if_true;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_66_46_66_53_false:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_67_27_67_41_end:
+        %tmp.18 = phi [%tmp.11 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_67_12_67_41_begin] [%tmp.17 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_67_27_67_41_false] [%tmp.18 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_67_27_67_41_end];
+        bt %tmp.18 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_67_8_67_69_if_true;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_67_46_67_53_false:
         %tmp.19 = lgetv %url.2;
-        symbol [ url %tmp.19 66 46 49 ];
+        symbol [ url %tmp.19 67 46 49 ];
         %tmp.20 = null;
         %tmp.21 = eq %tmp.19 %tmp.20;
         push %tmp.21;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_66_46_66_53_end:
-        %tmp.22 = phi [%tmp.18 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_66_12_66_53_begin] [%tmp.21 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_66_46_66_53_false] [%tmp.22 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_66_46_66_53_end];
-        bf %tmp.22 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_66_8_66_69_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_66_8_66_69_if_true:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_66_59_66_69_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 66 61 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_67_46_67_53_end:
+        %tmp.22 = phi [%tmp.18 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_67_12_67_53_begin] [%tmp.21 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_67_46_67_53_false] [%tmp.22 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_67_46_67_53_end];
+        bf %tmp.22 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_67_8_67_69_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_67_8_67_69_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_67_59_67_69_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 67 61 ]
         ret ?;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_66_59_66_69_stop:
-        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_66_8_66_69_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_66_8_66_69_if_end:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 67 8 ]
-        symbol [ Toybox %tmp.24 67 8 14 ];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_67_59_67_69_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_67_8_67_69_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_67_8_67_69_if_end:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 68 8 ]
+        symbol [ Toybox %tmp.24 68 8 14 ];
         %tmp.24 = getv ? :Toybox;
-        symbol [ Communications %tmp.25 67 15 29 ];
+        symbol [ Communications %tmp.25 68 15 29 ];
         %tmp.25 = getv %tmp.24 :Communications;
-        symbol [ makeWebRequest %tmp.26 67 30 44 ];
+        symbol [ makeWebRequest %tmp.26 68 30 44 ];
         %tmp.26 = getv function %tmp.25 :makeWebRequest;
         %tmp.27 = lgetv %url.2;
-        symbol [ url %tmp.27 68 12 15 ];
+        symbol [ url %tmp.27 69 12 15 ];
         %tmp.28 = newd 3;
         %tmp.29 = "name";
         %tmp.30 = "watch-decisions";
@@ -362,282 +367,479 @@ _Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_66_8_66
         %tmp.36 = aputv %tmp.35 %tmp.33 %tmp.34;
         %tmp.37 = "decisions";
         %tmp.38 = lgetv %log.1;
-        symbol [ log %tmp.38 69 78 81 ];
+        symbol [ log %tmp.38 70 78 81 ];
         %tmp.39 = dup %tmp.36;
         %tmp.40 = aputv %tmp.39 %tmp.37 %tmp.38;
         %tmp.41 = newd 3;
         %tmp.43 = const :method;
-        symbol [ method %tmp.43 70 14 20 const ];
-        symbol [ Toybox %tmp.45 70 24 30 ];
+        symbol [ method %tmp.43 71 14 20 const ];
+        symbol [ Toybox %tmp.45 71 24 30 ];
         %tmp.45 = getv ? :Toybox;
-        symbol [ Communications %tmp.46 70 31 45 ];
+        symbol [ Communications %tmp.46 71 31 45 ];
         %tmp.46 = getv %tmp.45 :Communications;
-        symbol [ HTTP_REQUEST_METHOD_POST %tmp.47 70 46 70 ];
+        symbol [ HTTP_REQUEST_METHOD_POST %tmp.47 71 46 70 ];
         %tmp.47 = getv %tmp.46 :HTTP_REQUEST_METHOD_POST;
         %tmp.48 = dup %tmp.41;
         %tmp.49 = aputv %tmp.48 %tmp.43 %tmp.47;
         %tmp.51 = const :headers;
-        symbol [ headers %tmp.51 71 14 21 const ];
+        symbol [ headers %tmp.51 72 14 21 const ];
         %tmp.52 = newd 1;
         %tmp.53 = "Content-Type";
-        symbol [ Toybox %tmp.55 71 44 50 ];
+        symbol [ Toybox %tmp.55 72 44 50 ];
         %tmp.55 = getv ? :Toybox;
-        symbol [ Communications %tmp.56 71 51 65 ];
+        symbol [ Communications %tmp.56 72 51 65 ];
         %tmp.56 = getv %tmp.55 :Communications;
-        symbol [ REQUEST_CONTENT_TYPE_JSON %tmp.57 71 66 91 ];
+        symbol [ REQUEST_CONTENT_TYPE_JSON %tmp.57 72 66 91 ];
         %tmp.57 = getv %tmp.56 :REQUEST_CONTENT_TYPE_JSON;
         %tmp.58 = dup %tmp.52;
         %tmp.59 = aputv %tmp.58 %tmp.53 %tmp.57;
         %tmp.60 = dup %tmp.49;
         %tmp.61 = aputv %tmp.60 %tmp.51 %tmp.59;
         %tmp.63 = const :responseType;
-        symbol [ responseType %tmp.63 72 14 26 const ];
-        symbol [ Toybox %tmp.65 72 30 36 ];
+        symbol [ responseType %tmp.63 73 14 26 const ];
+        symbol [ Toybox %tmp.65 73 30 36 ];
         %tmp.65 = getv ? :Toybox;
-        symbol [ Communications %tmp.66 72 37 51 ];
+        symbol [ Communications %tmp.66 73 37 51 ];
         %tmp.66 = getv %tmp.65 :Communications;
-        symbol [ HTTP_RESPONSE_CONTENT_TYPE_JSON %tmp.67 72 52 83 ];
+        symbol [ HTTP_RESPONSE_CONTENT_TYPE_JSON %tmp.67 73 52 83 ];
         %tmp.67 = getv %tmp.66 :HTTP_RESPONSE_CONTENT_TYPE_JSON;
         %tmp.68 = dup %tmp.61;
         %tmp.69 = aputv %tmp.68 %tmp.63 %tmp.67;
         %tmp.70 = self;
-        symbol [ method %tmp.71 73 12 18 ];
+        symbol [ method %tmp.71 74 12 18 ];
         %tmp.71 = getv function %tmp.70 :method;
         %tmp.73 = const :onLogFlushed;
-        symbol [ onLogFlushed %tmp.73 73 20 32 const ];
+        symbol [ onLogFlushed %tmp.73 74 20 32 const ];
         %tmp.74 = invoke %tmp.70 %tmp.71(%tmp.73);
         invoke %tmp.25 %tmp.26(%tmp.27, %tmp.40, %tmp.69, %tmp.74);
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_63_32_75_4_stop:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_64_32_76_4_stop:
     }
-    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 77; @symbol_functiondef = [onLogFlushed,77,13,25]; @symbol_param<0> = [responseCode,77,26,38]; @symbol_param<1> = [data,77,40,44]; ]
-    function onLogFlushed(responseCode, data) {
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_77_46_84_4_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 78 8 ]
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_78_8_83_8_if_stmt:
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 81; @symbol_functiondef = [refreshManifestMeta,81,13,32]; ]
+    function refreshManifestMeta() {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_81_35_90_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 82 8 ]
+        [ "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_81_35_90_4_start" "_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_81_35_90_4_stop" ]
+        %url.1 = local;
+        symbol [ url %url.1 82 12 15 ];
+        symbol [ WatchServer %tmp.2 82 18 29 ];
+        %tmp.2 = getv ? :WatchServer;
+        symbol [ manifestUrl %tmp.3 82 30 41 ];
+        %tmp.3 = getv function %tmp.2 :manifestUrl;
+        %tmp.4 = invoke %tmp.2 %tmp.3();
+        lputv %url.1 %tmp.4;
+        symbol [ url %url.1 82 12 15 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 83 8 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_83_8_83_35_if_stmt:
+        %tmp.5 = lgetv %url.1;
+        symbol [ url %tmp.5 83 12 15 ];
+        %tmp.6 = null;
+        %tmp.7 = eq %tmp.5 %tmp.6;
+        bf %tmp.7 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_83_8_83_35_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_83_8_83_35_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_83_25_83_35_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 83 27 ]
+        ret ?;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_83_25_83_35_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_83_8_83_35_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_83_8_83_35_if_end:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 84 8 ]
+        symbol [ Toybox %tmp.9 84 8 14 ];
+        %tmp.9 = getv ? :Toybox;
+        symbol [ Communications %tmp.10 84 15 29 ];
+        %tmp.10 = getv %tmp.9 :Communications;
+        symbol [ makeWebRequest %tmp.11 84 30 44 ];
+        %tmp.11 = getv function %tmp.10 :makeWebRequest;
+        %tmp.12 = lgetv %url.1;
+        symbol [ url %tmp.12 85 12 15 ];
+        %tmp.13 = null;
+        %tmp.14 = newd 2;
+        %tmp.16 = const :method;
+        symbol [ method %tmp.16 86 14 20 const ];
+        symbol [ Toybox %tmp.18 86 24 30 ];
+        %tmp.18 = getv ? :Toybox;
+        symbol [ Communications %tmp.19 86 31 45 ];
+        %tmp.19 = getv %tmp.18 :Communications;
+        symbol [ HTTP_REQUEST_METHOD_GET %tmp.20 86 46 69 ];
+        %tmp.20 = getv %tmp.19 :HTTP_REQUEST_METHOD_GET;
+        %tmp.21 = dup %tmp.14;
+        %tmp.22 = aputv %tmp.21 %tmp.16 %tmp.20;
+        %tmp.24 = const :responseType;
+        symbol [ responseType %tmp.24 87 14 26 const ];
+        symbol [ Toybox %tmp.26 87 30 36 ];
+        %tmp.26 = getv ? :Toybox;
+        symbol [ Communications %tmp.27 87 37 51 ];
+        %tmp.27 = getv %tmp.26 :Communications;
+        symbol [ HTTP_RESPONSE_CONTENT_TYPE_JSON %tmp.28 87 52 83 ];
+        %tmp.28 = getv %tmp.27 :HTTP_RESPONSE_CONTENT_TYPE_JSON;
+        %tmp.29 = dup %tmp.22;
+        %tmp.30 = aputv %tmp.29 %tmp.24 %tmp.28;
+        %tmp.31 = self;
+        symbol [ method %tmp.32 88 12 18 ];
+        %tmp.32 = getv function %tmp.31 :method;
+        %tmp.34 = const :onManifestMeta;
+        symbol [ onManifestMeta %tmp.34 88 20 34 const ];
+        %tmp.35 = invoke %tmp.31 %tmp.32(%tmp.34);
+        invoke %tmp.10 %tmp.11(%tmp.12, %tmp.13, %tmp.30, %tmp.35);
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_81_35_90_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 92; @symbol_functiondef = [onManifestMeta,92,13,27]; @symbol_param<0> = [responseCode,92,28,40]; @symbol_param<1> = [data,92,42,46]; ]
+    function onManifestMeta(responseCode, data) {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_92_48_97_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 93 8 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_93_8_93_104_if_stmt:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_93_12_93_91_begin:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_93_12_93_43_begin:
         %tmp.1 = lgetv %responseCode;
-        symbol [ responseCode %tmp.1 78 12 24 ];
+        symbol [ responseCode %tmp.1 93 12 24 ];
+        %tmp.2 = 200;
+        %tmp.3 = ne %tmp.1 %tmp.2;
+        bt %tmp.3 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_93_8_93_104_if_true;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_93_35_93_43_false:
+        %tmp.4 = lgetv %data;
+        symbol [ data %tmp.4 93 35 39 ];
+        %tmp.5 = null;
+        %tmp.6 = eq %tmp.4 %tmp.5;
+        push %tmp.6;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_93_35_93_43_end:
+        %tmp.7 = phi [%tmp.3 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_93_12_93_43_begin] [%tmp.6 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_93_35_93_43_false] [%tmp.7 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_93_35_93_43_end];
+        bt %tmp.7 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_93_8_93_104_if_true;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_93_51_93_91_false:
+        %tmp.8 = lgetv %data;
+        symbol [ data %tmp.8 93 53 57 ];
+        %tmp.9 = as %tmp.8 { (!Null) };
+        symbol [ Toybox %tmp.11 93 69 75 ];
+        %tmp.11 = getv ? :Toybox;
+        symbol [ Lang %tmp.12 93 76 80 ];
+        %tmp.12 = getv %tmp.11 :Lang;
+        symbol [ Dictionary %tmp.13 93 81 91 ];
+        %tmp.13 = getv %tmp.12 :Dictionary;
+        %tmp.14 = isa %tmp.9 %tmp.13;
+        %tmp.15 = not %tmp.14;
+        push %tmp.15;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_93_51_93_91_end:
+        %tmp.16 = phi [%tmp.7 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_93_12_93_91_begin] [%tmp.15 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_93_51_93_91_false] [%tmp.16 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_93_51_93_91_end];
+        bf %tmp.16 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_93_8_93_104_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_93_8_93_104_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_93_94_93_104_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 93 96 ]
+        ret ?;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_93_94_93_104_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_93_8_93_104_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_93_8_93_104_if_end:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 94 8 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_94_8_94_79_if_stmt:
+        %tmp.17 = lgetv %data;
+        symbol [ data %tmp.17 94 12 16 ];
+        %tmp.18 = "pairs";
+        %tmp.19 = agetv %tmp.17 %tmp.18;
+        %tmp.20 = null;
+        %tmp.21 = ne %tmp.19 %tmp.20;
+        bf %tmp.21 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_94_8_94_79_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_94_8_94_79_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_94_35_94_79_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 94 37 ]
+        symbol [ Storage %tmp.22 94 37 44 ];
+        %tmp.22 = getm $.Toybox.Application.Storage;
+        symbol [ setValue %tmp.23 94 45 53 ];
+        %tmp.23 = getv function %tmp.22 :setValue;
+        %tmp.24 = "pairs";
+        %tmp.25 = lgetv %data;
+        symbol [ data %tmp.25 94 63 67 ];
+        %tmp.26 = "pairs";
+        %tmp.27 = agetv %tmp.25 %tmp.26;
+        invoke %tmp.22 %tmp.23(%tmp.24, %tmp.27);
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_94_35_94_79_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_94_8_94_79_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_94_8_94_79_if_end:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 95 8 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_95_8_95_82_if_stmt:
+        %tmp.28 = lgetv %data;
+        symbol [ data %tmp.28 95 12 16 ];
+        %tmp.29 = "logUrl";
+        %tmp.30 = agetv %tmp.28 %tmp.29;
+        %tmp.31 = null;
+        %tmp.32 = ne %tmp.30 %tmp.31;
+        bf %tmp.32 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_95_8_95_82_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_95_8_95_82_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_95_36_95_82_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 95 38 ]
+        symbol [ Storage %tmp.33 95 38 45 ];
+        %tmp.33 = getm $.Toybox.Application.Storage;
+        symbol [ setValue %tmp.34 95 46 54 ];
+        %tmp.34 = getv function %tmp.33 :setValue;
+        %tmp.35 = "logUrl";
+        %tmp.36 = lgetv %data;
+        symbol [ data %tmp.36 95 65 69 ];
+        %tmp.37 = "logUrl";
+        %tmp.38 = agetv %tmp.36 %tmp.37;
+        invoke %tmp.33 %tmp.34(%tmp.35, %tmp.38);
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_95_36_95_82_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_95_8_95_82_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_95_8_95_82_if_end:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 96 8 ]
+        symbol [ Toybox %tmp.40 96 8 14 ];
+        %tmp.40 = getv ? :Toybox;
+        symbol [ System %tmp.41 96 15 21 ];
+        %tmp.41 = getv %tmp.40 :System;
+        symbol [ println %tmp.42 96 22 29 ];
+        %tmp.42 = getv function %tmp.41 :println;
+        %tmp.43 = "AWDJ meta | refreshed pairs=";
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_96_64_96_111_begin:
+        %tmp.44 = lgetv %data;
+        symbol [ data %tmp.44 96 64 68 ];
+        %tmp.45 = "pairs";
+        %tmp.46 = agetv %tmp.44 %tmp.45;
+        %tmp.47 = null;
+        %tmp.48 = ne %tmp.46 %tmp.47;
+        bf %tmp.48 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_96_64_96_111_else_false;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_96_64_96_111_true:
+        %tmp.49 = lgetv %data;
+        symbol [ data %tmp.49 96 88 92 ];
+        %tmp.50 = "pairs";
+        %tmp.51 = agetv %tmp.49 %tmp.50;
+        symbol [ size %tmp.52 96 102 106 ];
+        %tmp.52 = getv function %tmp.51 :size;
+        %tmp.53 = invoke %tmp.51 %tmp.52();
+        push %tmp.53;
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_96_64_96_111_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_96_64_96_111_else_false:
+        %tmp.54 = 0;
+        push %tmp.54;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_96_64_96_111_end:
+        %tmp.55 = phi [%tmp.48 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_96_64_96_111_begin] [%tmp.53 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_96_64_96_111_true] [%tmp.54 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_96_64_96_111_else_false] [%tmp.55 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_96_64_96_111_end];
+        %tmp.56 = add %tmp.43 %tmp.55;
+        invoke %tmp.41 %tmp.42(%tmp.56);
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_92_48_97_4_stop:
+    }
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 99; @symbol_functiondef = [onLogFlushed,99,13,25]; @symbol_param<0> = [responseCode,99,26,38]; @symbol_param<1> = [data,99,40,44]; ]
+    function onLogFlushed(responseCode, data) {
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_99_46_106_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 100 8 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_100_8_105_8_if_stmt:
+        %tmp.1 = lgetv %responseCode;
+        symbol [ responseCode %tmp.1 100 12 24 ];
         %tmp.2 = 201;
         %tmp.3 = eq %tmp.1 %tmp.2;
-        bf %tmp.3 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_78_8_83_8_if_else_false;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_78_8_83_8_if_true:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_78_33_81_8_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 79 12 ]
-        symbol [ Storage %tmp.4 79 12 19 ];
+        bf %tmp.3 @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_100_8_105_8_if_else_false;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_100_8_105_8_if_true:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_100_33_103_8_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 101 12 ]
+        symbol [ Storage %tmp.4 101 12 19 ];
         %tmp.4 = getm $.Toybox.Application.Storage;
-        symbol [ setValue %tmp.5 79 20 28 ];
+        symbol [ setValue %tmp.5 101 20 28 ];
         %tmp.5 = getv function %tmp.4 :setValue;
         %tmp.6 = "declog";
         %tmp.7 = newa 0;
         invoke %tmp.4 %tmp.5(%tmp.6, %tmp.7);
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 80 12 ]
-        symbol [ Toybox %tmp.9 80 12 18 ];
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 102 12 ]
+        symbol [ Toybox %tmp.9 102 12 18 ];
         %tmp.9 = getv ? :Toybox;
-        symbol [ System %tmp.10 80 19 25 ];
+        symbol [ System %tmp.10 102 19 25 ];
         %tmp.10 = getv %tmp.9 :System;
-        symbol [ println %tmp.11 80 26 33 ];
+        symbol [ println %tmp.11 102 26 33 ];
         %tmp.11 = getv function %tmp.10 :println;
         %tmp.12 = "AWDJ log | flushed to relay";
         invoke %tmp.10 %tmp.11(%tmp.12);
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_78_33_81_8_stop:
-        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_78_8_83_8_if_end;
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_78_8_83_8_if_else_false:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_81_15_83_8_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 82 12 ]
-        symbol [ Toybox %tmp.14 82 12 18 ];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_100_33_103_8_stop:
+        goto @_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_100_8_105_8_if_end;
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_100_8_105_8_if_else_false:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_103_15_105_8_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 104 12 ]
+        symbol [ Toybox %tmp.14 104 12 18 ];
         %tmp.14 = getv ? :Toybox;
-        symbol [ System %tmp.15 82 19 25 ];
+        symbol [ System %tmp.15 104 19 25 ];
         %tmp.15 = getv %tmp.14 :System;
-        symbol [ println %tmp.16 82 26 33 ];
+        symbol [ println %tmp.16 104 26 33 ];
         %tmp.16 = getv function %tmp.15 :println;
         %tmp.17 = "AWDJ log | flush failed code=";
         %tmp.18 = lgetv %responseCode;
-        symbol [ responseCode %tmp.18 82 68 80 ];
+        symbol [ responseCode %tmp.18 104 68 80 ];
         %tmp.19 = add %tmp.17 %tmp.18;
         %tmp.20 = " (kept)";
         %tmp.21 = add %tmp.19 %tmp.20;
         invoke %tmp.15 %tmp.16(%tmp.21);
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_81_15_83_8_stop:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_78_8_83_8_if_end:
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_77_46_84_4_stop:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_103_15_105_8_stop:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_100_8_105_8_if_end:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_99_46_106_4_stop:
     }
-    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 86; @symbol_functiondef = [onUpdate,86,13,21]; @symbol_param<0> = [dc,86,22,24]; ]
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 108; @symbol_functiondef = [onUpdate,108,13,21]; @symbol_param<0> = [dc,108,22,24]; ]
     function onUpdate(dc) {
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_86_26_92_4_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 87 8 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_108_26_114_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 109 8 ]
         %tmp.1 = lgetv %dc;
-        symbol [ dc %tmp.1 87 8 10 ];
-        symbol [ setColor %tmp.2 87 11 19 ];
+        symbol [ dc %tmp.1 109 8 10 ];
+        symbol [ setColor %tmp.2 109 11 19 ];
         %tmp.2 = getv function %tmp.1 :setColor;
-        symbol [ Graphics %tmp.3 87 20 28 ];
+        symbol [ Graphics %tmp.3 109 20 28 ];
         %tmp.3 = getm $.Toybox.Graphics;
-        symbol [ COLOR_BLACK %tmp.4 87 29 40 ];
+        symbol [ COLOR_BLACK %tmp.4 109 29 40 ];
         %tmp.4 = getv %tmp.3 :COLOR_BLACK;
-        symbol [ Graphics %tmp.5 87 42 50 ];
+        symbol [ Graphics %tmp.5 109 42 50 ];
         %tmp.5 = getm $.Toybox.Graphics;
-        symbol [ COLOR_BLACK %tmp.6 87 51 62 ];
+        symbol [ COLOR_BLACK %tmp.6 109 51 62 ];
         %tmp.6 = getv %tmp.5 :COLOR_BLACK;
         invoke %tmp.1 %tmp.2(%tmp.4, %tmp.6);
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 88 8 ]
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 110 8 ]
         %tmp.7 = lgetv %dc;
-        symbol [ dc %tmp.7 88 8 10 ];
-        symbol [ clear %tmp.8 88 11 16 ];
+        symbol [ dc %tmp.7 110 8 10 ];
+        symbol [ clear %tmp.8 110 11 16 ];
         %tmp.8 = getv function %tmp.7 :clear;
         invoke %tmp.7 %tmp.8();
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 89 8 ]
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 111 8 ]
         %tmp.9 = lgetv %dc;
-        symbol [ dc %tmp.9 89 8 10 ];
-        symbol [ setColor %tmp.10 89 11 19 ];
+        symbol [ dc %tmp.9 111 8 10 ];
+        symbol [ setColor %tmp.10 111 11 19 ];
         %tmp.10 = getv function %tmp.9 :setColor;
-        symbol [ Graphics %tmp.11 89 20 28 ];
+        symbol [ Graphics %tmp.11 111 20 28 ];
         %tmp.11 = getm $.Toybox.Graphics;
-        symbol [ COLOR_WHITE %tmp.12 89 29 40 ];
+        symbol [ COLOR_WHITE %tmp.12 111 29 40 ];
         %tmp.12 = getv %tmp.11 :COLOR_WHITE;
-        symbol [ Graphics %tmp.13 89 42 50 ];
+        symbol [ Graphics %tmp.13 111 42 50 ];
         %tmp.13 = getm $.Toybox.Graphics;
-        symbol [ COLOR_BLACK %tmp.14 89 51 62 ];
+        symbol [ COLOR_BLACK %tmp.14 111 51 62 ];
         %tmp.14 = getv %tmp.13 :COLOR_BLACK;
         invoke %tmp.9 %tmp.10(%tmp.12, %tmp.14);
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 90 8 ]
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 112 8 ]
         %tmp.15 = lgetv %dc;
-        symbol [ dc %tmp.15 90 8 10 ];
-        symbol [ drawText %tmp.16 90 11 19 ];
+        symbol [ dc %tmp.15 112 8 10 ];
+        symbol [ drawText %tmp.16 112 11 19 ];
         %tmp.16 = getv function %tmp.15 :drawText;
         %tmp.17 = lgetv %dc;
-        symbol [ dc %tmp.17 90 20 22 ];
-        symbol [ getWidth %tmp.18 90 23 31 ];
+        symbol [ dc %tmp.17 112 20 22 ];
+        symbol [ getWidth %tmp.18 112 23 31 ];
         %tmp.18 = getv function %tmp.17 :getWidth;
         %tmp.19 = invoke %tmp.17 %tmp.18();
         %tmp.20 = 2;
         %tmp.21 = div %tmp.19 %tmp.20;
         %tmp.22 = lgetv %dc;
-        symbol [ dc %tmp.22 90 39 41 ];
-        symbol [ getHeight %tmp.23 90 42 51 ];
+        symbol [ dc %tmp.22 112 39 41 ];
+        symbol [ getHeight %tmp.23 112 42 51 ];
         %tmp.23 = getv function %tmp.22 :getHeight;
         %tmp.24 = invoke %tmp.22 %tmp.23();
         %tmp.25 = 2;
         %tmp.26 = div %tmp.24 %tmp.25;
-        symbol [ Graphics %tmp.27 90 59 67 ];
+        symbol [ Graphics %tmp.27 112 59 67 ];
         %tmp.27 = getm $.Toybox.Graphics;
-        symbol [ FONT_SMALL %tmp.28 90 68 78 ];
+        symbol [ FONT_SMALL %tmp.28 112 68 78 ];
         %tmp.28 = getv %tmp.27 :FONT_SMALL;
-        symbol [ mText %tmp.30 90 80 85 ];
+        symbol [ mText %tmp.30 112 80 85 ];
         %tmp.30 = getv ? :mText;
-        symbol [ Graphics %tmp.31 91 12 20 ];
+        symbol [ Graphics %tmp.31 113 12 20 ];
         %tmp.31 = getm $.Toybox.Graphics;
-        symbol [ TEXT_JUSTIFY_CENTER %tmp.32 91 21 40 ];
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.32 113 21 40 ];
         %tmp.32 = getv %tmp.31 :TEXT_JUSTIFY_CENTER;
-        symbol [ Graphics %tmp.33 91 43 51 ];
+        symbol [ Graphics %tmp.33 113 43 51 ];
         %tmp.33 = getm $.Toybox.Graphics;
-        symbol [ TEXT_JUSTIFY_VCENTER %tmp.34 91 52 72 ];
+        symbol [ TEXT_JUSTIFY_VCENTER %tmp.34 113 52 72 ];
         %tmp.34 = getv %tmp.33 :TEXT_JUSTIFY_VCENTER;
         %tmp.35 = bitor %tmp.32 %tmp.34;
         invoke %tmp.15 %tmp.16(%tmp.21, %tmp.26, %tmp.28, %tmp.30, %tmp.35);
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_86_26_92_4_stop:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_108_26_114_4_stop:
     }
 }
-[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 95; @symbol_classdef = [WatchSyncView,95,6,19]; @symbol_extends<0> = [WatchUi,95,28,35]; @symbol_extends<1> = [View,95,36,40]; ]
+[ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 117; @symbol_classdef = [WatchSyncView,117,6,19]; @symbol_extends<0> = [WatchUi,117,28,35]; @symbol_extends<1> = [View,117,36,40]; ]
 class WatchSyncView extends WatchUi.View {
-    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 95; ]
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 117; ]
     <init> {
     }
-    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 95; ]
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 117; ]
     static
     <init> {
     }
-    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 97; @symbol_functiondef = [initialize,97,13,23]; ]
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 119; @symbol_functiondef = [initialize,119,13,23]; ]
     function initialize() as Void {
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_97_26_99_4_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 98 8 ]
-        symbol [ View %tmp.2 98 8 12 ];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_119_26_121_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 120 8 ]
+        symbol [ View %tmp.2 120 8 12 ];
         %tmp.2 = getv ? :View;
-        symbol [ initialize %tmp.3 98 13 23 ];
+        symbol [ initialize %tmp.3 120 13 23 ];
         %tmp.3 = getv function %tmp.2 :initialize;
         invoke %tmp.2 %tmp.3();
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_97_26_99_4_stop:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_119_26_121_4_stop:
     }
-    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 101; @symbol_functiondef = [onShow,101,13,19]; ]
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 123; @symbol_functiondef = [onShow,123,13,19]; ]
     function onShow() {
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_101_22_103_4_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 102 8 ]
-        symbol [ Media %tmp.1 102 8 13 ];
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_123_22_125_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 124 8 ]
+        symbol [ Media %tmp.1 124 8 13 ];
         %tmp.1 = getm $.Toybox.Media;
-        symbol [ startSync %tmp.2 102 14 23 ];
+        symbol [ startSync %tmp.2 124 14 23 ];
         %tmp.2 = getv function %tmp.1 :startSync;
         invoke %tmp.1 %tmp.2();
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_101_22_103_4_stop:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_123_22_125_4_stop:
     }
-    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 105; @symbol_functiondef = [onUpdate,105,13,21]; @symbol_param<0> = [dc,105,22,24]; ]
+    [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 127; @symbol_functiondef = [onUpdate,127,13,21]; @symbol_param<0> = [dc,127,22,24]; ]
     function onUpdate(dc) {
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_105_26_112_4_start:
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 106 8 ]
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_127_26_134_4_start:
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 128 8 ]
         %tmp.1 = lgetv %dc;
-        symbol [ dc %tmp.1 106 8 10 ];
-        symbol [ setColor %tmp.2 106 11 19 ];
+        symbol [ dc %tmp.1 128 8 10 ];
+        symbol [ setColor %tmp.2 128 11 19 ];
         %tmp.2 = getv function %tmp.1 :setColor;
-        symbol [ Graphics %tmp.3 106 20 28 ];
+        symbol [ Graphics %tmp.3 128 20 28 ];
         %tmp.3 = getm $.Toybox.Graphics;
-        symbol [ COLOR_BLACK %tmp.4 106 29 40 ];
+        symbol [ COLOR_BLACK %tmp.4 128 29 40 ];
         %tmp.4 = getv %tmp.3 :COLOR_BLACK;
-        symbol [ Graphics %tmp.5 106 42 50 ];
+        symbol [ Graphics %tmp.5 128 42 50 ];
         %tmp.5 = getm $.Toybox.Graphics;
-        symbol [ COLOR_BLACK %tmp.6 106 51 62 ];
+        symbol [ COLOR_BLACK %tmp.6 128 51 62 ];
         %tmp.6 = getv %tmp.5 :COLOR_BLACK;
         invoke %tmp.1 %tmp.2(%tmp.4, %tmp.6);
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 107 8 ]
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 129 8 ]
         %tmp.7 = lgetv %dc;
-        symbol [ dc %tmp.7 107 8 10 ];
-        symbol [ clear %tmp.8 107 11 16 ];
+        symbol [ dc %tmp.7 129 8 10 ];
+        symbol [ clear %tmp.8 129 11 16 ];
         %tmp.8 = getv function %tmp.7 :clear;
         invoke %tmp.7 %tmp.8();
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 108 8 ]
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 130 8 ]
         %tmp.9 = lgetv %dc;
-        symbol [ dc %tmp.9 108 8 10 ];
-        symbol [ setColor %tmp.10 108 11 19 ];
+        symbol [ dc %tmp.9 130 8 10 ];
+        symbol [ setColor %tmp.10 130 11 19 ];
         %tmp.10 = getv function %tmp.9 :setColor;
-        symbol [ Graphics %tmp.11 108 20 28 ];
+        symbol [ Graphics %tmp.11 130 20 28 ];
         %tmp.11 = getm $.Toybox.Graphics;
-        symbol [ COLOR_WHITE %tmp.12 108 29 40 ];
+        symbol [ COLOR_WHITE %tmp.12 130 29 40 ];
         %tmp.12 = getv %tmp.11 :COLOR_WHITE;
-        symbol [ Graphics %tmp.13 108 42 50 ];
+        symbol [ Graphics %tmp.13 130 42 50 ];
         %tmp.13 = getm $.Toybox.Graphics;
-        symbol [ COLOR_BLACK %tmp.14 108 51 62 ];
+        symbol [ COLOR_BLACK %tmp.14 130 51 62 ];
         %tmp.14 = getv %tmp.13 :COLOR_BLACK;
         invoke %tmp.9 %tmp.10(%tmp.12, %tmp.14);
-[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 109 8 ]
+[ "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc" 131 8 ]
         %tmp.15 = lgetv %dc;
-        symbol [ dc %tmp.15 109 8 10 ];
-        symbol [ drawText %tmp.16 109 11 19 ];
+        symbol [ dc %tmp.15 131 8 10 ];
+        symbol [ drawText %tmp.16 131 11 19 ];
         %tmp.16 = getv function %tmp.15 :drawText;
         %tmp.17 = lgetv %dc;
-        symbol [ dc %tmp.17 109 20 22 ];
-        symbol [ getWidth %tmp.18 109 23 31 ];
+        symbol [ dc %tmp.17 131 20 22 ];
+        symbol [ getWidth %tmp.18 131 23 31 ];
         %tmp.18 = getv function %tmp.17 :getWidth;
         %tmp.19 = invoke %tmp.17 %tmp.18();
         %tmp.20 = 2;
         %tmp.21 = div %tmp.19 %tmp.20;
         %tmp.22 = lgetv %dc;
-        symbol [ dc %tmp.22 109 39 41 ];
-        symbol [ getHeight %tmp.23 109 42 51 ];
+        symbol [ dc %tmp.22 131 39 41 ];
+        symbol [ getHeight %tmp.23 131 42 51 ];
         %tmp.23 = getv function %tmp.22 :getHeight;
         %tmp.24 = invoke %tmp.22 %tmp.23();
         %tmp.25 = 2;
         %tmp.26 = div %tmp.24 %tmp.25;
-        symbol [ Graphics %tmp.27 109 59 67 ];
+        symbol [ Graphics %tmp.27 131 59 67 ];
         %tmp.27 = getm $.Toybox.Graphics;
-        symbol [ FONT_SMALL %tmp.28 109 68 78 ];
+        symbol [ FONT_SMALL %tmp.28 131 68 78 ];
         %tmp.28 = getv %tmp.27 :FONT_SMALL;
         %tmp.29 = "AWDJ crate sync\nMac dev server must be up";
-        symbol [ Graphics %tmp.30 111 12 20 ];
+        symbol [ Graphics %tmp.30 133 12 20 ];
         %tmp.30 = getm $.Toybox.Graphics;
-        symbol [ TEXT_JUSTIFY_CENTER %tmp.31 111 21 40 ];
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.31 133 21 40 ];
         %tmp.31 = getv %tmp.30 :TEXT_JUSTIFY_CENTER;
-        symbol [ Graphics %tmp.32 111 43 51 ];
+        symbol [ Graphics %tmp.32 133 43 51 ];
         %tmp.32 = getm $.Toybox.Graphics;
-        symbol [ TEXT_JUSTIFY_VCENTER %tmp.33 111 52 72 ];
+        symbol [ TEXT_JUSTIFY_VCENTER %tmp.33 133 52 72 ];
         %tmp.33 = getv %tmp.32 :TEXT_JUSTIFY_VCENTER;
         %tmp.34 = bitor %tmp.31 %tmp.33;
         invoke %tmp.15 %tmp.16(%tmp.21, %tmp.26, %tmp.28, %tmp.29, %tmp.34);
-_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_105_26_112_4_stop:
+_Users_ethanroberts_ai_workout_dj_garmin_awdj_watch_source_WatchViews_mc_127_26_134_4_stop:
     }
 }
 [ @file = "/Users/ethanroberts/ai-workout-dj/garmin/awdj-watch/source/WatchViews.mc"; @line = 4; ]
