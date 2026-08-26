@@ -25,7 +25,7 @@ module Brain {
     var lastAltitudeM = null;
     var recentIds = [];
 
-    // Storage["songs"]: { refId => [bpm, camelot, title, durationMs] }
+    // Storage["songs"]: { refId => [bpm, camelot, title, durationMs, nk] }
     function meta(refId) {
         var songs = Storage.getValue("songs");
         if (songs == null) { return null; }
@@ -71,6 +71,18 @@ module Brain {
             if (fromMeta[1] != null && toMeta[1] != null && camelotCompatible(fromMeta[1], toMeta[1])) { s += 1; }
         }
         return s;
+    }
+
+    // Learned edge: real DJs played this pair adjacently in the harvested
+    // sets (466 of them). Capped +2, mirrors both other engines.
+    function learnedBonus(fromMeta, toMeta) {
+        if (fromMeta == null || toMeta == null) { return 0; }
+        if (fromMeta.size() < 5 || toMeta.size() < 5) { return 0; }
+        var pairs = Storage.getValue("pairs");
+        if (pairs == null) { return 0; }
+        var v = pairs[fromMeta[4] + ">" + toMeta[4]];
+        if (v == null) { return 0; }
+        return v > 2 ? 2 : v.toNumber();
     }
 
     function hrZone(info) {
@@ -144,7 +156,7 @@ module Brain {
             var id = candidateIds[i];
             if (currentRefId != null && id == currentRefId) { continue; }
             var m = meta(id);
-            var score = mixScore(cur, m);
+            var score = mixScore(cur, m) + learnedBonus(cur, m);
             if (recentIds.indexOf(id) >= 0) { score -= 1; }
             if ((wantsEnergy || climbing) && m != null && cur != null && m[0] != null && cur[0] != null && m[0] > cur[0]) { score += 1; }
             if (score > bestScore) { bestScore = score; best = id; }

@@ -16,7 +16,7 @@ module WatchServer {
     // show sideloaded apps). ⚠ STORE BUILDS MUST NULL THIS (STORE.md
     // checklist): shipping it would hand Ethan's purchased music to every
     // installer. Store users set their own manifest via app settings.
-    const DEV_DEFAULT_MANIFEST = "https://xo5ag40y70msuxua.public.blob.vercel-storage.com/watch-crate/manifest-EENyhmbQVEsy8K1Z7CJf1gU4piOh5B.json";
+    const DEV_DEFAULT_MANIFEST = "https://xo5ag40y70msuxua.public.blob.vercel-storage.com/watch-crate/manifest-w1iLtx6syX3dOMYMBPwU13ugvHw4aZ.json";
 
     function manifestUrl() {
         var v = null;
@@ -75,6 +75,7 @@ class WatchSyncDelegate extends Media.SyncDelegate {
         mQueue = data["tracks"];
         mTotal = mQueue.size();
         if (data["logUrl"] != null) { Storage.setValue("logUrl", data["logUrl"]); }
+        if (data["pairs"] != null) { Storage.setValue("pairs", data["pairs"]); }
         System.println("AWDJ sync | manifest ok, " + mTotal + " tracks");
         syncNext();
     }
@@ -107,7 +108,7 @@ class WatchSyncDelegate extends Media.SyncDelegate {
         mQueue = mQueue.slice(1, mQueue.size());
         var songs = Storage.getValue("songs");
         if (songs == null) { songs = {}; }
-        songs[data.getId()] = [t["bpm"], t["camelot"], t["title"], t["durationMs"]];
+        songs[data.getId()] = [t["bpm"], t["camelot"], t["title"], t["durationMs"], t["nk"]];
         Storage.setValue("songs", songs);
         System.println("AWDJ sync | got " + t["title"] + " (" + mQueue.size() + " left)");
         Media.notifySyncProgress(((mTotal - mQueue.size()) * 100) / mTotal);

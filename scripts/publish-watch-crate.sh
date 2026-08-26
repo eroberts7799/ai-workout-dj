@@ -14,17 +14,48 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 LIMIT="${1:-15}"
-MUSIC="${AWDJ_MUSIC_DIR:-$HOME/Downloads/awdj-music}"
-CACHE=data/watch-crate-urls.json
+# Crate selection: default = Ethan's purchased crate; CRATE=demo publishes
+# the royalty-free demo library (Pixabay - redistributable) that the STORE
+# build uses as its zero-config default.
+if [ "${CRATE:-}" = "demo" ]; then
+  MUSIC="analysis/demo-music"
+  ANALYSIS="analysis/demo-analysis.json"
+  KEYS="analysis/demo-keys.json"
+  PREFIX="demo-crate"
+  CACHE=data/demo-crate-urls.json
+else
+  MUSIC="${AWDJ_MUSIC_DIR:-$HOME/Downloads/awdj-music}"
+  ANALYSIS="analysis/crate-analysis.json"
+  KEYS="analysis/crate-keys.json"
+  PREFIX="watch-crate"
+  CACHE=data/watch-crate-urls.json
+fi
 export $(grep BLOB_READ_WRITE_TOKEN relay/.env.local | tr -d '"')
 [ -f "$CACHE" ] || echo '{}' > "$CACHE"
 
-python3 - "$LIMIT" "$MUSIC" "$CACHE" << 'EOF'
+python3 - "$LIMIT" "$MUSIC" "$CACHE" "$ANALYSIS" "$KEYS" "$PREFIX" << 'EOF'
 import json, subprocess, sys, urllib.parse
-limit, music_dir, cache_path = int(sys.argv[1]), sys.argv[2], sys.argv[3]
-import os
-analysis = json.load(open('analysis/crate-analysis.json'))['analysis']
-keys = json.load(open('analysis/crate-keys.json'))
+limit, music_dir, cache_path, analysis_path, keys_path, prefix = (
+    int(sys.argv[1]), sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6])
+import os, re
+music_dir = os.path.abspath(music_dir)
+raw = json.load(open(analysis_path))
+analysis = raw.get('analysis', raw) if isinstance(raw, dict) else raw
+try:
+    keys = json.load(open(keys_path))
+except FileNotFoundError:
+    keys = {}
+
+def nk(e):
+    # Mirrors the TS engine's normKey: words of "artists name".
+    words = re.findall(r'[a-z0-9]+', f"{e.get('artist','')} {e.get('title') or e['sourceFile']}".lower())
+    return ' '.join(words)
+
+def display_title(e):
+    t = e.get('title') or e['sourceFile']
+    # Demo files are named like "house-chill-reel-570198" - humanize.
+    t = re.sub(r'-\d{4,}$', '', t)
+    return t.replace('-', ' ').title() if e.get('artist', '') == '' else t
 cache = json.load(open(cache_path))
 tracks = []
 picked = [e for e in analysis if e.get('bpm') and os.path.exists(os.path.join(music_dir, e['sourceFile']))][:limit]
@@ -34,7 +65,7 @@ for i, e in enumerate(picked):
         print(f"  uploading {i+1}/{len(picked)}: {f}")
         out = subprocess.run(
             ['vercel', 'blob', 'put', os.path.join(music_dir, f),
-             '--pathname', f'watch-crate/{f}', '--content-type', 'audio/mpeg', '--add-random-suffix', 'true', '--access', 'public'],
+             '--pathname', f'{prefix}/{f}', '--content-type', 'audio/mpeg', '--add-random-suffix', 'true', '--access', 'public'],
             capture_output=True, text=True, cwd='relay')
         url = next((w for w in (out.stdout + ' ' + out.stderr).split() if w.startswith('https://')), None)
         if not url:
@@ -45,17 +76,29 @@ for i, e in enumerate(picked):
         print(f"  cached    {i+1}/{len(picked)}: {f}")
     tracks.append({
         'url': cache[f],
-        'title': e.get('title', f),
+        'title': display_title(e),
         'artist': e.get('artist', ''),
         'bpm': e['bpm'],
         'camelot': e.get('camelot') or keys.get(f, {}).get('camelot'),
         'durationMs': e.get('durationMs'),
+        'nk': nk(e),
     })
-manifest = {'tracks': tracks, 'logUrl': 'https://awdj-relay.vercel.app/api/sessions?k=awdj-7g2k9x'}
+# Learned pairs, filtered to THIS crate: what real DJs played adjacently
+# among these exact tracks. Tiny by construction (watch Storage is 8KB/value).
+try:
+    weights = json.load(open('analysis/selection-weights.json'))
+    all_pairs = weights.get('pairs', weights)
+except FileNotFoundError:
+    all_pairs = {}
+nks = {t['nk'] for t in tracks}
+pairs = {k: v for k, v in all_pairs.items()
+         if '>' in k and k.split('>')[0] in nks and k.split('>')[1] in nks}
+print(f"learned pairs shipped: {len(pairs)}")
+manifest = {'tracks': tracks, 'pairs': pairs, 'logUrl': 'https://awdj-relay.vercel.app/api/sessions?k=awdj-7g2k9x'}
 open('/tmp/awdj-watch-manifest.json', 'w').write(json.dumps(manifest))
 out = subprocess.run(
     ['vercel', 'blob', 'put', '/tmp/awdj-watch-manifest.json',
-     '--pathname', 'watch-crate/manifest.json', '--content-type', 'application/json',
+     '--pathname', f'{prefix}/manifest.json', '--content-type', 'application/json',
      '--add-random-suffix', 'true', '--access', 'public'],
     capture_output=True, text=True, cwd='relay')
 url = next((w for w in (out.stdout + ' ' + out.stderr).split() if w.startswith('https://')), None)

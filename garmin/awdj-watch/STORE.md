@@ -4,9 +4,9 @@ The `.iq` is built (`AWDJ.iq`, both fr570 sizes). Submission is a browser
 flow with Ethan's Garmin login — ~15 minutes.
 
 ## PRE-SUBMISSION CHECKLIST (do not skip)
-- [ ] Null `DEV_DEFAULT_MANIFEST` in source/WatchSync.mc (set to `null`)
-  and rebuild the .iq — shipping Ethan's crate URL would distribute his
-  purchased music to every installer.
+- [ ] Build the .iq ONLY via ./build-store.sh — it swaps Ethan's crate
+  default for the royalty-free DEMO crate (installers hear music in
+  minute one; Ethan's purchased music never ships).
 
 ## Steps
 1. https://apps.garmin.com → sign in (same Garmin account as the watch) →
