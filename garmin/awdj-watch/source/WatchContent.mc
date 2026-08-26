@@ -81,16 +81,17 @@ class WatchContentIterator extends Media.ContentIterator {
 
     function getPlaybackProfile() {
         var profile = new Media.PlaybackProfile();
-        // No PREVIOUS — the Brain only picks forward, and its triangle
-        // doubled the play glyph (Ethan's "two play buttons"). Thumbs
-        // replace it: explicit taste votes from the wrist, straight into
-        // the flywheel. Thumbs-down also skips.
+        // Ethan's 4-slot spec (BACK is the physical button, not a slot):
+        // play/pause · next · volume · menu. No PREVIOUS (the Brain only
+        // picks forward — its triangle doubled the play glyph). LIBRARY
+        // opens AWDJ's own screen. Skips still log as the taste signal;
+        // explicit thumbs can return later as a setting.
         profile.playbackControls = [
             Media.PLAYBACK_CONTROL_PLAYBACK,
             Media.PLAYBACK_CONTROL_NEXT,
-            Media.PLAYBACK_CONTROL_THUMBS_UP_THUMBS_DOWN,
+            Media.PLAYBACK_CONTROL_VOLUME,
+            Media.PLAYBACK_CONTROL_LIBRARY,
         ];
-        profile.attemptSkipAfterThumbsDown = true;
         profile.requirePlaybackNotification = false;
         return profile;
     }
