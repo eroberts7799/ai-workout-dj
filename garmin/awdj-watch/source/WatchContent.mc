@@ -18,6 +18,17 @@ class WatchContentDelegate extends Media.ContentDelegate {
         return mIterator;
     }
 
+    // Explicit taste votes — the strongest signal the flywheel has.
+    function onThumbsUp(refId) {
+        var m = Brain.meta(refId);
+        Brain.record({"e" => "thumbsUp", "song" => m != null ? m[2] : "?"});
+    }
+
+    function onThumbsDown(refId) {
+        var m = Brain.meta(refId);
+        Brain.record({"e" => "thumbsDown", "song" => m != null ? m[2] : "?"});
+    }
+
     function resetContentIterator() {
         mIterator = new WatchContentIterator();
         return mIterator;
@@ -70,11 +81,16 @@ class WatchContentIterator extends Media.ContentIterator {
 
     function getPlaybackProfile() {
         var profile = new Media.PlaybackProfile();
+        // No PREVIOUS — the Brain only picks forward, and its triangle
+        // doubled the play glyph (Ethan's "two play buttons"). Thumbs
+        // replace it: explicit taste votes from the wrist, straight into
+        // the flywheel. Thumbs-down also skips.
         profile.playbackControls = [
             Media.PLAYBACK_CONTROL_PLAYBACK,
-            Media.PLAYBACK_CONTROL_PREVIOUS,
             Media.PLAYBACK_CONTROL_NEXT,
+            Media.PLAYBACK_CONTROL_THUMBS_UP_THUMBS_DOWN,
         ];
+        profile.attemptSkipAfterThumbsDown = true;
         profile.requirePlaybackNotification = false;
         return profile;
     }
