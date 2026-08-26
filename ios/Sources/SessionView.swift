@@ -233,6 +233,10 @@ struct SessionView: View {
     .onAppear {
       if profileName.isEmpty { showProfile = true }
       engine.restore()
+      Task {
+        await SpotifyLibrary.refreshTagTable()
+        if spotify.connected { await SpotifyLibrary.captureTasteSnapshot() }
+      }
       relay.onSample = { [weak engine] s in
         guard let engine else { return }
         engine.handleGarmin(event: s.event, timerMs: s.timerMs, receivedAt: s.receivedAt, armed: true)

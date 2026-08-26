@@ -22,31 +22,44 @@ enum SpotifyLibrary {
     return t.trimmingCharacters(in: .whitespaces)
   }
 
-  private static let tagTable: [String: [String: Double?]] = {
-    guard let url = Bundle.main.url(forResource: "track-tags", withExtension: "json"),
-          let data = try? Data(contentsOf: url),
-          let raw = try? JSONSerialization.jsonObject(with: data) as? [String: [String: Any]] else { return [:] }
-    var out: [String: [String: Double?]] = [:]
-    for (k, v) in raw {
-      out[k] = ["bpm": v["bpm"] as? Double, "energy": v["energy"] as? Double]
-    }
-    return out
-  }()
+  // The tag table refreshes from the cloud (stable relay URL) so tagging
+  // runs on the Mac reach every phone at next app-open — no app updates.
+  // Load order: Documents cache (newest fetched) → bundled fallback.
+  private static let tableURL = URL(string: "https://awdj-relay.vercel.app/api/track-tags")!
+  private static var cachePath: URL {
+    FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+      .appendingPathComponent("track-tags.json")
+  }
 
-  private static let camelotTable: [String: String] = {
-    guard let url = Bundle.main.url(forResource: "track-tags", withExtension: "json"),
-          let data = try? Data(contentsOf: url),
-          let raw = try? JSONSerialization.jsonObject(with: data) as? [String: [String: Any]] else { return [:] }
-    var out: [String: String] = [:]
-    for (k, v) in raw {
-      if let c = v["camelot"] as? String { out[k] = c }
+  private static var tables: (tags: [String: (bpm: Double?, energy: Double?)], camelot: [String: String]) = loadTables()
+
+  private static func loadTables() -> (tags: [String: (bpm: Double?, energy: Double?)], camelot: [String: String]) {
+    let data = (try? Data(contentsOf: cachePath))
+      ?? Bundle.main.url(forResource: "track-tags", withExtension: "json").flatMap { try? Data(contentsOf: $0) }
+    guard let data, let raw = try? JSONSerialization.jsonObject(with: data) as? [String: [String: Any]] else {
+      return ([:], [:])
     }
-    return out
-  }()
+    var tags: [String: (bpm: Double?, energy: Double?)] = [:]
+    var cam: [String: String] = [:]
+    for (k, v) in raw {
+      tags[k] = (v["bpm"] as? Double, v["energy"] as? Double)
+      if let c = v["camelot"] as? String { cam[k] = c }
+    }
+    return (tags, cam)
+  }
+
+  @MainActor
+  static func refreshTagTable() async {
+    guard let (data, resp) = try? await URLSession.shared.data(from: tableURL),
+          (resp as? HTTPURLResponse)?.statusCode == 200,
+          (try? JSONSerialization.jsonObject(with: data)) != nil else { return }
+    try? data.write(to: cachePath)
+    tables = loadTables()
+  }
 
   static func enrich(artist: String, title: String) -> (bpm: Double?, camelot: String?) {
     let key = "\(norm(artist))|\(norm(title))"
-    return (tagTable[key]?["bpm"] ?? nil, camelotTable[key])
+    return (tables.tags[key]?.bpm ?? nil, tables.camelot[key])
   }
 
   /// Public playlist by link → (name, tags). Nil on any failure — the
@@ -122,6 +135,57 @@ enum SpotifyLibrary {
 
   private static func err(_ s: String) -> NSError {
     NSError(domain: "awdj", code: 1, userInfo: [NSLocalizedDescriptionKey: s])
+  }
+
+  // MARK: - Taste capture (the flywheel's preference intake)
+
+  /// Personalization endpoints may or may not have survived the purge —
+  /// probe them, capture whatever answers, ship it to the relay. Runs at
+  /// most daily. Failures are silent: taste capture must never bother the
+  /// runner.
+  static func captureTasteSnapshot() async {
+    let d = UserDefaults.standard
+    let last = d.double(forKey: "awdj.tasteSnapshotAt")
+    guard Date().timeIntervalSince1970 - last > 86_400 else { return }
+    guard let token = try? await SpotifyAuth.shared.accessToken() else { return }
+    var snapshot: [String: Any] = ["name": "taste-snapshot", "source": "taste"]
+    var gotAny = false
+    for range in ["short_term", "medium_term", "long_term"] {
+      if let items = await fetchItems(token: token, path: "/me/top/tracks?time_range=\(range)&limit=50") {
+        snapshot["top_\(range)"] = items
+        gotAny = true
+      }
+    }
+    if let recent = await fetchItems(token: token, path: "/me/player/recently-played?limit=50") {
+      snapshot["recentlyPlayed"] = recent
+      gotAny = true
+    }
+    guard gotAny, let body = try? JSONSerialization.data(withJSONObject: snapshot) else { return }
+    var req = URLRequest(url: URL(string: "https://awdj-relay.vercel.app/api/sessions?k=awdj-7g2k9x")!, timeoutInterval: 20)
+    req.httpMethod = "POST"
+    req.httpBody = body
+    if let (_, resp) = try? await URLSession.shared.data(for: req),
+       (resp as? HTTPURLResponse)?.statusCode == 201 {
+      d.set(Date().timeIntervalSince1970, forKey: "awdj.tasteSnapshotAt")
+    }
+  }
+
+  private static func fetchItems(token: String, path: String) async -> [[String: Any]]? {
+    var req = URLRequest(url: URL(string: "https://api.spotify.com/v1\(path)")!, timeoutInterval: 15)
+    req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+    guard let (data, resp) = try? await URLSession.shared.data(for: req),
+          (resp as? HTTPURLResponse)?.statusCode == 200,
+          let root = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+          let items = root["items"] as? [[String: Any]] else { return nil }
+    // Lean records only — ids, names, artists, played_at when present.
+    return items.compactMap { it in
+      let t = (it["track"] as? [String: Any]) ?? it
+      guard let id = t["id"] as? String else { return nil }
+      var rec: [String: Any] = ["id": id, "name": t["name"] as? String ?? ""]
+      rec["artists"] = ((t["artists"] as? [[String: Any]]) ?? []).compactMap { $0["name"] as? String }.joined(separator: ", ")
+      if let p = it["played_at"] as? String { rec["playedAt"] = p }
+      return rec
+    }
   }
 
   // MARK: - The user's own playlists (post-migration API)

@@ -130,6 +130,19 @@ final class SessionEngine: ObservableObject {
     matchAudioFiles()
     let tagged = tags.filter { $0.bpm != nil }.count
     status = "library: \(name) · \(tags.count) songs (\(tagged) with DJ tags)"
+    // Report the adopted library (names only) so enrichment runs on the Mac
+    // can preview-tag what the phone actually plays from — the tag table
+    // then upgrades every picker at next app-open.
+    let snapshot: [String: Any] = [
+      "name": "library-snapshot", "source": "library", "library": name,
+      "tracks": tags.map { ["id": $0.trackId, "name": $0.name, "artists": $0.artists, "tagged": $0.bpm != nil] },
+    ]
+    if let body = try? JSONSerialization.data(withJSONObject: snapshot) {
+      var req = URLRequest(url: URL(string: "https://awdj-relay.vercel.app/api/sessions?k=awdj-7g2k9x")!, timeoutInterval: 20)
+      req.httpMethod = "POST"
+      req.httpBody = body
+      URLSession.shared.dataTask(with: req).resume()
+    }
   }
 
   func importAudio(from urls: [URL]) {

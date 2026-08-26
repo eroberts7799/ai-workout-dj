@@ -13,7 +13,7 @@ final class SpotifyAuth: NSObject, ObservableObject, ASWebAuthenticationPresenta
   // Playback control + the library surfaces: Liked Songs and the user's OWN
   // playlists (the post-migration /items endpoint serves only your own —
   // which is exactly the product's ask). Scope additions need one re-login.
-  private static let scopes = "user-modify-playback-state user-read-playback-state user-library-read playlist-read-private playlist-read-collaborative"
+  private static let scopes = "user-modify-playback-state user-read-playback-state user-library-read playlist-read-private playlist-read-collaborative user-top-read user-read-recently-played"
 
   // Connected only counts if the stored token was minted with the CURRENT
   // scope set — a scope addition (e.g. playlist reads) silently 403s on old
