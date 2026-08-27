@@ -72,6 +72,7 @@ final class SessionEngine: ObservableObject {
       return
     }
     bundle = b
+    musicSource = .ownedFiles // built-in programs play bundled audio
     phase = .idle
     clockMs = 0
     status = "program: \(b.name)"
@@ -98,6 +99,7 @@ final class SessionEngine: ObservableObject {
       defer { if scoped { url.stopAccessingSecurityScopedResource() } }
       let data = try Data(contentsOf: url)
       bundle = try JSONDecoder().decode(SessionBundle.self, from: data)
+      musicSource = .ownedFiles // imported bundles carry owned audio
       try data.write(to: docs.appendingPathComponent("session-bundle.json"))
       // Calibrated zone anchor rides in on real bundles; keep it even when
       // the demo set later replaces the bundle in memory.
@@ -115,6 +117,11 @@ final class SessionEngine: ObservableObject {
   /// the music library while everything the bundle learned stays — hrMax,
   /// learned pairs. Persisted like any imported bundle.
   func adoptLibrary(name: String, tags: [TaggedSong]) {
+    // Adopting a Spotify playlist / Liked Songs IS declaring Spotify the
+    // source — otherwise musicSource stays .ownedFiles and every command
+    // routes to the silent deck (8/27: the SECOND half of the silent-run
+    // bug; the runner never knew a hidden picker also had to be flipped).
+    musicSource = .spotify
     // Plan deliberately dropped: adopting a music library is a fresh start,
     // and an empty plan is what lets FOLLOW MODE conduct from the watch's
     // step stream (a stale plan would silently block it — Thursday's test).
