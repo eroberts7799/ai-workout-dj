@@ -330,11 +330,13 @@ final class SessionEngine: ObservableObject {
       phoneSensors.stop()
       BleHeartRate.shared.stop()
       deck.stop() // trail sessions end SILENT — no orphan DJ haunting the car ride home
-      if musicSource == .spotify {
-        spotifyGen += 1 // orphan any in-flight retry — it must not resurrect music
-        pendingSpotify = nil
-        Task { await SpotifyRemote.shared.pause() }
-      }
+    }
+    // Spotify cleanup keys on music source, not mode — a LIVE (watch-driven)
+    // Spotify run must also stop cleanly (8/27: same trailMode-gating bug).
+    if musicSource == .spotify {
+      spotifyGen += 1 // orphan any in-flight retry — it must not resurrect music
+      pendingSpotify = nil
+      Task { await SpotifyRemote.shared.pause() }
     }
     phase = .done
     status = trailMode ? "trail session ended" : "stopped — music left playing"
@@ -589,7 +591,11 @@ final class SessionEngine: ObservableObject {
     )
     for c in live.advance(s) {
       if suppressLoopbacks && c.reason.hasPrefix("loop back") { continue }
-      if trailMode && musicSource == .spotify {
+      // Output keys on MUSIC SOURCE, not session mode. (8/27: the Spotify
+      // path was gated on trailMode, so a watch-triggered STRUCTURED run —
+      // LIVE mode, not trail — sent its commands to the silent owned-files
+      // deck. The engine was flawless; the music went to a dead output.)
+      if musicSource == .spotify {
         // Phone conducts its own Spotify app; the watchdog owns delivery.
         // The spare rides along so the runner's "next" button works.
         firedCount += 1
@@ -614,7 +620,7 @@ final class SessionEngine: ObservableObject {
     // mismatch = the runner skipped (or the queue spare fired) — the model
     // adopts reality and the overrule lands in the log as feedback.
     // Skipped while a delivery is pending: the player is known-stale then.
-    if trailMode, musicSource == .spotify, pendingSpotify == nil,
+    if musicSource == .spotify, pendingSpotify == nil,
        timerMs >= spotifyPollAtMs, !spotifyPollInFlight {
       spotifyPollAtMs = timerMs + 20_000
       spotifyPollInFlight = true
@@ -633,10 +639,21 @@ final class SessionEngine: ObservableObject {
 
   func startSimulatedRun(speed: Double = 8) {
     guard phase == .idle || phase == .done else { return }
-    guard let b = bundle, let plan = b.plan, supportsLive else {
-      status = "this bundle has no LIVE payload — re-export from the web app"
+    guard let b = bundle, supportsLive else {
+      status = "select a playlist or library first"
       return
     }
+    // Playlist libraries carry no plan (they run follow mode live). For a
+    // desk dress rehearsal, drive the synthetic runner with a stand-in
+    // interval plan so the whole output path — including Spotify — exercises.
+    let plan = (b.plan?.isEmpty == false) ? b.plan! : [
+      WorkoutStep(kind: "warmup", seconds: 120, meters: nil),
+      WorkoutStep(kind: "hard", seconds: 60, meters: nil),
+      WorkoutStep(kind: "rest", seconds: 60, meters: nil),
+      WorkoutStep(kind: "hard", seconds: 60, meters: nil),
+      WorkoutStep(kind: "rest", seconds: 60, meters: nil),
+      WorkoutStep(kind: "cooldown", seconds: 120, meters: nil),
+    ]
     startLive()
     guard phase == .running else { return }
     suppressLoopbacks = speed > 1
