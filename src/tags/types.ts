@@ -25,6 +25,10 @@ export interface SongTags {
   segments?: { label: string; startMs: number; endMs: number }[]
   /** The owned file this song came from — sync-from-disk matches by this. */
   sourceFile?: string
+  /** Per-user taste bonus (−2..+2) from lifetime listening history: loved
+   *  tracks lift, habitually-skipped ones sink. Selection-only; never a
+   *  transition or timing input. */
+  affinity?: number | null
   updatedAt: string
 }
 

@@ -48,18 +48,39 @@ enum SpotifyLibrary {
     return (tags, cam)
   }
 
-  @MainActor
-  static func refreshTagTable() async {
-    guard let (data, resp) = try? await URLSession.shared.data(from: tableURL),
-          (resp as? HTTPURLResponse)?.statusCode == 200,
-          (try? JSONSerialization.jsonObject(with: data)) != nil else { return }
-    try? data.write(to: cachePath)
-    tables = loadTables()
+  // Per-user taste bonus (−2..+2), keyed/private. Loaded like the tag table.
+  private static let tasteURL = URL(string: "https://awdj-relay.vercel.app/api/taste?k=awdj-7g2k9x")!
+  private static var tasteCachePath: URL {
+    FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+      .appendingPathComponent("taste-bonus.json")
+  }
+  private static var taste: [String: Double] = loadTaste()
+
+  private static func loadTaste() -> [String: Double] {
+    guard let data = try? Data(contentsOf: tasteCachePath),
+          let raw = try? JSONSerialization.jsonObject(with: data) as? [String: Double] else { return [:] }
+    return raw
   }
 
-  static func enrich(artist: String, title: String) -> (bpm: Double?, camelot: String?) {
+  @MainActor
+  static func refreshTagTable() async {
+    if let (data, resp) = try? await URLSession.shared.data(from: tableURL),
+       (resp as? HTTPURLResponse)?.statusCode == 200,
+       (try? JSONSerialization.jsonObject(with: data)) != nil {
+      try? data.write(to: cachePath)
+      tables = loadTables()
+    }
+    if let (data, resp) = try? await URLSession.shared.data(from: tasteURL),
+       (resp as? HTTPURLResponse)?.statusCode == 200,
+       (try? JSONSerialization.jsonObject(with: data)) != nil {
+      try? data.write(to: tasteCachePath)
+      taste = loadTaste()
+    }
+  }
+
+  static func enrich(artist: String, title: String) -> (bpm: Double?, camelot: String?, affinity: Double?) {
     let key = "\(norm(artist))|\(norm(title))"
-    return (tables.tags[key]?.bpm ?? nil, tables.camelot[key])
+    return (tables.tags[key]?.bpm ?? nil, tables.camelot[key], taste[key])
   }
 
   /// Public playlist by link → (name, tags). Nil on any failure — the
@@ -91,7 +112,7 @@ enum SpotifyLibrary {
       let e = enrich(artist: artists, title: title)
       return TaggedSong(trackId: trackId, uri: uri, name: title, artists: artists,
                         durationMs: t["duration"] as? Double ?? 0,
-                        bpm: e.bpm, camelot: e.camelot, markers: [])
+                        bpm: e.bpm, camelot: e.camelot, markers: [], affinity: e.affinity)
     }
     guard !tags.isEmpty else { throw err("no playable tracks in that playlist") }
     return (name, tags)
@@ -124,7 +145,7 @@ enum SpotifyLibrary {
         let artists = t.artists.map { $0.name }.joined(separator: ", ")
         let e = enrich(artist: artists, title: t.name)
         out.append(TaggedSong(trackId: id, uri: t.uri, name: t.name, artists: artists,
-                              durationMs: t.duration_ms, bpm: e.bpm, camelot: e.camelot, markers: []))
+                              durationMs: t.duration_ms, bpm: e.bpm, camelot: e.camelot, markers: [], affinity: e.affinity))
       }
       offset += 50
       if offset >= page.total { break }
@@ -255,7 +276,7 @@ enum SpotifyLibrary {
         let e = enrich(artist: artists, title: title)
         out.append(TaggedSong(trackId: trackId, uri: uri, name: title, artists: artists,
                               durationMs: t["duration_ms"] as? Double ?? 0,
-                              bpm: e.bpm, camelot: e.camelot, markers: []))
+                              bpm: e.bpm, camelot: e.camelot, markers: [], affinity: e.affinity))
       }
       let total = root["total"] as? Int ?? out.count
       offset += 50

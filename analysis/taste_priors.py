@@ -93,6 +93,22 @@ def main():
     OUT.parent.mkdir(exist_ok=True)
     json.dump({"generatedFromPlays": total_plays, "tracks": priors}, open(OUT, "w"))
 
+    # Compact shippable bonus map: normalize affinity to a capped ±2 the
+    # engine adds directly (comparable to mixScore's +2 and the learned-pair
+    # +2). Scale by the 90th-percentile positive affinity so a handful of
+    # obsession tracks don't flatten everything else. Only tracks with real
+    # signal ship (|bonus| ≥ 0.5) — the map stays small and private.
+    pos = sorted(p["affinity"] for p in priors.values() if p["affinity"] > 0)
+    p90 = pos[int(len(pos) * 0.9)] if pos else 1.0
+    bonus_map = {}
+    for k, p in priors.items():
+        b = max(-2.0, min(2.0, 2.0 * p["affinity"] / p90))
+        if abs(b) >= 0.5:
+            bonus_map[k] = round(b, 2)
+    BONUS = REPO / "data" / "taste-bonus.json"
+    json.dump(bonus_map, open(BONUS, "w"))
+    print(f"shippable bonus map: {len(bonus_map)} tracks with |bonus|≥0.5 → {BONUS.name}")
+
     ranked = sorted(priors.values(), key=lambda p: -p["affinity"])
     total_min = sum(p["minutes"] for p in priors.values())
     print(f"{total_plays:,} plays across {len(files)} years → {len(priors):,} tracks with a prior")

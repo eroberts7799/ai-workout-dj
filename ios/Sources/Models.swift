@@ -44,6 +44,9 @@ struct TaggedSong: Codable, Identifiable {
   let markers: [Marker]
   /// Optional structure — energy-aware chain points (bundles from 2026-08-17).
   var segments: [SongSegment]? = nil
+  /// Per-user taste bonus (−2..+2) from lifetime listening history. Mirrors
+  /// SongTags.affinity — selection-only, never a transition/timing input.
+  var affinity: Double? = nil
   var id: String { trackId }
 }
 

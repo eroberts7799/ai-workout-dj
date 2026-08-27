@@ -220,11 +220,12 @@ final class LiveEngine {
   /// state changes only if it actually plays (syncExternalPlayback). Mirrors TS.
   private func peekSpare(chosen: TaggedSong) -> TaggedSong? {
     let recent = Set(commands.suffix(6).map { $0.trackId })
-    var best: (song: TaggedSong, score: Int)?
+    var best: (song: TaggedSong, score: Double)?
     for c in loopable {
       if c.song.trackId == chosen.trackId { continue }
-      var score = BeatMath.mixScore(fromBpm: chosen.bpm, fromKey: chosen.camelot, toBpm: c.song.bpm, toKey: c.song.camelot)
-      score += learnedBonus(from: chosen, to: c.song)
+      var score = Double(BeatMath.mixScore(fromBpm: chosen.bpm, fromKey: chosen.camelot, toBpm: c.song.bpm, toKey: c.song.camelot))
+      score += Double(learnedBonus(from: chosen, to: c.song))
+      score += max(-2, min(2, c.song.affinity ?? 0)) // lifetime taste
       if recent.contains(c.song.trackId) { score -= 1 }
       if best == nil || score > best!.score { best = (c.song, score) }
     }
@@ -466,12 +467,13 @@ final class LiveEngine {
     guard !droppable.isEmpty else { return nil }
     let from = playing?.song
     let recent = recentIds()
-    var best: (c: DropChoice, advance: Int, score: Int)?
+    var best: (c: DropChoice, advance: Int, score: Double)?
     for i in 0..<droppable.count {
       let c = droppable[(dropIdx + i) % droppable.count]
       if c.song.trackId == playing?.song.trackId { continue }
-      var score = from != nil ? BeatMath.mixScore(fromBpm: from!.bpm, fromKey: from!.camelot, toBpm: c.song.bpm, toKey: c.song.camelot) : 0
-      score += learnedBonus(from: from, to: c.song)
+      var score = Double(from != nil ? BeatMath.mixScore(fromBpm: from!.bpm, fromKey: from!.camelot, toBpm: c.song.bpm, toKey: c.song.camelot) : 0)
+      score += Double(learnedBonus(from: from, to: c.song))
+      score += max(-2, min(2, c.song.affinity ?? 0)) // lifetime taste
       if recent.contains(c.song.trackId) { score -= 1 }
       if best == nil || score > best!.score { best = (c, i + 1, score) }
     }
@@ -489,12 +491,13 @@ final class LiveEngine {
     guard !loopable.isEmpty else { return nil }
     let from = playing?.song
     let recent = recentIds()
-    var best: (c: LoopChoice, advance: Int, score: Int)?
+    var best: (c: LoopChoice, advance: Int, score: Double)?
     for i in 0..<loopable.count {
       let c = loopable[(loopIdx + i) % loopable.count]
       if c.song.trackId == playing?.song.trackId { continue }
-      var score = from != nil ? BeatMath.mixScore(fromBpm: from!.bpm, fromKey: from!.camelot, toBpm: c.song.bpm, toKey: c.song.camelot) : 0
-      score += learnedBonus(from: from, to: c.song)
+      var score = Double(from != nil ? BeatMath.mixScore(fromBpm: from!.bpm, fromKey: from!.camelot, toBpm: c.song.bpm, toKey: c.song.camelot) : 0)
+      score += Double(learnedBonus(from: from, to: c.song))
+      score += max(-2, min(2, c.song.affinity ?? 0)) // lifetime taste
       if recent.contains(c.song.trackId) { score -= 1 }
       if best == nil || score > best!.score { best = (c, i + 1, score) }
     }

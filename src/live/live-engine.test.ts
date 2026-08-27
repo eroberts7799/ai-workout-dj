@@ -512,6 +512,24 @@ describe('LiveEngine', () => {
     }
   })
 
+  test('taste affinity biases selection toward loved tracks', () => {
+    // Two equally-mixable candidates; one has a strong positive affinity.
+    // The loved one should win the cruise pick.
+    const base = (id: string, affinity: number): SongTags => ({
+      trackId: id, uri: `spotify:track:${id}`, name: `Song ${id}`, artists: 'X',
+      durationMs: 210_000, bpm: 128, camelot: '8A', markers: [], updatedAt: '', affinity,
+    })
+    const cruise: WorkoutPlan = { name: 'cruise', steps: [{ kind: 'easy', seconds: 300 }] }
+    // seed (neutral) + a loved candidate + a skipped candidate, all compatible.
+    const lib = [base('seed', 0), base('loved', 2), base('skipped', -2)]
+    const engine = new LiveEngine(cruise, lib, { paceSecPerKm: 340 })
+    run(engine, stream([{ seconds: 300, mps: 3 }]))
+    const changed = engine.commands.map((c) => c.trackId).filter((id) => id !== 'seed')
+    expect(changed).toContain('loved')
+    // the skipped track is only ever chosen after loved is exhausted by recency
+    expect(changed.indexOf('loved')).toBeLessThan(changed.indexOf('skipped') === -1 ? Infinity : changed.indexOf('skipped'))
+  })
+
   test('manual skip: the model adopts reality and records the overrule', () => {
     const cruise: WorkoutPlan = { name: 'cruise', steps: [{ kind: 'easy', seconds: 900 }] }
     const engine = new LiveEngine(cruise, songs, { paceSecPerKm: 340 })

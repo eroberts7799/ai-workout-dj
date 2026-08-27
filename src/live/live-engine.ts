@@ -536,7 +536,11 @@ export class LiveEngine {
       const learned = from
         ? Math.min(2, this.pairBonus[`${this.normKey.get(from.trackId)}>${this.normKey.get(c.song.trackId)}`] ?? 0)
         : 0
-      const score = (from ? mixScore(from, c.song) : 0) + learned - (recent.has(c.song.trackId) ? 1 : 0)
+      // Taste: lifetime affinity for the candidate itself (−2..+2). Intrinsic
+      // to the song, not the transition — a track Ethan loves gets picked
+      // more, one he skips less, all else near-equal.
+      const taste = Math.max(-2, Math.min(2, c.song.affinity ?? 0))
+      const score = (from ? mixScore(from, c.song) : 0) + learned + taste - (recent.has(c.song.trackId) ? 1 : 0)
       if (!best || score > best.score) best = { choice: c, advance: i + 1, score }
     }
     if (best) return best
