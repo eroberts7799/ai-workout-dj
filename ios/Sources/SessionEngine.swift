@@ -467,6 +467,7 @@ final class SessionEngine: ObservableObject {
     uploaded = false
     suppressLoopbacks = false
     prevMs = 0
+    spotifyEverDelivered = false
     phase = .running
     status = "🛰 LIVE — conducting \(b.name) from your body's data"
     for w in live?.warnings ?? [] { status += " · ⚠️ \(w)" }
@@ -498,11 +499,15 @@ final class SessionEngine: ObservableObject {
   private var spotifyAttemptInFlight = false
   private var spotifyPollAtMs: Double = 0
   private var spotifyPollInFlight = false
+  private var spotifyEverDelivered = false
 
   private func deliverSpotify(uris: [String], positionMs: Double, timerMs: Double, reason: String) {
     spotifyGen += 1
     pendingSpotify = PendingSpotify(uris: uris, positionMs: positionMs, atTimerMs: timerMs, gen: spotifyGen, reason: reason)
-    spotifyRetryAtMs = timerMs + 10_000
+    // Retry FAST early (3s): the first command often lands before Spotify's
+    // device is awake, and a runner shouldn't wait 10s for music. The pump
+    // backs off to 10s once something has delivered.
+    spotifyRetryAtMs = timerMs + 3_000
     attemptSpotifyDelivery()
   }
 
@@ -520,8 +525,12 @@ final class SessionEngine: ObservableObject {
       guard self.pendingSpotify?.gen == p.gen else { return } // superseded mid-flight
       if err == nil {
         self.pendingSpotify = nil
+        self.spotifyEverDelivered = true
       } else {
-        self.lastCommand = "\(p.reason) · \(err!) — retrying"
+        // Actionable message: the usual cause is a sleeping Spotify.
+        self.lastCommand = self.spotifyEverDelivered
+          ? "\(p.reason) · \(err!) — retrying"
+          : "open Spotify & press play once, then it takes over"
       }
     }
   }
@@ -548,6 +557,7 @@ final class SessionEngine: ObservableObject {
     uploaded = false
     suppressLoopbacks = false
     prevMs = 0
+    spotifyEverDelivered = false
     trailMode = true
     phase = .running
     status = "TRAIL — phone sensors conducting (offline-ready)"
@@ -617,10 +627,10 @@ final class SessionEngine: ObservableObject {
         lastCommand = c.reason
       }
     }
-    // Watchdog pump: re-offer an undelivered Spotify command when signal
-    // may be back. Rides the 1Hz sensor tick — no extra timer to manage.
+    // Watchdog pump: re-offer an undelivered Spotify command. Fast (3s)
+    // while nothing has ever delivered (waking the device); 10s after.
     if pendingSpotify != nil, timerMs >= spotifyRetryAtMs {
-      spotifyRetryAtMs = timerMs + 10_000
+      spotifyRetryAtMs = timerMs + (spotifyEverDelivered ? 10_000 : 3_000)
       attemptSpotifyDelivery()
     }
     // Reconciliation: every 20s ask Spotify what is ACTUALLY playing. A
