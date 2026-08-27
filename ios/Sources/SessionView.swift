@@ -18,6 +18,8 @@ struct SessionView: View {
   @State private var showPlaylistPrompt = false
   @State private var playlistLinkText = ""
   @State private var showPlaylistSheet = false
+  @State private var showPreview = false
+  @State private var previewRows: [SessionEngine.PreviewRow] = []
   @State private var myPlaylists: [SpotifyLibrary.PlaylistRef] = []
 
   @State private var showMenu = false
@@ -103,6 +105,13 @@ struct SessionView: View {
         }
         .buttonStyle(FieldButtonStyle())
         .disabled(!spotify.connected)
+        if engine.bundle?.tags?.isEmpty == false {
+          Button("Preview the mix") {
+            previewRows = engine.previewSetlist()
+            showPreview = true
+          }
+          .buttonStyle(FieldButtonStyle(color: Theme.faded))
+        }
         if relay.fresh {
           Text("watch connected — press START on the watch for a planned workout")
             .fieldMono(12)
@@ -157,6 +166,22 @@ struct SessionView: View {
     .background(Theme.paper.ignoresSafeArea())
     .foregroundColor(Theme.ink)
     .tint(Theme.olive)
+    .sheet(isPresented: $showPreview) {
+      NavigationView {
+        List(previewRows) { r in
+          HStack(alignment: .top, spacing: 12) {
+            Text(String(format: "%.0f min", r.atMin))
+              .font(.system(size: 13, weight: .bold, design: .monospaced))
+              .foregroundColor(r.reason.contains("rep change") || r.reason.contains("drop") ? Theme.olive : Theme.faded)
+              .frame(width: 54, alignment: .leading)
+            Text(r.reason)
+              .font(.system(size: 14))
+          }
+        }
+        .navigationTitle("What the DJ will do")
+        .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Done") { showPreview = false } } }
+      }
+    }
     .sheet(isPresented: $showPlaylistSheet) {
       NavigationView {
         List(myPlaylists) { p in

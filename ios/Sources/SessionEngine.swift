@@ -655,6 +655,36 @@ final class SessionEngine: ObservableObject {
     landingCount = live.landings.count
   }
 
+  /// Projected setlist: run the REAL engine in-memory against a
+  /// representative interval workout and return what it would play — so
+  /// "did it do anything?" is answered in a glance, no 40-min run, no audio
+  /// (8/27: an 8× sim can't demonstrate the Spotify tier audibly). This is
+  /// exactly what a real Drop-Set-shaped run would choreograph.
+  struct PreviewRow: Identifiable { let id = UUID(); let atMin: Double; let reason: String }
+
+  func previewSetlist() -> [PreviewRow] {
+    guard let b = bundle, let tags = b.tags, !tags.isEmpty else { return [] }
+    let plan: [WorkoutStep] = [
+      WorkoutStep(kind: "warmup", seconds: nil, meters: 1200),
+    ] + [1000.0, 1000, 800, 800, 600, 600, 400, 400].flatMap { m in
+      [WorkoutStep(kind: "hard", seconds: nil, meters: m),
+       WorkoutStep(kind: "rest", seconds: 90, meters: nil)]
+    } + [WorkoutStep(kind: "cooldown", seconds: nil, meters: 1250)]
+    let hrMax = UserDefaults.standard.object(forKey: "awdj.hrMax") as? Double
+    let eng = LiveEngine(plan: plan, songs: tags, pairBonus: b.pairBonus ?? [:], hrMax: hrMax)
+    var t = 0.0, d = 0.0, si = 0, stepD = 0.0
+    func pace(_ k: String) -> Double { k == "hard" ? 3.6 : k == "rest" ? 1.5 : 3.1 }
+    func len(_ s: WorkoutStep) -> Double { s.meters ?? ((s.seconds ?? 0) * pace(s.kind)) }
+    var sec = 0
+    while sec < 3600, si < plan.count {
+      let s = plan[si]; t += 1000; d += pace(s.kind); stepD += pace(s.kind)
+      eng.advance(LiveSample(tMs: t, distanceM: d, hr: s.kind == "hard" ? 175 : 150))
+      if stepD >= len(s) { si += 1; stepD = 0 }
+      sec += 1
+    }
+    return eng.commands.map { PreviewRow(atMin: $0.tMs / 60000, reason: $0.reason) }
+  }
+
   // MARK: - Simulated run (no watch needed — demo + Thursday dress rehearsal)
 
   func startSimulatedRun(speed: Double = 8) {
