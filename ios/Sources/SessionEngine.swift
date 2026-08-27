@@ -343,6 +343,7 @@ final class SessionEngine: ObservableObject {
     if musicSource == .spotify {
       spotifyGen += 1 // orphan any in-flight retry — it must not resurrect music
       pendingSpotify = nil
+      KeepAlive.shared.stop()
       Task { await SpotifyRemote.shared.pause() }
     }
     phase = .done
@@ -468,6 +469,7 @@ final class SessionEngine: ObservableObject {
     suppressLoopbacks = false
     prevMs = 0
     spotifyEverDelivered = false
+    if musicSource == .spotify { KeepAlive.shared.start() } // survive the pocket
     phase = .running
     status = "🛰 LIVE — conducting \(b.name) from your body's data"
     for w in live?.warnings ?? [] { status += " · ⚠️ \(w)" }
@@ -558,6 +560,7 @@ final class SessionEngine: ObservableObject {
     suppressLoopbacks = false
     prevMs = 0
     spotifyEverDelivered = false
+    if musicSource == .spotify { KeepAlive.shared.start() } // survive the pocket
     trailMode = true
     phase = .running
     status = "TRAIL — phone sensors conducting (offline-ready)"
