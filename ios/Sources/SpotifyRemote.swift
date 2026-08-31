@@ -103,9 +103,12 @@ final class SpotifyRemote {
   }
 
   /// Un-pause exactly where pause() left the music: play with no body
-  /// resumes the current track at its current position.
-  func resume() async {
-    guard let id = try? await resolveDevice(force: false) else { return }
-    _ = try? await api("/me/player/play?device_id=\(id)", method: "PUT")
+  /// resumes the current track at its current position. Returns whether it
+  /// worked — a long pause can put the device to sleep, and a silently
+  /// failed resume means silence until the next scheduled cut.
+  func resume() async -> Bool {
+    guard let id = try? await resolveDevice(force: false) else { return false }
+    guard let (code, _) = try? await api("/me/player/play?device_id=\(id)", method: "PUT") else { return false }
+    return (200...299).contains(code)
   }
 }

@@ -335,7 +335,13 @@ final class SessionEngine: ObservableObject {
           pausedSpotify = nil
           deliverSpotify(uris: p.uris, positionMs: p.positionMs, timerMs: p.atTimerMs, reason: p.reason)
         } else {
-          Task { await SpotifyRemote.shared.resume() }
+          Task { [weak self] in
+            if await SpotifyRemote.shared.resume() { return }
+            // Device slept through the pause — fall back to re-delivering
+            // the last command; the watchdog retries until it lands.
+            guard let self, self.phase == .running, let l = self.lastDeliveredSpotify else { return }
+            self.deliverSpotify(uris: l.uris, positionMs: l.positionMs, timerMs: l.atTimerMs, reason: "\(l.reason) (resume)")
+          }
         }
       }
       phase = .running
@@ -514,6 +520,10 @@ final class SessionEngine: ObservableObject {
   private var pendingSpotify: PendingSpotify?
   /// Command that was still undelivered when the session paused — re-offered on resume.
   private var pausedSpotify: PendingSpotify?
+  /// Most recent successfully delivered command — the fallback anchor when a
+  /// plain resume fails (device slept through a long pause): re-offer it and
+  /// the watchdog rejoins at the modeled playhead.
+  private var lastDeliveredSpotify: PendingSpotify?
 
   /// Session over (stop, sim completion, reset): Spotify goes silent, nothing
   /// in flight may resurrect it. Every halt path calls this — halting only
@@ -542,6 +552,7 @@ final class SessionEngine: ObservableObject {
     spotifyGen += 1 // orphan any in-flight attempt from a previous session
     pendingSpotify = nil
     pausedSpotify = nil
+    lastDeliveredSpotify = nil
     spotifyRetryAtMs = 0
     spotifyPollAtMs = 0
     spotifyEverDelivered = false
@@ -573,6 +584,7 @@ final class SessionEngine: ObservableObject {
       if err == nil {
         self.pendingSpotify = nil
         self.spotifyEverDelivered = true
+        self.lastDeliveredSpotify = p
         self.spotifyLastDeliveryWall = Date().timeIntervalSince1970
         // Grace window: /me/player is eventually-consistent — a read right
         // after a play command reports the PREVIOUS track, and adopting it

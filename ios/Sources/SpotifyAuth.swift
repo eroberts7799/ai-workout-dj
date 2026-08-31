@@ -82,21 +82,34 @@ final class SpotifyAuth: NSObject, ObservableObject, ASWebAuthenticationPresenta
     try await tokenRequest(body: body)
   }
 
-  /// Bearer token for API calls, refreshing when stale.
-  func accessToken() async throws -> String {
+  /// In-flight refresh, shared by every caller that hits the expiry window.
+  @MainActor private var refreshTask: Task<String, Error>?
+
+  /// Bearer token for API calls, refreshing when stale. The refresh is
+  /// SINGLE-FLIGHT: Spotify's PKCE refresh tokens rotate on use, and two
+  /// concurrent refreshes (watchdog + reconciliation poll hitting the hourly
+  /// expiry together) would both spend the same token — Spotify's reuse
+  /// detection can revoke the whole grant, disconnecting mid-run.
+  @MainActor func accessToken() async throws -> String {
     let d = UserDefaults.standard
     if let tok = d.string(forKey: "awdj.spotify.access"),
-       d.double(forKey: "awdj.spotify.expiresAt") > Date().timeIntervalSince1970 + 30 {
+       d.double(forKey: "awdj.spotify.expiresAt") > Date().timeIntervalSince1970 + 60 {
       return tok
     }
+    if let inflight = refreshTask { return try await inflight.value }
     guard let refresh = d.string(forKey: "awdj.spotify.refresh"), let clientId else {
       throw NSError(domain: "awdj", code: 401, userInfo: [NSLocalizedDescriptionKey: "not connected to Spotify"])
     }
-    try await tokenRequest(body: "grant_type=refresh_token&refresh_token=\(refresh)&client_id=\(clientId)")
-    guard let fresh = d.string(forKey: "awdj.spotify.access") else {
-      throw NSError(domain: "awdj", code: 401, userInfo: [NSLocalizedDescriptionKey: "refresh produced no token"])
+    let task = Task<String, Error> {
+      try await self.tokenRequest(body: "grant_type=refresh_token&refresh_token=\(refresh)&client_id=\(clientId)")
+      guard let fresh = d.string(forKey: "awdj.spotify.access") else {
+        throw NSError(domain: "awdj", code: 401, userInfo: [NSLocalizedDescriptionKey: "refresh produced no token"])
+      }
+      return fresh
     }
-    return fresh
+    refreshTask = task
+    defer { refreshTask = nil }
+    return try await task.value
   }
 
   private func tokenRequest(body: String) async throws {

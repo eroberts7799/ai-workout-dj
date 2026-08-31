@@ -18,6 +18,24 @@ final class KeepAlive {
   static let shared = KeepAlive()
   private let engine = AVAudioEngine()
   private var running = false
+  private var built = false
+
+  private init() {
+    // A phone call or Siri mid-run interrupts the audio session and stops
+    // the silent engine — without recovery, the app suspends at the next
+    // screen lock and the conductor goes dead (the 8/27 gap, via a side
+    // door). When the interruption ends, reclaim the session and restart.
+    NotificationCenter.default.addObserver(
+      forName: AVAudioSession.interruptionNotification, object: nil, queue: .main
+    ) { [weak self] note in
+      guard let self, self.running,
+            let raw = note.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt,
+            AVAudioSession.InterruptionType(rawValue: raw) == .ended
+      else { return }
+      try? AVAudioSession.sharedInstance().setActive(true)
+      try? self.engine.start()
+    }
+  }
 
   func start() {
     guard !running else { return }
@@ -27,17 +45,20 @@ final class KeepAlive {
     try? session.setCategory(.playback, mode: .default, options: [.mixWithOthers])
     try? session.setActive(true)
 
-    let fmt = engine.outputNode.inputFormat(forBus: 0)
-    let source = AVAudioSourceNode { _, _, frameCount, audioBufferList -> OSStatus in
-      let abl = UnsafeMutableAudioBufferListPointer(audioBufferList)
-      for buffer in abl {
-        memset(buffer.mData, 0, Int(buffer.mDataByteSize)) // pure silence
+    if !built {
+      let fmt = engine.outputNode.inputFormat(forBus: 0)
+      let source = AVAudioSourceNode { _, _, frameCount, audioBufferList -> OSStatus in
+        let abl = UnsafeMutableAudioBufferListPointer(audioBufferList)
+        for buffer in abl {
+          memset(buffer.mData, 0, Int(buffer.mDataByteSize)) // pure silence
+        }
+        return noErr
       }
-      return noErr
+      engine.attach(source)
+      engine.connect(source, to: engine.mainMixerNode, format: fmt)
+      engine.mainMixerNode.outputVolume = 0
+      built = true // attach once — reset() never detaches, so re-attaching each session accumulates nodes
     }
-    engine.attach(source)
-    engine.connect(source, to: engine.mainMixerNode, format: fmt)
-    engine.mainMixerNode.outputVolume = 0
     do {
       try engine.start()
       running = true
