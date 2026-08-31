@@ -304,6 +304,16 @@ struct SessionView: View {
             Text("Owned files").tag(SessionEngine.MusicSource.ownedFiles)
           }
           .pickerStyle(.segmented)
+          Button("Free play — my whole taste") {
+            withAnimation { showMenu = false }
+            engine.status = "building your free-play crate…"
+            Task {
+              do {
+                let tags = try await SpotifyLibrary.freeCrate { engine.status = $0 }
+                engine.adoptLibrary(name: SpotifyLibrary.freeCrateName, tags: tags)
+              } catch { engine.status = "free play failed: \(error.localizedDescription)" }
+            }
+          }
           Button("Liked Songs") {
             withAnimation { showMenu = false }
             engine.status = "importing Liked Songs…"

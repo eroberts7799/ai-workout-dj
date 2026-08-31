@@ -158,6 +158,100 @@ enum SpotifyLibrary {
     NSError(domain: "awdj", code: 1, userInfo: [NSLocalizedDescriptionKey: s])
   }
 
+  // MARK: - Free play (the virtual crate)
+
+  /// The whole taste universe as one library, no playlist required: deep
+  /// Liked pull + top tracks (3 time ranges) + recently played, deduped and
+  /// tag/taste-enriched. Spotify's recommendations API died in the Feb 2026
+  /// purge, so "limitless" is built from what the API still serves — every
+  /// candidate is a song the user already loves, which is the better crate
+  /// anyway. Cached for instant starts (rebuilt when older than a day).
+  static let freeCrateName = "Free Play"
+
+  private static var crateCachePath: URL {
+    FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+      .appendingPathComponent("free-crate.json")
+  }
+
+  static func freeCrate(progress: @MainActor @escaping (String) -> Void) async throws -> [TaggedSong] {
+    if let data = try? Data(contentsOf: crateCachePath),
+       let cached = try? JSONDecoder().decode([TaggedSong].self, from: data),
+       cached.count >= 50,
+       let mod = try? FileManager.default.attributesOfItem(atPath: crateCachePath.path)[.modificationDate] as? Date,
+       Date().timeIntervalSince1970 - mod.timeIntervalSince1970 < 86_400 {
+      return cached
+    }
+    // Sources fail SOFT individually (a 403 on one endpoint must not sink
+    // the crate) — but an empty result is a hard error the user can act on.
+    await progress("building your crate — top tracks…")
+    var tops: [TaggedSong] = []
+    for range in ["short_term", "medium_term", "long_term"] {
+      tops += (try? await topTracks(range: range)) ?? []
+    }
+    await progress("building your crate — recent plays…")
+    let recent = (try? await recentlyPlayed()) ?? []
+    await progress("building your crate — Liked Songs…")
+    let liked = (try? await likedSongs(cap: 1000)) ?? []
+    let crate = mergeCrate([tops, recent, liked])
+    guard crate.count >= 20 else {
+      throw err("couldn't build your crate — reconnect Spotify?")
+    }
+    if let data = try? JSONEncoder().encode(crate) { try? data.write(to: crateCachePath) }
+    return crate
+  }
+
+  /// Dedupe by trackId, first occurrence wins — pure and order-stable so
+  /// higher-signal sources (top tracks) are listed before bulk (Liked).
+  static func mergeCrate(_ groups: [[TaggedSong]]) -> [TaggedSong] {
+    var seen = Set<String>()
+    var out: [TaggedSong] = []
+    for g in groups {
+      for t in g where seen.insert(t.trackId).inserted { out.append(t) }
+    }
+    return out
+  }
+
+  private static func trackTag(_ t: [String: Any]) -> TaggedSong? {
+    guard let id = t["id"] as? String,
+          let uri = t["uri"] as? String, uri.hasPrefix("spotify:track:"),
+          let title = t["name"] as? String else { return nil }
+    let artists = ((t["artists"] as? [[String: Any]]) ?? [])
+      .compactMap { $0["name"] as? String }.joined(separator: ", ")
+    let e = enrich(artist: artists, title: title)
+    return TaggedSong(trackId: id, uri: uri, name: title, artists: artists,
+                      durationMs: t["duration_ms"] as? Double ?? 0,
+                      bpm: e.bpm, camelot: e.camelot, markers: [], affinity: e.affinity)
+  }
+
+  /// GET /me/top/tracks — full track objects (unlike the lean taste
+  /// snapshot), one page per time range is Spotify's own signal ceiling.
+  static func topTracks(range: String) async throws -> [TaggedSong] {
+    let token = try await SpotifyAuth.shared.accessToken()
+    var req = URLRequest(url: URL(string: "https://api.spotify.com/v1/me/top/tracks?time_range=\(range)&limit=50")!, timeoutInterval: 15)
+    req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+    let (data, resp) = try await URLSession.shared.data(for: req)
+    guard (resp as? HTTPURLResponse)?.statusCode == 200,
+          let root = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+          let items = root["items"] as? [[String: Any]]
+    else { throw err("top tracks HTTP \((resp as? HTTPURLResponse)?.statusCode ?? 0)") }
+    return items.compactMap { trackTag($0) }
+  }
+
+  /// GET /me/player/recently-played — track sits under "track".
+  static func recentlyPlayed() async throws -> [TaggedSong] {
+    let token = try await SpotifyAuth.shared.accessToken()
+    var req = URLRequest(url: URL(string: "https://api.spotify.com/v1/me/player/recently-played?limit=50")!, timeoutInterval: 15)
+    req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+    let (data, resp) = try await URLSession.shared.data(for: req)
+    guard (resp as? HTTPURLResponse)?.statusCode == 200,
+          let root = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+          let items = root["items"] as? [[String: Any]]
+    else { throw err("recently played HTTP \((resp as? HTTPURLResponse)?.statusCode ?? 0)") }
+    return items.compactMap { it in
+      (it["track"] as? [String: Any]).flatMap { trackTag($0) }
+    }
+  }
+
   // MARK: - Taste capture (the flywheel's preference intake)
 
   /// Personalization endpoints may or may not have survived the purge —
