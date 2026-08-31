@@ -101,4 +101,11 @@ final class SpotifyRemote {
   func pause() async {
     _ = try? await api("/me/player/pause", method: "PUT")
   }
+
+  /// Un-pause exactly where pause() left the music: play with no body
+  /// resumes the current track at its current position.
+  func resume() async {
+    guard let id = try? await resolveDevice(force: false) else { return }
+    _ = try? await api("/me/player/play?device_id=\(id)", method: "PUT")
+  }
 }

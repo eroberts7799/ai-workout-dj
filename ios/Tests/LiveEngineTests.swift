@@ -413,4 +413,28 @@ final class LiveEngineTests: XCTestCase {
     XCTAssertNil(old.plan)
     XCTAssertNil(old.tags)
   }
+
+  /// The in-app Simulate path for plan-less playlist libraries: the stand-in
+  /// interval plan reaches the engine as a watch-style step stream (wkStepSeq
+  /// + step shape), driving FOLLOW MODE. 8/31 sim ran a whole workout as one
+  /// cruise pick ("0 cues landed") because the stand-in plan shaped only the
+  /// synthetic runner's pace and the engine saw an empty plan.
+  func testSyntheticWkStreamDrivesFollowMode() {
+    let standIn = [
+      WorkoutStep(kind: "warmup", seconds: 120, meters: nil),
+      WorkoutStep(kind: "hard", seconds: 60, meters: nil),
+      WorkoutStep(kind: "rest", seconds: 60, meters: nil),
+      WorkoutStep(kind: "hard", seconds: 60, meters: nil),
+      WorkoutStep(kind: "rest", seconds: 60, meters: nil),
+      WorkoutStep(kind: "cooldown", seconds: 120, meters: nil),
+    ]
+    let engine = LiveEngine(plan: [], songs: songs) // follow mode: no plan loaded
+    for s in syntheticSamples(plan: standIn, scenario: RunScenario()) { engine.advance(s) }
+    XCTAssertGreaterThan(engine.commands.count, 1, "a structured sim must choreograph, not cruise one song")
+    XCTAssertGreaterThanOrEqual(engine.landings.count, 2, "both hard steps must land a moment")
+    XCTAssertTrue(
+      engine.commands.contains { $0.reason.contains("drop") || $0.reason.contains("rep change") },
+      "hard steps must get a drop/rep-change command"
+    )
+  }
 }

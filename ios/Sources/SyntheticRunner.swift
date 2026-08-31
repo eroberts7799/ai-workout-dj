@@ -40,7 +40,19 @@ func syntheticSamples(plan: [WorkoutStep], scenario o: RunScenario) -> [LiveSamp
     let pace = basePace * fatigue * (1 + (o.noisePct / 100) * wobble)
     t += 1000
     d += 1000 / pace // meters covered this second
-    out.append(LiveSample(tMs: t, distanceM: (d * 10).rounded() / 10))
+    // Stream the plan the way a watch does (wkStepSeq boundary counter +
+    // current/next step shape) — the simulated runner exercises the engine's
+    // FOLLOW MODE, the same path a real structured run drives. Before this,
+    // the stand-in plan shaped only the runner's pace: the engine saw an
+    // empty plan and cruised the whole workout (8/31: "0 cues landed").
+    out.append(LiveSample(
+      tMs: t, distanceM: (d * 10).rounded() / 10,
+      wkStepSeq: Double(stepIdx),
+      wkKind: step.kind,
+      wkDurationType: step.seconds != nil ? 0 : (step.meters != nil ? 1 : nil),
+      wkDurationValue: step.seconds ?? step.meters,
+      wkNextKind: stepIdx + 1 < plan.count ? plan[stepIdx + 1].kind : nil
+    ))
     let done: Bool
     if let seconds = step.seconds {
       done = t - stepStartT >= seconds * 1000

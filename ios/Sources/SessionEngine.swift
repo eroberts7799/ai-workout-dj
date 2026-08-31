@@ -309,6 +309,16 @@ final class SessionEngine: ObservableObject {
     guard phase == .running else { return }
     clock.pause()
     deck.pause()
+    // Pause silences EVERY output, keyed on music source — not just the deck
+    // (8/31: pause left Spotify playing; same class as the 8/27 trailMode
+    // gating bug). An undelivered command is stashed for resume; an in-flight
+    // attempt is orphaned so it can't undo the pause.
+    if musicSource == .spotify {
+      spotifyGen += 1
+      pausedSpotify = pendingSpotify
+      pendingSpotify = nil
+      Task { await SpotifyRemote.shared.pause() }
+    }
     phase = .paused
   }
 
@@ -318,6 +328,16 @@ final class SessionEngine: ObservableObject {
       // LIVE follows the watch/sim clock — just unmute and continue.
       clock.resume()
       deck.resume()
+      if musicSource == .spotify {
+        if let p = pausedSpotify {
+          // A command was still undelivered at pause — re-offer it; the
+          // watchdog rejoins at the modeled playhead automatically.
+          pausedSpotify = nil
+          deliverSpotify(uris: p.uris, positionMs: p.positionMs, timerMs: p.atTimerMs, reason: p.reason)
+        } else {
+          Task { await SpotifyRemote.shared.resume() }
+        }
+      }
       phase = .running
       return
     }
@@ -340,14 +360,9 @@ final class SessionEngine: ObservableObject {
     }
     // Spotify cleanup keys on music source, not mode — a LIVE (watch-driven)
     // Spotify run must also stop cleanly (8/27: same trailMode-gating bug).
-    if musicSource == .spotify {
-      spotifyGen += 1 // orphan any in-flight retry — it must not resurrect music
-      pendingSpotify = nil
-      KeepAlive.shared.stop()
-      Task { await SpotifyRemote.shared.pause() }
-    }
+    silenceSpotify()
     phase = .done
-    status = trailMode ? "trail session ended" : "stopped — music left playing"
+    status = trailMode ? "trail session ended" : "stopped"
     uploadSessionLog(source: trailMode ? "ios-trail" : simulating ? "ios-sim" : "ios")
     trailMode = false
   }
@@ -441,6 +456,7 @@ final class SessionEngine: ObservableObject {
     simTask?.cancel()
     live = nil
     deck.stop()
+    silenceSpotify()
     phase = .idle
     clockMs = 0
     lastCommand = ""
@@ -468,7 +484,7 @@ final class SessionEngine: ObservableObject {
     uploaded = false
     suppressLoopbacks = false
     prevMs = 0
-    spotifyEverDelivered = false
+    resetSpotifyDelivery()
     if musicSource == .spotify { KeepAlive.shared.start() } // survive the pocket
     phase = .running
     status = "🛰 LIVE — conducting \(b.name) from your body's data"
@@ -496,12 +512,41 @@ final class SessionEngine: ObservableObject {
   // where the model thinks it is the moment signal returns.
   private struct PendingSpotify { let uris: [String]; let positionMs: Double; let atTimerMs: Double; let gen: Int; let reason: String }
   private var pendingSpotify: PendingSpotify?
+  /// Command that was still undelivered when the session paused — re-offered on resume.
+  private var pausedSpotify: PendingSpotify?
+
+  /// Session over (stop, sim completion, reset): Spotify goes silent, nothing
+  /// in flight may resurrect it. Every halt path calls this — halting only
+  /// the deck while the source is Spotify is the 8/27+8/31 bug class.
+  private func silenceSpotify() {
+    guard musicSource == .spotify else { return }
+    spotifyGen += 1 // orphan any in-flight retry — it must not resurrect music
+    pendingSpotify = nil
+    pausedSpotify = nil
+    KeepAlive.shared.stop()
+    Task { await SpotifyRemote.shared.pause() }
+  }
   private var spotifyGen = 0
   private var spotifyRetryAtMs: Double = 0
   private var spotifyAttemptInFlight = false
   private var spotifyPollAtMs: Double = 0
   private var spotifyPollInFlight = false
   private var spotifyEverDelivered = false
+  private var spotifyLastDeliveryWall: TimeInterval = 0
+
+  /// Fresh pipeline for a fresh session. Stale poll/retry deadlines from a
+  /// previous session either fired a reconciliation read on the FIRST tick
+  /// (adopting the pre-run song as choreography — the dirty-start bug) or
+  /// pushed the first poll minutes out (skip detection dead all session).
+  private func resetSpotifyDelivery() {
+    spotifyGen += 1 // orphan any in-flight attempt from a previous session
+    pendingSpotify = nil
+    pausedSpotify = nil
+    spotifyRetryAtMs = 0
+    spotifyPollAtMs = 0
+    spotifyEverDelivered = false
+    spotifyLastDeliveryWall = 0
+  }
 
   private func deliverSpotify(uris: [String], positionMs: Double, timerMs: Double, reason: String) {
     spotifyGen += 1
@@ -528,6 +573,11 @@ final class SessionEngine: ObservableObject {
       if err == nil {
         self.pendingSpotify = nil
         self.spotifyEverDelivered = true
+        self.spotifyLastDeliveryWall = Date().timeIntervalSince1970
+        // Grace window: /me/player is eventually-consistent — a read right
+        // after a play command reports the PREVIOUS track, and adopting it
+        // snaps the model backwards and re-cuts the song we just started.
+        self.spotifyPollAtMs = self.clockMs + 20_000
       } else {
         // Actionable message: the usual cause is a sleeping Spotify.
         self.lastCommand = self.spotifyEverDelivered
@@ -559,7 +609,7 @@ final class SessionEngine: ObservableObject {
     uploaded = false
     suppressLoopbacks = false
     prevMs = 0
-    spotifyEverDelivered = false
+    resetSpotifyDelivery()
     if musicSource == .spotify { KeepAlive.shared.start() } // survive the pocket
     trailMode = true
     phase = .running
@@ -640,7 +690,13 @@ final class SessionEngine: ObservableObject {
     // mismatch = the runner skipped (or the queue spare fired) — the model
     // adopts reality and the overrule lands in the log as feedback.
     // Skipped while a delivery is pending: the player is known-stale then.
-    if musicSource == .spotify, pendingSpotify == nil,
+    // Also skipped: before the first delivery (a t≈0 read adopts the runner's
+    // pre-run song as choreography), within 5s wall-time of any delivery
+    // (stale-read window), and during simulation (engine clock runs 8× real
+    // audio — "reconciling" against lagging audio is a permanent jump loop).
+    if musicSource == .spotify, pendingSpotify == nil, !simulating,
+       spotifyEverDelivered,
+       Date().timeIntervalSince1970 - spotifyLastDeliveryWall >= 5,
        timerMs >= spotifyPollAtMs, !spotifyPollInFlight {
       spotifyPollAtMs = timerMs + 20_000
       spotifyPollInFlight = true
@@ -720,14 +776,25 @@ final class SessionEngine: ObservableObject {
           if Task.isCancelled { return }
         }
         guard phase == .running else { return }
-        advanceLive(timerMs: s.tMs, distanceM: s.distanceM)
-        recorded.append(RecordedSample(t: s.tMs, d: s.distanceM, hr: nil))
+        advanceLive(
+          timerMs: s.tMs, distanceM: s.distanceM,
+          wkStepSeq: s.wkStepSeq, wkKind: s.wkKind,
+          wkDurationType: s.wkDurationType, wkDurationValue: s.wkDurationValue,
+          wkNextKind: s.wkNextKind
+        )
+        recorded.append(RecordedSample(
+          t: s.tMs, d: s.distanceM, hr: nil,
+          wkSeq: s.wkStepSeq, wkKind: s.wkKind,
+          wkDurType: s.wkDurationType, wkDurVal: s.wkDurationValue,
+          wkNextKind: s.wkNextKind
+        ))
         try? await Task.sleep(nanoseconds: UInt64(1_000_000_000 / speed))
       }
       guard phase == .running else { return }
       phase = .done
       status = "simulated session complete — \(firedCount) cues · \(landingCount) landings"
       deck.stop()
+      silenceSpotify()
       uploadSessionLog(source: "ios-sim")
     }
   }

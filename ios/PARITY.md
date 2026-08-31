@@ -59,3 +59,11 @@ learned pairs (yet). Climb detection is altitude-delta-since-last-boundary
 (CLIMB_GAIN_M 8m, GUESS) — not GradeTracker. Engine changes to selection
 scoring in TS must consider Brain.mc; everything else is out of its scope
 by design.
+
+## SyntheticRunner divergence (2026-08-31)
+Swift `syntheticSamples` now emits the watch-style step stream (wkStepSeq +
+wkKind/duration/wkNextKind) so the in-app Simulate exercises FOLLOW MODE —
+the same engine path a real structured run drives. TS `src/replay/simulate.ts`
+still emits bare t/d samples (its consumers replay logged runs or drive
+plan-loaded engines). Port the wk-stream emission to TS if the replay lab
+ever needs to simulate follow mode.
