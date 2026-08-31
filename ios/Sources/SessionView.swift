@@ -330,6 +330,10 @@ struct SessionView: View {
           }
         }
         Section("Workouts") {
+          Button("Today's workout (from Garmin)") {
+            withAnimation { showMenu = false }
+            engine.loadNextWorkout()
+          }
           // One tap: the program loads and counts itself down.
           ForEach(SessionEngine.builtinPrograms, id: \.resource) { p in
             Button(p.title) {

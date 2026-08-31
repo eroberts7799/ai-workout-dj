@@ -414,6 +414,23 @@ final class LiveEngineTests: XCTestCase {
     XCTAssertNil(old.tags)
   }
 
+  /// Mirrors TS 'hard moments pick the banger, rest fills pick the breather'
+  /// — identical mixability, energy the only separator.
+  func testEnergyAwareMomentFit() {
+    var banger = song("hot"); banger.energy = 1.0
+    var chill = song("cold"); chill.energy = 0.5
+    let reps = [
+      WorkoutStep(kind: "hard", seconds: 60, meters: nil),
+      WorkoutStep(kind: "rest", seconds: 120, meters: nil),
+    ]
+    let engine = LiveEngine(plan: reps, songs: [chill, banger])
+    for i in 1...200 { engine.advance(LiveSample(tMs: Double(i) * 1000, distanceM: Double(i) * 3)) }
+    XCTAssertTrue(engine.commands[0].reason.contains("opening"))
+    XCTAssertEqual(engine.commands[0].trackId, "hot", "the rep must open on the banger")
+    let fill = engine.commands.first { $0.reason.hasPrefix("groove fill") }
+    XCTAssertEqual(fill?.trackId, "cold", "the rest fill must take the breather")
+  }
+
   /// The in-app Simulate path for plan-less playlist libraries: the stand-in
   /// interval plan reaches the engine as a watch-style step stream (wkStepSeq
   /// + step shape), driving FOLLOW MODE. 8/31 sim ran a whole workout as one

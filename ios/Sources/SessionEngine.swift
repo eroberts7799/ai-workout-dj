@@ -152,6 +152,52 @@ final class SessionEngine: ObservableObject {
     }
   }
 
+  /// Attach the day's planned workout to the current music library. Live,
+  /// the watch still owns step BOUNDARIES (wkStepSeq is authoritative); the
+  /// plan supplies step IDENTITY the stream can't carry — Runna authors
+  /// tempo floats as plain "interval" steps, indistinguishable from the
+  /// efforts, so a Rolling 800s day would read as six identical hards.
+  func adoptPlan(name: String, steps: [WorkoutStep]) {
+    guard let b = bundle, b.tags?.isEmpty == false else {
+      status = "pick a music library first, then load the workout"
+      return
+    }
+    bundle = SessionBundle(
+      name: b.name, planEndMs: b.planEndMs, cues: b.cues, songs: b.songs,
+      plan: steps, tags: b.tags, hrMax: b.hrMax, pairBonus: b.pairBonus, files: b.files)
+    if let data = try? JSONEncoder().encode(bundle) {
+      try? data.write(to: docs.appendingPathComponent("session-bundle.json"))
+    }
+    let hard = steps.filter { $0.kind == "hard" }.count
+    status = "workout loaded: \(name) — \(steps.count) steps, \(hard) efforts get bangers"
+  }
+
+  private struct NextWorkout: Decodable {
+    let name: String
+    let date: String?
+    let steps: [WorkoutStep]
+  }
+
+  /// The Mac publishes the next planned workout (scripts/publish-next-
+  /// workout.sh → key-gated relay); one tap loads it here.
+  func loadNextWorkout() {
+    status = "fetching today's workout…"
+    Task { [weak self] in
+      do {
+        let url = URL(string: "https://awdj-relay.vercel.app/api/next-workout?k=awdj-7g2k9x")!
+        let (data, resp) = try await URLSession.shared.data(from: url)
+        guard (resp as? HTTPURLResponse)?.statusCode == 200 else {
+          throw NSError(domain: "awdj", code: 404, userInfo: [
+            NSLocalizedDescriptionKey: "none published — run publish-next-workout.sh on the Mac"])
+        }
+        let w = try JSONDecoder().decode(NextWorkout.self, from: data)
+        self?.adoptPlan(name: w.name, steps: w.steps)
+      } catch {
+        self?.status = "workout fetch failed: \(error.localizedDescription)"
+      }
+    }
+  }
+
   func importAudio(from urls: [URL]) {
     for url in urls {
       let scoped = url.startAccessingSecurityScopedResource()
@@ -732,7 +778,9 @@ final class SessionEngine: ObservableObject {
 
   func previewSetlist() -> [PreviewRow] {
     guard let b = bundle, let tags = b.tags, !tags.isEmpty else { return [] }
-    let plan: [WorkoutStep] = [
+    // A LOADED workout previews the real choreography; otherwise the
+    // representative Drop Set stands in.
+    let plan: [WorkoutStep] = (b.plan?.isEmpty == false) ? b.plan! : [
       WorkoutStep(kind: "warmup", seconds: nil, meters: 1200),
     ] + [1000.0, 1000, 800, 800, 600, 600, 400, 400].flatMap { m in
       [WorkoutStep(kind: "hard", seconds: nil, meters: m),

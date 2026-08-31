@@ -463,6 +463,19 @@ final class LiveEngine {
     return Int(min(2, pairBonus["\(a)>\(b)"] ?? 0))
   }
 
+  enum WantEnergy { case high, low }
+
+  /// Moment fit from perceived intensity — mirrors TS energyFit. Hard
+  /// moments pull high-energy songs hard (±2); wind-down fills nudge low
+  /// (±1). Unknown energy is neutral — never punished.
+  private func energyFit(_ energy: Double?, _ want: WantEnergy?) -> Double {
+    guard let energy, let want else { return 0 }
+    switch want {
+    case .high: return max(-2, min(2, (energy - 0.5) * 4))
+    case .low: return max(-1, min(1, (0.5 - energy) * 2))
+    }
+  }
+
   private func bestDrop() -> (c: DropChoice, advance: Int)? {
     guard !droppable.isEmpty else { return nil }
     let from = playing?.song
@@ -474,6 +487,7 @@ final class LiveEngine {
       var score = Double(from != nil ? BeatMath.mixScore(fromBpm: from!.bpm, fromKey: from!.camelot, toBpm: c.song.bpm, toKey: c.song.camelot) : 0)
       score += Double(learnedBonus(from: from, to: c.song))
       score += max(-2, min(2, c.song.affinity ?? 0)) // lifetime taste
+      score += energyFit(c.song.energy, .high) // a drop IS a hard moment
       if recent.contains(c.song.trackId) { score -= 1 }
       if best == nil || score > best!.score { best = (c, i + 1, score) }
     }
@@ -487,7 +501,7 @@ final class LiveEngine {
     return b.c
   }
 
-  private func pickLoop() -> LoopChoice? {
+  private func pickLoop(want: WantEnergy? = nil) -> LoopChoice? {
     guard !loopable.isEmpty else { return nil }
     let from = playing?.song
     let recent = recentIds()
@@ -498,6 +512,7 @@ final class LiveEngine {
       var score = Double(from != nil ? BeatMath.mixScore(fromBpm: from!.bpm, fromKey: from!.camelot, toBpm: c.song.bpm, toKey: c.song.camelot) : 0)
       score += Double(learnedBonus(from: from, to: c.song))
       score += max(-2, min(2, c.song.affinity ?? 0)) // lifetime taste
+      score += energyFit(c.song.energy, want)
       if recent.contains(c.song.trackId) { score -= 1 }
       if best == nil || score > best!.score { best = (c, i + 1, score) }
     }
@@ -537,7 +552,10 @@ final class LiveEngine {
   /// Cruise: songs start at the BEGINNING and play through — Spotify-style
   /// listening. Mirrors TS.
   private func startFill(_ t: Double) {
-    guard let fill = pickLoop() else { return }
+    // Wind-down fills breathe; the hard/easy CONTRAST is the emotion
+    // machine, and it needs both poles. Mirrors TS.
+    let kind = currentStep()?.kind
+    guard let fill = pickLoop(want: kind == "rest" || kind == "cooldown" ? .low : nil) else { return }
     mode = .fill
     fillExitPosMs = chainExitPosMs(song: fill.song, entryMs: 0)
     let spare = peekSpare(chosen: fill.song)
@@ -577,7 +595,7 @@ final class LiveEngine {
           landings.append(LandingReport(targetTMs: target, actualTMs: t, errorMs: t - target))
         } else if dropStyle == .fresh {
           // ETA collapsed before the commit — change songs NOW, from the top.
-          if let pick = pickLoop() {
+          if let pick = pickLoop(want: .high) {
             emit(t: t, song: pick.song, positionMs: 0, fadeSec: 0.3, reason: "rep change (truncated) (\(pick.song.name))")
             landings.append(LandingReport(targetTMs: t, actualTMs: t, errorMs: 0))
           }
@@ -607,7 +625,7 @@ final class LiveEngine {
     // mirrors TS (backtest: every progressive long run's first effort missed).
     if mode == nil {
       if currentStep()?.kind == "hard" {
-        if dropStyle == .fresh, let pick = pickLoop() {
+        if dropStyle == .fresh, let pick = pickLoop(want: .high) {
           emit(t: t, song: pick.song, positionMs: 0, fadeSec: 0.3, reason: "rep change (opening) (\(pick.song.name))")
           landings.append(LandingReport(targetTMs: t, actualTMs: t, errorMs: 0))
           mode = .ride
@@ -630,7 +648,7 @@ final class LiveEngine {
       let eta = etaToNextHardMs(t: t, dist: dist)
       let earned = hrState.hr == nil || hrState.zone >= 3
       if (eta == nil || eta! > Self.crestMinEtaMs), earned {
-        if dropStyle == .fresh, let pick = pickLoop() {
+        if dropStyle == .fresh, let pick = pickLoop(want: .high) {
           // Fresh mode: the crest song is a normal cruise entry — it rides to
           // its own chain point. The 25s time-box belongs to the anticipated
           // style; boxing a 0:00 entry amputated it mid-intro (trail run
@@ -659,7 +677,7 @@ final class LiveEngine {
       if dropStyle == .fresh {
         // Fresh mode: a NEW song from 0:00, crossfade timed so the swap
         // peaks right as the rep begins. Prediction owns the WHEN. Mirrors TS.
-        if let eta = etaToNextHardMs(t: t, dist: dist), eta <= Self.freshChangeLeadMs, let pick = pickLoop() {
+        if let eta = etaToNextHardMs(t: t, dist: dist), eta <= Self.freshChangeLeadMs, let pick = pickLoop(want: .high) {
           emit(t: t, song: pick.song, positionMs: 0, fadeSec: 0.45, reason: "rep change (\(pick.song.name))")
           mode = .build
           buildTargetT = t + eta

@@ -85,6 +85,18 @@ interface LoopChoice {
 
 type Mode = 'fill' | 'build' | 'ride'
 
+/** Moment fit from perceived intensity (tag table, 0..1 — observed 0.5–1.0).
+ *  Hard moments (drops, rep changes, crest rewards) pull high-energy songs
+ *  hard (±2: a banger belongs on the rep, even over a slightly better key
+ *  match); wind-down fills (rest, cooldown) nudge low (±1: calm preferred,
+ *  mix quality still leads). Unknown energy is neutral — an untagged song
+ *  is never punished (rule 4: honest neutrality beats a guessed penalty). */
+export function energyFit(energy: number | null | undefined, want: 'high' | 'low' | null): number {
+  if (energy == null || want == null) return 0
+  if (want === 'high') return Math.max(-2, Math.min(2, (energy - 0.5) * 4))
+  return Math.max(-1, Math.min(1, (0.5 - energy) * 2))
+}
+
 const DEFAULT_LEAD_MS = 30_000
 /** EMA smoothing for pace (per sample at ~1Hz). */
 const PACE_ALPHA = 0.15
@@ -514,6 +526,7 @@ export class LiveEngine {
   private pickBest<T extends { song: SongTags }>(
     choices: T[],
     startIdx: number,
+    wantEnergy: 'high' | 'low' | null = null,
   ): { choice: T; advance: number } | null {
     if (choices.length === 0) return null
     const from = this.playing?.song
@@ -540,7 +553,10 @@ export class LiveEngine {
       // to the song, not the transition — a track Ethan loves gets picked
       // more, one he skips less, all else near-equal.
       const taste = Math.max(-2, Math.min(2, c.song.affinity ?? 0))
-      const score = (from ? mixScore(from, c.song) : 0) + learned + taste - (recent.has(c.song.trackId) ? 1 : 0)
+      const score =
+        (from ? mixScore(from, c.song) : 0) + learned + taste
+        + energyFit(c.song.energy, wantEnergy)
+        - (recent.has(c.song.trackId) ? 1 : 0)
       if (!best || score > best.score) best = { choice: c, advance: i + 1, score }
     }
     if (best) return best
@@ -548,14 +564,15 @@ export class LiveEngine {
   }
 
   private pickDrop(): DropChoice | null {
-    const r = this.pickBest(this.droppable, this.dropIdx)
+    // A drop IS a hard moment — it always wants a banger.
+    const r = this.pickBest(this.droppable, this.dropIdx, 'high')
     if (!r) return null
     this.dropIdx += r.advance
     return r.choice
   }
 
-  private pickLoop(): LoopChoice | null {
-    const r = this.pickBest(this.loopable, this.loopIdx)
+  private pickLoop(wantEnergy: 'high' | 'low' | null = null): LoopChoice | null {
+    const r = this.pickBest(this.loopable, this.loopIdx, wantEnergy)
     if (!r) return null
     this.loopIdx += r.advance
     return r.choice
@@ -595,7 +612,10 @@ export class LiveEngine {
   }
 
   private startFill(t: number) {
-    const fill = this.pickLoop()
+    // Wind-down fills (rest, cooldown) breathe; everything else is neutral —
+    // the hard/easy CONTRAST is the emotion machine, and it needs both poles.
+    const kind = this.currentStep()?.kind
+    const fill = this.pickLoop(kind === 'rest' || kind === 'cooldown' ? 'low' : null)
     if (!fill) return
     this.mode = 'fill'
     // Songs start at the BEGINNING — Spotify-style listening ("until we get
@@ -636,7 +656,7 @@ export class LiveEngine {
           this.landings.push({ targetTMs: this.buildTargetT, actualTMs: t, errorMs: t - this.buildTargetT })
         } else if (this.dropStyle === 'fresh') {
           // ETA collapsed before the commit — change songs NOW, from the top.
-          const pick = this.pickLoop()
+          const pick = this.pickLoop('high')
           if (pick) {
             this.emit(t, pick.song, 0, 0.3, `rep change (truncated) (${pick.song.name})`)
             this.landings.push({ targetTMs: t, actualTMs: t, errorMs: 0 })
@@ -659,7 +679,7 @@ export class LiveEngine {
         // songs twice in quick succession is worse than riding this one
         // straight through the rest into the buildup.
         const eta = this.etaToNextHardMs(t, dist)
-        const peek = this.dropStyle === 'anticipated' ? this.pickBest(this.droppable, this.dropIdx) : null
+        const peek = this.dropStyle === 'anticipated' ? this.pickBest(this.droppable, this.dropIdx, 'high') : null
         const lead = this.dropStyle === 'fresh' ? FRESH_CHANGE_LEAD_MS : peek ? peek.choice.dropMs - peek.choice.entryMs : 0
         if (eta == null || eta > lead + RELEASE_MIN_LISTEN_MS) this.startFill(t)
         this.crestRideUntil = null
@@ -671,7 +691,7 @@ export class LiveEngine {
     // was missed — step 0 is never "entered", so nothing choreographed it).
     if (this.mode === null) {
       if (this.currentStep()?.kind === 'hard') {
-        const pick = this.dropStyle === 'fresh' ? this.pickLoop() : this.pickDrop()
+        const pick = this.dropStyle === 'fresh' ? this.pickLoop('high') : this.pickDrop()
         if (pick) {
           const pos = this.dropStyle === 'fresh' ? 0 : (pick as DropChoice).dropMs
           const reason = this.dropStyle === 'fresh' ? 'rep change (opening)' : 'drop lands (opening)'
@@ -701,7 +721,7 @@ export class LiveEngine {
           // style, where the entry IS a drop section; time-boxing a song that
           // started at 0:00 amputated it mid-intro and gave every summit
           // three songs in 90s (trail run 2026-08-22, all 6 crests).
-          const pick = this.pickLoop()
+          const pick = this.pickLoop('high')
           if (pick) {
             this.emit(t, pick.song, 0, 0.45, `rep change (crest reward) (${pick.song.name})`, this.peekSpare(pick.song))
             this.fillExitPosMs = this.chainExitPosMs(pick.song, 0)
@@ -738,7 +758,7 @@ export class LiveEngine {
         // peaks right as the rep begins. The prediction machinery still owns
         // the WHEN; only the WHAT changed.
         if (eta <= FRESH_CHANGE_LEAD_MS) {
-          const pick = this.pickLoop()
+          const pick = this.pickLoop('high')
           if (pick) {
             this.emit(t, pick.song, 0, 0.45, `rep change (${pick.song.name})`)
             this.mode = 'build'
@@ -747,7 +767,7 @@ export class LiveEngine {
           }
         }
       } else if (eta != null) {
-        const r = this.pickBest(this.droppable, this.dropIdx)
+        const r = this.pickBest(this.droppable, this.dropIdx, 'high')
         if (r) {
           const buildLen = r.choice.dropMs - r.choice.entryMs
           if (eta <= buildLen) {

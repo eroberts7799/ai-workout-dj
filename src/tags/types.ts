@@ -29,6 +29,10 @@ export interface SongTags {
    *  tracks lift, habitually-skipped ones sink. Selection-only; never a
    *  transition or timing input. */
   affinity?: number | null
+  /** Perceived intensity 0..1 from the analysis pipeline (observed range
+   *  0.5–1.0 across the tag table — workout music skews hot). Moment fit:
+   *  hard efforts want high, wind-downs want low. Selection-only. */
+  energy?: number | null
   updatedAt: string
 }
 

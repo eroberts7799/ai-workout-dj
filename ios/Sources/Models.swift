@@ -47,6 +47,9 @@ struct TaggedSong: Codable, Identifiable {
   /// Per-user taste bonus (−2..+2) from lifetime listening history. Mirrors
   /// SongTags.affinity — selection-only, never a transition/timing input.
   var affinity: Double? = nil
+  /// Perceived intensity 0..1 (tag table; observed 0.5–1.0). Mirrors
+  /// SongTags.energy — moment fit, selection-only.
+  var energy: Double? = nil
   var id: String { trackId }
 }
 

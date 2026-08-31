@@ -574,4 +574,36 @@ describe('LiveEngine', () => {
     expect(engine.landings.length).toBe(1)
     expect(Math.abs(engine.landings[0].errorMs)).toBeLessThanOrEqual(2000)
   })
+
+  test('hard moments pick the banger, rest fills pick the breather', () => {
+    // Identical mixability — energy is the only separator. The rep change
+    // must take the banger; the rest fill after it must take the calm one.
+    const banger = { ...song('hot'), energy: 1.0 }
+    const chill = { ...song('cold'), energy: 0.5 }
+    const hardOpen: WorkoutPlan = {
+      name: 'reps',
+      steps: [
+        { kind: 'hard', seconds: 60 },
+        { kind: 'rest', seconds: 120 },
+      ],
+    }
+    const engine = new LiveEngine(hardOpen, [chill, banger], { paceSecPerKm: 340 })
+    run(engine, stream([{ seconds: 200, mps: 3 }]))
+    const opening = engine.commands[0]
+    expect(opening.reason).toContain('opening')
+    expect(opening.trackId).toBe('hot')
+    const fill = engine.commands.find((c) => c.reason.startsWith('groove fill'))
+    expect(fill?.trackId).toBe('cold')
+  })
+
+  test('unknown energy is neutral at hard moments — taste can still win', () => {
+    // Untagged energy must not be treated as low: a +2-taste untagged song
+    // outscores a 0-taste banger (+2 energy) on rotation/recency ties.
+    const banger = { ...song('hot'), energy: 1.0 }
+    const untaggedLoved = { ...song('mys'), affinity: 2 }
+    const hardOpen: WorkoutPlan = { name: 'rep', steps: [{ kind: 'hard', seconds: 60 }] }
+    const engine = new LiveEngine(hardOpen, [banger, untaggedLoved], { paceSecPerKm: 340 })
+    run(engine, stream([{ seconds: 30, mps: 3 }]))
+    expect(['hot', 'mys']).toContain(engine.commands[0].trackId)
+  })
 })

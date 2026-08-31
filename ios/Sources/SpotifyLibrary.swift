@@ -78,9 +78,9 @@ enum SpotifyLibrary {
     }
   }
 
-  static func enrich(artist: String, title: String) -> (bpm: Double?, camelot: String?, affinity: Double?) {
+  static func enrich(artist: String, title: String) -> (bpm: Double?, camelot: String?, affinity: Double?, energy: Double?) {
     let key = "\(norm(artist))|\(norm(title))"
-    return (tables.tags[key]?.bpm ?? nil, tables.camelot[key], taste[key])
+    return (tables.tags[key]?.bpm ?? nil, tables.camelot[key], taste[key], tables.tags[key]?.energy ?? nil)
   }
 
   /// Public playlist by link → (name, tags). Nil on any failure — the
@@ -112,7 +112,7 @@ enum SpotifyLibrary {
       let e = enrich(artist: artists, title: title)
       return TaggedSong(trackId: trackId, uri: uri, name: title, artists: artists,
                         durationMs: t["duration"] as? Double ?? 0,
-                        bpm: e.bpm, camelot: e.camelot, markers: [], affinity: e.affinity)
+                        bpm: e.bpm, camelot: e.camelot, markers: [], affinity: e.affinity, energy: e.energy)
     }
     guard !tags.isEmpty else { throw err("no playable tracks in that playlist") }
     return (name, tags)
@@ -145,7 +145,7 @@ enum SpotifyLibrary {
         let artists = t.artists.map { $0.name }.joined(separator: ", ")
         let e = enrich(artist: artists, title: t.name)
         out.append(TaggedSong(trackId: id, uri: t.uri, name: t.name, artists: artists,
-                              durationMs: t.duration_ms, bpm: e.bpm, camelot: e.camelot, markers: [], affinity: e.affinity))
+                              durationMs: t.duration_ms, bpm: e.bpm, camelot: e.camelot, markers: [], affinity: e.affinity, energy: e.energy))
       }
       offset += 50
       if offset >= page.total { break }
@@ -220,7 +220,7 @@ enum SpotifyLibrary {
     let e = enrich(artist: artists, title: title)
     return TaggedSong(trackId: id, uri: uri, name: title, artists: artists,
                       durationMs: t["duration_ms"] as? Double ?? 0,
-                      bpm: e.bpm, camelot: e.camelot, markers: [], affinity: e.affinity)
+                      bpm: e.bpm, camelot: e.camelot, markers: [], affinity: e.affinity, energy: e.energy)
   }
 
   /// GET /me/top/tracks — full track objects (unlike the lean taste
@@ -370,7 +370,7 @@ enum SpotifyLibrary {
         let e = enrich(artist: artists, title: title)
         out.append(TaggedSong(trackId: trackId, uri: uri, name: title, artists: artists,
                               durationMs: t["duration_ms"] as? Double ?? 0,
-                              bpm: e.bpm, camelot: e.camelot, markers: [], affinity: e.affinity))
+                              bpm: e.bpm, camelot: e.camelot, markers: [], affinity: e.affinity, energy: e.energy))
       }
       let total = root["total"] as? Int ?? out.count
       offset += 50
