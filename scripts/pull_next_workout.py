@@ -90,7 +90,11 @@ def main():
         cal = api.connectapi(f"/calendar-service/year/{probe.year}/month/{probe.month - 1}")
         for it in cal.get("calendarItems", []):
             if it.get("itemType") == "workout" and it.get("date") and it.get("workoutId"):
-                seen[it["date"]] = it
+                # Two workouts on one date (e.g. a test scheduled after the
+                # morning's run): the newest-created wins — it's the intent.
+                cur = seen.get(it["date"])
+                if cur is None or it["workoutId"] > cur["workoutId"]:
+                    seen[it["date"]] = it
     upcoming = sorted(d for d in seen if d >= today.isoformat())
     if not upcoming:
         print("no upcoming workout found", file=sys.stderr)
