@@ -122,6 +122,7 @@ final class SessionEngine: ObservableObject {
     // routes to the silent deck (8/27: the SECOND half of the silent-run
     // bug; the runner never knew a hidden picker also had to be flipped).
     musicSource = .spotify
+    workoutName = nil // the plan goes with it — prepareForToday reloads
     // Plan deliberately dropped: adopting a music library is a fresh start,
     // and an empty plan is what lets FOLLOW MODE conduct from the watch's
     // step stream (a stale plan would silently block it — Thursday's test).
@@ -152,6 +153,9 @@ final class SessionEngine: ObservableObject {
     }
   }
 
+  /// The day's workout as shown on the ready screen ("Rolling 800s (5mi)").
+  @Published var workoutName: String?
+
   /// Attach the day's planned workout to the current music library. Live,
   /// the watch still owns step BOUNDARIES (wkStepSeq is authoritative); the
   /// plan supplies step IDENTITY the stream can't carry — Runna authors
@@ -168,6 +172,7 @@ final class SessionEngine: ObservableObject {
     if let data = try? JSONEncoder().encode(bundle) {
       try? data.write(to: docs.appendingPathComponent("session-bundle.json"))
     }
+    workoutName = name
     let hard = steps.filter { $0.kind == "hard" }.count
     status = "workout loaded: \(name) — \(steps.count) steps, \(hard) efforts get bangers"
   }
@@ -179,23 +184,44 @@ final class SessionEngine: ObservableObject {
   }
 
   /// The Mac publishes the next planned workout (scripts/publish-next-
-  /// workout.sh → key-gated relay); one tap loads it here.
+  /// workout.sh, launchd-daily) — fetched automatically at app open and
+  /// on the manual menu button.
   func loadNextWorkout() {
     status = "fetching today's workout…"
-    Task { [weak self] in
-      do {
-        let url = URL(string: "https://awdj-relay.vercel.app/api/next-workout?k=awdj-7g2k9x")!
-        let (data, resp) = try await URLSession.shared.data(from: url)
-        guard (resp as? HTTPURLResponse)?.statusCode == 200 else {
-          throw NSError(domain: "awdj", code: 404, userInfo: [
-            NSLocalizedDescriptionKey: "none published — run publish-next-workout.sh on the Mac"])
-        }
-        let w = try JSONDecoder().decode(NextWorkout.self, from: data)
-        self?.adoptPlan(name: w.name, steps: w.steps)
-      } catch {
-        self?.status = "workout fetch failed: \(error.localizedDescription)"
+    Task { [weak self] in await self?.fetchNextWorkout() }
+  }
+
+  private func fetchNextWorkout() async {
+    do {
+      let url = URL(string: "https://awdj-relay.vercel.app/api/next-workout?k=awdj-7g2k9x")!
+      let (data, resp) = try await URLSession.shared.data(from: url)
+      guard (resp as? HTTPURLResponse)?.statusCode == 200 else {
+        throw NSError(domain: "awdj", code: 404, userInfo: [
+          NSLocalizedDescriptionKey: "none published — run publish-next-workout.sh on the Mac"])
+      }
+      let w = try JSONDecoder().decode(NextWorkout.self, from: data)
+      adoptPlan(name: w.name, steps: w.steps)
+    } catch {
+      status = "workout fetch failed: \(error.localizedDescription)"
+    }
+  }
+
+  /// Preset, ready to rock (9/1 postmortem: the run failed on setup
+  /// friction, not the brain). At app open: hold the audio session so a
+  /// locked phone still hears the watch's START, ensure a library (cached
+  /// Free Play crate when none picked — always wired), and load the day's
+  /// workout. After this, the whole start ritual is: press START on the
+  /// watch (plus Spotify's own wake, which iOS will not let us do).
+  func prepareForToday(spotifyConnected: Bool) async {
+    guard phase == .idle, spotifyConnected else { return }
+    KeepAlive.shared.start() // awake BEFORE the run — START must find us listening
+    if bundle?.tags?.isEmpty != false {
+      status = "wiring up Free Play…"
+      if let tags = try? await SpotifyLibrary.freeCrate(progress: { [weak self] in self?.status = $0 }) {
+        adoptLibrary(name: SpotifyLibrary.freeCrateName, tags: tags)
       }
     }
+    await fetchNextWorkout()
   }
 
   func importAudio(from urls: [URL]) {

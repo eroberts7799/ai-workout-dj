@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Daily workout publish: Garmin calendar -> engine-shaped plan -> relay.
+     Install:  cp scripts/com.awdj.publish-workout.plist ~/Library/LaunchAgents/
+               launchctl load ~/Library/LaunchAgents/com.awdj.publish-workout.plist
+     05:00 local, so the phone's app-open auto-fetch always sees today. -->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.awdj.publish-workout</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Users/ethanroberts/ai-workout-dj/scripts/publish-next-workout.sh</string>
+  </array>
+  <key>StartCalendarInterval</key>
+  <dict><key>Hour</key><integer>5</integer><key>Minute</key><integer>0</integer></dict>
+  <key>StandardOutPath</key><string>/tmp/awdj-publish-workout.log</string>
+  <key>StandardErrorPath</key><string>/tmp/awdj-publish-workout.log</string>
+  <key>EnvironmentVariables</key>
+  <dict><key>PATH</key><string>/Users/ethanroberts/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string></dict>
+</dict>
+</plist>

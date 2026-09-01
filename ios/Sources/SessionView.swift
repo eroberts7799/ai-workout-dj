@@ -86,9 +86,25 @@ struct SessionView: View {
           }
           .buttonStyle(ArmButtonStyle())
         } else {
-          Button("START RUN") { engine.startTrailRun() }
-            .buttonStyle(ArmButtonStyle())
-            .disabled(engine.musicSource == .ownedFiles ? !engine.allAudioReady : !spotify.connected)
+          // READY state, not a control panel: the 9/1 Rolling 800s failed
+          // because the big in-app START button launched TRAIL mode over a
+          // loaded structured plan. The app now presets everything and the
+          // only start that exists is the watch's. Trail lives in the menu.
+          if let w = engine.workoutName, let steps = engine.bundle?.plan, !steps.isEmpty {
+            Text("TODAY").fieldMono(11, weight: .bold).foregroundColor(Theme.faded)
+            Text(w).fieldDisplay(22).textCase(.uppercase)
+            let hard = steps.filter { $0.kind == "hard" }.count
+            let km = steps.compactMap { $0.meters }.reduce(0, +) / 1000
+            Text(String(format: "%.1f km · %d efforts", km, hard))
+              .fieldMono(12)
+              .foregroundColor(Theme.faded)
+          }
+          Text("PRESS START ON YOUR WATCH")
+            .fieldMono(14, weight: .bold)
+            .foregroundColor(Theme.olive)
+          Text("open Spotify & press play first — then it takes over")
+            .fieldMono(11)
+            .foregroundColor(Theme.faded)
         }
         Button("Select playlist") {
           engine.status = "loading your playlists…"
@@ -260,6 +276,9 @@ struct SessionView: View {
       engine.restore()
       Task {
         await SpotifyLibrary.refreshTagTable()
+        // Preset ready: library wired (Free Play default), workout loaded,
+        // app held awake — the morning ritual is the watch's START button.
+        await engine.prepareForToday(spotifyConnected: spotify.connected)
         if spotify.connected { await SpotifyLibrary.captureTasteSnapshot() }
       }
       relay.onSample = { [weak engine] s in
@@ -333,6 +352,10 @@ struct SessionView: View {
           Button("Today's workout (from Garmin)") {
             withAnimation { showMenu = false }
             engine.loadNextWorkout()
+          }
+          Button("Trail run (phone only, no watch)") {
+            withAnimation { showMenu = false }
+            engine.startTrailRun()
           }
           // One tap: the program loads and counts itself down.
           ForEach(SessionEngine.builtinPrograms, id: \.resource) { p in
