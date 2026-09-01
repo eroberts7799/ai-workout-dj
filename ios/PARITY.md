@@ -54,8 +54,13 @@ The Monkey C Brain is boundary-mode only (the platform physics: code runs
 only at song boundaries, no mid-song cuts). It mirrors EXACTLY: mixScore
 (+2 bpm≤3%, +1 camelot-compatible), camelotCompatible, recency -1 (last 6),
 hrMax 197. It does NOT have: buildups/drops, chain points, never-silence
-(the native player owns playback), loop machinery, wkStep/follow mode,
-learned pairs (yet). Climb detection is altitude-delta-since-last-boundary
+(the native player owns playback), loop machinery, wkStep/follow mode.
+It DOES have (parity law 2026-09-01: tiers move together): learned pairs,
+taste (manifest 'aff', capped ±2) and energy fit (manifest 'energy',
+(e−0.5)×4 capped ±2 on effort/climb moments; bpm-greater heuristic remains
+the fallback for untagged tracks). Crate energies are FILE-derived,
+rank-normalized 0.5–1.0 (analysis/crate_energy.py — the preview formula
+saturates on full-file masters). Climb detection is altitude-delta-since-last-boundary
 (CLIMB_GAIN_M 8m, GUESS) — not GradeTracker. Engine changes to selection
 scoring in TS must consider Brain.mc; everything else is out of its scope
 by design.

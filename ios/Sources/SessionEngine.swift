@@ -76,6 +76,7 @@ final class SessionEngine: ObservableObject {
     phase = .idle
     clockMs = 0
     status = "program: \(b.name)"
+    stampTagTable()
     matchAudioFiles()
   }
 
@@ -106,6 +107,7 @@ final class SessionEngine: ObservableObject {
       if let m = bundle!.hrMax, m >= 120, m <= 230 {
         UserDefaults.standard.set(m, forKey: "awdj.hrMax")
       }
+      stampTagTable()
       matchAudioFiles()
       status = "bundle: \(bundle!.name) · \(bundle!.cues.count) cues"
     } catch {
@@ -213,15 +215,21 @@ final class SessionEngine: ObservableObject {
   /// workout. After this, the whole start ritual is: press START on the
   /// watch (plus Spotify's own wake, which iOS will not let us do).
   func prepareForToday(spotifyConnected: Bool) async {
-    guard phase == .idle, spotifyConnected else { return }
-    KeepAlive.shared.start() // awake BEFORE the run — START must find us listening
-    if bundle?.tags?.isEmpty != false {
-      status = "wiring up Free Play…"
-      if let tags = try? await SpotifyLibrary.freeCrate(progress: { [weak self] in self?.status = $0 }) {
-        adoptLibrary(name: SpotifyLibrary.freeCrateName, tags: tags)
+    guard phase == .idle else { return }
+    // Parity law: the ready-state flow serves BOTH tiers. Spotify-specific:
+    // the pre-run keep-alive (the deck holds its own audio session) and the
+    // Free Play default library. The workout preset is universal.
+    if musicSource == .spotify {
+      guard spotifyConnected else { return }
+      KeepAlive.shared.start() // awake BEFORE the run — START must find us listening
+      if bundle?.tags?.isEmpty != false {
+        status = "wiring up Free Play…"
+        if let tags = try? await SpotifyLibrary.freeCrate(progress: { [weak self] in self?.status = $0 }) {
+          adoptLibrary(name: SpotifyLibrary.freeCrateName, tags: tags)
+        }
       }
     }
-    await fetchNextWorkout()
+    if bundle?.tags?.isEmpty == false { await fetchNextWorkout() }
   }
 
   func importAudio(from urls: [URL]) {
@@ -253,7 +261,30 @@ final class SessionEngine: ObservableObject {
       bundle = b
       status = "demo set loaded — press Start, or Simulate a run"
     }
+    stampTagTable()
     matchAudioFiles()
+  }
+
+  /// Parity law (2026-09-01): owned-file bundles get the same taste +
+  /// energy enrichment the Spotify imports get — the tiers move together.
+  /// Per-field provenance (rule 5): the tagger's bpm/camelot/markers are
+  /// file-derived ground truth and are never overwritten — the table only
+  /// fills gaps; affinity/energy are table-derived by nature and refresh.
+  private func stampTagTable() {
+    guard let b = bundle, let tags = b.tags, !tags.isEmpty else { return }
+    let stamped = tags.map { t -> TaggedSong in
+      let e = SpotifyLibrary.enrich(artist: t.artists, title: t.name)
+      var s = TaggedSong(trackId: t.trackId, uri: t.uri, name: t.name, artists: t.artists,
+                         durationMs: t.durationMs, bpm: t.bpm ?? e.bpm,
+                         camelot: t.camelot ?? e.camelot, markers: t.markers)
+      s.segments = t.segments
+      s.affinity = e.affinity ?? t.affinity
+      s.energy = t.energy ?? e.energy
+      return s
+    }
+    bundle = SessionBundle(
+      name: b.name, planEndMs: b.planEndMs, cues: b.cues, songs: b.songs,
+      plan: b.plan, tags: stamped, hrMax: b.hrMax, pairBonus: b.pairBonus, files: b.files)
   }
 
   private func normalize(_ s: String) -> String {

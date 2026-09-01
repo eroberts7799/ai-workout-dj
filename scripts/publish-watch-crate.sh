@@ -57,6 +57,25 @@ def display_title(e):
     t = re.sub(r'-\d{4,}$', '', t)
     return t.replace('-', ' ').title() if e.get('artist', '') == '' else t
 cache = json.load(open(cache_path))
+try:
+    taste = json.load(open('data/taste-bonus.json'))
+except FileNotFoundError:
+    taste = {}
+# The crate analyzer never emitted energy (that's the preview-tag
+# pipeline's field) — fill from the cloud tag table, same source the
+# phone's enrich() uses. Misses stay null (neutral, never punished).
+try:
+    import urllib.request
+    tagtable = json.load(urllib.request.urlopen('https://awdj-relay.vercel.app/api/track-tags', timeout=15))
+except Exception:
+    tagtable = {}
+def norm(x):
+    import re as _re
+    x = x.lower()
+    x = _re.sub(r'\((?:extended|original|club|radio)[^)]*\)', '', x)
+    x = _re.sub(r'\s*(?:feat|ft)\.?\s.*', '', x)
+    x = _re.sub(r'[^a-z0-9]+', ' ', x)
+    return x.strip()
 tracks = []
 picked = [e for e in analysis if e.get('bpm') and os.path.exists(os.path.join(music_dir, e['sourceFile']))][:limit]
 for i, e in enumerate(picked):
@@ -74,6 +93,16 @@ for i, e in enumerate(picked):
         json.dump(cache, open(cache_path, 'w'), indent=1)
     else:
         print(f"  cached    {i+1}/{len(picked)}: {f}")
+    # Parity law (2026-09-01): the watch Brain scores taste + energy like
+    # the phone brains. Taste key mirrors SpotifyLibrary.enrich's norm form.
+    title_n = norm(e.get('title') or e['sourceFile'])
+    artist_full = norm(e.get('artist',''))
+    artist_first = norm((e.get('artist','') or '').split(',')[0])
+    # Full-artist key first; first-artist fallback for multi-artist DJ
+    # edits ("Beam, Skin On Skin, Fred again.." vs the table's primary).
+    def look(table):
+        return table.get(f"{artist_full}|{title_n}") or table.get(f"{artist_first}|{title_n}")
+    tag_hit = look(tagtable) or {}
     tracks.append({
         'url': cache[f],
         'title': display_title(e),
@@ -82,6 +111,8 @@ for i, e in enumerate(picked):
         'camelot': e.get('camelot') or keys.get(f, {}).get('camelot'),
         'durationMs': e.get('durationMs'),
         'nk': nk(e),
+        'aff': look(taste),
+        'energy': e.get('energy') if e.get('energy') is not None else tag_hit.get('energy'),
     })
 # Learned pairs, filtered to THIS crate: what real DJs played adjacently
 # among these exact tracks. Tiny by construction (watch Storage is 8KB/value).

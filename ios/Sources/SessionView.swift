@@ -102,9 +102,11 @@ struct SessionView: View {
           Text("PRESS START ON YOUR WATCH")
             .fieldMono(14, weight: .bold)
             .foregroundColor(Theme.olive)
-          Text("open Spotify & press play first — then it takes over")
-            .fieldMono(11)
-            .foregroundColor(Theme.faded)
+          if engine.musicSource == .spotify {
+            Text("open Spotify & press play first — then it takes over")
+              .fieldMono(11)
+              .foregroundColor(Theme.faded)
+          }
         }
         Button("Select playlist") {
           engine.status = "loading your playlists…"

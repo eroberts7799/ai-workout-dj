@@ -108,7 +108,9 @@ class WatchSyncDelegate extends Media.SyncDelegate {
         mQueue = mQueue.slice(1, mQueue.size());
         var songs = Storage.getValue("songs");
         if (songs == null) { songs = {}; }
-        songs[data.getId()] = [t["bpm"], t["camelot"], t["title"], t["durationMs"], t["nk"]];
+        // [bpm, camelot, title, durationMs, nk, affinity, energy] — aff/energy
+        // null on old manifests; the Brain treats null as neutral.
+        songs[data.getId()] = [t["bpm"], t["camelot"], t["title"], t["durationMs"], t["nk"], t["aff"], t["energy"]];
         Storage.setValue("songs", songs);
         System.println("AWDJ sync | got " + t["title"] + " (" + mQueue.size() + " left)");
         Media.notifySyncProgress(((mTotal - mQueue.size()) * 100) / mTotal);

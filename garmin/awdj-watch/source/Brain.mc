@@ -25,7 +25,7 @@ module Brain {
     var lastAltitudeM = null;
     var recentIds = [];
 
-    // Storage["songs"]: { refId => [bpm, camelot, title, durationMs, nk] }
+    // Storage["songs"]: { refId => [bpm, camelot, title, durationMs, nk, affinity, energy] }
     function meta(refId) {
         var songs = Storage.getValue("songs");
         if (songs == null) { return null; }
@@ -158,7 +158,26 @@ module Brain {
             var m = meta(id);
             var score = mixScore(cur, m) + learnedBonus(cur, m);
             if (recentIds.indexOf(id) >= 0) { score -= 1; }
-            if ((wantsEnergy || climbing) && m != null && cur != null && m[0] != null && cur[0] != null && m[0] > cur[0]) { score += 1; }
+            // Taste (parity with phone brains): lifetime affinity, capped +/-2.
+            if (m != null && m.size() > 5 && m[5] != null) {
+                var a = m[5].toFloat();
+                if (a > 2.0) { a = 2.0; }
+                if (a < -2.0) { a = -2.0; }
+                score += a;
+            }
+            // Energy fit (parity): analyzed energy when known, mirrors
+            // energyFit 'high' — (e-0.5)*4 capped +/-2. The old bpm-greater
+            // heuristic stays as the fallback for untagged tracks.
+            if (wantsEnergy || climbing) {
+                if (m != null && m.size() > 6 && m[6] != null) {
+                    var ef = (m[6].toFloat() - 0.5) * 4;
+                    if (ef > 2.0) { ef = 2.0; }
+                    if (ef < -2.0) { ef = -2.0; }
+                    score += ef;
+                } else if (m != null && cur != null && m[0] != null && cur[0] != null && m[0] > cur[0]) {
+                    score += 1;
+                }
+            }
             if (score > bestScore) { bestScore = score; best = id; }
         }
         if (best != null) {
