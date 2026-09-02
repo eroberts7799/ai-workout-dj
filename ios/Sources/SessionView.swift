@@ -144,6 +144,11 @@ struct SessionView: View {
             .foregroundColor(Theme.olive)
         }
         if engine.liveMode || !engine.lastCommand.isEmpty {
+          // Build + source on screen: four shakeout attempts were burned
+          // not knowing which build/source actually ran. Never again.
+          Text("b\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "?") · \(engine.musicSource.rawValue)")
+            .fieldMono(10)
+            .foregroundColor(Theme.faded)
           Text("\(engine.landingCount) landings · \(engine.lastCommand)")
             .fieldMono(12)
             .foregroundColor(Theme.faded)

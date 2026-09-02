@@ -273,11 +273,16 @@ final class SessionEngine: ObservableObject {
     // source field; the didSet then self-heals them on first assignment.
     if let src = bundle?.source, let m = MusicSource(rawValue: src) {
       musicSource = m
+    } else if isStreamingShaped(bundle) {
+      // Deterministic, zero-heuristic: in-app libraries (playlist / Liked /
+      // Free Play) are ALWAYS built with songs:[] and tags full; owned-file
+      // web bundles ALWAYS carry songs+cues. (The previous derivation —
+      // "no matched owned audio" — was defeated by a tag title
+      // name-matching an old imported file: shakeout attempt 3.)
+      musicSource = .spotify
     } else if let raw = UserDefaults.standard.string(forKey: "awdj.musicSource"),
        let m = MusicSource(rawValue: raw) {
       musicSource = m
-    } else if bundle?.tags?.isEmpty == false, !audioReady.values.contains(true) {
-      musicSource = .spotify
     }
   }
 
@@ -601,6 +606,12 @@ final class SessionEngine: ObservableObject {
       status = "this bundle has no LIVE payload — re-export from the web app"
       return
     }
+    // LAST-GATE GUARD (9/2, four failed shakeouts on this one field): a
+    // LIVE session must never run a streaming-shaped library on the deck —
+    // the deck is silent for it AND its non-mixing session pauses Spotify.
+    if musicSource == .ownedFiles, isStreamingShaped(b) {
+      musicSource = .spotify
+    }
     deck.stop()
     // Empty plan → follow mode: the watch's step stream IS the workout.
     // hrMax: calibrated per-athlete anchor delivered by the bundle import.
@@ -640,6 +651,13 @@ final class SessionEngine: ObservableObject {
       UserDefaults.standard.set(musicSource.rawValue, forKey: "awdj.musicSource")
       persistBundleSource()
     }
+  }
+
+  /// In-app adopted streaming libraries are structurally distinct from
+  /// owned-file bundles: no songs, no cues, tags only.
+  private func isStreamingShaped(_ b: SessionBundle?) -> Bool {
+    guard let b else { return false }
+    return b.songs.isEmpty && b.cues.isEmpty && !(b.tags ?? []).isEmpty
   }
 
   private func persistBundleSource() {
