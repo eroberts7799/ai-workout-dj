@@ -72,3 +72,11 @@ the same engine path a real structured run drives. TS `src/replay/simulate.ts`
 still emits bare t/d samples (its consumers replay logged runs or drive
 plan-loaded engines). Port the wk-stream emission to TS if the replay lab
 ever needs to simulate follow mode.
+
+## Terrain module (2026-09-02) — TS-only, lab stage
+`src/live/terrain.ts` (profile smoothing, GradeTracker-driven cue
+extraction, GAP-prior arrival prediction) has NO Swift port yet: its only
+consumer is `scripts/terrain-backtest.ts` (the Approach A replay lab).
+Port lands with Approach B's live wiring, same-session per the parity
+rule. The GAP curve is a literature prior (personal fit failed honestly:
+flat-city corpus + altimeter jitter + hill-repeat effort confound).
