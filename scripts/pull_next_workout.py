@@ -31,6 +31,14 @@ load_dotenv(Path.home() / "health-tracker" / ".env")
 # workout shapes calibrate it.
 EFFORT_SPEED_RATIO = 0.9
 
+# The relative rule degenerates when a workout has only ONE distinct target
+# band: the single band is 100% of itself, so a 5.5mi easy run read as "1
+# effort" (caught 2026-09-02). Single-band workouts are judged on ABSOLUTE
+# pace instead: Ethan's genuine efforts sit at 4.13 m/s (6:30/mi), his floats
+# at 3.46 (7:45/mi), easy at ≤3.22 (8:20/mi+) — 3.7 m/s splits the observed
+# gap. Calibrated on those three points; refine as more workouts flow.
+EFFORT_ABSOLUTE_MPS = 3.7
+
 KIND_BY_STEP_TYPE = {
     "warmup": "warmup",
     "cooldown": "cooldown",
@@ -58,17 +66,29 @@ def convert(workout):
     for s in raw:
         t1, t2 = s.get("targetValueOne"), s.get("targetValueTwo")
         if t1 and t2:
-            mids.append((t1 + t2) / 2)
+            mids.append(round((t1 + t2) / 2, 3))
     fastest = max(mids) if mids else None
+    multi_band = len(set(mids)) >= 2
 
     steps = []
     for s in raw:
         step_type = (s.get("stepType") or {}).get("stepTypeKey") or "other"
         kind = KIND_BY_STEP_TYPE.get(step_type, "easy")
         t1, t2 = s.get("targetValueOne"), s.get("targetValueTwo")
-        if kind == "hard" and t1 and t2 and fastest:
-            if (t1 + t2) / 2 < EFFORT_SPEED_RATIO * fastest:
-                kind = "easy"  # a float: quality pace, but not the effort
+        if kind == "hard":
+            if not (t1 and t2):
+                # Target-less "interval" = a steady segment. Every genuine
+                # Runna effort in the 41-run corpus carries a speed band;
+                # "conversational pace" easy runs ship as bare intervals
+                # (2026-09-02: 5.5mi easy run read as 1 effort).
+                kind = "easy"
+            elif fastest:
+                mid = (t1 + t2) / 2
+                if multi_band:
+                    if mid < EFFORT_SPEED_RATIO * fastest:
+                        kind = "easy"  # a float: quality pace, not the effort
+                elif mid < EFFORT_ABSOLUTE_MPS:
+                    kind = "easy"  # single-band steady run at sub-effort pace
         cond = (s.get("endCondition") or {}).get("conditionTypeKey")
         val = s.get("endConditionValue")
         step = {"kind": kind}
