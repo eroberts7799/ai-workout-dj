@@ -995,6 +995,18 @@ final class SessionEngine: ObservableObject {
   // MARK: - Garmin events (from the relay)
 
   func handleGarmin(event: String?, timerMs: Double?, receivedAt: Double, armed: Bool) {
+    // LATE-JOIN (9/2): timerStart is one relay sample — if the phone wasn't
+    // listening that exact second (app opening late, mid-update, brief
+    // suspension), the whole run used to be stranded even though the relay
+    // kept streaming the timer. A running watch timer with no active
+    // session now joins mid-run; wkStepSeq catches the engine up. Idle
+    // only: a session the user STOPPED (phase .done) never resurrects.
+    if event == nil, phase == .idle, armed, liveMode, supportsLive, !trailMode,
+       let t = timerMs, t > 5_000,
+       Date().timeIntervalSince1970 * 1000 - receivedAt < 15_000 {
+      startLive()
+      status += " · joined mid-run"
+    }
     guard let event, receivedAt != lastHandledEvent else { return }
     lastHandledEvent = receivedAt
     // Trail sessions are phone-clocked: a watch recording running alongside
