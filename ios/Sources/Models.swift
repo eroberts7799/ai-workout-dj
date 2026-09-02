@@ -74,6 +74,10 @@ struct SessionBundle: Codable {
   /// Learned pairing weights mined from real DJ sets ("<norm>><norm>" →
   /// count; bundles from 2026-08-17 on).
   var pairBonus: [String: Double]? = nil
+  /// Which output this library plays through ("spotify" | "ownedFiles").
+  /// A FACT recorded at adoption/import time, never derived: the 9/2
+  /// shakeout died three times on heuristics guessing this field.
+  var source: String? = nil
   /// Built-in demo bundles: trackId → bundled audio resource filename.
   let files: [String: String]?
 }

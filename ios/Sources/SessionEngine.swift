@@ -128,11 +128,12 @@ final class SessionEngine: ObservableObject {
     // Plan deliberately dropped: adopting a music library is a fresh start,
     // and an empty plan is what lets FOLLOW MODE conduct from the watch's
     // step stream (a stale plan would silently block it — Thursday's test).
-    let b = SessionBundle(
+    var b = SessionBundle(
       name: name, planEndMs: 0, cues: [], songs: [],
       plan: nil, tags: tags,
       hrMax: bundle?.hrMax ?? UserDefaults.standard.object(forKey: "awdj.hrMax") as? Double,
       pairBonus: bundle?.pairBonus, files: nil)
+    b.source = MusicSource.spotify.rawValue
     bundle = b
     if let data = try? JSONEncoder().encode(b) {
       try? data.write(to: docs.appendingPathComponent("session-bundle.json"))
@@ -168,9 +169,11 @@ final class SessionEngine: ObservableObject {
       status = "pick a music library first, then load the workout"
       return
     }
-    bundle = SessionBundle(
+    var withPlan = SessionBundle(
       name: b.name, planEndMs: b.planEndMs, cues: b.cues, songs: b.songs,
       plan: steps, tags: b.tags, hrMax: b.hrMax, pairBonus: b.pairBonus, files: b.files)
+    withPlan.source = b.source
+    bundle = withPlan
     if let data = try? JSONEncoder().encode(bundle) {
       try? data.write(to: docs.appendingPathComponent("session-bundle.json"))
     }
@@ -263,10 +266,14 @@ final class SessionEngine: ObservableObject {
     }
     stampTagTable()
     matchAudioFiles()
-    // Restore the music source with the bundle. Stored preference wins;
-    // with none stored (first launch on this build), derive it: a library
-    // of tags with ZERO matched owned audio is a streaming library.
-    if let raw = UserDefaults.standard.string(forKey: "awdj.musicSource"),
+    // Restore the music source: the bundle's RECORDED fact wins (9/2:
+    // heuristics failed three ways — the name-match derivation flagged a
+    // Spotify library as owned because a track title matched an old
+    // imported file). Legacy fallbacks only for bundles that predate the
+    // source field; the didSet then self-heals them on first assignment.
+    if let src = bundle?.source, let m = MusicSource(rawValue: src) {
+      musicSource = m
+    } else if let raw = UserDefaults.standard.string(forKey: "awdj.musicSource"),
        let m = MusicSource(rawValue: raw) {
       musicSource = m
     } else if bundle?.tags?.isEmpty == false, !audioReady.values.contains(true) {
@@ -291,9 +298,11 @@ final class SessionEngine: ObservableObject {
       s.energy = t.energy ?? e.energy
       return s
     }
-    bundle = SessionBundle(
+    var stampedBundle = SessionBundle(
       name: b.name, planEndMs: b.planEndMs, cues: b.cues, songs: b.songs,
       plan: b.plan, tags: stamped, hrMax: b.hrMax, pairBonus: b.pairBonus, files: b.files)
+    stampedBundle.source = b.source
+    bundle = stampedBundle
   }
 
   private func normalize(_ s: String) -> String {
@@ -622,13 +631,25 @@ final class SessionEngine: ObservableObject {
   /// RECORDING continues untouched).
   enum MusicSource: String { case ownedFiles, spotify }
   @Published var musicSource: MusicSource = .ownedFiles {
-    // Persist across launches: a force-quit + relaunch used to revert a
-    // Spotify library to .ownedFiles (9/2 shakeout — commands went to the
-    // silent deck, whose non-mixing session paused Spotify; KeepAlive was
-    // skipped too, so a locked phone slept through the watch START).
-    // Third appearance of the 8/27 gating class: adoptLibrary set the
-    // source, restore() never did.
-    didSet { UserDefaults.standard.set(musicSource.rawValue, forKey: "awdj.musicSource") }
+    // The source is a FACT about the library, recorded into the bundle
+    // itself (9/2: three shakeout attempts died on this field being
+    // guessed — first not restored at all, then mis-derived by a name
+    // match against old imported audio). Any change, including the manual
+    // picker, rewrites the bundle's source so restarts restore truth.
+    didSet {
+      UserDefaults.standard.set(musicSource.rawValue, forKey: "awdj.musicSource")
+      persistBundleSource()
+    }
+  }
+
+  private func persistBundleSource() {
+    // In-memory patch only: the adoption/import sites own their disk
+    // writes. Writing here would let a built-in demo program (never
+    // persisted by design) clobber the user's real library on disk.
+    guard let b = bundle, b.source != musicSource.rawValue else { return }
+    var patched = b
+    patched.source = musicSource.rawValue
+    bundle = patched
   }
 
   // MARK: - Spotify delivery watchdog
