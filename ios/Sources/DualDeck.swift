@@ -45,9 +45,11 @@ final class DualDeck {
       engine.connect(s.eq, to: engine.mainMixerNode, format: nil)
       s.player.volume = 0
     }
-    try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
-    try? AVAudioSession.sharedInstance().setActive(true)
-    try? engine.start()
+    // Session + engine start DEFERRED to play(): the deck's category is
+    // non-mixing .playback by design (owned tier owns the audio), but
+    // grabbing it at construction meant every app launch armed a session
+    // that pauses Spotify the moment it activates (9/2 shakeout: a
+    // Spotify session with the deck idle still killed the music).
   }
 
   func load(id: String, url: URL) throws {
@@ -81,6 +83,7 @@ final class DualDeck {
   /// and tempo-locking; blendPlan decides overlap length + bass swap.
   func play(id: String, positionMs: Double, fadeSec: Double = 0.8, opts: BeatMath.DeckOpts? = nil) throws {
     if !engine.isRunning {
+      try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
       try AVAudioSession.sharedInstance().setActive(true)
       try engine.start()
     }

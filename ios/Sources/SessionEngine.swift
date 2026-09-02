@@ -263,6 +263,15 @@ final class SessionEngine: ObservableObject {
     }
     stampTagTable()
     matchAudioFiles()
+    // Restore the music source with the bundle. Stored preference wins;
+    // with none stored (first launch on this build), derive it: a library
+    // of tags with ZERO matched owned audio is a streaming library.
+    if let raw = UserDefaults.standard.string(forKey: "awdj.musicSource"),
+       let m = MusicSource(rawValue: raw) {
+      musicSource = m
+    } else if bundle?.tags?.isEmpty == false, !audioReady.values.contains(true) {
+      musicSource = .spotify
+    }
   }
 
   /// Parity law (2026-09-01): owned-file bundles get the same taste +
@@ -521,6 +530,8 @@ final class SessionEngine: ObservableObject {
     if let live {
       payload["landings"] = live.landings.map { ["targetTMs": $0.targetTMs, "actualTMs": $0.actualTMs, "errorMs": $0.errorMs] }
       payload["commands"] = live.commands.map { ["tMs": $0.tMs, "trackId": $0.trackId, "positionMs": $0.positionMs, "reason": $0.reason] }
+      if !deliveryEvents.isEmpty { payload["delivery"] = deliveryEvents }
+      payload["musicSource"] = musicSource.rawValue
       // The runner's overrules — per-transition negative feedback, free.
       payload["skips"] = live.skips.map {
         var d: [String: Any] = ["tMs": $0.tMs, "toTrackId": $0.toTrackId]
@@ -610,7 +621,15 @@ final class SessionEngine: ObservableObject {
   /// commands need signal — airplane mode = music pauses at song end while
   /// RECORDING continues untouched).
   enum MusicSource: String { case ownedFiles, spotify }
-  @Published var musicSource: MusicSource = .ownedFiles
+  @Published var musicSource: MusicSource = .ownedFiles {
+    // Persist across launches: a force-quit + relaunch used to revert a
+    // Spotify library to .ownedFiles (9/2 shakeout — commands went to the
+    // silent deck, whose non-mixing session paused Spotify; KeepAlive was
+    // skipped too, so a locked phone slept through the watch START).
+    // Third appearance of the 8/27 gating class: adoptLibrary set the
+    // source, restore() never did.
+    didSet { UserDefaults.standard.set(musicSource.rawValue, forKey: "awdj.musicSource") }
+  }
 
   // MARK: - Spotify delivery watchdog
   // Soft-fail is still the doctrine (recording never depends on playback),
@@ -646,6 +665,15 @@ final class SessionEngine: ObservableObject {
   private var spotifyPollInFlight = false
   private var spotifyEverDelivered = false
   private var spotifyLastDeliveryWall: TimeInterval = 0
+  /// Field diagnosability (9/2 shakeout: "music never came on" with zero
+  /// evidence in the log): every delivery attempt's outcome, shipped in the
+  /// session log. Ring-capped — a broken morning must not bloat the upload.
+  private var deliveryEvents: [[String: Any]] = []
+
+  private func recordDelivery(ok: Bool, note: String) {
+    deliveryEvents.append(["tMs": clockMs, "ok": ok, "note": String(note.prefix(120))])
+    if deliveryEvents.count > 200 { deliveryEvents.removeFirst(deliveryEvents.count - 200) }
+  }
 
   /// Fresh pipeline for a fresh session. Stale poll/retry deadlines from a
   /// previous session either fired a reconciliation read on the FIRST tick
@@ -656,6 +684,7 @@ final class SessionEngine: ObservableObject {
     pendingSpotify = nil
     pausedSpotify = nil
     lastDeliveredSpotify = nil
+    deliveryEvents = []
     spotifyRetryAtMs = 0
     spotifyPollAtMs = 0
     spotifyEverDelivered = false
@@ -684,6 +713,7 @@ final class SessionEngine: ObservableObject {
       guard let self else { return }
       self.spotifyAttemptInFlight = false
       guard self.pendingSpotify?.gen == p.gen else { return } // superseded mid-flight
+      self.recordDelivery(ok: err == nil, note: err ?? p.reason)
       if err == nil {
         self.pendingSpotify = nil
         self.spotifyEverDelivered = true

@@ -64,9 +64,12 @@ final class SpotifyRemote {
         json: ["uris": uris, "position_ms": Int(max(0, positionMs))]
       )
       if code == 404 || code == 403 {
-        // Device id churned or went inactive — re-resolve, transfer, retry.
+        // Device id churned or went inactive — re-resolve and play with the
+        // fresh id (play?device_id transfers implicitly). The old explicit
+        // transfer used "play": false, which PAUSED the runner's music and
+        // left silence whenever the follow-up play failed — a stop we
+        // caused ourselves. Never pause on a failure path.
         id = try await resolveDevice(force: true)
-        _ = try await api("/me/player", method: "PUT", json: ["device_ids": [id], "play": false])
         (code, _) = try await api(
           "/me/player/play?device_id=\(id)", method: "PUT",
           json: ["uris": uris, "position_ms": Int(max(0, positionMs))]
