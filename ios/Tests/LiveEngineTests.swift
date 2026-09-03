@@ -374,6 +374,85 @@ final class LiveEngineTests: XCTestCase {
     XCTAssertEqual(engine.commands.count, before)
   }
 
+  // MARK: streaming handoff (mirrors TS 'streaming handoff' block)
+
+  private let handoffCruise = [WorkoutStep(kind: "easy", seconds: 1200, meters: nil)]
+  private func advance(_ engine: LiveEngine, from fromMs: Double, seconds: Int) {
+    for s in stream([(seconds: seconds, mps: 3)]) {
+      engine.advance(LiveSample(tMs: s.tMs + fromMs, distanceM: (s.distanceM ?? 0) + fromMs * 0.003))
+    }
+  }
+
+  func testSongEndRollsIntoSpareAsHandoffAtTheEndWithNoLead() {
+    let engine = LiveEngine(plan: handoffCruise, songs: songs, paceSecPerKm: 340, streamingHandoff: true)
+    for s in stream([(seconds: 500, mps: 3)]) { engine.advance(s) }
+    let first = engine.commands[0]
+    XCTAssertFalse(first.handoff)
+    XCTAssertNotNil(first.spareTrackId)
+    let second = engine.commands[1]
+    XCTAssertTrue(second.handoff)
+    XCTAssertEqual(second.trackId, first.spareTrackId)
+    XCTAssertEqual(second.positionMs, 0)
+    XCTAssertGreaterThanOrEqual(second.tMs - first.tMs, 240_000)
+    XCTAssertLessThan(second.tMs - first.tMs, 242_000)
+    XCTAssertNotNil(second.spareTrackId)
+    XCTAssertNotEqual(second.spareTrackId, second.trackId)
+    XCTAssertEqual(engine.commands.filter { !$0.handoff }.count, 1)
+  }
+
+  func testWithoutTheOptionSongEndsAreCutsAsBefore() {
+    let engine = LiveEngine(plan: handoffCruise, songs: songs, paceSecPerKm: 340)
+    for s in stream([(seconds: 500, mps: 3)]) { engine.advance(s) }
+    XCTAssertTrue(engine.commands.allSatisfy { !$0.handoff })
+    XCTAssertLessThan(engine.commands[1].tMs - engine.commands[0].tMs, 240_000)
+  }
+
+  func testPlayerRolledIntoSpareEarlyIsAdoptedAsHandoffNotSkip() {
+    let engine = LiveEngine(plan: handoffCruise, songs: songs, paceSecPerKm: 340, streamingHandoff: true)
+    for s in stream([(seconds: 236, mps: 3)]) { engine.advance(s) }
+    let first = engine.commands[0]
+    let emitted = engine.syncExternalPlayback(trackId: first.spareTrackId!, positionMs: 2_000, tMs: 236_000)
+    XCTAssertEqual(engine.skips.count, 0)
+    XCTAssertEqual(emitted.count, 1)
+    XCTAssertTrue(emitted[0].handoff)
+    XCTAssertEqual(emitted[0].trackId, first.spareTrackId)
+    XCTAssertNotNil(emitted[0].spareTrackId)
+    let before = engine.commands.count
+    advance(engine, from: 236_000, seconds: 200)
+    XCTAssertEqual(engine.commands.count, before)
+  }
+
+  func testVerificationStillOnOldSongRevertsAndFiresAgainLater() {
+    let engine = LiveEngine(plan: handoffCruise, songs: songs, paceSecPerKm: 340, streamingHandoff: true)
+    for s in stream([(seconds: 241, mps: 3)]) { engine.advance(s) }
+    let first = engine.commands[0]
+    XCTAssertEqual(engine.commands.count, 2)
+    XCTAssertTrue(engine.commands[1].handoff)
+    let emitted = engine.syncExternalPlayback(trackId: first.trackId, positionMs: 233_000, tMs: 241_000, natural: true)
+    XCTAssertEqual(emitted.count, 0)
+    XCTAssertEqual(engine.skips.count, 0)
+    XCTAssertEqual(engine.commands.count, 1)
+    XCTAssertEqual(engine.state.playingTrackId, first.trackId)
+    advance(engine, from: 241_000, seconds: 10)
+    XCTAssertEqual(engine.commands.count, 2)
+    XCTAssertTrue(engine.commands[1].handoff)
+    XCTAssertEqual(engine.commands[1].trackId, first.spareTrackId)
+    XCTAssertGreaterThanOrEqual(engine.commands[1].tMs, 247_000)
+  }
+
+  func testRealMidSongSkipIsStillAnOverruleAndRearmsTheChain() {
+    let engine = LiveEngine(plan: handoffCruise, songs: songs, paceSecPerKm: 340, streamingHandoff: true)
+    for s in stream([(seconds: 60, mps: 3)]) { engine.advance(s) }
+    let first = engine.commands[0]
+    let other = songs.first { $0.trackId != first.trackId && $0.trackId != first.spareTrackId }!
+    let emitted = engine.syncExternalPlayback(trackId: other.trackId, positionMs: 0, tMs: 61_000)
+    XCTAssertEqual(engine.skips.count, 1)
+    XCTAssertEqual(engine.skips[0].fromTrackId, first.trackId)
+    XCTAssertEqual(emitted.count, 1)
+    XCTAssertTrue(emitted[0].handoff)
+    XCTAssertNotNil(emitted[0].spareTrackId)
+  }
+
   func testSameTrackDriftReanchorsWithoutASkipEvent() {
     let cruise = [WorkoutStep(kind: "easy", seconds: 900, meters: nil)]
     let engine = LiveEngine(plan: cruise, songs: songs, paceSecPerKm: 340)

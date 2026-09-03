@@ -54,6 +54,12 @@ export interface PlayCommand {
    *  plays, the executor reports it via syncExternalPlayback. */
   spareTrackId?: string
   spareUri?: string
+  /** The player is ALREADY on this song — a natural roll into the spare it
+   *  held, or an adoption the executor just observed. Issue no play; only
+   *  queue the new spare so the chain continues natively. (9/3 walk: the
+   *  engine cut at its MODELED song end, ±3s off the real one — early was a
+   *  hard pause, late restarted the song Spotify had already rolled into.) */
+  handoff?: boolean
 }
 
 /** A manual song change the executor observed — the runner overruled the
@@ -188,16 +194,36 @@ export class LiveEngine {
   private followStep: WorkoutStep | null = null
   private followNextKind: string | null = null
 
+  /** STREAMING HANDOFF: the executor is a remote player (Spotify) that holds
+   *  the current song plus its advertised spare as a native context. A song
+   *  end is then the player's own gapless (or user-crossfaded) roll — no
+   *  command can time a cut better than "no cut". The engine adopts the
+   *  spare at the modeled end and asks the executor to queue the next one.
+   *  Off for the owned-file deck, whose crossfades are the product. */
+  private readonly streamingHandoff: boolean
+  /** Spare advertised with the song now playing — what the executor holds next. */
+  private playingSpare: SongTags | null = null
+  /** The song a handoff just left, kept so a verification read that finds
+   *  the player STILL on it (model ran early) can revert without a skip. */
+  private lastHandoffFrom: { song: SongTags; spare: SongTags } | null = null
+
   constructor(
     plan: WorkoutPlan,
     songs: SongTags[],
-    opts: { paceSecPerKm?: number; hrMax?: number; pairBonus?: Record<string, number>; dropStyle?: DropStyle } = {},
+    opts: {
+      paceSecPerKm?: number
+      hrMax?: number
+      pairBonus?: Record<string, number>
+      dropStyle?: DropStyle
+      streamingHandoff?: boolean
+    } = {},
   ) {
     this.steps = plan.steps
     this.paceSecPerKm = opts.paceSecPerKm ?? DEFAULT_PACE_SEC_PER_KM
     this.hrTracker = new HrTracker(opts.hrMax)
     this.pairBonus = opts.pairBonus ?? {}
     this.dropStyle = opts.dropStyle ?? 'fresh'
+    this.streamingHandoff = opts.streamingHandoff ?? false
     this.followMode = plan.steps.length === 0
     for (const song of songs) {
       const words = `${song.artists} ${song.name}`.toLowerCase().match(/[a-z0-9]+/g) ?? []
@@ -250,28 +276,51 @@ export class LiveEngine {
     return this.playing.positionAtMs + (t - this.playing.atTMs)
   }
 
-  private emit(t: number, song: SongTags, positionMs: number, fadeSec: number, reason: string, spare?: SongTags | null) {
+  private emit(t: number, song: SongTags, positionMs: number, fadeSec: number, reason: string, spare?: SongTags | null, handoff = false) {
     this.commands.push({
       tMs: t, trackId: song.trackId, uri: song.uri, positionMs, fadeSec, reason,
       ...(spare ? { spareTrackId: spare.trackId, spareUri: spare.uri } : {}),
+      ...(handoff ? { handoff: true } : {}),
     })
+    // A same-song re-aim keeps the spare the executor already holds; a new
+    // song carries its own (or none — the executor then holds nothing next).
+    const sameSong = this.playing?.song.trackId === song.trackId
+    this.playingSpare = spare ?? (sameSong ? this.playingSpare : null)
+    if (!handoff) this.lastHandoffFrom = null
     this.playing = { song, positionAtMs: positionMs, atTMs: t }
   }
 
   /** The executor's queue insurance: what "next" should land on if the
-   *  runner skips DURING `chosen`. Pure peek — no freshness, index, or
-   *  recency consumption; state only changes if the spare actually plays
-   *  (reported back via syncExternalPlayback). */
+   *  runner skips DURING `chosen` — and, under streaming handoff, what the
+   *  player rolls into at the song's end. Same scoring as a cruise pick
+   *  (mix + learned + taste − recency) so the natural next is as good as a
+   *  cut would have been. Pure peek — no rotation consumption; state
+   *  changes only if the spare actually plays (syncExternalPlayback / handoff). */
   private peekSpare(chosen: SongTags): SongTags | null {
     const recent = new Set(this.commands.slice(-6).map((c) => c.trackId))
     let best: { song: SongTags; score: number } | null = null
     for (const c of this.loopable) {
       if (c.song.trackId === chosen.trackId) continue
       const learned = Math.min(2, this.pairBonus[`${this.normKey.get(chosen.trackId)}>${this.normKey.get(c.song.trackId)}`] ?? 0)
-      const score = mixScore(chosen, c.song) + learned - (recent.has(c.song.trackId) ? 1 : 0)
+      const taste = Math.max(-2, Math.min(2, c.song.affinity ?? 0))
+      const score = mixScore(chosen, c.song) + learned + taste - (recent.has(c.song.trackId) ? 1 : 0)
       if (!best || score > best.score) best = { song: c.song, score }
     }
     return best?.song ?? null
+  }
+
+  /** The player is on `song` at `positionMs` (rolled there itself, or the
+   *  executor saw it there): adopt it, advertise its spare, emit a handoff
+   *  command — no play, the executor only queues the spare. */
+  private handoff(t: number, song: SongTags, positionMs: number, reason: string, predicted: boolean) {
+    const from = this.playing?.song ?? null
+    if (this.mode !== 'ride') this.mode = 'fill'
+    this.fillExitPosMs = this.chainExitPosMs(song, positionMs)
+    const spare = this.peekSpare(song)
+    this.emit(t, song, positionMs, 0, reason, spare, true)
+    // Only a PREDICTED handoff (the model's end estimate) can be found early
+    // by verification; an adoption was observed, there is nothing to revert.
+    this.lastHandoffFrom = predicted && from ? { song: from, spare: song } : null
   }
 
   /** The executor observed playback that differs from the model — a manual
@@ -279,8 +328,14 @@ export class LiveEngine {
    *  model must never argue with the speaker) and record the overrule:
    *  the abandoned song at its abandoned position is ground-truth negative
    *  feedback. Same-track calls with drifted position re-anchor the model
-   *  (late watchdog delivery, restarts). */
-  syncExternalPlayback(trackId: string, positionMs: number, tMs: number): void {
+   *  (late watchdog delivery, restarts).
+   *
+   *  `natural`: the executor read this right after a modeled song end — the
+   *  player's own progression, not the runner's hand. Never a skip. Returns
+   *  any command the adoption emitted (a handoff, under streaming handoff)
+   *  so the executor can act on it outside advance(). */
+  syncExternalPlayback(trackId: string, positionMs: number, tMs: number, natural = false): PlayCommand[] {
+    const before = this.commands.length
     const cur = this.playing
     if (cur && cur.song.trackId === trackId) {
       const modeled = cur.positionAtMs + (tMs - cur.atTMs)
@@ -288,18 +343,42 @@ export class LiveEngine {
         this.playing = { song: cur.song, positionAtMs: positionMs, atTMs: tMs }
         if (this.mode === 'fill') this.fillExitPosMs = this.chainExitPosMs(cur.song, Math.min(positionMs, cur.song.durationMs))
       }
-      return
+      return []
+    }
+    // The model handed off early: the player is still finishing the song we
+    // left. Step back onto it (spare intact — the player still holds it) and
+    // let the handoff fire again at the corrected end. No skip, no command.
+    const prev = this.lastHandoffFrom
+    const last = this.commands[this.commands.length - 1]
+    if (natural && prev && prev.song.trackId === trackId && last?.handoff && last.trackId === cur?.song.trackId) {
+      this.playing = { song: prev.song, positionAtMs: positionMs, atTMs: tMs }
+      this.playingSpare = prev.spare
+      this.lastHandoffFrom = null
+      this.commands.pop() // the premature handoff never happened for the executor
+      return []
     }
     const found = this.loopable.find((c) => c.song.trackId === trackId)
-    this.skips.push({
-      tMs,
-      fromTrackId: cur?.song.trackId ?? null,
-      fromPositionMs: cur ? Math.round(cur.positionAtMs + (tMs - cur.atTMs)) : null,
-      toTrackId: trackId,
-    })
-    if (!found) return // external track outside the library — feedback logged, model unchanged
-    this.playing = { song: found.song, positionAtMs: positionMs, atTMs: tMs }
-    if (this.mode === 'fill') this.fillExitPosMs = this.chainExitPosMs(found.song, positionMs)
+    const rolledIntoSpare =
+      cur != null && this.playingSpare?.trackId === trackId
+      && cur.positionAtMs + (tMs - cur.atTMs) >= cur.song.durationMs - 10_000
+    // A roll into the spare at the song's end is the chain working, not a
+    // thumbs-down (9/3 walk logged one as a "skip" of a song played to 308/312s).
+    if (!natural && !rolledIntoSpare) {
+      this.skips.push({
+        tMs,
+        fromTrackId: cur?.song.trackId ?? null,
+        fromPositionMs: cur ? Math.round(cur.positionAtMs + (tMs - cur.atTMs)) : null,
+        toTrackId: trackId,
+      })
+    }
+    if (!found) return [] // external track outside the library — feedback logged, model unchanged
+    if (this.streamingHandoff) {
+      this.handoff(tMs, found.song, positionMs, `handoff (${found.song.name})`, false)
+    } else {
+      this.playing = { song: found.song, positionAtMs: positionMs, atTMs: tMs }
+      if (this.mode === 'fill') this.fillExitPosMs = this.chainExitPosMs(found.song, positionMs)
+    }
+    return this.commands.slice(before)
   }
 
   private currentStep(): WorkoutStep | null {
@@ -807,22 +886,31 @@ export class LiveEngine {
       }
     }
 
+    // Never-silence: chain a fresh groove if the current track would end.
+    // Runs BEFORE the chain point so a natural end (exit == duration) is
+    // owned here — as a handoff when the player holds the spare, otherwise
+    // as a cut with a 1.5s crossfade lead.
+    if (this.playing && this.mode !== 'build') {
+      const pos = this.playheadMs(t)
+      const dur = this.playing.song.durationMs
+      if (this.streamingHandoff && this.playingSpare) {
+        // No lead: nothing to deliver, the player rolls by itself. The
+        // model adopts the spare at ITS end estimate; the executor's
+        // verification read re-anchors (or reverts) against reality.
+        if (pos >= dur) this.handoff(t, this.playingSpare, 0, `handoff (${this.playingSpare.name})`, true)
+      } else if (pos >= dur - 1500 && this.mode !== 'ride') {
+        this.startFill(t)
+      } else if (pos >= dur - 1500 && this.mode === 'ride') {
+        this.startFill(t)
+        this.mode = 'ride'
+      }
+    }
+
     // Cruise chain point: change songs where the MUSIC says to — at the
     // planned segment boundary (strong section just ended), or the corpus
     // timer when the song carries no structure.
     if (this.mode === 'fill' && this.playing && this.fillExitPosMs != null && this.loopable.length > 1) {
       if (this.playheadMs(t) >= this.fillExitPosMs) this.startFill(t)
-    }
-
-    // Never-silence: chain a fresh groove if the current track would end.
-    if (this.playing && this.mode !== 'build') {
-      const pos = this.playheadMs(t)
-      if (pos >= this.playing.song.durationMs - 1500 && this.mode !== 'ride') {
-        this.startFill(t)
-      } else if (pos >= this.playing.song.durationMs - 1500 && this.mode === 'ride') {
-        this.startFill(t)
-        this.mode = 'ride'
-      }
     }
 
     return this.commands.slice(before)

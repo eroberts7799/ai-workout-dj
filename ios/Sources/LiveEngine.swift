@@ -40,6 +40,9 @@ struct LivePlayCommand {
   /// runner's "next" button lands somewhere real (mirrors TS, 8/25 run).
   var spareTrackId: String? = nil
   var spareUri: String? = nil
+  /// The player is ALREADY on this song (rolled into its held spare, or an
+  /// observed adoption): issue no play, only queue the new spare. Mirrors TS.
+  var handoff: Bool = false
 }
 
 /// A manual song change the executor observed — the runner overruled the
@@ -152,8 +155,20 @@ final class LiveEngine {
   private var hrState = HrState()
   private var crestRideUntil: Double?
 
-  init(plan: [WorkoutStep], songs: [TaggedSong], paceSecPerKm: Double = defaultPaceSecPerKm, pairBonus: [String: Double] = [:], dropStyle: DropStyle = .fresh, hrMax: Double? = nil) {
+  /// STREAMING HANDOFF (mirrors TS): the executor is a remote player that
+  /// holds the current song + its advertised spare as a native context, so
+  /// a song end is the player's own roll — no cut can time it better than
+  /// "no cut". Off for the owned-file deck, whose crossfades are the product.
+  private let streamingHandoff: Bool
+  /// Spare advertised with the song now playing — what the executor holds next.
+  private var playingSpare: TaggedSong?
+  /// The song a PREDICTED handoff just left — verification finding the
+  /// player still on it (model ran early) reverts without a skip.
+  private var lastHandoffFrom: (song: TaggedSong, spare: TaggedSong)?
+
+  init(plan: [WorkoutStep], songs: [TaggedSong], paceSecPerKm: Double = defaultPaceSecPerKm, pairBonus: [String: Double] = [:], dropStyle: DropStyle = .fresh, hrMax: Double? = nil, streamingHandoff: Bool = false) {
     self.dropStyle = dropStyle
+    self.streamingHandoff = streamingHandoff
     self.followMode = plan.isEmpty
     self.hrTracker = HrTracker(hrMax: hrMax)
     steps = plan
@@ -208,16 +223,35 @@ final class LiveEngine {
     return p.positionAtMs + (t - p.atTMs)
   }
 
-  private func emit(t: Double, song: TaggedSong, positionMs: Double, fadeSec: Double, reason: String, spare: TaggedSong? = nil) {
+  private func emit(t: Double, song: TaggedSong, positionMs: Double, fadeSec: Double, reason: String, spare: TaggedSong? = nil, handoff: Bool = false) {
     commands.append(LivePlayCommand(
       tMs: t, trackId: song.trackId, uri: song.uri, positionMs: positionMs, fadeSec: fadeSec, reason: reason,
-      spareTrackId: spare?.trackId, spareUri: spare?.uri))
+      spareTrackId: spare?.trackId, spareUri: spare?.uri, handoff: handoff))
+    // A same-song re-aim keeps the spare the executor already holds; a new
+    // song carries its own (or none). Mirrors TS.
+    let sameSong = playing?.song.trackId == song.trackId
+    playingSpare = spare ?? (sameSong ? playingSpare : nil)
+    if !handoff { lastHandoffFrom = nil }
     playing = (song: song, positionAtMs: positionMs, atTMs: t)
   }
 
+  /// The player is on `song` at `positionMs` (rolled there itself, or the
+  /// executor saw it there): adopt it, advertise its spare, emit a handoff
+  /// command — no play, the executor only queues the spare. Mirrors TS.
+  private func handoff(t: Double, song: TaggedSong, positionMs: Double, reason: String, predicted: Bool) {
+    let from = playing?.song
+    if mode != .ride { mode = .fill }
+    fillExitPosMs = chainExitPosMs(song: song, entryMs: positionMs)
+    let spare = peekSpare(chosen: song)
+    emit(t: t, song: song, positionMs: positionMs, fadeSec: 0, reason: reason, spare: spare, handoff: true)
+    // Only a PREDICTED handoff can be found early by verification.
+    lastHandoffFrom = (predicted && from != nil) ? (song: from!, spare: song) : nil
+  }
+
   /// The executor's queue insurance: what "next" lands on if the runner
-  /// skips DURING `chosen`. Pure peek — no rotation/recency consumption;
-  /// state changes only if it actually plays (syncExternalPlayback). Mirrors TS.
+  /// skips DURING `chosen` — and, under streaming handoff, what the player
+  /// rolls into at the song's end. Same scoring as a cruise pick. Pure peek —
+  /// no rotation consumption; state changes only if it plays. Mirrors TS.
   private func peekSpare(chosen: TaggedSong) -> TaggedSong? {
     let recent = Set(commands.suffix(6).map { $0.trackId })
     var best: (song: TaggedSong, score: Double)?
@@ -235,24 +269,56 @@ final class LiveEngine {
   /// The executor observed playback that differs from the model — a manual
   /// skip, the queue spare firing, any external change. Adopt reality (the
   /// model never argues with the speaker), record the overrule as feedback.
-  /// Same-track calls with >5s drift re-anchor the model. Mirrors TS.
-  func syncExternalPlayback(trackId: String, positionMs: Double, tMs: Double) {
-    if let cur = playing, cur.song.trackId == trackId {
+  /// Same-track calls with >5s drift re-anchor the model.
+  /// `natural`: read right after a modeled song end — the player's own
+  /// progression, never a skip. Returns any command the adoption emitted
+  /// (a handoff, under streaming handoff) for the executor. Mirrors TS.
+  @discardableResult
+  func syncExternalPlayback(trackId: String, positionMs: Double, tMs: Double, natural: Bool = false) -> [LivePlayCommand] {
+    let before = commands.count
+    let cur = playing
+    if let cur, cur.song.trackId == trackId {
       let modeled = cur.positionAtMs + (tMs - cur.atTMs)
       if abs(modeled - positionMs) > 5000 {
         playing = (song: cur.song, positionAtMs: positionMs, atTMs: tMs)
         if mode == .fill { fillExitPosMs = chainExitPosMs(song: cur.song, entryMs: min(positionMs, cur.song.durationMs)) }
       }
-      return
+      return []
     }
-    skips.append(SkipEvent(
-      tMs: tMs,
-      fromTrackId: playing?.song.trackId,
-      fromPositionMs: playing.map { $0.positionAtMs + (tMs - $0.atTMs) },
-      toTrackId: trackId))
-    guard let found = loopable.first(where: { $0.song.trackId == trackId }) else { return }
-    playing = (song: found.song, positionAtMs: positionMs, atTMs: tMs)
-    if mode == .fill { fillExitPosMs = chainExitPosMs(song: found.song, entryMs: positionMs) }
+    // The model handed off early: the player is still finishing the song we
+    // left. Step back onto it (spare intact) and let the handoff fire again
+    // at the corrected end. No skip, no command — the premature handoff is
+    // withdrawn. Mirrors TS.
+    if natural, let prev = lastHandoffFrom, prev.song.trackId == trackId,
+       let last = commands.last, last.handoff, last.trackId == cur?.song.trackId {
+      playing = (song: prev.song, positionAtMs: positionMs, atTMs: tMs)
+      playingSpare = prev.spare
+      lastHandoffFrom = nil
+      commands.removeLast()
+      return []
+    }
+    let found = loopable.first(where: { $0.song.trackId == trackId })
+    let rolledIntoSpare: Bool = {
+      guard let cur, let sp = playingSpare, sp.trackId == trackId else { return false }
+      return cur.positionAtMs + (tMs - cur.atTMs) >= cur.song.durationMs - 10_000
+    }()
+    // A roll into the spare at the song's end is the chain working, not a
+    // thumbs-down. Mirrors TS.
+    if !natural && !rolledIntoSpare {
+      skips.append(SkipEvent(
+        tMs: tMs,
+        fromTrackId: cur?.song.trackId,
+        fromPositionMs: cur.map { $0.positionAtMs + (tMs - $0.atTMs) },
+        toTrackId: trackId))
+    }
+    guard let found else { return [] }
+    if streamingHandoff {
+      handoff(t: tMs, song: found.song, positionMs: positionMs, reason: "handoff (\(found.song.name))", predicted: false)
+    } else {
+      playing = (song: found.song, positionAtMs: positionMs, atTMs: tMs)
+      if mode == .fill { fillExitPosMs = chainExitPosMs(song: found.song, entryMs: positionMs) }
+    }
+    return Array(commands[before...])
   }
 
   private func currentStep() -> WorkoutStep? {
@@ -716,22 +782,29 @@ final class LiveEngine {
       }
     }
 
+    // Never-silence: chain a fresh groove if the current track would end.
+    // Runs BEFORE the chain point so a natural end is owned here — as a
+    // handoff when the player holds the spare, else a cut with a 1.5s
+    // crossfade lead. Mirrors TS.
+    if let p = playing, mode != .build {
+      let pos = playheadMs(t)
+      let dur = p.song.durationMs
+      if streamingHandoff, let sp = playingSpare {
+        // No lead: nothing to deliver, the player rolls by itself.
+        if pos >= dur { handoff(t: t, song: sp, positionMs: 0, reason: "handoff (\(sp.name))", predicted: true) }
+      } else if pos >= dur - 1500, mode != .ride {
+        startFill(t)
+      } else if pos >= dur - 1500, mode == .ride {
+        startFill(t)
+        mode = .ride
+      }
+    }
+
     // Cruise chain point: change songs where the MUSIC says to — the planned
     // segment boundary (strong section just ended), or the corpus timer for
     // structureless songs. Mirrors TS.
     if mode == .fill, playing != nil, let exit = fillExitPosMs, loopable.count > 1 {
       if playheadMs(t) >= exit { startFill(t) }
-    }
-
-    // Never-silence: chain a fresh groove if the current track would end.
-    if let p = playing, mode != .build {
-      let pos = playheadMs(t)
-      if pos >= p.song.durationMs - 1500, mode != .ride {
-        startFill(t)
-      } else if pos >= p.song.durationMs - 1500, mode == .ride {
-        startFill(t)
-        mode = .ride
-      }
     }
 
     return Array(commands[before...])

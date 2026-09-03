@@ -551,6 +551,93 @@ describe('LiveEngine', () => {
     expect(engine.commands.length).toBe(before)
   })
 
+  describe('streaming handoff', () => {
+    const cruise: WorkoutPlan = { name: 'cruise', steps: [{ kind: 'easy', seconds: 1200 }] }
+    const advanceFrom = (engine: LiveEngine, fromMs: number, seconds: number) => {
+      for (const s of stream([{ seconds, mps: 3 }]))
+        engine.advance({ tMs: s.tMs + fromMs, distanceM: (s.distanceM ?? 0) + fromMs * 0.003 })
+    }
+
+    test('a song end rolls into the advertised spare as a handoff, at the end, with no lead', () => {
+      const engine = new LiveEngine(cruise, songs, { paceSecPerKm: 340, streamingHandoff: true })
+      run(engine, stream([{ seconds: 500, mps: 3 }]))
+      const first = engine.commands[0]
+      expect(first.handoff).toBeUndefined()
+      expect(first.spareTrackId).toBeDefined()
+      const second = engine.commands[1]
+      expect(second.handoff).toBe(true)
+      expect(second.trackId).toBe(first.spareTrackId!)
+      expect(second.positionMs).toBe(0)
+      // 240s song: fired at ≥ 240s after the first command, not 238.5s.
+      expect(second.tMs - first.tMs).toBeGreaterThanOrEqual(240_000)
+      expect(second.tMs - first.tMs).toBeLessThan(242_000)
+      // The chain continues: the handoff advertises ITS spare for the queue.
+      expect(second.spareTrackId).toBeDefined()
+      expect(second.spareTrackId).not.toBe(second.trackId)
+      // No stray cut between them.
+      expect(engine.commands.filter((c) => !c.handoff).length).toBe(1)
+    })
+
+    test('without the option, song ends are cuts exactly as before', () => {
+      const engine = new LiveEngine(cruise, songs, { paceSecPerKm: 340 })
+      run(engine, stream([{ seconds: 500, mps: 3 }]))
+      expect(engine.commands.every((c) => !c.handoff)).toBe(true)
+      expect(engine.commands[1].tMs - engine.commands[0].tMs).toBeLessThan(240_000)
+    })
+
+    test('the player rolled into the spare before the model did: adopted as a handoff, not a skip', () => {
+      const engine = new LiveEngine(cruise, songs, { paceSecPerKm: 340, streamingHandoff: true })
+      run(engine, stream([{ seconds: 236, mps: 3 }]))
+      const first = engine.commands[0]
+      // Executor read: spare already playing at 0:02 while the model says 4s to go.
+      const emitted = engine.syncExternalPlayback(first.spareTrackId!, 2_000, 236_000)
+      expect(engine.skips.length).toBe(0)
+      expect(emitted.length).toBe(1)
+      expect(emitted[0].handoff).toBe(true)
+      expect(emitted[0].trackId).toBe(first.spareTrackId!)
+      expect(emitted[0].spareTrackId).toBeDefined()
+      // The model now runs on the spare: its end comes ~238s later, not 4s.
+      const before = engine.commands.length
+      advanceFrom(engine, 236_000, 200)
+      expect(engine.commands.length).toBe(before)
+    })
+
+    test('verification finds the player still finishing the old song: the handoff reverts and fires again later', () => {
+      const engine = new LiveEngine(cruise, songs, { paceSecPerKm: 340, streamingHandoff: true })
+      run(engine, stream([{ seconds: 241, mps: 3 }]))
+      const first = engine.commands[0]
+      expect(engine.commands.length).toBe(2)
+      expect(engine.commands[1].handoff).toBe(true)
+      // Reality: the model was 8s early — the first song is at 3:53.
+      const emitted = engine.syncExternalPlayback(first.trackId, 233_000, 241_000, true)
+      expect(emitted.length).toBe(0)
+      expect(engine.skips.length).toBe(0)
+      expect(engine.commands.length).toBe(1) // the premature handoff is withdrawn
+      expect(engine.state.playingTrackId).toBe(first.trackId)
+      // …and the handoff fires again at the corrected end (~7s later).
+      advanceFrom(engine, 241_000, 10)
+      expect(engine.commands.length).toBe(2)
+      expect(engine.commands[1].handoff).toBe(true)
+      expect(engine.commands[1].trackId).toBe(first.spareTrackId!)
+      expect(engine.commands[1].tMs).toBeGreaterThanOrEqual(247_000)
+    })
+
+    test('a real mid-song skip is still an overrule, and re-arms the chain', () => {
+      const engine = new LiveEngine(cruise, songs, { paceSecPerKm: 340, streamingHandoff: true })
+      run(engine, stream([{ seconds: 60, mps: 3 }]))
+      const first = engine.commands[0]
+      const other = songs.find((s) => s.trackId !== first.trackId && s.trackId !== first.spareTrackId)!
+      const emitted = engine.syncExternalPlayback(other.trackId, 0, 61_000)
+      expect(engine.skips.length).toBe(1)
+      expect(engine.skips[0].fromTrackId).toBe(first.trackId)
+      // The executor holds nothing after the skipped-to song: the handoff
+      // command hands it a spare to queue, so the NEXT end rolls natively too.
+      expect(emitted.length).toBe(1)
+      expect(emitted[0].handoff).toBe(true)
+      expect(emitted[0].spareTrackId).toBeDefined()
+    })
+  })
+
   test('same-track position drift re-anchors the model without a skip event', () => {
     const cruise: WorkoutPlan = { name: 'cruise', steps: [{ kind: 'easy', seconds: 900 }] }
     const engine = new LiveEngine(cruise, songs, { paceSecPerKm: 340 })

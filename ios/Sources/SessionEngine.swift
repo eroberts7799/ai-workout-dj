@@ -497,6 +497,23 @@ final class SessionEngine: ObservableObject {
     status = trailMode ? "trail session ended" : "stopped"
     uploadSessionLog(source: trailMode ? "ios-trail" : simulating ? "ios-sim" : "ios")
     trailMode = false
+    // The watch may still be running this activity — remember it so a
+    // Reset to idle doesn't late-join the same run and restart the music.
+    if let t = lastWatchTimerMs { stoppedActivity = (timerMs: t, wall: Date().timeIntervalSince1970) }
+  }
+
+  /// The activity the user stopped the app on: watch timer + wall clock at
+  /// the stop. 9/3 walk: five resurrections in 40s after the stop — each
+  /// Reset went idle, the still-running watch timer late-joined, and the
+  /// first song started again. Same activity ⇔ the timer has advanced about
+  /// as much as the wall clock (pauses only shrink it); a NEW activity seen
+  /// past the old stop point shows a far larger wall gap.
+  private var stoppedActivity: (timerMs: Double, wall: TimeInterval)?
+  private var lastWatchTimerMs: Double?
+  private func isStoppedActivity(timerMs t: Double) -> Bool {
+    guard let s = stoppedActivity, t >= s.timerMs else { return false }
+    let wallElapsedMs = (Date().timeIntervalSince1970 - s.wall) * 1000
+    return wallElapsedMs < (t - s.timerMs) + 600_000
   }
 
   /// Anonymous per-install identity — multi-user flywheel data needs to
@@ -616,7 +633,7 @@ final class SessionEngine: ObservableObject {
     // Empty plan → follow mode: the watch's step stream IS the workout.
     // hrMax: calibrated per-athlete anchor delivered by the bundle import.
     let hrMax = UserDefaults.standard.object(forKey: "awdj.hrMax") as? Double
-    live = LiveEngine(plan: b.plan ?? [], songs: tags, pairBonus: b.pairBonus ?? [:], hrMax: hrMax)
+    live = LiveEngine(plan: b.plan ?? [], songs: tags, pairBonus: b.pairBonus ?? [:], hrMax: hrMax, streamingHandoff: musicSource == .spotify)
     firedCount = 0
     landingCount = 0
     lastCommand = ""
@@ -704,6 +721,16 @@ final class SessionEngine: ObservableObject {
   private var spotifyPollInFlight = false
   private var spotifyEverDelivered = false
   private var spotifyLastDeliveryWall: TimeInterval = 0
+  /// STREAMING HANDOFF (9/3 walk: every song-end cut landed ±3s off the real
+  /// end — early was a hard pause, late restarted the song Spotify had
+  /// already rolled into). Song ends are now the player's own roll into the
+  /// spare it holds; the engine predicts the roll, a read verifies it, and
+  /// only then the next spare is queued.
+  private struct SpotifyHandoff { let command: LivePlayCommand; let fromTrackId: String?; let atMs: Double; var tries: Int }
+  private var spotifyHandoff: SpotifyHandoff?
+  /// What the executor last put in front of the player (cut or verified roll).
+  private var spotifyModelTrackId: String?
+  private var spotifyQueueRetry: (uri: String, atMs: Double)?
   /// Field diagnosability (9/2 shakeout: "music never came on" with zero
   /// evidence in the log): every delivery attempt's outcome, shipped in the
   /// session log. Ring-capped — a broken morning must not bloat the upload.
@@ -728,6 +755,9 @@ final class SessionEngine: ObservableObject {
     spotifyPollAtMs = 0
     spotifyEverDelivered = false
     spotifyLastDeliveryWall = 0
+    spotifyHandoff = nil
+    spotifyModelTrackId = nil
+    spotifyQueueRetry = nil
   }
 
   private func deliverSpotify(uris: [String], positionMs: Double, timerMs: Double, reason: String) {
@@ -785,7 +815,7 @@ final class SessionEngine: ObservableObject {
     }
     deck.stop()
     let hrMax = UserDefaults.standard.object(forKey: "awdj.hrMax") as? Double
-    live = LiveEngine(plan: [], songs: tags, pairBonus: b.pairBonus ?? [:], hrMax: hrMax)
+    live = LiveEngine(plan: [], songs: tags, pairBonus: b.pairBonus ?? [:], hrMax: hrMax, streamingHandoff: musicSource == .spotify)
     firedCount = 0
     landingCount = 0
     lastCommand = ""
@@ -844,31 +874,19 @@ final class SessionEngine: ObservableObject {
       wkKind: wkKind, wkDurationType: wkDurationType, wkDurationValue: wkDurationValue, wkNextKind: wkNextKind
     )
     for c in live.advance(s) {
-      if suppressLoopbacks && c.reason.hasPrefix("loop back") { continue }
-      // Output keys on MUSIC SOURCE, not session mode. (8/27: the Spotify
-      // path was gated on trailMode, so a watch-triggered STRUCTURED run —
-      // LIVE mode, not trail — sent its commands to the silent owned-files
-      // deck. The engine was flawless; the music went to a dead output.)
-      if musicSource == .spotify {
-        // Phone conducts its own Spotify app; the watchdog owns delivery.
-        // The spare rides along so the runner's "next" button works.
-        firedCount += 1
-        lastCommand = c.reason
-        var uris = [c.uri]
-        if let spare = c.spareUri { uris.append(spare) }
-        deliverSpotify(uris: uris, positionMs: c.positionMs, timerMs: timerMs, reason: c.reason)
-      } else {
-        // Never interrupt the run: a missing file leaves current audio playing.
-        try? deck.play(id: c.trackId, positionMs: c.positionMs, fadeSec: c.fadeSec, opts: BeatMath.deckOpts(for: c.reason))
-        firedCount += 1
-        lastCommand = c.reason
-      }
+      // Commands from advance() are PREDICTIONS (a handoff's roll is not
+      // yet observed); adoptions from a player read arrive confirmed.
+      execute(c, timerMs: timerMs, confirmed: false)
     }
     // Watchdog pump: re-offer an undelivered Spotify command. Fast (3s)
     // while nothing has ever delivered (waking the device); 10s after.
     if pendingSpotify != nil, timerMs >= spotifyRetryAtMs {
       spotifyRetryAtMs = timerMs + (spotifyEverDelivered ? 10_000 : 3_000)
       attemptSpotifyDelivery()
+    }
+    if let r = spotifyQueueRetry, timerMs >= r.atMs {
+      spotifyQueueRetry = nil
+      queueSpare(r.uri, for: "queue retry")
     }
     // Reconciliation: every 20s ask Spotify what is ACTUALLY playing. A
     // mismatch = the runner skipped (or the queue spare fired) — the model
@@ -888,11 +906,127 @@ final class SessionEngine: ObservableObject {
         let state = await SpotifyRemote.shared.playerState()
         guard let self else { return }
         self.spotifyPollInFlight = false
-        guard self.phase == .running, let st = state, st.isPlaying else { return }
-        self.live?.syncExternalPlayback(trackId: st.trackId, positionMs: st.progressMs, tMs: self.clockMs)
+        guard self.phase == .running else { return }
+        if let h = self.spotifyHandoff {
+          self.verifyHandoff(h, state)
+          return
+        }
+        guard let st = state, st.isPlaying else { return }
+        let adopted = self.live?.syncExternalPlayback(trackId: st.trackId, positionMs: st.progressMs, tMs: self.clockMs) ?? []
+        for c in adopted { self.execute(c, timerMs: self.clockMs, confirmed: true) }
       }
     }
     landingCount = live.landings.count
+  }
+
+  /// Route one engine command to the music output. Output keys on MUSIC
+  /// SOURCE, not session mode (8/27: gating on trailMode sent a LIVE run's
+  /// commands to the silent owned-files deck).
+  private func execute(_ c: LivePlayCommand, timerMs: Double, confirmed: Bool) {
+    if suppressLoopbacks && c.reason.hasPrefix("loop back") { return }
+    firedCount += 1
+    lastCommand = c.reason
+    guard musicSource == .spotify else {
+      // Never interrupt the run: a missing file leaves current audio playing.
+      // (A handoff is a plain play here — the deck crossfades into it.)
+      try? deck.play(id: c.trackId, positionMs: c.positionMs, fadeSec: c.fadeSec, opts: BeatMath.deckOpts(for: c.reason))
+      return
+    }
+    if c.handoff {
+      if confirmed {
+        // The read that produced this command saw the player on it — the
+        // queue is empty behind it, so the next spare goes in now.
+        recordDelivery(ok: true, note: "\(c.reason) · adopted")
+        spotifyModelTrackId = c.trackId
+        queueSpare(c.spareUri, for: c.reason)
+      } else {
+        // PREDICTED roll into the held spare: no play — verify the player
+        // got there before touching the queue. A queue item plays before
+        // any context continuation, so queueing behind the wrong song
+        // leaks it into the wrong slot.
+        spotifyHandoff = SpotifyHandoff(command: c, fromTrackId: spotifyModelTrackId, atMs: timerMs, tries: 0)
+        spotifyPollAtMs = timerMs + 4_500 // /me/player lags reality by a few seconds
+      }
+      return
+    }
+    // A real cut: the phone conducts its Spotify app; the watchdog owns
+    // delivery. The spare rides along so the runner's "next" button works
+    // and the song end after this one rolls natively.
+    spotifyHandoff = nil
+    spotifyQueueRetry = nil
+    spotifyModelTrackId = c.trackId
+    var uris = [c.uri]
+    if let spare = c.spareUri { uris.append(spare) }
+    deliverSpotify(uris: uris, positionMs: c.positionMs, timerMs: timerMs, reason: c.reason)
+  }
+
+  /// A predicted handoff's verification read. Three outcomes besides the
+  /// happy one: the player is still finishing the old song (stale read →
+  /// look again; genuinely early → the model steps back), it rolled into
+  /// something else (adopt it — a queue item that outlived a cut, never a
+  /// skip), or it is silent/unreachable (rescue with an explicit play).
+  private func verifyHandoff(_ h: SpotifyHandoff, _ state: (trackId: String, progressMs: Double, isPlaying: Bool)?) {
+    let c = h.command
+    if let st = state, st.isPlaying {
+      if st.trackId == c.trackId {
+        spotifyHandoff = nil
+        spotifyModelTrackId = c.trackId
+        recordDelivery(ok: true, note: "\(c.reason) · verified at \(Int(st.progressMs / 1000))s")
+        _ = live?.syncExternalPlayback(trackId: st.trackId, positionMs: st.progressMs, tMs: clockMs)
+        queueSpare(c.spareUri, for: c.reason)
+        return
+      }
+      if st.trackId == h.fromTrackId {
+        let dur = bundle?.tags?.first(where: { $0.trackId == st.trackId })?.durationMs ?? 0
+        let remaining = dur - st.progressMs
+        if remaining > 4_000 {
+          spotifyHandoff = nil
+          recordDelivery(ok: true, note: "\(c.reason) · early by \(Int(remaining / 1000))s — model stepped back")
+          _ = live?.syncExternalPlayback(trackId: st.trackId, positionMs: st.progressMs, tMs: clockMs, natural: true)
+          return
+        }
+        if h.tries < 3 {
+          // Seconds from the end, or a stale read of it: look again.
+          spotifyHandoff?.tries += 1
+          spotifyPollAtMs = clockMs + 3_000
+          return
+        }
+        // Reported at its end three reads running — stuck. Rescue below.
+      } else {
+        spotifyHandoff = nil
+        recordDelivery(ok: true, note: "\(c.reason) · player rolled into \(st.trackId) instead — adopted")
+        let adopted = live?.syncExternalPlayback(trackId: st.trackId, positionMs: st.progressMs, tMs: clockMs, natural: true) ?? []
+        for cmd in adopted { execute(cmd, timerMs: clockMs, confirmed: true) }
+        return
+      }
+    } else if h.tries < 2 {
+      spotifyHandoff?.tries += 1
+      spotifyPollAtMs = clockMs + 3_000
+      return
+    }
+    // Rescue: the queue never carried the spare (a failed queue call, an
+    // exhausted context) or the player is unreachable. Explicit play at the
+    // modeled position — the watchdog carries it if we are offline.
+    spotifyHandoff = nil
+    spotifyModelTrackId = c.trackId
+    recordDelivery(ok: false, note: "\(c.reason) · rescue: player \(state == nil ? "unreachable or idle" : "not playing") — issuing play")
+    var uris = [c.uri]
+    if let spare = c.spareUri { uris.append(spare) }
+    deliverSpotify(uris: uris, positionMs: 0, timerMs: h.atMs, reason: "rescue \(c.reason)")
+  }
+
+  private func queueSpare(_ uri: String?, for reason: String) {
+    guard let uri else {
+      recordDelivery(ok: false, note: "\(reason) · no spare to queue")
+      return
+    }
+    let gen = spotifyGen
+    Task { [weak self] in
+      let err = await SpotifyRemote.shared.queue(uri: uri)
+      guard let self, self.spotifyGen == gen else { return }
+      self.recordDelivery(ok: err == nil, note: err.map { "queue spare · \($0)" } ?? "queued spare")
+      if err != nil { self.spotifyQueueRetry = (uri: uri, atMs: self.clockMs + 10_000) }
+    }
   }
 
   /// Projected setlist: run the REAL engine in-memory against a
@@ -913,7 +1047,7 @@ final class SessionEngine: ObservableObject {
        WorkoutStep(kind: "rest", seconds: 90, meters: nil)]
     } + [WorkoutStep(kind: "cooldown", seconds: nil, meters: 1250)]
     let hrMax = UserDefaults.standard.object(forKey: "awdj.hrMax") as? Double
-    let eng = LiveEngine(plan: plan, songs: tags, pairBonus: b.pairBonus ?? [:], hrMax: hrMax)
+    let eng = LiveEngine(plan: plan, songs: tags, pairBonus: b.pairBonus ?? [:], hrMax: hrMax, streamingHandoff: musicSource == .spotify)
     var t = 0.0, d = 0.0, si = 0, stepD = 0.0
     func pace(_ k: String) -> Double { k == "hard" ? 3.6 : k == "rest" ? 1.5 : 3.1 }
     func len(_ s: WorkoutStep) -> Double { s.meters ?? ((s.seconds ?? 0) * pace(s.kind)) }
@@ -1001,14 +1135,16 @@ final class SessionEngine: ObservableObject {
     // kept streaming the timer. A running watch timer with no active
     // session now joins mid-run; wkStepSeq catches the engine up. Idle
     // only: a session the user STOPPED (phase .done) never resurrects.
+    if let timerMs { lastWatchTimerMs = timerMs }
     if event == nil, phase == .idle, armed, liveMode, supportsLive, !trailMode,
-       let t = timerMs, t > 5_000,
+       let t = timerMs, t > 5_000, !isStoppedActivity(timerMs: t),
        Date().timeIntervalSince1970 * 1000 - receivedAt < 15_000 {
       startLive()
       status += " · joined mid-run"
     }
     guard let event, receivedAt != lastHandledEvent else { return }
     lastHandledEvent = receivedAt
+    if event == "timerStart" { stoppedActivity = nil } // a fresh activity
     // Trail sessions are phone-clocked: a watch recording running alongside
     // must not pause/steer the music (the 8/21 conflict, finally closed).
     if trailMode { return }

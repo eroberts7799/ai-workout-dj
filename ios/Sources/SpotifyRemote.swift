@@ -81,6 +81,22 @@ final class SpotifyRemote {
     }
   }
 
+  /// Append one track to the player's queue — the streaming-handoff chain:
+  /// after the player rolls into the spare it held, the NEXT spare goes
+  /// here so the following end rolls natively too. Queue items play before
+  /// any context continuation, so the caller queues only once a read has
+  /// confirmed what is playing (a queue behind the wrong song is a leak).
+  func queue(uri: String) async -> String? {
+    do {
+      let id = try await resolveDevice(force: false)
+      let q = uri.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? uri
+      let (code, _) = try await api("/me/player/queue?uri=\(q)&device_id=\(id)", method: "POST")
+      return (200...299).contains(code) ? nil : "spotify queue HTTP \(code)"
+    } catch {
+      return "spotify offline (\((error as NSError).code))"
+    }
+  }
+
   /// What is ACTUALLY playing — the reconciliation read that lets the
   /// engine notice manual skips. nil when unknown (offline, nothing playing).
   func playerState() async -> (trackId: String, progressMs: Double, isPlaying: Bool)? {

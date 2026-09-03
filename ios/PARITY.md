@@ -80,3 +80,25 @@ consumer is `scripts/terrain-backtest.ts` (the Approach A replay lab).
 Port lands with Approach B's live wiring, same-session per the parity
 rule. The GAP curve is a literature prior (personal fit failed honestly:
 flat-city corpus + altimeter jitter + hill-repeat effort confound).
+
+## Streaming handoff (2026-09-03) — engine ported, executor iOS-only
+`LiveEngine` option `streamingHandoff` (TS + Swift, same session): under it a
+song end is the player's own roll into the advertised spare — the engine
+emits a `handoff` command (no play, queue the next spare) at its modeled end
+instead of a cut 1.5s early, `syncExternalPlayback` gains a `natural` flag
+(a read right after a modeled end is never a skip; finding the OLD song
+still playing steps the model back) and returns the commands an adoption
+emits. `peekSpare` now scores taste like a real pick (Swift already did —
+that was a silent divergence, closed). The EXECUTOR half — predicted-roll
+verification read, `/me/player/queue` for the next spare, early/drift/
+rescue outcomes — lives in `ios/Sources/SessionEngine.swift` only. The web
+conductor's Spotify path (`src/spike/webapi-path.ts`) still issues plain
+cuts with the option off; port the executor if the web tier ever conducts
+Spotify for real.
+
+Two Spotify behaviors are ASSUMED until the first field log says otherwise
+(every outcome is recorded in the session log's `delivery` events):
+1. Queue items play after a uris-context is exhausted (chain continues).
+2. A new `play` with uris does NOT clear a previously queued item, so after
+   a real cut the leaked item may play before the cut's spare — handled by
+   adopting whatever the verification read finds, never by a skip.
