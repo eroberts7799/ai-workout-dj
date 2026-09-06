@@ -156,6 +156,11 @@ struct SessionView: View {
               .fieldMono(10)
               .foregroundColor(Theme.faded)
           }
+          if !engine.coachLine.isEmpty {
+            Text("🗣 \(engine.coachLine)")
+              .fieldMono(10)
+              .foregroundColor(Theme.faded)
+          }
           Text("\(engine.landingCount) landings · \(engine.lastCommand)")
             .fieldMono(12)
             .foregroundColor(Theme.faded)
@@ -381,6 +386,12 @@ struct SessionView: View {
                 if engine.phase == .idle { engine.start(atOffsetMs: 0) }
               }
             }
+          }
+        }
+        Section("Coach") {
+          Button(CoachVoice.shared.enabled ? "Coach voice: on" : "Coach voice: off") {
+            CoachVoice.shared.enabled.toggle()
+            engine.status = CoachVoice.shared.enabled ? "coach voice on" : "coach voice off"
           }
         }
         Section("Advanced") {

@@ -119,3 +119,19 @@ fresh-cut window. Executor pieces are iOS-only: phone GPS in LIVE mode
 day), log fields (lat/lon, terrainPredictions, terrainLandings, route). The
 web conductor passes no routes (matcher off). Watch tier: no positions, no
 matcher — reduced surface by platform physics, as with terrain.
+
+## Live coaching (2026-09-06) — engine ported, voice iOS-only
+`src/live/coach.ts` → `ios/Sources/Coach.swift` (CoachEngine: the intent
+channel beside the music — pre-rep 30s/10s, halfway, pace drift vs the
+Runna target, rep end with pace and delta, recovery, HR-high on easy days,
+crest/climb ahead from trusted route cues, route lock and final kilometer;
+8s minimum gap; nothing from T−6s to T+3s around a drop landing).
+LiveEngine's coaching view (step/hardDone/hardTotal/nextHard/entered/
+crest/pAhead1k) is in both engines; `WorkoutStep.targetPaceSecPerKm` rides
+from pull_next_workout.py through both step types. Tests mirrored (4 each).
+Executor pieces are iOS-only: CoachVoice (AVSpeechSynthesizer; own audio
+session on the Spotify tier so Spotify ducks, deck.duck on the owned tier),
+the morning script fetch (/api/coach-script, today's date only), the
+session-log `coach` field. The morning script itself is a Mac job
+(scripts/coach_script.py → claude -p → publish-coach-script.sh). Watch tier:
+no speech (CIQ) — reduced surface, as with terrain.

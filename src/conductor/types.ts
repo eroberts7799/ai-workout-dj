@@ -8,6 +8,8 @@ export interface WorkoutStep {
   seconds?: number
   meters?: number
   label?: string
+  /** Prescribed pace (speed-band midpoint) — coaching compares the rep against it. */
+  targetPaceSecPerKm?: number
 }
 
 export interface WorkoutPlan {

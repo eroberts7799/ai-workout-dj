@@ -62,6 +62,16 @@ final class DualDeck {
     meta[id] = DeckTrackMeta(bpm: bpm, anchorMs: anchorMs)
   }
 
+  /// Coach voice ducking: the owned tier is our own audio, so we dip the
+  /// active side ourselves (0.35 ≈ −9dB) and restore it. A crossfade in
+  /// flight sets volumes on its own schedule and simply wins.
+  private var duckGain: Float = 1
+  func duck(_ on: Bool) {
+    duckGain = on ? 0.35 : 1
+    let p = sides[active].player
+    if p.volume > 0 || !on { p.volume = on ? min(p.volume, duckGain) : 1 }
+  }
+
   /// Human-readable engine state for the spike UI.
   func debugState() -> String {
     "engine=\(engine.isRunning ? "running" : "STOPPED") files=\(files.count) activeVol=\(sides[active].player.volume)"

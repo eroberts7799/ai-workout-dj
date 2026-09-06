@@ -58,6 +58,8 @@ struct WorkoutStep: Codable {
   let kind: String // warmup | easy | hard | rest | cooldown
   let seconds: Double?
   let meters: Double?
+  /// Prescribed pace (Runna/Garmin speed band midpoint) — coaching only.
+  var targetPaceSecPerKm: Double? = nil
 }
 
 struct SessionBundle: Codable {

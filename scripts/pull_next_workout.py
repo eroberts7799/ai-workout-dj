@@ -92,6 +92,10 @@ def convert(workout):
         cond = (s.get("endCondition") or {}).get("conditionTypeKey")
         val = s.get("endConditionValue")
         step = {"kind": kind}
+        # Target pace (sec/km) from the speed band midpoint — the coaching
+        # voice compares the rep's actual pace against it.
+        if t1 and t2 and (t1 + t2) > 0:
+            step["targetPaceSecPerKm"] = round(1000 / ((t1 + t2) / 2), 1)
         if cond == "distance" and val:
             step["meters"] = round(val, 2)
         elif cond == "time" and val:

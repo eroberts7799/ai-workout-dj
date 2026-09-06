@@ -230,6 +230,10 @@ export class LiveEngine {
    *  crest already changed the song. */
   private crestSuppressUntilDist: number | null = null
   private lastFixDist: number | null = null
+  /** Coaching view bookkeeping: hard steps completed, last entered kind. */
+  private hardDone = 0
+  private lastEntered: string | null = null
+  private prevStepKind: string | null = null
   /** FOLLOW MODE: constructed with an empty plan, the engine conducts
    *  straight from the watch's stream — the workout lives in Runna/Garmin,
    *  nobody should retype it. Current step shape + next-step kind arrive on
@@ -308,9 +312,41 @@ export class LiveEngine {
     route: { routeId: string; reversed: boolean; progressM: number; remainingM: number; agreement: number } | null
     /** Next terrain cue ahead on the locked route, with its ETA at current pace. */
     terrainAhead: { type: 'climbStart' | 'crest'; etaMs: number; gainM: number; confidence: number } | null
+    // — coaching view —
+    /** The step the runner is in (plan or watch stream), its remaining time
+     *  at current pace, and its prescribed pace when the plan carries one. */
+    step: { kind: string; idx: number; remainingMs: number | null; targetPaceSecPerKm: number | null } | null
+    /** Hard steps done / total (plan mode; follow mode counts what it saw). */
+    hardDone: number
+    hardTotal: number | null
+    /** The next hard step's shape (plan mode) — what the pre-rep cue names. */
+    nextHard: { meters: number | null; seconds: number | null; targetPaceSecPerKm: number | null } | null
+    /** Kind of the step entered on the LAST advance, if any. */
+    entered: string | null
+    /** Reactive crest fired on the last advance. */
+    crest: boolean
+    /** Probability (history) the runner stays on the locked route for 1km. */
+    pAhead1k: number
   } {
     const next = this.nextAheadCue()
+    const cur = this.currentStep()
     return {
+      step: cur ? {
+        kind: cur.kind, idx: this.stepIdx,
+        remainingMs: this.lastT != null ? this.remainingMs(cur, this.lastT, this.lastDist) : null,
+        targetPaceSecPerKm: cur.targetPaceSecPerKm ?? null,
+      } : null,
+      hardDone: this.hardDone,
+      hardTotal: this.followMode ? null : this.steps.filter((x) => x.kind === 'hard').length,
+      nextHard: (() => {
+        if (this.followMode) return null
+        const from = cur?.kind === 'hard' ? this.stepIdx + 1 : this.stepIdx
+        const nh = this.steps.slice(from).find((x) => x.kind === 'hard')
+        return nh ? { meters: nh.meters ?? null, seconds: nh.seconds ?? null, targetPaceSecPerKm: nh.targetPaceSecPerKm ?? null } : null
+      })(),
+      entered: this.lastEntered,
+      crest: this.gradeState.crest,
+      pAhead1k: this.matcher?.pAhead(1000) ?? 0,
       route: this.matcher?.lock ?? null,
       terrainAhead: next ? { type: next.type, etaMs: this.cueEtaMs(next), gainM: next.gainM, confidence: next.confidence } : null,
       stepIdx: this.stepIdx,
@@ -800,6 +836,9 @@ export class LiveEngine {
     const entered = this.trackSteps(t, dist, sample)
     this.lastT = t
     this.lastDist = dist
+    this.lastEntered = entered.length ? entered[entered.length - 1].kind : null
+    for (const step of entered) if (step.kind !== 'hard' && this.prevStepKind === 'hard') this.hardDone++
+    if (entered.length) this.prevStepKind = entered[entered.length - 1].kind
 
     // Actual hard-step arrival: score the landing, ensure the moment is marked.
     for (const step of entered) {

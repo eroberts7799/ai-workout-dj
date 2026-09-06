@@ -195,6 +195,10 @@ final class LiveEngine {
   private var terrainPending: TerrainPrediction?
   private var crestSuppressUntilDist: Double?
   private var lastFixDist: Double?
+  /// Coaching view bookkeeping (mirrors TS): hard steps completed, last entered kind.
+  private var hardDone = 0
+  private var lastEntered: String?
+  private var prevStepKind: String?
   /// Spare advertised with the song now playing — what the executor holds next.
   private var playingSpare: TaggedSong?
   /// The song a PREDICTED handoff just left — verification finding the
@@ -256,6 +260,35 @@ final class LiveEngine {
       route: matcher?.lock,
       terrainAhead: next.map { TerrainAhead(type: $0.type, etaMs: cueEtaMs($0), gainM: $0.gainM, confidence: $0.confidence) }
     )
+  }
+
+  /// The coach's view of the engine's mind for this sample. Mirrors the
+  /// TS state fields the CoachEngine reads (step, hardDone/Total, nextHard,
+  /// entered, crest, pAhead1k) plus the sample itself.
+  func coachView(tMs: Double, distanceM: Double?, hr: Double?) -> CoachView {
+    let cur = currentStep()
+    let st = state
+    var nextHard: CoachView.NextHard?
+    if !followMode {
+      let from = cur?.kind == "hard" ? stepIdx + 1 : stepIdx
+      if from < steps.count, let nh = steps[from...].first(where: { $0.kind == "hard" }) {
+        nextHard = CoachView.NextHard(meters: nh.meters, seconds: nh.seconds, targetPaceSecPerKm: nh.targetPaceSecPerKm)
+      }
+    }
+    return CoachView(
+      tMs: tMs, distanceM: distanceM, hr: hr,
+      paceSecPerKm: paceSecPerKm, etaToHardMs: st.etaToHardMs, hrZone: hrState.zone,
+      step: cur.map { CoachView.Step(kind: $0.kind, idx: stepIdx,
+                                     remainingMs: lastT.map { t in remainingMs(step: cur!, t: t, dist: lastDist) },
+                                     targetPaceSecPerKm: $0.targetPaceSecPerKm) },
+      hardDone: hardDone,
+      hardTotal: followMode ? nil : steps.filter { $0.kind == "hard" }.count,
+      nextHard: nextHard,
+      entered: lastEntered,
+      crest: gradeState.crest,
+      route: st.route,
+      terrainAhead: st.terrainAhead,
+      pAhead1k: matcher?.pAhead(1000) ?? 0)
   }
 
   private func cueEtaMs(_ cue: AheadCue) -> Double {
@@ -713,6 +746,9 @@ final class LiveEngine {
     let entered = trackSteps(t: t, dist: dist, sample: sample)
     lastT = t
     lastDist = dist
+    lastEntered = entered.last?.kind
+    for step in entered where step.kind != "hard" && prevStepKind == "hard" { hardDone += 1 }
+    if let last = entered.last { prevStepKind = last.kind }
 
     // Actual hard-step arrival: score the landing, ensure we're riding a drop.
     for step in entered {

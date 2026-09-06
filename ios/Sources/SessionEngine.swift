@@ -53,6 +53,12 @@ final class SessionEngine: ObservableObject {
   private var routes: [Route] = []
   /// One line for the session screen: the locked route and the terrain ahead.
   @Published var routeStatus = ""
+  /// LIVE COACHING (2026-09-06): the intent channel beside the music. The
+  /// CoachEngine reads the same anticipation clock the DJ does; CoachVoice
+  /// speaks its cues. Today's script (morning job) replaces the wording.
+  private var coach: CoachEngine?
+  private var coachScript: CoachScript?
+  @Published var coachLine = ""
   private var uploaded = false
 
   var allAudioReady: Bool {
@@ -218,6 +224,19 @@ final class SessionEngine: ObservableObject {
     }
   }
 
+  /// Today's coaching script, if the morning job wrote one for today.
+  private func loadCoachScript() async {
+    struct Dated: Decodable { let date: String? }
+    let url = URL(string: "https://awdj-relay.vercel.app/api/coach-script?k=awdj-7g2k9x")!
+    guard let (data, resp) = try? await URLSession.shared.data(from: url),
+          (resp as? HTTPURLResponse)?.statusCode == 200,
+          let dated = try? JSONDecoder().decode(Dated.self, from: data) else { return }
+    let f = DateFormatter()
+    f.dateFormat = "yyyy-MM-dd"
+    guard dated.date == f.string(from: Date()) else { return }
+    coachScript = try? JSONDecoder().decode(CoachScript.self, from: data)
+  }
+
   /// The route library: cached copy first (a day is plenty — routes change
   /// slowly), relay refresh otherwise. Never blocks the ready state.
   private func loadRouteLibrary() async {
@@ -262,6 +281,7 @@ final class SessionEngine: ObservableObject {
     }
     if bundle?.tags?.isEmpty == false { await fetchNextWorkout() }
     await loadRouteLibrary()
+    await loadCoachScript()
   }
 
   func importAudio(from urls: [URL]) {
@@ -515,6 +535,7 @@ final class SessionEngine: ObservableObject {
     tick?.invalidate()
     simTask?.cancel()
     phoneSensors.stop() // GPS rides along in every mode now (route matcher)
+    CoachVoice.shared.stop()
     if trailMode {
       BleHeartRate.shared.stop()
       deck.stop() // trail sessions end SILENT — no orphan DJ haunting the car ride home
@@ -607,6 +628,10 @@ final class SessionEngine: ObservableObject {
         payload["route"] = ["routeId": r.routeId, "reversed": r.reversed, "progressM": r.progressM, "remainingM": r.remainingM] as [String: Any]
       }
       payload["routeLibrarySize"] = routes.count
+      if let coach {
+        payload["coach"] = coach.cues.map { ["tMs": $0.tMs, "kind": $0.kind, "text": $0.text] as [String: Any] }
+        payload["coachScript"] = coachScript != nil
+      }
       // The runner's overrules — per-transition negative feedback, free.
       payload["skips"] = live.skips.map {
         var d: [String: Any] = ["tMs": $0.tMs, "toTrackId": $0.toTrackId]
@@ -651,6 +676,9 @@ final class SessionEngine: ObservableObject {
     simTask?.cancel()
     live = nil
     phoneSensors.stop()
+    CoachVoice.shared.stop()
+    coach = nil
+    coachLine = ""
     routeStatus = ""
     deck.stop()
     silenceSpotify()
@@ -686,6 +714,7 @@ final class SessionEngine: ObservableObject {
     phoneSensors.onTick = nil
     phoneSensors.start()
     routeStatus = ""
+    startCoach()
     firedCount = 0
     landingCount = 0
     lastCommand = ""
@@ -869,6 +898,7 @@ final class SessionEngine: ObservableObject {
     let hrMax = UserDefaults.standard.object(forKey: "awdj.hrMax") as? Double
     live = LiveEngine(plan: [], songs: tags, pairBonus: b.pairBonus ?? [:], hrMax: hrMax, streamingHandoff: musicSource == .spotify, routes: routes)
     routeStatus = ""
+    startCoach()
     firedCount = 0
     landingCount = 0
     lastCommand = ""
@@ -979,6 +1009,7 @@ final class SessionEngine: ObservableObject {
       }
     }
     landingCount = live.landings.count
+    advanceCoach(timerMs: timerMs, distanceM: distanceM, hr: hr)
     // Route awareness on screen: what the matcher knows, what's ahead.
     let st = live.state
     var line = ""
@@ -990,6 +1021,25 @@ final class SessionEngine: ObservableObject {
       line += (line.isEmpty ? "" : " · ") + (a.type == .crest ? "⛰ crest in \(Int(a.etaMs / 1000))s" : "↗ climb in \(Int(a.etaMs / 1000))s")
     }
     if line != routeStatus { routeStatus = line }
+  }
+
+  private func startCoach() {
+    coach = CoachEngine(script: coachScript)
+    coachLine = ""
+    CoachVoice.shared.onSpeaking = { [weak self] speaking in
+      guard let self, self.musicSource == .ownedFiles else { return }
+      self.deck.duck(speaking)
+    }
+  }
+
+  /// After the DJ has moved: the coach reads the engine's mind for this
+  /// sample and speaks. Simulated runs stay silent (8× speech is noise).
+  private func advanceCoach(timerMs: Double, distanceM: Double?, hr: Double?) {
+    guard let coach, let live, !simulating else { return }
+    for cue in coach.advance(live.coachView(tMs: timerMs, distanceM: distanceM, hr: hr)) {
+      coachLine = cue.text
+      CoachVoice.shared.speak(cue.text, ownsAudio: musicSource == .ownedFiles)
+    }
   }
 
   /// Route one engine command to the music output. Output keys on MUSIC
