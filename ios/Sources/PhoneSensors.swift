@@ -16,6 +16,9 @@ final class PhoneSensors: NSObject, CLLocationManagerDelegate {
   private var gpsAltitudeM: Double?
   private var hasBaro = false
   private(set) var distanceM: Double = 0
+  /// Latest credible GPS fix — the route matcher's input. In LIVE mode the
+  /// watch owns distance/altitude and the phone contributes only this.
+  private(set) var latestFix: (lat: Double, lon: Double, at: Date)?
   private var startedAt: Date?
   private var timer: Timer?
 
@@ -54,12 +57,21 @@ final class PhoneSensors: NSObject, CLLocationManagerDelegate {
     location.stopUpdatingLocation()
     if hasBaro { altimeter.stopRelativeAltitudeUpdates() }
     startedAt = nil
+    latestFix = nil
+  }
+
+  /// A fix no older than `maxAgeS` — stale fixes (tunnel, pocket, indoors)
+  /// must not pin the matcher to an old position.
+  func freshFix(maxAgeS: TimeInterval = 5) -> (lat: Double, lon: Double)? {
+    guard let f = latestFix, Date().timeIntervalSince(f.at) <= maxAgeS else { return nil }
+    return (f.lat, f.lon)
   }
 
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
     for l in locations {
       // Trail GPS is jumpy under canopy — only accumulate credible fixes.
       guard l.horizontalAccuracy >= 0, l.horizontalAccuracy <= 30 else { continue }
+      latestFix = (lat: l.coordinate.latitude, lon: l.coordinate.longitude, at: l.timestamp)
       if let last = lastLocation {
         let d = l.distance(from: last)
         if d >= 1 {

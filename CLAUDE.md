@@ -37,9 +37,12 @@ agent's memory dir.
 9. **Evaluators before optimizers.** The critic (`analysis/render_and_judge.py`)
    judges engine changes by rendering actual audio; the Replay Lab replays
    real session logs. Ship engine changes with a critic verdict, not vibes.
-10. **Privacy floor.** No lat/lon extraction from fitness files, friend data
-    stays local-only until the cloud store has per-user auth, never
-    redistribute analyzed audio.
+10. **Privacy floor.** Friend data stays local-only until the cloud store
+    has per-user auth; never redistribute analyzed audio. Positions
+    (lat/lon) are extracted ONLY from Ethan's own runs (relaxed 2026-09-06
+    for the route matcher): they live under `data/` (gitignored), in
+    key-gated relay blobs, and on his phone — never in friend data, never
+    in anything public.
 
 ## Commands
 

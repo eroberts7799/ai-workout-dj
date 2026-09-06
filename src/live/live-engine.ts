@@ -12,6 +12,7 @@
 import type { SongTags, WorkoutPlan, WorkoutStep } from '../conductor/types'
 import { DEFAULT_PACE_SEC_PER_KM } from '../conductor/conductor'
 import { mixScore, snapToBeat } from '../conductor/beat'
+import { RouteMatcher, type AheadCue, type Route } from './route-match'
 import { GradeTracker, HrTracker } from './rules'
 
 export interface LiveSample {
@@ -39,6 +40,32 @@ export interface LiveSample {
   wkDurationValue?: number
   /** Kind of the NEXT step — what anticipation aims at with no plan loaded. */
   wkNextKind?: string
+  /** Phone GPS fix (both tiers, 2026-09-06) — feeds route matching: "your
+   *  history is your route". Own data only; never leaves key-gated storage. */
+  lat?: number
+  lon?: number
+}
+
+/** A terrain cue the route matcher saw coming, frozen at the fresh-cut
+ *  lead — the engine's claim about WHEN the hill tops out. Graded against
+ *  the reactive detector in `terrainLandings`. */
+export interface TerrainPrediction {
+  key: string
+  type: 'climbStart' | 'crest'
+  tMs: number
+  predictedTMs: number
+  liveDistanceM: number
+  gainM: number
+  confidence: number
+  /** Whether this prediction moved the music (false = shadow mode). */
+  drove: boolean
+}
+
+export interface TerrainLanding {
+  key: string
+  predictedTMs: number
+  actualTMs: number
+  errorMs: number
 }
 
 export interface PlayCommand {
@@ -186,6 +213,23 @@ export class LiveEngine {
   private readonly normKey = new Map<string, string>()
 
   private readonly dropStyle: DropStyle
+  /** ROUTE AWARENESS (design doc Approach B, live wiring 2026-09-06). The
+   *  matcher identifies which past route the runner is on from the phone's
+   *  GPS; its terrain cues ahead become PREDICTIONS here. SHADOW by default:
+   *  every prediction is logged and graded against the reactive crest
+   *  detector, but the music still follows the reactive rules until the
+   *  field error proves small (route backtest 2026-09-06: cross-run summit
+   *  disagreement was unvalidated, n=7 — evaluators before optimizers). */
+  private readonly matcher: RouteMatcher | null
+  private readonly terrainDrivesMusic: boolean
+  readonly terrainPredictions: TerrainPrediction[] = []
+  readonly terrainLandings: TerrainLanding[] = []
+  /** A frozen crest prediction waiting for the reactive detector to grade it. */
+  private terrainPending: TerrainPrediction | null = null
+  /** Reactive crest rule stays quiet until this live distance — a predicted
+   *  crest already changed the song. */
+  private crestSuppressUntilDist: number | null = null
+  private lastFixDist: number | null = null
   /** FOLLOW MODE: constructed with an empty plan, the engine conducts
    *  straight from the watch's stream — the workout lives in Runna/Garmin,
    *  nobody should retype it. Current step shape + next-step kind arrive on
@@ -216,8 +260,12 @@ export class LiveEngine {
       pairBonus?: Record<string, number>
       dropStyle?: DropStyle
       streamingHandoff?: boolean
+      routes?: Route[]
+      terrainDrivesMusic?: boolean
     } = {},
   ) {
+    this.matcher = opts.routes && opts.routes.length > 0 ? new RouteMatcher(opts.routes) : null
+    this.terrainDrivesMusic = opts.terrainDrivesMusic ?? false
     this.steps = plan.steps
     this.paceSecPerKm = opts.paceSecPerKm ?? DEFAULT_PACE_SEC_PER_KM
     this.hrTracker = new HrTracker(opts.hrMax)
@@ -257,8 +305,14 @@ export class LiveEngine {
     gradePct: number
     climbing: boolean
     hrZone: number
+    route: { routeId: string; reversed: boolean; progressM: number; remainingM: number; agreement: number } | null
+    /** Next terrain cue ahead on the locked route, with its ETA at current pace. */
+    terrainAhead: { type: 'climbStart' | 'crest'; etaMs: number; gainM: number; confidence: number } | null
   } {
+    const next = this.nextAheadCue()
     return {
+      route: this.matcher?.lock ?? null,
+      terrainAhead: next ? { type: next.type, etaMs: this.cueEtaMs(next), gainM: next.gainM, confidence: next.confidence } : null,
       stepIdx: this.stepIdx,
       mode: this.mode,
       paceSecPerKm: this.paceSecPerKm,
@@ -268,6 +322,20 @@ export class LiveEngine {
       climbing: this.gradeState.climbing,
       hrZone: this.hrState.zone,
     }
+  }
+
+  private cueEtaMs(cue: AheadCue): number {
+    return (cue.flatEquivRemainingM / 1000) * this.paceSecPerKm * 1000
+  }
+
+  /** The nearest cue ahead that still matters (crests need a real hill). */
+  private nextAheadCue(): AheadCue | null {
+    if (!this.matcher) return null
+    for (const c of this.matcher.aheadCues()) {
+      if (c.type === 'crest' && c.gainM < 30) continue
+      return c
+    }
+    return null
   }
 
   /** Current playhead position in the active track at time t. */
@@ -721,6 +789,11 @@ export class LiveEngine {
     // Body-signal trackers: grade/climb/crest from altitude, zones from HR.
     this.gradeState = this.gradeTracker.update(dist, sample.altitudeM)
     this.hrState = this.hrTracker.update(sample.hr)
+    // Route matching: a GPS fix + the odometer identify the route ahead.
+    if (this.matcher && sample.lat != null && sample.lon != null && dist != null && dist !== this.lastFixDist) {
+      this.matcher.update({ lat: sample.lat, lon: sample.lon, distM: dist })
+      this.lastFixDist = dist
+    }
 
     // trackSteps reads lastT/lastDist as the PREVIOUS sample (boundary
     // interpolation window) — update them only after.
@@ -785,11 +858,56 @@ export class LiveEngine {
       }
     }
 
+    // Predicted crest (route-aware): the matcher says the summit is
+    // FRESH_CHANGE_LEAD_MS away at current pace. Freeze the prediction; in
+    // drive mode (confidence ≥ 0.5 = real hill AND every plausible route
+    // agrees on the future) change the song NOW so it lands on the summit —
+    // in shadow mode just log it and let the reactive rule below play.
+    if (dist != null && this.terrainPending == null) {
+      const cue = this.nextAheadCue()
+      if (cue && cue.type === 'crest') {
+        const eta = this.cueEtaMs(cue)
+        if (eta <= FRESH_CHANGE_LEAD_MS && !this.terrainPredictions.some((p) => p.key === cue.key)) {
+          const hardEta = this.etaToNextHardMs(t, dist)
+          const earned = this.hrState.hr == null || this.hrState.zone >= 3
+          const drive = this.terrainDrivesMusic && cue.confidence >= 0.5 && this.mode === 'fill'
+            && (hardEta == null || hardEta > CREST_MIN_ETA_MS) && earned && this.dropStyle === 'fresh'
+          const pred: TerrainPrediction = {
+            key: cue.key, type: 'crest', tMs: t, predictedTMs: t + eta, liveDistanceM: cue.liveDistanceM,
+            gainM: cue.gainM, confidence: cue.confidence, drove: drive,
+          }
+          this.terrainPredictions.push(pred)
+          this.terrainPending = pred
+          if (drive) {
+            const pick = this.pickLoop('high')
+            if (pick) {
+              this.emit(t, pick.song, 0, 0.45, `rep change (crest ahead) (${pick.song.name})`, this.peekSpare(pick.song))
+              this.fillExitPosMs = this.chainExitPosMs(pick.song, 0)
+              this.crestSuppressUntilDist = cue.liveDistanceM + 250
+            }
+          }
+        }
+      }
+    }
+    // Grade the pending prediction when the reactive detector fires (or give
+    // up 400m past the predicted summit — the hill never crested).
+    if (this.terrainPending && dist != null) {
+      const pend = this.terrainPending
+      if (this.gradeState.crest) {
+        this.terrainLandings.push({ key: pend.key, predictedTMs: pend.predictedTMs, actualTMs: t, errorMs: t - pend.predictedTMs })
+        this.terrainPending = null
+      } else if (dist > pend.liveDistanceM + 400) {
+        this.terrainPending = null
+      }
+    }
+    if (this.crestSuppressUntilDist != null && dist != null && dist > this.crestSuppressUntilDist) this.crestSuppressUntilDist = null
+
     // Crest reward: you ground up a real hill and just topped out — the drop
     // hits NOW. Only from the groove (planned drops own their moments), only
     // when no hard step is imminent, and only if the body actually worked
-    // for it (zone ≥ 3 when HR data exists).
-    if (this.gradeState.crest && this.mode === 'fill') {
+    // for it (zone ≥ 3 when HR data exists). Silent while a PREDICTED crest
+    // already changed the song for this hill.
+    if (this.gradeState.crest && this.mode === 'fill' && this.crestSuppressUntilDist == null) {
       const eta = this.etaToNextHardMs(t, dist)
       const earned = this.hrState.hr == null || this.hrState.zone >= 3
       if ((eta == null || eta > CREST_MIN_ETA_MS) && earned) {

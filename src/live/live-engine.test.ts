@@ -694,3 +694,66 @@ describe('LiveEngine', () => {
     expect(['hot', 'mys']).toContain(engine.commands[0].trackId)
   })
 })
+
+describe('route-aware terrain (shadow + drive)', () => {
+  const LAT0 = 32.06
+  const LON0 = 34.77
+  const KY = 110_540
+  /** North 3km: flat 1km, +80m over the next 1km, flat 1km — as a route AND as the live run. */
+  const alt = (d: number) => (d <= 1000 ? 10 : d <= 2000 ? 10 + (d - 1000) * 0.08 : 90)
+  const hillRoute = () => {
+    const points = []
+    for (let d = 0; d <= 3000; d += 20) points.push({ lat: LAT0 + d / KY, lon: LON0, distM: d, altM: alt(d) })
+    return { id: 'hill', km: 3, runs: 3, points }
+  }
+  /** 1Hz at 3 m/s straight up the route, HR in zone 4 (earned). */
+  const liveRun = (seconds: number): LiveSample[] => {
+    const out: LiveSample[] = []
+    for (let i = 1; i <= seconds; i++) {
+      const d = i * 3
+      out.push({ tMs: i * 1000, distanceM: d, altitudeM: alt(d), hr: 165, lat: LAT0 + d / KY, lon: LON0 })
+    }
+    return out
+  }
+  const cruise: WorkoutPlan = { name: 'cruise', steps: [{ kind: 'easy', seconds: 1200 }] }
+
+  test('shadow mode: the crest is predicted and graded, the reactive rule still owns the music', () => {
+    const engine = new LiveEngine(cruise, songs, { paceSecPerKm: 340, routes: [hillRoute()] })
+    run(engine, liveRun(1000))
+    expect(engine.state.route?.routeId).toBe('hill')
+    expect(engine.terrainPredictions.length).toBe(1)
+    const p = engine.terrainPredictions[0]
+    expect(p.drove).toBe(false)
+    expect(p.confidence).toBeGreaterThan(0.9)
+    // Summit at 2000m → 666.7s at 3 m/s; predicted within a few seconds.
+    expect(Math.abs(p.predictedTMs - 666_700)).toBeLessThan(6_000)
+    expect(engine.terrainLandings.length).toBe(1)
+    // The reactive detector fires after the smoothed grade decays — late by design.
+    expect(engine.terrainLandings[0].errorMs).toBeGreaterThan(0)
+    expect(engine.terrainLandings[0].errorMs).toBeLessThan(90_000)
+    expect(engine.commands.some((c) => c.reason.startsWith('rep change (crest reward)'))).toBe(true)
+    expect(engine.commands.some((c) => c.reason.startsWith('rep change (crest ahead)'))).toBe(false)
+  })
+
+  test('drive mode: the song changes before the summit and the reactive rule stays quiet', () => {
+    const engine = new LiveEngine(cruise, songs, { paceSecPerKm: 340, routes: [hillRoute()], terrainDrivesMusic: true })
+    run(engine, liveRun(1000))
+    const ahead = engine.commands.filter((c) => c.reason.startsWith('rep change (crest ahead)'))
+    expect(ahead.length).toBe(1)
+    expect(ahead[0].tMs).toBeLessThan(667_000)
+    expect(ahead[0].tMs).toBeGreaterThan(655_000)
+    expect(ahead[0].spareTrackId).toBeDefined()
+    expect(engine.commands.some((c) => c.reason.startsWith('rep change (crest reward)'))).toBe(false)
+    expect(engine.terrainPredictions[0].drove).toBe(true)
+  })
+
+  test('state exposes the next cue with its ETA while climbing', () => {
+    const engine = new LiveEngine(cruise, songs, { paceSecPerKm: 340, routes: [hillRoute()] })
+    run(engine, liveRun(400)) // 1200m in: locked, mid-climb
+    const s = engine.state
+    expect(s.route?.progressM).toBeGreaterThan(1150)
+    expect(s.terrainAhead?.type).toBe('crest')
+    expect(s.terrainAhead!.etaMs).toBeGreaterThan(200_000)
+    expect(s.terrainAhead!.etaMs).toBeLessThan(400_000)
+  })
+})

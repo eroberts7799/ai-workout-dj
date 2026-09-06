@@ -22,9 +22,12 @@ describe('terrain', () => {
     expect(starts.length).toBe(1)
     expect(starts[0].distanceM).toBeGreaterThan(1900)
     expect(starts[0].distanceM).toBeLessThan(2400)
-    // Crest fires when smoothed grade decays past the summit — allow lag.
-    expect(crests[0].distanceM).toBeGreaterThan(2950)
-    expect(crests[0].distanceM).toBeLessThan(3400)
+    // The cue AIMS at the summit; the reactive detector fires after the
+    // smoothed grade decays — that lag is reported separately.
+    expect(crests[0].distanceM).toBeGreaterThan(2900)
+    expect(crests[0].distanceM).toBeLessThan(3100)
+    expect(crests[0].detectDistanceM!).toBeGreaterThan(crests[0].distanceM)
+    expect(crests[0].detectDistanceM!).toBeLessThan(3400)
     expect(crests[0].gainM).toBeGreaterThan(60)
     expect(crests[0].confidence).toBeGreaterThan(0.9)
   })

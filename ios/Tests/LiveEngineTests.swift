@@ -534,3 +534,62 @@ final class LiveEngineTests: XCTestCase {
     )
   }
 }
+
+// MARK: route-aware terrain (shadow + drive) — mirrors TS
+final class LiveEngineTerrainTests: XCTestCase {
+  private let LAT0 = 32.06, LON0 = 34.77, KY = 110_540.0
+  private func alt(_ d: Double) -> Double { d <= 1000 ? 10 : d <= 2000 ? 10 + (d - 1000) * 0.08 : 90 }
+  private func hillRoute() -> Route {
+    var pts: [RoutePoint] = []
+    var d = 0.0
+    while d <= 3000 { pts.append(RoutePoint(lat: LAT0 + d / KY, lon: LON0, distM: d, altM: alt(d))); d += 20 }
+    return Route(id: "hill", km: 3, runs: 3, points: pts)
+  }
+  private func liveRun(_ seconds: Int) -> [LiveSample] {
+    (1...seconds).map { i in
+      let d = Double(i) * 3
+      var s = LiveSample(tMs: Double(i) * 1000, distanceM: d)
+      s.altitudeM = alt(d); s.hr = 165; s.lat = LAT0 + d / KY; s.lon = LON0
+      return s
+    }
+  }
+  private let cruise = [WorkoutStep(kind: "easy", seconds: 1200, meters: nil)]
+
+  func testShadowModePredictsAndGradesButReactiveRuleOwnsTheMusic() {
+    let engine = LiveEngine(plan: cruise, songs: songs, paceSecPerKm: 340, routes: [hillRoute()])
+    for s in liveRun(1000) { engine.advance(s) }
+    XCTAssertEqual(engine.state.route?.routeId, "hill")
+    XCTAssertEqual(engine.terrainPredictions.count, 1)
+    let p = engine.terrainPredictions[0]
+    XCTAssertFalse(p.drove)
+    XCTAssertGreaterThan(p.confidence, 0.9)
+    XCTAssertLessThan(abs(p.predictedTMs - 666_700), 6_000)
+    XCTAssertEqual(engine.terrainLandings.count, 1)
+    XCTAssertGreaterThan(engine.terrainLandings[0].errorMs, 0)
+    XCTAssertLessThan(engine.terrainLandings[0].errorMs, 90_000)
+    XCTAssertTrue(engine.commands.contains { $0.reason.hasPrefix("rep change (crest reward)") })
+    XCTAssertFalse(engine.commands.contains { $0.reason.hasPrefix("rep change (crest ahead)") })
+  }
+
+  func testDriveModeChangesBeforeTheSummitAndSilencesTheReactiveRule() {
+    let engine = LiveEngine(plan: cruise, songs: songs, paceSecPerKm: 340, routes: [hillRoute()], terrainDrivesMusic: true)
+    for s in liveRun(1000) { engine.advance(s) }
+    let ahead = engine.commands.filter { $0.reason.hasPrefix("rep change (crest ahead)") }
+    XCTAssertEqual(ahead.count, 1)
+    XCTAssertLessThan(ahead[0].tMs, 667_000)
+    XCTAssertGreaterThan(ahead[0].tMs, 655_000)
+    XCTAssertNotNil(ahead[0].spareTrackId)
+    XCTAssertFalse(engine.commands.contains { $0.reason.hasPrefix("rep change (crest reward)") })
+    XCTAssertTrue(engine.terrainPredictions[0].drove)
+  }
+
+  func testStateExposesTheNextCueWithETA() {
+    let engine = LiveEngine(plan: cruise, songs: songs, paceSecPerKm: 340, routes: [hillRoute()])
+    for s in liveRun(400) { engine.advance(s) }
+    let st = engine.state
+    XCTAssertGreaterThan(st.route?.progressM ?? 0, 1150)
+    XCTAssertEqual(st.terrainAhead?.type, .crest)
+    XCTAssertGreaterThan(st.terrainAhead?.etaMs ?? 0, 200_000)
+    XCTAssertLessThan(st.terrainAhead?.etaMs ?? 0, 400_000)
+  }
+}

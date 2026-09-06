@@ -12,7 +12,16 @@ export interface ProfilePoint {
 
 export interface TerrainCue {
   type: 'climbStart' | 'crest'
+  /** Where the cue is AIMED. For a crest this is the SUMMIT (max altitude
+   *  of the climb), not the point where the smoothed grade finally decays —
+   *  that decay point is where the live reactive detector fires, 100-200m
+   *  late, and it wanders between recordings of the same hill (route
+   *  backtest 2026-09-06: cross-run crest disagreement median ~40m). The
+   *  summit is what the music should land on anyway. */
   distanceM: number
+  /** Where the live reactive GradeTracker would fire for this crest — the
+   *  detector's own decay point (crest only). */
+  detectDistanceM?: number
   /** Total climb gain behind this cue, meters. */
   gainM: number
   /** 0..1 — v1: from climb size only (bigger hills = surer cues; a 60m+
@@ -50,19 +59,25 @@ export function extractTerrainCues(profile: ProfilePoint[]): TerrainCue[] {
   let wasClimbing = false
   let climbStartAlt = 0
   let maxAlt = -Infinity
+  let maxAltDist = 0
   for (const p of sm) {
     const st = tracker.update(p.distanceM, p.altitudeM)
     if (st.climbing && !wasClimbing) {
       climbStartAlt = p.altitudeM
       maxAlt = p.altitudeM
+      maxAltDist = p.distanceM
       cues.push({ type: 'climbStart', distanceM: p.distanceM, gainM: 0, confidence: 0.5 })
     }
-    if (st.climbing) maxAlt = Math.max(maxAlt, p.altitudeM)
+    if (st.climbing && p.altitudeM > maxAlt) {
+      maxAlt = p.altitudeM
+      maxAltDist = p.distanceM
+    }
     if (st.crest) {
       const gain = maxAlt - climbStartAlt
       cues.push({
         type: 'crest',
-        distanceM: p.distanceM,
+        distanceM: maxAltDist,
+        detectDistanceM: p.distanceM,
         gainM: gain,
         confidence: Math.min(1, gain / 60),
       })

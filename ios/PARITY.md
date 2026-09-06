@@ -102,3 +102,20 @@ Two Spotify behaviors are ASSUMED until the first field log says otherwise
 2. A new `play` with uris does NOT clear a previously queued item, so after
    a real cut the leaked item may play before the cut's spare — handled by
    adopting whatever the verification read finds, never by a skip.
+
+## Route awareness (2026-09-06) — engine + matcher ported, SHADOW mode
+`src/live/route-match.ts` → `ios/Sources/RouteMatch.swift`, `src/live/terrain.ts`
+→ `ios/Sources/Terrain.swift` (the 9/2 ledger debt above is paid), and the
+LiveEngine integration (LiveSample lat/lon, `routes` + `terrainDrivesMusic`
+options, terrainPredictions/terrainLandings, crest-ahead rule, reactive
+suppression) — all same-session, tests mirrored (5 matcher + 3 engine each
+side). Both engines default to SHADOW: predictions are logged and graded
+against the reactive crest detector, music untouched. Flip
+`terrainDrivesMusic` only on field evidence — the route backtest
+(scripts/route-backtest.ts, chronological leave-one-out over 300 GPS runs)
+found cross-run summit disagreement p50 ~100m (n=28), far outside the 4s
+fresh-cut window. Executor pieces are iOS-only: phone GPS in LIVE mode
+(PhoneSensors.freshFix), the route library fetch (/api/routes, cached a
+day), log fields (lat/lon, terrainPredictions, terrainLandings, route). The
+web conductor passes no routes (matcher off). Watch tier: no positions, no
+matcher — reduced surface by platform physics, as with terrain.

@@ -149,6 +149,13 @@ struct SessionView: View {
           Text("b\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "?") · \(engine.musicSource.rawValue)")
             .fieldMono(10)
             .foregroundColor(Theme.faded)
+          if !engine.routeStatus.isEmpty {
+            // Route awareness: the matched past route, distance left, the
+            // terrain ahead — shadow-mode predictions the runner can grade.
+            Text(engine.routeStatus)
+              .fieldMono(10)
+              .foregroundColor(Theme.faded)
+          }
           Text("\(engine.landingCount) landings · \(engine.lastCommand)")
             .fieldMono(12)
             .foregroundColor(Theme.faded)

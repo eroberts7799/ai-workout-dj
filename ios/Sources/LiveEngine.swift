@@ -27,6 +27,30 @@ struct LiveSample {
   var wkDurationType: Double? = nil
   var wkDurationValue: Double? = nil
   var wkNextKind: String? = nil
+  /// Phone GPS fix (both tiers, 2026-09-06) — feeds route matching. Mirrors TS.
+  var lat: Double? = nil
+  var lon: Double? = nil
+}
+
+/// A terrain cue the route matcher saw coming, frozen at the fresh-cut
+/// lead — graded against the reactive detector in `terrainLandings`. Mirrors TS.
+struct TerrainPrediction {
+  let key: String
+  let type: TerrainCue.Kind
+  let tMs: Double
+  let predictedTMs: Double
+  let liveDistanceM: Double
+  let gainM: Double
+  let confidence: Double
+  /// Whether this prediction moved the music (false = shadow mode).
+  let drove: Bool
+}
+
+struct TerrainLanding {
+  let key: String
+  let predictedTMs: Double
+  let actualTMs: Double
+  let errorMs: Double
 }
 
 struct LivePlayCommand {
@@ -160,15 +184,28 @@ final class LiveEngine {
   /// a song end is the player's own roll — no cut can time it better than
   /// "no cut". Off for the owned-file deck, whose crossfades are the product.
   private let streamingHandoff: Bool
+  /// ROUTE AWARENESS (mirrors TS): the matcher identifies the past route the
+  /// runner is on from the phone's GPS; its terrain cues ahead become
+  /// PREDICTIONS. SHADOW by default — logged and graded, music untouched
+  /// until the field error proves small.
+  private let matcher: RouteMatcher?
+  private let terrainDrivesMusic: Bool
+  private(set) var terrainPredictions: [TerrainPrediction] = []
+  private(set) var terrainLandings: [TerrainLanding] = []
+  private var terrainPending: TerrainPrediction?
+  private var crestSuppressUntilDist: Double?
+  private var lastFixDist: Double?
   /// Spare advertised with the song now playing — what the executor holds next.
   private var playingSpare: TaggedSong?
   /// The song a PREDICTED handoff just left — verification finding the
   /// player still on it (model ran early) reverts without a skip.
   private var lastHandoffFrom: (song: TaggedSong, spare: TaggedSong)?
 
-  init(plan: [WorkoutStep], songs: [TaggedSong], paceSecPerKm: Double = defaultPaceSecPerKm, pairBonus: [String: Double] = [:], dropStyle: DropStyle = .fresh, hrMax: Double? = nil, streamingHandoff: Bool = false) {
+  init(plan: [WorkoutStep], songs: [TaggedSong], paceSecPerKm: Double = defaultPaceSecPerKm, pairBonus: [String: Double] = [:], dropStyle: DropStyle = .fresh, hrMax: Double? = nil, streamingHandoff: Bool = false, routes: [Route] = [], terrainDrivesMusic: Bool = false) {
     self.dropStyle = dropStyle
     self.streamingHandoff = streamingHandoff
+    self.matcher = routes.isEmpty ? nil : RouteMatcher(routes: routes)
+    self.terrainDrivesMusic = terrainDrivesMusic
     self.followMode = plan.isEmpty
     self.hrTracker = HrTracker(hrMax: hrMax)
     steps = plan
@@ -207,14 +244,32 @@ final class LiveEngine {
   }
 
   /// Read-only snapshot of the engine's mind — for the UI.
-  var state: (stepIdx: Int, mode: Mode?, paceSecPerKm: Double, playingTrackId: String?, etaToHardMs: Double?) {
-    (
+  struct TerrainAhead { let type: TerrainCue.Kind; let etaMs: Double; let gainM: Double; let confidence: Double }
+  var state: (stepIdx: Int, mode: Mode?, paceSecPerKm: Double, playingTrackId: String?, etaToHardMs: Double?, route: RouteLock?, terrainAhead: TerrainAhead?) {
+    let next = nextAheadCue()
+    return (
       stepIdx: stepIdx,
       mode: mode,
       paceSecPerKm: paceSecPerKm,
       playingTrackId: playing?.song.trackId,
-      etaToHardMs: lastT.flatMap { etaToNextHardMs(t: $0, dist: lastDist) }
+      etaToHardMs: lastT.flatMap { etaToNextHardMs(t: $0, dist: lastDist) },
+      route: matcher?.lock,
+      terrainAhead: next.map { TerrainAhead(type: $0.type, etaMs: cueEtaMs($0), gainM: $0.gainM, confidence: $0.confidence) }
     )
+  }
+
+  private func cueEtaMs(_ cue: AheadCue) -> Double {
+    (cue.flatEquivRemainingM / 1000) * paceSecPerKm * 1000
+  }
+
+  /// The nearest cue ahead that still matters (crests need a real hill). Mirrors TS.
+  private func nextAheadCue() -> AheadCue? {
+    guard let m = matcher else { return nil }
+    for c in m.aheadCues() {
+      if c.type == .crest && c.gainM < 30 { continue }
+      return c
+    }
+    return nil
   }
 
   /// Current playhead position in the active track at time t.
@@ -647,6 +702,11 @@ final class LiveEngine {
     // Body-signal trackers: grade/climb/crest from altitude, zones from HR.
     gradeState = gradeTracker.update(distanceM: dist, altitudeM: sample.altitudeM)
     hrState = hrTracker.update(hr: sample.hr)
+    // Route matching: a GPS fix + the odometer identify the route ahead. Mirrors TS.
+    if let m = matcher, let lat = sample.lat, let lon = sample.lon, let d = dist, d != lastFixDist {
+      m.update(Fix(lat: lat, lon: lon, distM: d))
+      lastFixDist = d
+    }
 
     // trackSteps reads lastT/lastDist as the PREVIOUS sample (boundary
     // interpolation window) — update them only after.
@@ -707,10 +767,44 @@ final class LiveEngine {
       }
     }
 
+    // Predicted crest (route-aware, mirrors TS): the matcher says the summit
+    // is one fresh-cut lead away. Freeze the prediction; in drive mode change
+    // the song NOW so it lands on the summit — in shadow mode only log it.
+    if let d = dist, terrainPending == nil, let cue = nextAheadCue(), cue.type == .crest {
+      let eta = cueEtaMs(cue)
+      if eta <= Self.freshChangeLeadMs, !terrainPredictions.contains(where: { $0.key == cue.key }) {
+        let hardEta = etaToNextHardMs(t: t, dist: d)
+        let earned = hrState.hr == nil || hrState.zone >= 3
+        let drive = terrainDrivesMusic && cue.confidence >= 0.5 && mode == .fill
+          && (hardEta == nil || hardEta! > Self.crestMinEtaMs) && earned && dropStyle == .fresh
+        let pred = TerrainPrediction(key: cue.key, type: .crest, tMs: t, predictedTMs: t + eta, liveDistanceM: cue.liveDistanceM,
+                                     gainM: cue.gainM, confidence: cue.confidence, drove: drive)
+        terrainPredictions.append(pred)
+        terrainPending = pred
+        if drive, let pick = pickLoop(want: .high) {
+          emit(t: t, song: pick.song, positionMs: 0, fadeSec: 0.45, reason: "rep change (crest ahead) (\(pick.song.name))", spare: peekSpare(chosen: pick.song))
+          fillExitPosMs = chainExitPosMs(song: pick.song, entryMs: 0)
+          crestSuppressUntilDist = cue.liveDistanceM + 250
+        }
+      }
+    }
+    // Grade the pending prediction when the reactive detector fires (or give
+    // up 400m past the predicted summit). Mirrors TS.
+    if let pend = terrainPending, let d = dist {
+      if gradeState.crest {
+        terrainLandings.append(TerrainLanding(key: pend.key, predictedTMs: pend.predictedTMs, actualTMs: t, errorMs: t - pend.predictedTMs))
+        terrainPending = nil
+      } else if d > pend.liveDistanceM + 400 {
+        terrainPending = nil
+      }
+    }
+    if let s = crestSuppressUntilDist, let d = dist, d > s { crestSuppressUntilDist = nil }
+
     // Crest reward: a real hill just topped out — the moment hits NOW.
     // Only from the groove, only when no hard step is imminent, and only if
     // the body actually worked for it (zone ≥ 3 when HR data exists).
-    if gradeState.crest, mode == .fill {
+    // Silent while a PREDICTED crest already changed the song for this hill.
+    if gradeState.crest, mode == .fill, crestSuppressUntilDist == nil {
       let eta = etaToNextHardMs(t: t, dist: dist)
       let earned = hrState.hr == nil || hrState.zone >= 3
       if (eta == nil || eta! > Self.crestMinEtaMs), earned {

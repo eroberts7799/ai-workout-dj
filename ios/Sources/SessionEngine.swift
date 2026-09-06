@@ -44,8 +44,15 @@ final class SessionEngine: ObservableObject {
     var wkDurType: Double? = nil
     var wkDurVal: Double? = nil
     var wkNextKind: String? = nil
+    var lat: Double? = nil
+    var lon: Double? = nil
   }
   private var recorded: [RecordedSample] = []
+  /// Personal route library (relay /api/routes, cached a day) — "your
+  /// history is your route". Empty = no matcher, exactly today's behavior.
+  private var routes: [Route] = []
+  /// One line for the session screen: the locked route and the terrain ahead.
+  @Published var routeStatus = ""
   private var uploaded = false
 
   var allAudioReady: Bool {
@@ -211,6 +218,27 @@ final class SessionEngine: ObservableObject {
     }
   }
 
+  /// The route library: cached copy first (a day is plenty — routes change
+  /// slowly), relay refresh otherwise. Never blocks the ready state.
+  private func loadRouteLibrary() async {
+    let cache = docs.appendingPathComponent("route-library.json")
+    let fresh = (try? cache.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate)
+      .map { Date().timeIntervalSince($0) < 86_400 } ?? false
+    if fresh, let data = try? Data(contentsOf: cache), let lib = try? JSONDecoder().decode(RouteLibraryFile.self, from: data) {
+      routes = lib.asRoutes
+      return
+    }
+    let url = URL(string: "https://awdj-relay.vercel.app/api/routes?k=awdj-7g2k9x")!
+    guard let (data, resp) = try? await URLSession.shared.data(from: url),
+          (resp as? HTTPURLResponse)?.statusCode == 200,
+          let lib = try? JSONDecoder().decode(RouteLibraryFile.self, from: data) else {
+      if let data = try? Data(contentsOf: cache), let lib = try? JSONDecoder().decode(RouteLibraryFile.self, from: data) { routes = lib.asRoutes }
+      return
+    }
+    try? data.write(to: cache)
+    routes = lib.asRoutes
+  }
+
   /// Preset, ready to rock (9/1 postmortem: the run failed on setup
   /// friction, not the brain). At app open: hold the audio session so a
   /// locked phone still hears the watch's START, ensure a library (cached
@@ -233,6 +261,7 @@ final class SessionEngine: ObservableObject {
       }
     }
     if bundle?.tags?.isEmpty == false { await fetchNextWorkout() }
+    await loadRouteLibrary()
   }
 
   func importAudio(from urls: [URL]) {
@@ -485,8 +514,8 @@ final class SessionEngine: ObservableObject {
   func stopSession() {
     tick?.invalidate()
     simTask?.cancel()
+    phoneSensors.stop() // GPS rides along in every mode now (route matcher)
     if trailMode {
-      phoneSensors.stop()
       BleHeartRate.shared.stop()
       deck.stop() // trail sessions end SILENT — no orphan DJ haunting the car ride home
     }
@@ -547,6 +576,7 @@ final class SessionEngine: ObservableObject {
         if let v = r.d { d["distanceM"] = v }
         if let v = r.hr { d["hr"] = v }
         if let v = r.altitude { d["altitude"] = v }
+        if let la = r.lat, let lo = r.lon { d["lat"] = la; d["lon"] = lo }
         if let v = r.wkSeq { d["wkStepSeq"] = v }
         if let k = r.wkKind {
           var s: [String: Any] = ["kind": k]
@@ -563,6 +593,20 @@ final class SessionEngine: ObservableObject {
       payload["commands"] = live.commands.map { ["tMs": $0.tMs, "trackId": $0.trackId, "positionMs": $0.positionMs, "reason": $0.reason] }
       if !deliveryEvents.isEmpty { payload["delivery"] = deliveryEvents }
       payload["musicSource"] = musicSource.rawValue
+      // Route awareness, graded: every crest the matcher predicted vs when
+      // the reactive detector actually fired — the field evidence that
+      // decides whether predictions may drive the music.
+      payload["terrainPredictions"] = live.terrainPredictions.map {
+        ["key": $0.key, "tMs": $0.tMs, "predictedTMs": $0.predictedTMs, "liveDistanceM": $0.liveDistanceM,
+         "gainM": $0.gainM, "confidence": $0.confidence, "drove": $0.drove] as [String: Any]
+      }
+      payload["terrainLandings"] = live.terrainLandings.map {
+        ["key": $0.key, "predictedTMs": $0.predictedTMs, "actualTMs": $0.actualTMs, "errorMs": $0.errorMs] as [String: Any]
+      }
+      if let r = live.state.route {
+        payload["route"] = ["routeId": r.routeId, "reversed": r.reversed, "progressM": r.progressM, "remainingM": r.remainingM] as [String: Any]
+      }
+      payload["routeLibrarySize"] = routes.count
       // The runner's overrules — per-transition negative feedback, free.
       payload["skips"] = live.skips.map {
         var d: [String: Any] = ["tMs": $0.tMs, "toTrackId": $0.toTrackId]
@@ -606,6 +650,8 @@ final class SessionEngine: ObservableObject {
     tick?.invalidate()
     simTask?.cancel()
     live = nil
+    phoneSensors.stop()
+    routeStatus = ""
     deck.stop()
     silenceSpotify()
     phase = .idle
@@ -633,7 +679,13 @@ final class SessionEngine: ObservableObject {
     // Empty plan → follow mode: the watch's step stream IS the workout.
     // hrMax: calibrated per-athlete anchor delivered by the bundle import.
     let hrMax = UserDefaults.standard.object(forKey: "awdj.hrMax") as? Double
-    live = LiveEngine(plan: b.plan ?? [], songs: tags, pairBonus: b.pairBonus ?? [:], hrMax: hrMax, streamingHandoff: musicSource == .spotify)
+    live = LiveEngine(plan: b.plan ?? [], songs: tags, pairBonus: b.pairBonus ?? [:], hrMax: hrMax, streamingHandoff: musicSource == .spotify, routes: routes)
+    // The phone's GPS rides along in LIVE mode too: the watch owns
+    // distance/altitude, the phone contributes the fix the route matcher
+    // needs. (Location-only — no tick, no odometer.)
+    phoneSensors.onTick = nil
+    phoneSensors.start()
+    routeStatus = ""
     firedCount = 0
     landingCount = 0
     lastCommand = ""
@@ -815,7 +867,8 @@ final class SessionEngine: ObservableObject {
     }
     deck.stop()
     let hrMax = UserDefaults.standard.object(forKey: "awdj.hrMax") as? Double
-    live = LiveEngine(plan: [], songs: tags, pairBonus: b.pairBonus ?? [:], hrMax: hrMax, streamingHandoff: musicSource == .spotify)
+    live = LiveEngine(plan: [], songs: tags, pairBonus: b.pairBonus ?? [:], hrMax: hrMax, streamingHandoff: musicSource == .spotify, routes: routes)
+    routeStatus = ""
     firedCount = 0
     landingCount = 0
     lastCommand = ""
@@ -833,8 +886,9 @@ final class SessionEngine: ObservableObject {
       // Watch BLE broadcast fills the trail log's HR hole (8/22 run had
       // none) — and activates the crest "earned" gate (zone ≥ 3).
       let hr = BleHeartRate.shared.currentBpm
-      self.advanceLive(timerMs: t, distanceM: d, hr: hr, altitudeM: alt)
-      self.recorded.append(RecordedSample(t: t, d: d, hr: hr, altitude: alt))
+      let fix = self.phoneSensors.freshFix()
+      self.advanceLive(timerMs: t, distanceM: d, hr: hr, altitudeM: alt, lat: fix?.lat, lon: fix?.lon)
+      self.recorded.append(RecordedSample(t: t, d: d, hr: hr, altitude: alt, lat: fix?.lat, lon: fix?.lon))
     }
     BleHeartRate.shared.start()
     phoneSensors.start()
@@ -846,11 +900,12 @@ final class SessionEngine: ObservableObject {
   func recordSample(_ s: GarminSample) {
     if trailMode { return } // trail sessions record from phone sensors
     guard phase == .running, let t = s.timerMs else { return }
+    let fix = phoneSensors.freshFix()
     recorded.append(RecordedSample(
       t: t, d: s.distanceM, hr: s.hr, altitude: s.altitude,
       wkSeq: s.wkStepSeq, wkKind: s.wkStep?.kind,
       wkDurType: s.wkStep?.durationType, wkDurVal: s.wkStep?.durationValue,
-      wkNextKind: s.wkNext?.kind
+      wkNextKind: s.wkNext?.kind, lat: fix?.lat, lon: fix?.lon
     ))
   }
 
@@ -865,14 +920,21 @@ final class SessionEngine: ObservableObject {
     wkKind: String? = nil,
     wkDurationType: Double? = nil,
     wkDurationValue: Double? = nil,
-    wkNextKind: String? = nil
+    wkNextKind: String? = nil,
+    lat: Double? = nil,
+    lon: Double? = nil
   ) {
     guard phase == .running, let live else { return }
     clockMs = timerMs
-    let s = LiveSample(
+    // LIVE (watch-driven) samples carry no position — the phone's own GPS
+    // supplies it. Simulated runs carry none and get none.
+    let fix = (lat == nil && !simulating) ? phoneSensors.freshFix() : nil
+    var s = LiveSample(
       tMs: timerMs, distanceM: distanceM, altitudeM: altitudeM, hr: hr, wkStepSeq: wkStepSeq,
       wkKind: wkKind, wkDurationType: wkDurationType, wkDurationValue: wkDurationValue, wkNextKind: wkNextKind
     )
+    s.lat = lat ?? fix?.lat
+    s.lon = lon ?? fix?.lon
     for c in live.advance(s) {
       // Commands from advance() are PREDICTIONS (a handoff's roll is not
       // yet observed); adoptions from a player read arrive confirmed.
@@ -917,6 +979,17 @@ final class SessionEngine: ObservableObject {
       }
     }
     landingCount = live.landings.count
+    // Route awareness on screen: what the matcher knows, what's ahead.
+    let st = live.state
+    var line = ""
+    if let r = st.route {
+      let km = String(format: "%.1f", r.remainingM / 1000)
+      line = "📍 \(r.routeId.suffix(6))\(r.reversed ? " ↺" : "") · \(km)km left" + (r.agreement < 1 ? " · fork ahead" : "")
+    }
+    if let a = st.terrainAhead, a.etaMs < 120_000 {
+      line += (line.isEmpty ? "" : " · ") + (a.type == .crest ? "⛰ crest in \(Int(a.etaMs / 1000))s" : "↗ climb in \(Int(a.etaMs / 1000))s")
+    }
+    if line != routeStatus { routeStatus = line }
   }
 
   /// Route one engine command to the music output. Output keys on MUSIC
