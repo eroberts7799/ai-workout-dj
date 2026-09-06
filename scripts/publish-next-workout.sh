@@ -12,3 +12,6 @@ OUT=$(cd relay && vercel blob put ../data/next-workout.json \
 URL=$(echo "$OUT" | tr ' ' '\n' | grep '^https://' | head -1)
 [ -n "$URL" ] || { echo "FAILED: $OUT"; exit 1; }
 echo "workout published (served via /api/next-workout?k=KEY): $URL"
+# The route library rides on the same 05:00 job: it grows from the runs
+# the phone logged (lat/lon since build 38) and recent Garmin activity.
+"$(dirname "$0")/publish-route-library.sh 2>&1 | tail -1 || true

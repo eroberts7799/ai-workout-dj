@@ -25,6 +25,10 @@ export interface Route {
   /** How many times this route was run — the habit prior for ties. */
   runs: number
   points: RoutePoint[]
+  /** Per point: share of all runs through here that were still on this
+   *  route 100m later (history as a Markov chain, precomputed by the
+   *  library builder). Absent = unknown = 1. */
+  branch?: number[]
 }
 
 export interface Fix {
@@ -32,6 +36,9 @@ export interface Fix {
   lon: number
   /** Live odometer, meters (watch distance — authoritative). */
   distM: number
+  /** Live altitude (barometric preferred) — lets the live track itself
+   *  become a route with a profile (self-route). */
+  altM?: number
 }
 
 /** A terrain cue projected onto the LIVE run. */
@@ -43,12 +50,16 @@ export interface AheadCue extends TerrainCue {
   flatEquivRemainingM: number
   /** Stable identity: route + direction + route distance. */
   key: string
+  /** Probability (from history) the runner follows the route to this cue. */
+  pReach: number
 }
 
-/** Live meters on-route before a candidate may be declared locked. A 500m
- *  prefix rules out the wrong route in a city grid; shorter locks flip
- *  between neighbors (GUESS — the route backtest calibrates). */
-export const LOCK_MIN_TRACK_M = 500
+/** Live meters on-route before a candidate may be declared locked. Route
+ *  backtest 2026-09-06 (300 runs, chronological leave-one-out): 500m →
+ *  coverage 68.9% / wrong-future@50m 18.2%; 300m → 73.9% / 19.1%. 400m
+ *  splits the difference; the same-front-door prior (1.5×) locks a
+ *  familiar start in ~270m. */
+export const LOCK_MIN_TRACK_M = 400
 /** Residual (meters to the nearest route point) that counts as on-route.
  *  Phone GPS in a pocket is ~10m; opposite sidewalks are ~15-25m. */
 export const NEAR_M = 30
@@ -79,21 +90,88 @@ interface Candidate {
   onRouteM: number
   offRouteM: number
   lastLiveDistM: number | null
+  /** Started at the route's start while the run was starting — the "same
+   *  front door" prior: such a candidate needs less track to lock. */
+  startAligned: boolean
 }
 
 const GRID_CELL_M = 60
+/** SELF-ROUTE: the live track becomes a candidate of its own once this
+ *  long — on an out-and-back the outbound leg IS the route for the return
+ *  (every trip hill gets crossed twice), on laps lap one is the route for
+ *  lap two. No history needed. GUESS — the backtest calibrates. */
+export const SELF_ROUTE_MIN_M = 800
+/** The newest stretch of the live track is never part of the forward self
+ *  candidate — the runner is always "on" his own last meters. */
+const SELF_ROUTE_TAIL_M = 200
+const SELF_ROUTE_STEP_M = 20
+const SELF_ROUTE_REBUILD_M = 100
 
 export class RouteMatcher {
   private readonly cands: Candidate[] = []
   private readonly ky = 110_540
   private current: Candidate | null = null
   private lastFix: Fix | null = null
+  private readonly selfRoute: boolean
+  private readonly lockMinM: number
+  private readonly startPrior: boolean
+  /** Downsampled live track (every ~20m) with altitude. */
+  private readonly liveTrack: RoutePoint[] = []
+  private selfForward: Candidate | null = null
+  private selfReversed: Candidate | null = null
+  private selfBuiltAtM = 0
 
-  constructor(routes: Route[]) {
+  constructor(routes: Route[], opts: { selfRoute?: boolean; lockMinM?: number; startPrior?: boolean } = {}) {
+    this.selfRoute = opts.selfRoute ?? true
+    this.lockMinM = opts.lockMinM ?? LOCK_MIN_TRACK_M
+    this.startPrior = opts.startPrior ?? true
     for (const r of routes) {
       if (r.points.length < 10) continue
       this.cands.push(this.candidate(r, false))
       this.cands.push(this.candidate(r, true))
+    }
+  }
+
+  /** Grow the live track and (re)build the self candidates. The FORWARD
+   *  candidate (laps) keeps its state — its points only ever append. The
+   *  REVERSED candidate (out-and-back) is rebuilt only while not started:
+   *  once the runner is retracing it, its distances must stay put. */
+  private growSelf(fix: Fix): void {
+    if (!this.selfRoute) return
+    const last = this.liveTrack[this.liveTrack.length - 1]
+    if (last && fix.distM - last.distM < SELF_ROUTE_STEP_M) return
+    this.liveTrack.push({ lat: fix.lat, lon: fix.lon, distM: fix.distM, altM: fix.altM ?? last?.altM ?? 0 })
+    const total = fix.distM
+    if (total < SELF_ROUTE_MIN_M + SELF_ROUTE_TAIL_M || total - this.selfBuiltAtM < SELF_ROUTE_REBUILD_M) return
+    this.selfBuiltAtM = total
+    const body = this.liveTrack.filter((p) => p.distM <= total - SELF_ROUTE_TAIL_M)
+    if (body.length < 10) return
+    const route: Route = { id: 'self', km: body[body.length - 1].distM / 1000, runs: 0, points: body }
+    // Forward: rebuild but carry the live state across (points only grew).
+    const fwd = this.candidate(route, false)
+    if (this.selfForward) {
+      fwd.started = this.selfForward.started
+      fwd.idx = this.selfForward.idx
+      fwd.progressM = this.selfForward.progressM
+      fwd.onRouteM = this.selfForward.onRouteM
+      fwd.offRouteM = this.selfForward.offRouteM
+      const i = this.cands.indexOf(this.selfForward)
+      if (i >= 0) this.cands[i] = fwd
+      if (this.current === this.selfForward) this.current = fwd
+    } else {
+      this.cands.push(fwd)
+    }
+    this.selfForward = fwd
+    // Reversed: frozen once the runner is on it.
+    if (!this.selfReversed || !this.selfReversed.started) {
+      const rev = this.candidate(route, true)
+      if (this.selfReversed) {
+        const i = this.cands.indexOf(this.selfReversed)
+        if (i >= 0) this.cands[i] = rev
+      } else {
+        this.cands.push(rev)
+      }
+      this.selfReversed = rev
     }
   }
 
@@ -102,7 +180,12 @@ export class RouteMatcher {
     const pts = reversed
       ? [...route.points].reverse().map((p) => ({ ...p, distM: total - p.distM }))
       : route.points
-    const r: Route = { ...route, points: pts }
+    // Branch probabilities are direction-blind; reversing the points
+    // reverses the array. p[i] covers the 100m from point i onward.
+    const branch = route.branch && route.branch.length === route.points.length
+      ? (reversed ? [...route.branch].reverse() : route.branch)
+      : undefined
+    const r: Route = { ...route, points: pts, branch }
     const profile: ProfilePoint[] = pts.map((p) => ({ distanceM: p.distM, altitudeM: p.altM }))
     const sm = smoothProfile(profile)
     const cum = new Array<number>(sm.length).fill(0)
@@ -122,7 +205,7 @@ export class RouteMatcher {
     return {
       route: r, reversed, key: `${route.id}${reversed ? ':rev' : ''}`,
       sm, cumFlatEquivM: cum, cues: extractTerrainCues(profile), grid, kx,
-      started: false, idx: 0, progressM: 0, onRouteM: 0, offRouteM: 0, lastLiveDistM: null,
+      started: false, idx: 0, progressM: 0, onRouteM: 0, offRouteM: 0, lastLiveDistM: null, startAligned: false,
     }
   }
 
@@ -214,6 +297,7 @@ export class RouteMatcher {
       if (Math.hypot(hx, hy) >= 3) heading = [hx, hy]
     }
     this.lastFix = fix
+    this.growSelf(fix)
     for (const c of this.cands) {
       const [i, res, prog] = this.nearest(c, fix, heading)
       if (!c.started) {
@@ -223,6 +307,7 @@ export class RouteMatcher {
           c.progressM = prog
           c.onRouteM = 0
           c.offRouteM = 0
+          c.startAligned = this.startPrior && prog < 100 && fix.distM < 100 && c.route.id !== 'self'
         }
         continue
       }
@@ -251,14 +336,19 @@ export class RouteMatcher {
     // is sticky — a rival must beat it clearly, not merely tie it.
     let best: Candidate | null = null
     for (const c of this.cands) {
-      if (!c.started || c.onRouteM < LOCK_MIN_TRACK_M) continue
+      if (!this.lockEligible(c)) continue
       if (!best || this.better(c, best)) best = c
     }
-    if (this.current && this.current.started && this.current.onRouteM >= LOCK_MIN_TRACK_M) {
-      if (best && best !== this.current && best.onRouteM > this.current.onRouteM + LOCK_MIN_TRACK_M) this.current = best
+    if (this.current && this.lockEligible(this.current)) {
+      if (best && best !== this.current && best.onRouteM > this.current.onRouteM + this.lockMinM) this.current = best
     } else {
       this.current = best
     }
+  }
+
+  private lockEligible(c: Candidate): boolean {
+    if (!c.started) return false
+    return c.onRouteM * (c.startAligned ? 1.5 : 1) >= this.lockMinM
   }
 
   private better(a: Candidate, b: Candidate): boolean {
@@ -278,6 +368,24 @@ export class RouteMatcher {
     return { routeId: c.route.id, reversed: c.reversed, progressM: c.progressM, remainingM: total - c.progressM, agreement: this.agreement() }
   }
 
+  /** Probability (from history) that the runner is still on the locked
+   *  route `aheadM` from here — the product of the per-100m continuation
+   *  shares along the way. What a "final kilometer" claim should check. */
+  pAhead(aheadM: number): number {
+    const c = this.current
+    if (!c) return 0
+    return this.pReach(c, c.progressM + aheadM)
+  }
+
+  private pReach(c: Candidate, toRouteDistM: number): number {
+    const b = c.route.branch
+    if (!b) return 1
+    const pts = c.route.points
+    let p = 1
+    for (let i = c.idx; i < pts.length && pts[i].distM < toRouteDistM; i += 5) p *= b[i] ?? 1
+    return p
+  }
+
   /** Where candidate c says the runner will be `aheadM` past its progress. */
   private pointAhead(c: Candidate, aheadM: number): RoutePoint | null {
     const target = c.progressM + aheadM
@@ -294,7 +402,7 @@ export class RouteMatcher {
     let eligible = 0
     let agree = 0
     for (const c of this.cands) {
-      if (!c.started || c.onRouteM < LOCK_MIN_TRACK_M) continue
+      if (!this.lockEligible(c)) continue
       eligible++
       const p = this.pointAhead(c, aheadM)
       if (p && this.metersBetween(cur.kx, mine.lat, mine.lon, p.lat, p.lon) <= 40) agree++
@@ -314,9 +422,11 @@ export class RouteMatcher {
     const out: AheadCue[] = []
     for (const cue of c.cues) {
       if (cue.distanceM <= c.progressM) continue
+      const pReach = this.pReach(c, cue.distanceM)
       out.push({
         ...cue,
-        confidence: cue.confidence * (agreement >= 1 ? 1 : 0.5),
+        pReach,
+        confidence: cue.confidence * (agreement >= 1 ? 1 : 0.5) * pReach,
         liveDistanceM: fix.distM + (cue.distanceM - c.progressM),
         flatEquivRemainingM: this.flatEquivAt(c, cue.distanceM) - here,
         key: `${c.key}@${Math.round(cue.distanceM)}`,

@@ -704,7 +704,7 @@ final class LiveEngine {
     hrState = hrTracker.update(hr: sample.hr)
     // Route matching: a GPS fix + the odometer identify the route ahead. Mirrors TS.
     if let m = matcher, let lat = sample.lat, let lon = sample.lon, let d = dist, d != lastFixDist {
-      m.update(Fix(lat: lat, lon: lon, distM: d))
+      m.update(Fix(lat: lat, lon: lon, distM: d, altM: sample.altitudeM))
       lastFixDist = d
     }
 

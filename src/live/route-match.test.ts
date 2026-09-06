@@ -59,7 +59,8 @@ describe('RouteMatcher', () => {
       if (m.lock && lockedAt == null) lockedAt = f.distM
     }
     expect(lockedAt).not.toBeNull()
-    expect(lockedAt!).toBeGreaterThanOrEqual(LOCK_MIN_TRACK_M)
+    // Same front door as the route: the start prior (1.5×) locks earlier.
+    expect(lockedAt!).toBeGreaterThanOrEqual(LOCK_MIN_TRACK_M / 1.5 - 5)
     expect(lockedAt!).toBeLessThan(LOCK_MIN_TRACK_M + 40)
     expect(m.lock!.routeId).toBe('r')
     expect(m.lock!.reversed).toBe(false)
@@ -122,5 +123,68 @@ describe('RouteMatcher', () => {
     const profile = m.aheadProfile(2500)
     expect(profile[0].distanceM).toBeGreaterThanOrEqual(1090)
     expect(profile[profile.length - 1].altitudeM).toBeGreaterThan(80)
+  })
+
+  test('self-route: an out-and-back with NO history locks the return leg onto the outbound track, hill included', () => {
+    const m = new RouteMatcher([])
+    // Out: 2km north over a hill (crest at 1km), then straight back.
+    const alt = (d: number) => (d <= 1000 ? 10 + d * 0.06 : 70 - (d - 1000) * 0.06)
+    const out = fixes([{ dx: 0, dy: 2000 }]).map((f) => ({ ...f, altM: alt(f.distM) }))
+    for (const f of out) m.update(f)
+    expect(m.lock).toBeNull() // nothing to match on the way out
+    const back = fixes([{ dx: 0, dy: -2000 }], 0, 2000).map((f) => ({ ...f, lat: f.lat + 2000 / KY, altM: alt(4000 - f.distM) }))
+    let lockedAt: number | null = null
+    let crestSeen: number | null = null
+    for (const f of back) {
+      m.update(f)
+      if (m.lock && lockedAt == null) lockedAt = f.distM
+      if (m.lock && crestSeen == null) {
+        const c = m.aheadCues().find((x) => x.type === 'crest')
+        if (c) crestSeen = c.liveDistanceM
+      }
+    }
+    expect(lockedAt).not.toBeNull()
+    expect(lockedAt! - 2000).toBeLessThan(LOCK_MIN_TRACK_M + 250)
+    expect(m.lock!.routeId).toBe('self')
+    expect(m.lock!.reversed).toBe(true)
+    // The hill crossed on the way out is predicted for the return: live ≈ 3000.
+    expect(crestSeen).not.toBeNull()
+    expect(Math.abs(crestSeen! - 3000)).toBeLessThan(150)
+  })
+
+  test('self-route: laps — lap two locks onto lap one', () => {
+    const m = new RouteMatcher([])
+    const lap = [{ dx: 0, dy: 600 }, { dx: 600, dy: 0 }, { dx: 0, dy: -600 }, { dx: -600, dy: 0 }]
+    for (const f of fixes(lap)) m.update(f)
+    expect(m.lock).toBeNull()
+    let lockedAt: number | null = null
+    for (const f of fixes(lap, 0, 2400)) {
+      m.update(f)
+      if (m.lock && lockedAt == null) lockedAt = f.distM
+    }
+    expect(lockedAt).not.toBeNull()
+    expect(lockedAt! - 2400).toBeLessThan(LOCK_MIN_TRACK_M + 100)
+    expect(m.lock!.routeId).toBe('self')
+    expect(m.lock!.reversed).toBe(false)
+  })
+
+  test('self-route never steals a lock from a real history route', () => {
+    const m = new RouteMatcher([route('r', north2k, flat, 3)])
+    for (const f of fixes(north2k)) m.update(f)
+    expect(m.lock!.routeId).toBe('r')
+  })
+
+  test('branch probabilities from history: pAhead and cue confidence fall across a fork', () => {
+    const r = route('r', [{ dx: 0, dy: 3000 }], (d) => (d <= 1500 ? 10 : d <= 2500 ? 10 + (d - 1500) * 0.08 : 90))
+    // History: everyone continues for the first km; at ~1.2km half turn off.
+    r.branch = r.points.map((p) => (p.distM >= 1200 && p.distM < 1300 ? 0.5 : 1))
+    const m = new RouteMatcher([r])
+    for (const f of fixes([{ dx: 0, dy: 700 }])) m.update(f)
+    expect(m.lock).not.toBeNull()
+    expect(m.pAhead(400)).toBeCloseTo(1, 2)
+    expect(m.pAhead(1000)).toBeLessThan(0.6)
+    const crest = m.aheadCues().find((c) => c.type === 'crest')!
+    expect(crest.pReach).toBeLessThan(0.6)
+    expect(crest.confidence).toBeLessThan(0.6)
   })
 })

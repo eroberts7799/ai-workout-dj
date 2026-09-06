@@ -791,7 +791,7 @@ export class LiveEngine {
     this.hrState = this.hrTracker.update(sample.hr)
     // Route matching: a GPS fix + the odometer identify the route ahead.
     if (this.matcher && sample.lat != null && sample.lon != null && dist != null && dist !== this.lastFixDist) {
-      this.matcher.update({ lat: sample.lat, lon: sample.lon, distM: dist })
+      this.matcher.update({ lat: sample.lat, lon: sample.lon, distM: dist, altM: sample.altitudeM })
       this.lastFixDist = dist
     }
 

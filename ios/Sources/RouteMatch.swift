@@ -17,6 +17,9 @@ struct Route {
   /// How many times this route was run — the habit prior for ties.
   let runs: Int
   let points: [RoutePoint]
+  /// Per point: share of runs through here still on this route 100m later
+  /// (history as a Markov chain, precomputed). Mirrors TS.
+  var branch: [Double]? = nil
 }
 
 struct Fix {
@@ -24,6 +27,8 @@ struct Fix {
   let lon: Double
   /// Live odometer, meters (watch distance — authoritative).
   let distM: Double
+  /// Live altitude — lets the live track become a route (self-route).
+  var altM: Double? = nil
 }
 
 /// A terrain cue projected onto the LIVE run. Mirrors TS AheadCue.
@@ -34,6 +39,8 @@ struct AheadCue {
   let gainM: Double
   let confidence: Double
   let key: String
+  /// Probability (from history) the runner follows the route to this cue.
+  let pReach: Double
 }
 
 struct RouteLock {
@@ -52,20 +59,30 @@ struct RouteLibraryFile: Decodable {
     let km: Double
     let runs: Int
     let points: [[Double]]
+    let branch: [Double]?
   }
   let routes: [R]
 
   var asRoutes: [Route] {
     routes.map { r in
       Route(id: r.id, km: r.km, runs: r.runs,
-            points: r.points.compactMap { p in p.count >= 4 ? RoutePoint(lat: p[0], lon: p[1], distM: p[2], altM: p[3]) : nil })
+            points: r.points.compactMap { p in p.count >= 4 ? RoutePoint(lat: p[0], lon: p[1], distM: p[2], altM: p[3]) : nil },
+            branch: r.branch)
     }
   }
 }
 
 final class RouteMatcher {
   /// Mirrors TS constants (GUESS — the route backtest calibrates).
-  static let lockMinTrackM = 500.0
+  /// Mirrors TS LOCK_MIN_TRACK_M (backtest 2026-09-06: 500 → 68.9% coverage,
+  /// 300 → 73.9%; 400 splits it, the start prior locks a familiar door ~270m).
+  static let lockMinTrackM = 400.0
+  /// SELF-ROUTE (mirrors TS): the live track becomes a candidate — the
+  /// outbound leg is the route for the return, lap one for lap two.
+  static let selfRouteMinM = 800.0
+  private static let selfRouteTailM = 200.0
+  private static let selfRouteStepM = 20.0
+  private static let selfRouteRebuildM = 100.0
   static let nearM = 30.0
   private static let lostM = 60.0
   private static let lostTravelM = 100.0
@@ -88,6 +105,8 @@ final class RouteMatcher {
     var progressM = 0.0
     var onRouteM = 0.0
     var offRouteM = 0.0
+    /// Same-front-door prior: started at the route's start as the run started.
+    var startAligned = false
     init(route: Route, reversed: Bool, key: String, sm: [ProfilePoint], cum: [Double], cues: [TerrainCue], grid: [String: [Int]], kx: Double) {
       self.route = route; self.reversed = reversed; self.key = key; self.sm = sm
       self.cumFlatEquivM = cum; self.cues = cues; self.grid = grid; self.kx = kx
@@ -97,11 +116,57 @@ final class RouteMatcher {
   private var cands: [Candidate] = []
   private var current: Candidate?
   private var lastFix: Fix?
+  private let selfRoute: Bool
+  private let lockMinM: Double
+  private let startPrior: Bool
+  private var liveTrack: [RoutePoint] = []
+  private var selfForward: Candidate?
+  private var selfReversed: Candidate?
+  private var selfBuiltAtM = 0.0
 
-  init(routes: [Route]) {
+  init(routes: [Route], selfRoute: Bool = true, lockMinM: Double = RouteMatcher.lockMinTrackM, startPrior: Bool = true) {
+    self.selfRoute = selfRoute
+    self.lockMinM = lockMinM
+    self.startPrior = startPrior
     for r in routes where r.points.count >= 10 {
       cands.append(candidate(r, reversed: false))
       cands.append(candidate(r, reversed: true))
+    }
+  }
+
+  /// Grow the live track and (re)build the self candidates. Mirrors TS growSelf.
+  private func growSelf(_ fix: Fix) {
+    guard selfRoute else { return }
+    let last = liveTrack.last
+    if let last, fix.distM - last.distM < Self.selfRouteStepM { return }
+    liveTrack.append(RoutePoint(lat: fix.lat, lon: fix.lon, distM: fix.distM, altM: fix.altM ?? last?.altM ?? 0))
+    let total = fix.distM
+    if total < Self.selfRouteMinM + Self.selfRouteTailM || total - selfBuiltAtM < Self.selfRouteRebuildM { return }
+    selfBuiltAtM = total
+    let body = liveTrack.filter { $0.distM <= total - Self.selfRouteTailM }
+    if body.count < 10 { return }
+    let route = Route(id: "self", km: body[body.count - 1].distM / 1000, runs: 0, points: body)
+    let fwd = candidate(route, reversed: false)
+    if let old = selfForward {
+      fwd.started = old.started
+      fwd.idx = old.idx
+      fwd.progressM = old.progressM
+      fwd.onRouteM = old.onRouteM
+      fwd.offRouteM = old.offRouteM
+      if let i = cands.firstIndex(where: { $0 === old }) { cands[i] = fwd }
+      if current === old { current = fwd }
+    } else {
+      cands.append(fwd)
+    }
+    selfForward = fwd
+    if selfReversed == nil || !(selfReversed!.started) {
+      let rev = candidate(route, reversed: true)
+      if let old = selfReversed, let i = cands.firstIndex(where: { $0 === old }) {
+        cands[i] = rev
+      } else {
+        cands.append(rev)
+      }
+      selfReversed = rev
     }
   }
 
@@ -110,7 +175,9 @@ final class RouteMatcher {
     let pts: [RoutePoint] = reversed
       ? route.points.reversed().map { RoutePoint(lat: $0.lat, lon: $0.lon, distM: total - $0.distM, altM: $0.altM) }
       : route.points
-    let r = Route(id: route.id, km: route.km, runs: route.runs, points: pts)
+    let branch: [Double]? = (route.branch != nil && route.branch!.count == route.points.count)
+      ? (reversed ? Array(route.branch!.reversed()) : route.branch) : nil
+    let r = Route(id: route.id, km: route.km, runs: route.runs, points: pts, branch: branch)
     let profile = pts.map { ProfilePoint(distanceM: $0.distM, altitudeM: $0.altM) }
     let sm = Terrain.smoothProfile(profile)
     var cum = [Double](repeating: 0, count: sm.count)
@@ -211,6 +278,7 @@ final class RouteMatcher {
       if (hx * hx + hy * hy).squareRoot() >= 3 { heading = (hx, hy) }
     }
     lastFix = fix
+    growSelf(fix)
     for c in cands {
       let (i, res, prog) = nearest(c, fix, heading: heading)
       if !c.started {
@@ -220,6 +288,7 @@ final class RouteMatcher {
           c.progressM = prog
           c.onRouteM = 0
           c.offRouteM = 0
+          c.startAligned = startPrior && prog < 100 && fix.distM < 100 && c.route.id != "self"
         }
         continue
       }
@@ -241,14 +310,19 @@ final class RouteMatcher {
       }
     }
     var best: Candidate?
-    for c in cands where c.started && c.onRouteM >= Self.lockMinTrackM {
+    for c in cands where lockEligible(c) {
       if best == nil || better(c, best!) { best = c }
     }
-    if let cur = current, cur.started, cur.onRouteM >= Self.lockMinTrackM {
-      if let b = best, b !== cur, b.onRouteM > cur.onRouteM + Self.lockMinTrackM { current = b }
+    if let cur = current, lockEligible(cur) {
+      if let b = best, b !== cur, b.onRouteM > cur.onRouteM + lockMinM { current = b }
     } else {
       current = best
     }
+  }
+
+  private func lockEligible(_ c: Candidate) -> Bool {
+    guard c.started else { return false }
+    return c.onRouteM * (c.startAligned ? 1.5 : 1) >= lockMinM
   }
 
   private func better(_ a: Candidate, _ b: Candidate) -> Bool {
@@ -261,6 +335,24 @@ final class RouteMatcher {
     guard let c = current else { return nil }
     let total = c.route.points[c.route.points.count - 1].distM
     return RouteLock(routeId: c.route.id, reversed: c.reversed, progressM: c.progressM, remainingM: total - c.progressM, agreement: agreement())
+  }
+
+  /// Probability the runner is still on the locked route `aheadM` from here. Mirrors TS.
+  func pAhead(_ aheadM: Double) -> Double {
+    guard let c = current else { return 0 }
+    return pReach(c, c.progressM + aheadM)
+  }
+
+  private func pReach(_ c: Candidate, _ toRouteDistM: Double) -> Double {
+    guard let b = c.route.branch else { return 1 }
+    let pts = c.route.points
+    var p = 1.0
+    var i = c.idx
+    while i < pts.count && pts[i].distM < toRouteDistM {
+      p *= i < b.count ? b[i] : 1
+      i += 5
+    }
+    return p
   }
 
   private func pointAhead(_ c: Candidate, _ aheadM: Double) -> RoutePoint? {
@@ -279,7 +371,7 @@ final class RouteMatcher {
     guard let mine = pointAhead(cur, aheadM) else { return 1 }
     var eligible = 0
     var agree = 0
-    for c in cands where c.started && c.onRouteM >= Self.lockMinTrackM {
+    for c in cands where lockEligible(c) {
       eligible += 1
       if let p = pointAhead(c, aheadM), meters(cur.kx, mine.lat, mine.lon, p.lat, p.lon) <= 40 { agree += 1 }
     }
@@ -293,13 +385,15 @@ final class RouteMatcher {
     let agreement = agreement()
     var out: [AheadCue] = []
     for cue in c.cues where cue.distanceM > c.progressM {
+      let reach = pReach(c, cue.distanceM)
       out.append(AheadCue(
         type: cue.type,
         liveDistanceM: fix.distM + (cue.distanceM - c.progressM),
         flatEquivRemainingM: flatEquivAt(c, cue.distanceM) - here,
         gainM: cue.gainM,
-        confidence: cue.confidence * (agreement >= 1 ? 1 : 0.5),
-        key: "\(c.key)@\(Int(cue.distanceM.rounded()))"))
+        confidence: cue.confidence * (agreement >= 1 ? 1 : 0.5) * reach,
+        key: "\(c.key)@\(Int(cue.distanceM.rounded()))",
+        pReach: reach))
     }
     return out
   }

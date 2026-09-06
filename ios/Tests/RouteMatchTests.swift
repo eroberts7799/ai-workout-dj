@@ -52,7 +52,7 @@ final class RouteMatchTests: XCTestCase {
       if m.lock != nil, lockedAt == nil { lockedAt = f.distM }
     }
     XCTAssertNotNil(lockedAt)
-    XCTAssertGreaterThanOrEqual(lockedAt!, RouteMatcher.lockMinTrackM)
+    XCTAssertGreaterThanOrEqual(lockedAt!, RouteMatcher.lockMinTrackM / 1.5 - 5)
     XCTAssertLessThan(lockedAt!, RouteMatcher.lockMinTrackM + 40)
     XCTAssertEqual(m.lock?.routeId, "r")
     XCTAssertEqual(m.lock?.reversed, false)
@@ -104,5 +104,54 @@ final class RouteMatchTests: XCTestCase {
     let profile = m.aheadProfile(maxM: 2500)
     XCTAssertGreaterThanOrEqual(profile.first!.distanceM, 1090)
     XCTAssertGreaterThan(profile.last!.altitudeM, 80)
+  }
+
+  func testSelfRouteOutAndBackLocksTheReturnLegWithTheHill() {
+    let m = RouteMatcher(routes: [])
+    let alt: (Double) -> Double = { d in d <= 1000 ? 10 + d * 0.06 : 70 - (d - 1000) * 0.06 }
+    for f in fixes([(dx: 0, dy: 2000)]) { m.update(Fix(lat: f.lat, lon: f.lon, distM: f.distM, altM: alt(f.distM))) }
+    XCTAssertNil(m.lock)
+    var lockedAt: Double?
+    var crestSeen: Double?
+    for f in fixes([(dx: 0, dy: -2000)], startD: 2000, latShiftM: 2000) {
+      m.update(Fix(lat: f.lat, lon: f.lon, distM: f.distM, altM: alt(4000 - f.distM)))
+      if m.lock != nil, lockedAt == nil { lockedAt = f.distM }
+      if m.lock != nil, crestSeen == nil, let c = m.aheadCues().first(where: { $0.type == .crest }) { crestSeen = c.liveDistanceM }
+    }
+    XCTAssertNotNil(lockedAt)
+    XCTAssertLessThan(lockedAt! - 2000, RouteMatcher.lockMinTrackM + 250)
+    XCTAssertEqual(m.lock?.routeId, "self")
+    XCTAssertEqual(m.lock?.reversed, true)
+    XCTAssertNotNil(crestSeen)
+    XCTAssertLessThan(abs(crestSeen! - 3000), 150)
+  }
+
+  func testSelfRouteLapsLockOntoLapOne() {
+    let m = RouteMatcher(routes: [])
+    let lap = [(dx: 0.0, dy: 600.0), (dx: 600.0, dy: 0.0), (dx: 0.0, dy: -600.0), (dx: -600.0, dy: 0.0)]
+    for f in fixes(lap) { m.update(f) }
+    XCTAssertNil(m.lock)
+    var lockedAt: Double?
+    for f in fixes(lap, startD: 2400) {
+      m.update(f)
+      if m.lock != nil, lockedAt == nil { lockedAt = f.distM }
+    }
+    XCTAssertNotNil(lockedAt)
+    XCTAssertLessThan(lockedAt! - 2400, RouteMatcher.lockMinTrackM + 100)
+    XCTAssertEqual(m.lock?.routeId, "self")
+    XCTAssertEqual(m.lock?.reversed, false)
+  }
+
+  func testBranchProbabilitiesLowerPAheadAndCueConfidenceAcrossAFork() {
+    var r = route("r", [(dx: 0, dy: 3000)], alt: { d in d <= 1500 ? 10 : d <= 2500 ? 10 + (d - 1500) * 0.08 : 90 })
+    r.branch = r.points.map { ($0.distM >= 1200 && $0.distM < 1300) ? 0.5 : 1 }
+    let m = RouteMatcher(routes: [r])
+    for f in fixes([(dx: 0, dy: 700)]) { m.update(f) }
+    XCTAssertNotNil(m.lock)
+    XCTAssertEqual(m.pAhead(400), 1, accuracy: 0.01)
+    XCTAssertLessThan(m.pAhead(1000), 0.6)
+    guard let crest = m.aheadCues().first(where: { $0.type == .crest }) else { return XCTFail("no crest") }
+    XCTAssertLessThan(crest.pReach, 0.6)
+    XCTAssertLessThan(crest.confidence, 0.6)
   }
 }
